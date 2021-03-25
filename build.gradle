@@ -1,0 +1,60 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.72'
+}
+
+group 'com.redhat.devtools.intellij.commonUiTestLibrary'
+version '0.0.1-SNAPSHOT'
+
+apply plugin: 'maven'
+
+def remoteRobotVersion = '0.11.2'
+def fixturesVersion = '1.1.18'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+    maven {
+        url 'https://packages.jetbrains.team/maven/p/ij/intellij-dependencies'
+    }
+}
+
+dependencies {
+    compile 'org.jetbrains.kotlin:kotlin-stdlib:1.3.72'
+    api 'commons-io:commons-io:2.4'
+    api 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    api 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+    api "com.intellij.remoterobot:remote-robot:$remoteRobotVersion"
+    api "com.intellij.remoterobot:remote-fixtures:$fixturesVersion"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task createPom {
+    pom {
+        project {
+            artifactId 'intellij-common-ui-test-library'
+
+            properties {
+                maven {
+                    compiler {
+                        source '1.8'
+                        target '1.8'
+                    }
+                }
+            }
+
+            repositories {
+                repository {
+                    id 'intellij-dependencies'
+                    name 'intellij-dependencies'
+                    url 'https://packages.jetbrains.team/maven/p/ij/intellij-dependencies'
+                }
+            }
+        }
+    }.writeTo('pom.xml')
+}
