@@ -13,7 +13,10 @@ package com.redhat.devtools.intellij.commonUiTestLibrary;
 import com.intellij.remoterobot.RemoteRobot;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.GlobalUtils;
 
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Basic methods for starting and quiting the IntelliJ Idea IDE for UI tests
@@ -26,6 +29,8 @@ public class IntegrationTestsUtils {
     private static Process ideProcess;
 
     public static RemoteRobot runIde(String ideaVersion, int port) {
+        makeSureAllTermsAndConditionsAreAccepted();
+
         ProcessBuilder pb = new ProcessBuilder("./gradlew", "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port);
         try {
             ideProcess = pb.start();
@@ -45,5 +50,48 @@ public class IntegrationTestsUtils {
 
     public static void closeIde() {
         ideProcess.destroy();
+    }
+
+    private static void makeSureAllTermsAndConditionsAreAccepted() {
+        if (robot.isLinux()) {
+            String prefsXmlSourceLocation = "prefs.xml";
+            String prefsXmlDir = System.getProperty("user.home") + "/.java/.userPrefs/jetbrains/_!(!!cg\"p!(}!}@\"j!(k!|w\"w!'8!b!\"p!':!e@==";
+            createDirectoryHierarchy(prefsXmlDir);
+            copyFileFromJarResourceDir(prefsXmlSourceLocation, prefsXmlDir + "/prefs.xml");
+
+            String acceptedSourceLocation = "accepted";
+            String acceptedDir = System.getProperty("user.home") + "/.local/share/JetBrains/consentOptions";
+            createDirectoryHierarchy(acceptedDir);
+            copyFileFromJarResourceDir(acceptedSourceLocation, acceptedDir + "/accepted");
+        }
+        
+
+
+        // mac+win - to be done soon
+
+
+
+    }
+
+    private static void createDirectoryHierarchy(String location) {
+        Path path = Paths.get(location);
+        try {
+            Files.createDirectories(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void copyFileFromJarResourceDir(String sourceFileLocation, String destFileLocation) {
+        InputStream resourceStream = IntegrationTestsUtils.class.getClassLoader().getResourceAsStream(sourceFileLocation);
+        try {
+            byte[] buffer = new byte[resourceStream.available()];
+            resourceStream.read(buffer);
+            File targetFile = new File(destFileLocation);
+            OutputStream outStream = new FileOutputStream(targetFile);
+            outStream.write(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
