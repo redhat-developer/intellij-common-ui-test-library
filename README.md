@@ -2,9 +2,9 @@
 
 ### Add this library to an existing IntelliJ Plugin project
 
-1) Generate pom.xml and install the artifact into your local maven repository
+1) Install the plugin to your local maven repository (use Java 8 to run the following cmd)
 ```
-./gradlew createPom && mvn clean install
+./gradlew publishToMavenLocal
 ```
 
 2) Extend the build.gradle file of the IntelliJ Plugin repo

@@ -34,27 +34,22 @@ test {
     useJUnitPlatform()
 }
 
-task createPom {
-    pom {
-        project {
-            artifactId 'intellij-common-ui-test-library'
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                from components.java
 
-            properties {
-                maven {
-                    compiler {
-                        source '1.8'
-                        target '1.8'
+                name = 'IntelliJ common UI test library'
+                url = 'https://github.com/zcervink/intellij-common-ui-test-library'
+
+                developers {
+                    developer {
+                        name = 'Red Hat Developer'
+                        email = 'developers@redhat.com'
                     }
                 }
             }
-
-            repositories {
-                repository {
-                    id 'intellij-dependencies'
-                    name 'intellij-dependencies'
-                    url 'https://packages.jetbrains.team/maven/p/ij/intellij-dependencies'
-                }
-            }
         }
-    }.writeTo('pom.xml')
+    }
 }
