@@ -53,7 +53,9 @@ public class IntegrationTestsUtils {
     }
 
     private static void makeSureAllTermsAndConditionsAreAccepted() {
-        if (robot.isLinux()) {
+        String osName = System.getProperty("os.name");
+
+        if (osName.equals("Linux")) {
             String prefsXmlSourceLocation = "prefs.xml";
             String prefsXmlDir = System.getProperty("user.home") + "/.java/.userPrefs/jetbrains/_!(!!cg\"p!(}!}@\"j!(k!|w\"w!'8!b!\"p!':!e@==";
             createDirectoryHierarchy(prefsXmlDir);
@@ -64,13 +66,6 @@ public class IntegrationTestsUtils {
             createDirectoryHierarchy(acceptedDir);
             copyFileFromJarResourceDir(acceptedSourceLocation, acceptedDir + "/accepted");
         }
-        
-
-
-        // mac+win - to be done soon
-
-
-
     }
 
     private static void createDirectoryHierarchy(String location) {
