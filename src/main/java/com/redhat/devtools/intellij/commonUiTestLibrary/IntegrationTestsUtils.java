@@ -66,6 +66,25 @@ public class IntegrationTestsUtils {
             createDirectoryHierarchy(acceptedDir);
             copyFileFromJarResourceDir(acceptedSourceLocation, acceptedDir + "/accepted");
         }
+        else if (osName.toLowerCase().contains("os x")) {
+            String plistSourceLocation = "com.apple.java.util.prefs.plist";
+            String plistDir = System.getProperty("user.home") + "/Library/Preferences";
+            copyFileFromJarResourceDir(plistSourceLocation, plistDir + "/com.apple.java.util.prefs.plist");
+
+            String acceptedSourceLocation = "accepted";
+            String acceptedDir = System.getProperty("user.home") + "/Library/Application Support/JetBrains/consentOptions";
+            createDirectoryHierarchy(acceptedDir);
+            copyFileFromJarResourceDir(acceptedSourceLocation, acceptedDir + "/accepted");
+
+            // run the 'killall cfprefsd' cmd to force OS X to reload preferences files
+            ProcessBuilder pb = new ProcessBuilder("killall", "cfprefsd");
+            try {
+                Process p = pb.start();
+                p.waitFor();
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private static void createDirectoryHierarchy(String location) {
