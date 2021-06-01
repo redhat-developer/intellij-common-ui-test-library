@@ -31,7 +31,14 @@ public class IntegrationTestsUtils {
     public static RemoteRobot runIde(String ideaVersion, int port) {
         makeSureAllTermsAndConditionsAreAccepted();
 
-        ProcessBuilder pb = new ProcessBuilder("./gradlew", "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port);
+        String osName = System.getProperty("os.name").toLowerCase();
+        ProcessBuilder pb;
+        if (osName.contains("windows")) {
+            pb = new ProcessBuilder("powershell.exe", "Start-Process", ".\\gradlew.bat", "-ArgumentList", "\"runIdeForUiTests -PideaVersion=" + ideaVersion + "\"", "-WindowStyle", "hidden");
+        } else {
+            pb = new ProcessBuilder("./gradlew", "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port);
+        }
+
         try {
             ideProcess = pb.start();
             GlobalUtils.waitUntilIntelliJStarts(port);
@@ -53,9 +60,9 @@ public class IntegrationTestsUtils {
     }
 
     private static void makeSureAllTermsAndConditionsAreAccepted() {
-        String osName = System.getProperty("os.name");
+        String osName = System.getProperty("os.name").toLowerCase();
 
-        if (osName.equals("Linux")) {
+        if (osName.contains("linux")) {
             String prefsXmlSourceLocation = "prefs.xml";
             String prefsXmlDir = System.getProperty("user.home") + "/.java/.userPrefs/jetbrains/_!(!!cg\"p!(}!}@\"j!(k!|w\"w!'8!b!\"p!':!e@==";
             createDirectoryHierarchy(prefsXmlDir);
@@ -66,7 +73,7 @@ public class IntegrationTestsUtils {
             createDirectoryHierarchy(acceptedDir);
             copyFileFromJarResourceDir(acceptedSourceLocation, acceptedDir + "/accepted");
         }
-        else if (osName.toLowerCase().contains("os x")) {
+        else if (osName.contains("os x")) {
             String plistSourceLocation = "com.apple.java.util.prefs.plist";
             String plistDir = System.getProperty("user.home") + "/Library/Preferences";
             copyFileFromJarResourceDir(plistSourceLocation, plistDir + "/com.apple.java.util.prefs.plist");
@@ -81,6 +88,25 @@ public class IntegrationTestsUtils {
             try {
                 Process p = pb.start();
                 p.waitFor();
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (osName.contains("windows")) {
+            String acceptedSourceLocation = "accepted";
+            String acceptedDir = System.getProperty("user.home") + "\\AppData\\Roaming\\JetBrains\\consentOptions";
+            createDirectoryHierarchy(acceptedDir);
+            copyFileFromJarResourceDir(acceptedSourceLocation, acceptedDir + "\\accepted");
+
+            String registryPath = "HKCU:\\Software\\JavaSoft\\Prefs\\jetbrains\\privacy_policy";
+            ProcessBuilder pb1 = new ProcessBuilder("powershell.exe", "New-Item", "-Path", registryPath, "-Force");
+            ProcessBuilder pb2 = new ProcessBuilder("powershell.exe", "New-ItemProperty", "-Path", registryPath, "-Name", "accepted_version", "-Value", "\"2.1\"");
+
+            try {
+                Process p1 = pb1.start();
+                p1.waitFor();
+                Process p2 = pb1.start();
+                p2.waitFor();
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
