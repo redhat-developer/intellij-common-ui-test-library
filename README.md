@@ -44,11 +44,11 @@ private static RemoteRobot robot;
 
 @BeforeAll
 public static void runIdeForUiTests() {
-    robot = IntegrationTestsUtils.runIde("IC-2020.2", 8082);
+    robot = UITestRunner.runIde("IC-2020.2", 8082);
 }
 
 @AfterAll
 public static void closeIde() {
-    IntegrationTestsUtils.closeIde();
+    UITestRunner.closeIde();
 }
 ```

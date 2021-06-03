@@ -12,7 +12,7 @@ package com.redhat.devtools.intellij.commonUiTestLibrary;
 
 import org.junit.jupiter.api.Test;
 
-class IntegrationTestsUtilsTest {
+class UITestRunnerTest {
     @Test
     void testRunIdeForUiTestsMethod() {
         System.out.println("No test implemented.");

@@ -23,7 +23,7 @@ import java.nio.file.Paths;
  *
  * @author zcervink@redhat.com
  */
-public class IntegrationTestsUtils {
+public class UITestRunner {
     private static final int defaultPort = 8580;
     private static RemoteRobot robot = null;
     private static Process ideProcess;
@@ -57,6 +57,10 @@ public class IntegrationTestsUtils {
 
     public static void closeIde() {
         ideProcess.destroy();
+    }
+
+    public static RemoteRobot getRemoteRobotInstance() {
+        return robot;
     }
 
     private static void makeSureAllTermsAndConditionsAreAccepted() {
@@ -123,7 +127,7 @@ public class IntegrationTestsUtils {
     }
 
     private static void copyFileFromJarResourceDir(String sourceFileLocation, String destFileLocation) {
-        InputStream resourceStream = IntegrationTestsUtils.class.getClassLoader().getResourceAsStream(sourceFileLocation);
+        InputStream resourceStream = UITestRunner.class.getClassLoader().getResourceAsStream(sourceFileLocation);
         try {
             byte[] buffer = new byte[resourceStream.available()];
             resourceStream.read(buffer);
