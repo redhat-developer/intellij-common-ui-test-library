@@ -10,7 +10,7 @@ version projectVersion
 
 apply plugin: 'maven'
 
-def remoteRobotVersion = '0.11.2'
+def remoteRobotVersion = '0.11.4'
 def fixturesVersion = '1.1.18'
 
 repositories {
