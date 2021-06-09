@@ -109,7 +109,7 @@ public class UITestRunner {
             try {
                 Process p1 = pb1.start();
                 p1.waitFor();
-                Process p2 = pb1.start();
+                Process p2 = pb2.start();
                 p2.waitFor();
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
