@@ -2,10 +2,11 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'org.jetbrains.kotlin.jvm' version '1.3.72'
+    id 'io.codearte.nexus-staging' version "0.22.0"
 }
 
 group 'com.redhat.devtools.intellij.commonUiTestLibrary'
-version '0.0.1-SNAPSHOT'
+version projectVersion
 
 apply plugin: 'maven'
 
