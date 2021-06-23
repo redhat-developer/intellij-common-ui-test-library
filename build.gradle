@@ -41,14 +41,37 @@ publishing {
                 from components.java
 
                 name = 'IntelliJ common UI test library'
-                url = 'https://github.com/zcervink/intellij-common-ui-test-library'
+                description = 'Common utilities for IntelliJ UI testing'
+                url = 'https://github.com/redhat-developer/intellij-common-ui-test-library'
 
+                licenses {
+                    license {
+                        name = 'Eclipse Public License 2.0'
+                        url = 'https://www.eclipse.org/legal/epl-v20.html'
+                    }
+                }
                 developers {
                     developer {
                         name = 'Red Hat Developer'
                         email = 'developers@redhat.com'
                     }
                 }
+                scm {
+                    connection = 'scm:git:git://github.com/redhat-developer/intellij-common-ui-test-library.git'
+                    developerConnection = 'scm:git:ssh://git@github.com:redhat-developer/intellij-common-ui-test-library.git'
+                    url = 'https://github.com/redhat-developer/intellij-common-ui-test-library/'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://repository.jboss.org/nexus/service/local/staging/deploy/maven2"
+            def snapshotsRepoUrl = "https://repository.jboss.org/nexus/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = nexusUser
+                password = nexusPassword
             }
         }
     }
