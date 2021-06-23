@@ -9,6 +9,7 @@ group 'com.redhat.devtools.intellij.commonUiTestLibrary'
 version projectVersion
 
 apply plugin: 'maven'
+apply plugin: 'io.codearte.nexus-staging'
 
 def remoteRobotVersion = '0.11.2'
 def fixturesVersion = '1.1.18'
@@ -33,6 +34,13 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+nexusStaging {
+    serverUrl = 'https://repository.jboss.org/nexus/service/local/'
+    username = nexusUser
+    password = nexusPassword
+    packageGroup = 'JBoss Releases Staging Profile'
 }
 
 publishing {
