@@ -11,10 +11,6 @@ node('rhel7') {
     def isSnapshot = props['projectVersion'].contains('-SNAPSHOT')
 
     stage('Build') {
-        sh "./gradlew assemble"
-    }
-
-    stage('Package') {
         sh "./gradlew build"
     }
 
