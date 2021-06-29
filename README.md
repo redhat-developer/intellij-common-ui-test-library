@@ -36,6 +36,10 @@ dependencies {
 runIdeForUiTests {
     systemProperty "robot-server.port", System.getProperty("robot-server.port")
 }
+
+maven {
+    url 'https://packages.jetbrains.team/maven/p/ij/intellij-dependencies'
+}
 ```
 
 3) Run and close the IntelliJ Idea before and after all the UI tests
