@@ -37,8 +37,10 @@ runIdeForUiTests {
     systemProperty "robot-server.port", System.getProperty("robot-server.port")
 }
 
-maven {
-    url 'https://packages.jetbrains.team/maven/p/ij/intellij-dependencies'
+repositories {
+    maven {
+        url 'https://packages.jetbrains.team/maven/p/ij/intellij-dependencies'
+    }
 }
 ```
 
