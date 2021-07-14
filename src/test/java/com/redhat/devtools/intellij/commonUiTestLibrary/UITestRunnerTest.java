@@ -14,7 +14,8 @@ import org.junit.jupiter.api.Test;
 
 class UITestRunnerTest {
     @Test
-    void testRunIdeForUiTestsMethod() {
-        System.out.println("No test implemented.");
+    void testRunIdeForUiTests() {
+        UITestRunner.runIde("IC-2020.2", 8082);
+        UITestRunner.closeIde();
     }
 }

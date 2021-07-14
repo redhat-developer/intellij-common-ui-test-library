@@ -44,4 +44,8 @@ public class WelcomeFrameDialog extends ContainerFixture {
     public ComponentFixture ideErrorsIcon() {
         return find(ComponentFixture.class, byXpath("//div[@class='IdeErrorsIcon']"));
     }
+
+    public ComponentFixture windowsCloseButton() {
+        return find(ComponentFixture.class, byXpath("//div[@accessiblename='Close' and @class='JButton']"));
+    }
 }

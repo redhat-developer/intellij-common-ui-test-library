@@ -11,12 +11,18 @@
 package com.redhat.devtools.intellij.commonUiTestLibrary;
 
 import com.intellij.remoterobot.RemoteRobot;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.WelcomeFrameDialog;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.GlobalUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 
 /**
  * Basic methods for starting and quiting the IntelliJ Idea IDE for UI tests
@@ -34,7 +40,7 @@ public class UITestRunner {
         String osName = System.getProperty("os.name").toLowerCase();
         ProcessBuilder pb;
         if (osName.contains("windows")) {
-            pb = new ProcessBuilder("powershell.exe", "Start-Process", ".\\gradlew.bat", "-ArgumentList", "\"runIdeForUiTests -PideaVersion=" + ideaVersion + "\"", "-WindowStyle", "hidden");
+            pb = new ProcessBuilder(".\\gradlew.bat", "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port);
         } else {
             pb = new ProcessBuilder("./gradlew", "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port);
         }
@@ -56,7 +62,11 @@ public class UITestRunner {
     }
 
     public static void closeIde() {
-        ideProcess.destroy();
+        if (robot.isWin()) {
+            robot.find(WelcomeFrameDialog.class, Duration.ofSeconds(10)).windowsCloseButton().click();
+        } else {
+            ideProcess.destroy();
+        }
     }
 
     public static RemoteRobot getRemoteRobotInstance() {
@@ -76,8 +86,7 @@ public class UITestRunner {
             String acceptedDir = System.getProperty("user.home") + "/.local/share/JetBrains/consentOptions";
             createDirectoryHierarchy(acceptedDir);
             copyFileFromJarResourceDir(acceptedSourceLocation, acceptedDir + "/accepted");
-        }
-        else if (osName.contains("os x")) {
+        } else if (osName.contains("os x")) {
             String plistSourceLocation = "com.apple.java.util.prefs.plist";
             String plistDir = System.getProperty("user.home") + "/Library/Preferences";
             copyFileFromJarResourceDir(plistSourceLocation, plistDir + "/com.apple.java.util.prefs.plist");
@@ -95,8 +104,7 @@ public class UITestRunner {
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
-        }
-        else if (osName.contains("windows")) {
+        } else if (osName.contains("windows")) {
             String acceptedSourceLocation = "accepted";
             String acceptedDir = System.getProperty("user.home") + "\\AppData\\Roaming\\JetBrains\\consentOptions";
             createDirectoryHierarchy(acceptedDir);
@@ -104,7 +112,7 @@ public class UITestRunner {
 
             String registryPath = "HKCU:\\Software\\JavaSoft\\Prefs\\jetbrains\\privacy_policy";
             ProcessBuilder pb1 = new ProcessBuilder("powershell.exe", "New-Item", "-Path", registryPath, "-Force");
-            ProcessBuilder pb2 = new ProcessBuilder("powershell.exe", "New-ItemProperty", "-Path", registryPath, "-Name", "accepted_version", "-Value", "\"2.1\"");
+            ProcessBuilder pb2 = new ProcessBuilder("powershell.exe", "New-ItemProperty", "-Path", registryPath, "-Name", "accepted_version", "-Value", "'2.1'");
 
             try {
                 Process p1 = pb1.start();
