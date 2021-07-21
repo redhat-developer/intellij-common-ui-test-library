@@ -8,9 +8,6 @@ plugins {
 group 'com.redhat.devtools.intellij'
 version projectVersion
 
-apply plugin: 'maven'
-apply plugin: 'io.github.gradle-nexus.publish-plugin'
-
 def remoteRobotVersion = '0.11.2'
 def fixturesVersion = '1.1.18'
 

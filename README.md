@@ -58,3 +58,12 @@ public static void closeIde() {
     UITestRunner.closeIde();
 }
 ```
+
+### Run JUnit tests to test this library
+
+You can run JUnit tests contained in this repository to test this library by executing the following command:
+
+```sh
+cd test-project
+./gradlew test
+```
