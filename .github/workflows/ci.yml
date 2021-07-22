@@ -22,11 +22,11 @@ jobs:
     - name: Run integration tests
       run: |
         export DISPLAY=:99.0
-        Xvfb -ac :99 -screen 0 1920x1080x16 &
+        Xvfb -ac :99 -screen 0 1920x1080x24 &
         cd test-project
         chmod +x gradlew
-        ./gradlew clean test
-    - uses: actions/upload-artifact@v1
+        ./gradlew clean test --warning-mode none
+    - uses: actions/upload-artifact@v2
       with:
         name: ${{ runner.os }}-test-reports
         path: test-project/build/reports/tests/test
@@ -34,9 +34,9 @@ jobs:
     - name: Archiving screenshots
       uses: actions/upload-artifact@v2
       with: 
-        name: screenshots
-        path: |
-          test-project/build/screenshots/*
+        name: ${{ runner.os }}-screenshots
+        path: test-project/build/screenshots/*
+      if: always()
 
   build-macos:
     runs-on: macos-latest
@@ -51,8 +51,8 @@ jobs:
       run: |
         cd test-project
         chmod +x gradlew
-        ./gradlew clean test
-    - uses: actions/upload-artifact@v1
+        ./gradlew clean test --warning-mode none
+    - uses: actions/upload-artifact@v2
       with:
         name: ${{ runner.os }}-test-reports
         path: test-project/build/reports/tests/test
@@ -61,8 +61,8 @@ jobs:
       uses: actions/upload-artifact@v2
       with: 
         name: ${{ runner.os }}-screenshots
-        path: |
-          test-project/build/screenshots/*
+        path: test-project/build/screenshots/*
+      if: always()
 
   build-windows:
     runs-on: windows-latest
@@ -77,9 +77,9 @@ jobs:
       run: |
         cd test-project
         chmod +x gradlew.bat
-        .\gradlew.bat clean test
+        .\gradlew.bat clean test --warning-mode none
       shell: powershell
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v2
       with:
         name: ${{ runner.os }}-test-reports
         path: test-project/build/reports/tests/test
@@ -88,6 +88,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with: 
         name: ${{ runner.os }}-screenshots
-        path: |
-          test-project/build/screenshots/*
-
+        path: test-project/build/screenshots/*
+      if: always()

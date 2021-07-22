@@ -8,8 +8,7 @@ plugins {
 group 'com.redhat.devtools.intellij'
 version projectVersion
 
-def remoteRobotVersion = '0.11.2'
-def fixturesVersion = '1.1.18'
+def remoteRobotVersion = '0.11.6'
 
 repositories {
     mavenLocal()
@@ -26,7 +25,7 @@ dependencies {
     api 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     api 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
     api "com.intellij.remoterobot:remote-robot:$remoteRobotVersion"
-    api "com.intellij.remoterobot:remote-fixtures:$fixturesVersion"
+    api "com.intellij.remoterobot:remote-fixtures:$remoteRobotVersion"
 }
 
 java {

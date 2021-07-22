@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Red Hat, Inc.
+ * Copyright (c) 2021 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v2.0 which accompanies this distribution,
@@ -8,7 +8,7 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package com.redhat.devtools.intellij.commonUiTestLibrary.utils;
+package com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation;
 
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 
@@ -16,12 +16,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Static helper utilities that assist and simplify data conversion and transformation
+ * Static utilities that assist and simplify data conversion and transformation
  *
  * @author zcervink@redhat.com
  */
-public class TextHelper {
-
+public class TextUtils {
+    /**
+     * Transform a List of RemoteText labels to one String
+     *
+     * @param data List of RemoteText instancies
+     * @return     String containing a concatenation of all the labels in the 'data' List
+     */
     public static String listOfRemoteTextToString(List<RemoteText> data) {
         List<String> listOfStrings = data
                 .stream()

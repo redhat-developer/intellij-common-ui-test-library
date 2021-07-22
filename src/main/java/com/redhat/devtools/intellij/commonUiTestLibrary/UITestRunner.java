@@ -11,7 +11,9 @@
 package com.redhat.devtools.intellij.commonUiTestLibrary;
 
 import com.intellij.remoterobot.RemoteRobot;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.WelcomeFrameDialog;
+import com.intellij.remoterobot.fixtures.ComponentFixture;
+import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +28,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 
+import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
+import static com.intellij.remoterobot.utils.UtilsKt.getIdeBuildNumber;
 
 /**
  * Basic methods for starting and quiting the IntelliJ Idea IDE for UI tests
@@ -35,47 +39,118 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  */
 public class UITestRunner {
     private static final int defaultPort = 8580;
-    private static RemoteRobot robot = null;
+    private static RemoteRobot remoteRobot = null;
     private static Process ideProcess;
+    private static int intelliJIdeaVersion;
 
-    public static RemoteRobot runIde(String ideaVersion, int port) {
+    /**
+     * Start the given version of IntelliJ Idea listening on the given port
+     *
+     * @param ideaVersion version of the IntelliJ Idea to start
+     * @param port        port number on which will the IntelliJ Idea be listening
+     */
+    public static RemoteRobot runIde(IdeaVersion ideaVersion, int port) {
         makeSureAllTermsAndConditionsAreAccepted();
 
         String osName = System.getProperty("os.name").toLowerCase();
         ProcessBuilder pb;
         if (osName.contains("windows")) {
-            pb = new ProcessBuilder(".\\gradlew.bat", "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port);
+            pb = new ProcessBuilder(".\\gradlew.bat", "runIdeForUiTests", "-PideaVersion=" + ideaVersion.toString(), "-Drobot-server.port=" + port);
         } else {
-            pb = new ProcessBuilder("./gradlew", "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port);
+            pb = new ProcessBuilder("./gradlew", "runIdeForUiTests", "-PideaVersion=" + ideaVersion.toString(), "-Drobot-server.port=" + port);
         }
 
         try {
             ideProcess = pb.start();
             waitUntilIntelliJStarts(port);
-            robot = getRemoteRobotConnection(port);
+            remoteRobot = getRemoteRobotConnection(port);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
-        WelcomeFrameDialog wfd = robot.find(WelcomeFrameDialog.class, Duration.ofSeconds(10));
-        wfd.clearTheWorkspace();
-        return robot;
+        String intelliJBuildNumber = getIdeBuildNumber(remoteRobot);
+        intelliJIdeaVersion = Integer.parseInt(intelliJBuildNumber.substring(3, 6));
+
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame.clearWorkspace();
+        return remoteRobot;
     }
 
-    public static RemoteRobot runIde(String ideaVersion) {
+    /**
+     * Start the given version of IntelliJ Idea listening on the default port
+     *
+     * @param ideaVersion version of the IntelliJ Idea to start
+     */
+    public static RemoteRobot runIde(IdeaVersion ideaVersion) {
         return runIde(ideaVersion, defaultPort);
     }
 
+    /**
+     * Close the IntelliJ Idea IDE from the 'Welcome to IntelliJ IDEA' dialog
+     */
     public static void closeIde() {
-        if (robot.isWin()) {
-            robot.find(WelcomeFrameDialog.class, Duration.ofSeconds(10)).windowsCloseButton().click();
+        if (remoteRobot.isWin()) {
+            ComponentFixture windowsCloseButton = remoteRobot.find(ComponentFixture.class, byXpath("//div[@accessiblename='Close' and @class='JButton']"), Duration.ofSeconds(10));
+            windowsCloseButton.click();
         } else {
             ideProcess.destroy();
         }
     }
 
-    public static RemoteRobot getRemoteRobotInstance() {
-        return robot;
+    /**
+     * Return the integer representation of the currently running IntelliJ Idea version
+     *
+     * @return version of the currently running IntelliJ Idea
+     */
+    public static int getIntelliJIdeaVersion() {
+        return intelliJIdeaVersion;
+    }
+
+    /**
+     * Return the reference to the Remote Robot instance
+     *
+     * @return reference to the Remote Robot instance
+     */
+    public static RemoteRobot getRemoteRobot() {
+        return remoteRobot;
+    }
+
+    /**
+     * Create an instance of the RemoteRobot listening on the given port
+     *
+     * @param port port number
+     * @return instance of the RemoteRobot
+     */
+    public static RemoteRobot getRemoteRobotConnection(int port) throws InterruptedException {
+        RemoteRobot remoteRobot = new RemoteRobot("http://127.0.0.1:" + port);
+        for (int i = 0; i < 60; i++) {
+            try {
+                remoteRobot.find(FlatWelcomeFrame.class);
+            } catch (WaitForConditionTimeoutException e) {
+                Thread.sleep(1000);
+            }
+        }
+
+        return remoteRobot;
+    }
+
+    /**
+     * Enumeration for supported versions of the IntelliJ Idea
+     */
+    public enum IdeaVersion {
+        V_2020_2("IC-2020.2"),
+        V_2020_3("IC-2020.3");
+
+        final private String ideaVersionStringRepresentation;
+
+        IdeaVersion(String ideaVersionStringRepresentation) {
+            this.ideaVersionStringRepresentation = ideaVersionStringRepresentation;
+        }
+
+        @Override
+        public String toString() {
+            return ideaVersionStringRepresentation;
+        }
     }
 
     private static void makeSureAllTermsAndConditionsAreAccepted() {
@@ -148,19 +223,6 @@ public class UITestRunner {
             return false;
         }
         return true;
-    }
-
-    public static RemoteRobot getRemoteRobotConnection(int port) throws InterruptedException {
-        RemoteRobot remoteRobot = new RemoteRobot("http://127.0.0.1:" + port);
-        for (int i = 0; i < 60; i++) {
-            try {
-                remoteRobot.find(WelcomeFrameDialog.class);
-            } catch (Exception ex) {
-                Thread.sleep(1000);
-            }
-        }
-
-        return remoteRobot;
     }
 
     private static void createDirectoryHierarchy(String location) {
