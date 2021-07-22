@@ -1,0 +1,93 @@
+# This workflow will build a Java project with Gradle
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - name: Run integration tests
+      run: |
+        export DISPLAY=:99.0
+        Xvfb -ac :99 -screen 0 1920x1080x16 &
+        cd test-project
+        chmod +x gradlew
+        ./gradlew clean test
+    - uses: actions/upload-artifact@v1
+      with:
+        name: ${{ runner.os }}-test-reports
+        path: test-project/build/reports/tests/test
+      if: always()
+    - name: Archiving screenshots
+      uses: actions/upload-artifact@v2
+      with: 
+        name: screenshots
+        path: |
+          test-project/build/screenshots/*
+
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - name: Run integration tests
+      run: |
+        cd test-project
+        chmod +x gradlew
+        ./gradlew clean test
+    - uses: actions/upload-artifact@v1
+      with:
+        name: ${{ runner.os }}-test-reports
+        path: test-project/build/reports/tests/test
+      if: always()
+    - name: Archiving screenshots
+      uses: actions/upload-artifact@v2
+      with: 
+        name: ${{ runner.os }}-screenshots
+        path: |
+          test-project/build/screenshots/*
+
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - name: Run integration tests
+      run: |
+        cd test-project
+        chmod +x gradlew.bat
+        .\gradlew.bat clean test
+      shell: powershell
+    - uses: actions/upload-artifact@v1
+      with:
+        name: ${{ runner.os }}-test-reports
+        path: test-project/build/reports/tests/test
+      if: always()
+    - name: Archiving screenshots
+      uses: actions/upload-artifact@v2
+      with: 
+        name: ${{ runner.os }}-screenshots
+        path: |
+          test-project/build/screenshots/*
+

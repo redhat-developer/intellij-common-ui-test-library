@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  *
  * @author zcervink@redhat.com
  */
-public class HelperUtils {
+public class TextHelper {
 
     public static String listOfRemoteTextToString(List<RemoteText> data) {
         List<String> listOfStrings = data

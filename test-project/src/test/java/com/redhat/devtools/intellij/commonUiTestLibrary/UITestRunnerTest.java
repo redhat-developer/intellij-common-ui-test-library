@@ -11,10 +11,17 @@
 package com.redhat.devtools.intellij.commonUiTestLibrary;
 
 import org.junit.jupiter.api.Test;
+import com.redhat.devtools.intellij.commonUiTestLibrary.UITestRunner;
 
+/**
+ * Basic JUnit tests to test the library
+ *
+ * @author zcervink@redhat.com
+ */
 class UITestRunnerTest {
     @Test
-    void testRunIdeForUiTestsMethod() {
-        System.out.println("No test implemented.");
+    void testRunIdeForUiTests() {
+        UITestRunner.runIde("IC-2021.1", 8580);
+        UITestRunner.closeIde();
     }
 }
