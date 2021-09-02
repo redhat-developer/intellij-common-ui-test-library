@@ -27,6 +27,11 @@ import com.intellij.remoterobot.RemoteRobot;
  * @author zcervink@redhat.com
  */
 public class ScreenshotUtils {
+    final static String screenshotLocation = "." + File.separator + "build" + File.separator + "screenshots" + File.separator;
+    final static String screenshotFilename = getTimeNow("yyyy_MM_dd_HH_mm_ss");
+    final static String filetype = "png";
+    final static String screenshotPathname = screenshotLocation + screenshotFilename + "." + filetype;
+
     /**
      * Take screenshot of the entire screen and save it on disk
      *
@@ -34,11 +39,6 @@ public class ScreenshotUtils {
      * @return            the screenshot as a File object
      */
     public static File takeScreenshot(RemoteRobot remoteRobot) {
-        final String screenshotLocation = "./build/screenshots/";
-        final String screenshotFilename = getTimeNow("yyyy_MM_dd_HH_mm_ss");
-        final String filetype = "png";
-        final String screenshotPathname = screenshotLocation + screenshotFilename + "." + filetype;
-
         try {
             BufferedImage screenshotBufferedImage = remoteRobot.getScreenshot();
             boolean doesScreenshotDirExists = Files.exists(Paths.get(screenshotLocation));

@@ -13,12 +13,13 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.ContainerFixture;
+import com.redhat.devtools.intellij.commonUiTestLibrary.UITestRunner;
 
 import java.time.Duration;
 import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.UITestRunner.getIntelliJIdeaVersion;
+import static com.redhat.devtools.intellij.commonUiTestLibrary.UITestRunner.getIdeaVersion;
 
 /**
  * Top menu fixture
@@ -27,10 +28,11 @@ import static com.redhat.devtools.intellij.commonUiTestLibrary.UITestRunner.getI
  */
 public class MenuBar {
     private RemoteRobot remoteRobot;
-    private final int ideaVersion = getIntelliJIdeaVersion();
+    private UITestRunner.IdeaVersion ideaVersion;
 
     public MenuBar(RemoteRobot remoteRobot) {
         this.remoteRobot = remoteRobot;
+        this.ideaVersion = getIdeaVersion();
     }
 
     /**
@@ -70,7 +72,7 @@ public class MenuBar {
             ContainerFixture cf = remoteRobot.find(ContainerFixture.class, byXpath("//div[@class='LinuxIdeMenuBar']"), Duration.ofSeconds(10));
             return cf.find(ComponentFixture.class, byXpath("//div[@accessiblename='" + label + "' and @class='ActionMenu' and @text='" + label + "']"), Duration.ofSeconds(10));
         } else if (remoteRobot.isWin()) {
-            if (ideaVersion >= 203) {
+            if (ideaVersion.toInt() >= 20203) {
                 ContainerFixture cf = remoteRobot.find(ContainerFixture.class, byXpath("//div[@class='MenuFrameHeader']"), Duration.ofSeconds(10));
                 return cf.find(ComponentFixture.class, byXpath("//div[@text='" + label + "']"), Duration.ofSeconds(10));
             } else {

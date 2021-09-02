@@ -38,7 +38,7 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
     private final String projectName = "welcome_frame_java_project";
 
     @BeforeEach
-    public void prepareTheProject() {
+    public void prepareProject() {
         createNewProject(projectName, "Java");
     }
 

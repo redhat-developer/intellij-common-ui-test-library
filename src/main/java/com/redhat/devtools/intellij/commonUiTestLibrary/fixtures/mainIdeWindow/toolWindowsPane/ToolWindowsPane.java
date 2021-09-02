@@ -31,6 +31,8 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 import static com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane.ToolToBuildProject.GRADLE;
 import static com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane.ToolToBuildProject.MAVEN;
+import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.gradleStripeButtonLabel;
+import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.mavenStripeButtonLabel;
 import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils.listOfRemoteTextToString;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -42,8 +44,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DefaultXpath(by = "ToolWindowsPane type", xpath = "//div[@class='ToolWindowsPane']")
 @FixtureName(name = "Tool Windows Pane")
 public class ToolWindowsPane extends CommonContainerFixture {
-    private static String lastBuildStatusTreeText;
     private RemoteRobot remoteRobot;
+    private static String lastBuildStatusTreeText;
 
     public ToolWindowsPane(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
@@ -87,7 +89,7 @@ public class ToolWindowsPane extends CommonContainerFixture {
             case MAVEN:
                 waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The 'Maven' stripe button is not available.", () -> isStripeButtonAvailable("Maven"));
                 ToolWindowsPane toolWindowsPaneMaven = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-                toolWindowsPaneMaven.stripeButton("Maven").click();
+                toolWindowsPaneMaven.stripeButton(mavenStripeButtonLabel).click();
                 waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The Maven target tree did not appear in 30 seconds.", () -> isMavenOrGradleTreeVisible(MAVEN));
                 expandMavenTargetTreeIfNecessary();
                 toolWindowsPaneMaven.mavenTabTree().findText("Lifecycle").doubleClick();
@@ -96,7 +98,7 @@ public class ToolWindowsPane extends CommonContainerFixture {
             case GRADLE:
                 waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The 'Gradle' stripe button is not available.", () -> isStripeButtonAvailable("Gradle"));
                 ToolWindowsPane toolWindowsPaneGradle = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-                toolWindowsPaneGradle.stripeButton("Gradle").click();
+                toolWindowsPaneGradle.stripeButton(gradleStripeButtonLabel).click();
                 waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The Gradle tasks tree did not appear in 30 seconds.", () -> isMavenOrGradleTreeVisible(GRADLE));
                 expandGradleTasksTreeIfNecessary();
                 toolWindowsPaneGradle.gradleTabTree().findText("Tasks").doubleClick();

@@ -25,6 +25,10 @@ import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
+import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.nextLabel;
+import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.finishLabel;
+import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.cancelLabel;
+import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.previousLabel;
 import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils.listOfRemoteTextToString;
 
 /**
@@ -82,7 +86,7 @@ public class NewProjectDialog extends CommonContainerFixture {
         }
         projectJdkComboBox.click();
 
-        waitFor(Duration.ofSeconds(20), Duration.ofSeconds(2), "The project JDK list did not load all items in 20 seconds.", () -> didTheProjectSdkListLoadAllItems());
+        waitFor(Duration.ofSeconds(20), Duration.ofSeconds(2), "The project JDK list did not load all items in 20 seconds.", () -> didProjectSdkListLoadAllItems());
         ComponentFixture projectSdkList = find(ComponentFixture.class, byXpath("//div[@class='HeavyWeightWindow']"), Duration.ofSeconds(10));
         List<RemoteText> sdkItems = projectSdkList.findAllText();
         for (RemoteText sdkItem : sdkItems) {
@@ -101,31 +105,31 @@ public class NewProjectDialog extends CommonContainerFixture {
      * Move to the next page of the 'New Project' dialog by clicking on the 'Next' button
      */
     public void next() {
-        button("Next").click();
+        button(nextLabel).click();
     }
 
     /**
      * Finish the 'New Project' dialog by clicking on the 'Finish' button
      */
     public void finish() {
-        button("Finish").click();
+        button(finishLabel).click();
     }
 
     /**
      * Close the 'New Project' dialog by clicking on the 'Cancel' button
      */
     public void cancel() {
-        button("Cancel").click();
+        button(cancelLabel).click();
     }
 
     /**
      * Move to the previous page of the 'New Project' dialog by clicking on the 'Previous' button
      */
     public void previous() {
-        button("Previous").click();
+        button(previousLabel).click();
     }
 
-    private boolean didTheProjectSdkListLoadAllItems() {
+    private boolean didProjectSdkListLoadAllItems() {
         ComponentFixture projectSdkList = find(ComponentFixture.class, byXpath("//div[@class='HeavyWeightWindow']"), Duration.ofSeconds(10));
         List<RemoteText> sdkItems = projectSdkList.findAllText();
         int currentSdkItemsCount = sdkItems.size();

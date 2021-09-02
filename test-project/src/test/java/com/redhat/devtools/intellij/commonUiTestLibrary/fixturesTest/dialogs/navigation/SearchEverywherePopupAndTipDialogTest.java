@@ -36,14 +36,13 @@ public class SearchEverywherePopupAndTipDialogTest extends LibraryTestBase {
     private final String projectName = "tip_dialog_java_project";
 
     @BeforeEach
-    public void prepareTheProject() {
+    public void prepareProject() {
         createNewProject(projectName, "Java");
     }
 
     @AfterEach
-    public void closeTheProject() {
-        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
-        mainIdeWindow.closeProject();
+    public void closeProject() {
+        super.closeProject();
     }
 
     @Test

@@ -34,7 +34,11 @@ import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.screenshot.
  *
  */
 public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallback {
-    private final RemoteRobot remoteRobot = UITestRunner.getRemoteRobot();
+    private RemoteRobot remoteRobot;
+
+    public ScreenshotAfterTestFailExtension() {
+        this.remoteRobot = UITestRunner.getRemoteRobot();
+    }
 
     /**
      * Take screenshot right after a test fail and perform a clean up to ensure no dialog or windows is opened

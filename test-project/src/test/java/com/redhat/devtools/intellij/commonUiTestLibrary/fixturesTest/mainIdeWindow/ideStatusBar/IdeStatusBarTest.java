@@ -37,9 +37,8 @@ class IdeStatusBarTest extends LibraryTestBase {
     private final String projectName = "ide_status_bar_java_project";
 
     @AfterEach
-    public void closeTheProject() {
-        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
-        mainIdeWindow.closeProject();
+    public void closeProject() {
+        super.closeProject();
     }
 
     @Test

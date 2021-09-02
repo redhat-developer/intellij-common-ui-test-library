@@ -14,6 +14,7 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.*;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
+import com.redhat.devtools.intellij.commonUiTestLibrary.UITestRunner;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.errors.IdeFatalErrorsDialog;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +27,7 @@ import java.time.Duration;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.UtilsKt.hasAnyComponent;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.UITestRunner.getIntelliJIdeaVersion;
+import static com.redhat.devtools.intellij.commonUiTestLibrary.UITestRunner.getIdeaVersion;
 
 /**
  * Welcome to IntelliJ IDEA dialog fixture
@@ -36,11 +37,11 @@ import static com.redhat.devtools.intellij.commonUiTestLibrary.UITestRunner.getI
 @DefaultXpath(by = "FlatWelcomeFrame type", xpath = "//div[@class='FlatWelcomeFrame']")
 @FixtureName(name = "Welcome To IntelliJ IDEA Dialog")
 public class FlatWelcomeFrame extends CommonContainerFixture {
-    private int intelliJVersion;
+    private UITestRunner.IdeaVersion intelliJVersion;
 
     public FlatWelcomeFrame(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        this.intelliJVersion = getIntelliJIdeaVersion();
+        this.intelliJVersion = getIdeaVersion();
     }
 
     /**
@@ -48,7 +49,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      */
     public void createNewProject() {
         // Code for IntelliJ Idea 2020.3 or newer
-        if (intelliJVersion >= 203) {
+        if (intelliJVersion.toInt() >= 20203) {
             welcomeFrameLink("New Project").click();
         }
         // Code for IntelliJ Idea 2020.2 or earlier
@@ -68,7 +69,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             recentProjectsList.runJs("const horizontal_offset = component.getWidth()-22;\n" +
                     "robot.click(component, new Point(horizontal_offset, 22), MouseButton.LEFT_BUTTON, 1);");
             // Code for IntelliJ Idea 2020.3 or newer
-            if (intelliJVersion >= 203) {
+            if (intelliJVersion.toInt() >= 20203) {
                 JPopupMenuFixture contextMenu = find(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType(), Duration.ofSeconds(10));
                 contextMenu.select("Remove from Recent Projects");
             }

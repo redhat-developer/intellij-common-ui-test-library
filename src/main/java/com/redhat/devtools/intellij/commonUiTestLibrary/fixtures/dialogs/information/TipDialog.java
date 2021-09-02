@@ -20,6 +20,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 
+import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.closeLabel;
+
 /**
  * Tip of the Day dialog fixture
  *
@@ -40,7 +42,7 @@ public class TipDialog extends CommonContainerFixture {
     public static void closeTipDialogIfItAppears(RemoteRobot remoteRobot) {
         try {
             TipDialog tipDialog = remoteRobot.find(TipDialog.class, Duration.ofSeconds(20));
-            tipDialog.button("Close").click();
+            tipDialog.button(closeLabel).click();
         } catch (WaitForConditionTimeoutException e) {
             e.printStackTrace();
         }

@@ -11,7 +11,6 @@
 package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWindow.toolWindowsPaneAndMenuBar;
 
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
@@ -35,9 +34,8 @@ class ToolWindowsPaneTest extends LibraryTestBase {
     private final String gradleProjectName = "tool_windows_pane_java_gradle_project";
 
     @AfterEach
-    public void closeTheProject() {
-        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
-        mainIdeWindow.closeProject();
+    public void closeProject() {
+        super.closeProject();
     }
 
     @Test

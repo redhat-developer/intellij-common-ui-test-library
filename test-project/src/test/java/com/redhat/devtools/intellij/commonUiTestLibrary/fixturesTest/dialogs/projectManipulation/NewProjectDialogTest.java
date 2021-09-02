@@ -29,47 +29,63 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(ScreenshotAfterTestFailExtension.class)
 public class NewProjectDialogTest extends LibraryTestBase {
+    private final String plainJavaProjectName = "plain_java_project_name_test";
+    private final String mavenProjectName = "maven_project_name_test";
+    private final String gradleProjectName = "gradle_project_name_test";
+
     @Test
     public void newProjectDialogJavaTest() {
-        openNewProjectDialogFromWelcomeDialog();
-        NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
-        newProjectDialog.selectNewProjectType("Java");
-        newProjectDialog.next();
-        newProjectDialog.next();
-        String javaProjectName = "java_project_name_test";
-        newProjectDialog.setProjectNameForJavaProject(javaProjectName);
-        String javaProjectNameFromInputField = remoteRobot.findAll(JTextFieldFixture.class, byXpath("//div[@accessiblename='Project name:' and @class='JTextField']")).get(0).getText();
-        assertTrue(javaProjectName.equals(javaProjectNameFromInputField), "Project name in the input field (" + javaProjectNameFromInputField + ") is different from the expected project name (" + javaProjectName + ").");
-        newProjectDialog.previous();
-        newProjectDialog.previous();
-        newProjectDialog.cancel();
+        testProjectDialog(NewProjectType.PLAIN_JAVA, plainJavaProjectName);
     }
 
     @Test
     public void newProjectDialogMavenTest() {
-        openNewProjectDialogFromWelcomeDialog();
-        NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
-        newProjectDialog.selectNewProjectType("Maven");
-        newProjectDialog.next();
-        String mavenProjectName = "maven_project_name_test";
-        newProjectDialog.setProjectNameForMavenOrGradleProject(mavenProjectName);
-        String mavenProjectNameFromInputField = remoteRobot.find(JTextFieldFixture.class, byXpath("//div[@class='JBTextField']")).getText();
-        assertTrue(mavenProjectName.equals(mavenProjectNameFromInputField), "Project name in the input field (" + mavenProjectNameFromInputField + ") is different from the expected project name (" + mavenProjectName + ").");
-        newProjectDialog.previous();
-        newProjectDialog.cancel();
+        testProjectDialog(NewProjectType.MAVEN, mavenProjectName);
     }
 
     @Test
     public void newProjectDialogGradleTest() {
+        testProjectDialog(NewProjectType.GRADLE, gradleProjectName);
+    }
+
+    private void testProjectDialog(NewProjectType newProjectType, String newProjectName) {
         openNewProjectDialogFromWelcomeDialog();
         NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
-        newProjectDialog.selectNewProjectType("Gradle");
+        newProjectDialog.selectNewProjectType(newProjectType.toString());
         newProjectDialog.next();
-        String gradleProjectName = "gradle_project_name_test";
-        newProjectDialog.setProjectNameForMavenOrGradleProject(gradleProjectName);
-        String gradleProjectNameFromInputField = remoteRobot.find(JTextFieldFixture.class, byXpath("//div[@class='JBTextField']")).getText();
-        assertTrue(gradleProjectName.equals(gradleProjectNameFromInputField), "Project name in the input field (" + gradleProjectNameFromInputField + ") is different from the expected project name (" + gradleProjectName + ").");
+
+        String projectNameFromInputField;
+        if (newProjectType == NewProjectType.PLAIN_JAVA) {
+            newProjectDialog.next();
+            newProjectDialog.setProjectNameForJavaProject(newProjectName);
+            projectNameFromInputField = remoteRobot.findAll(JTextFieldFixture.class, byXpath("//div[@accessiblename='Project name:' and @class='JTextField']")).get(0).getText();
+        } else {
+            newProjectDialog.setProjectNameForMavenOrGradleProject(newProjectName);
+            projectNameFromInputField = remoteRobot.find(JTextFieldFixture.class, byXpath("//div[@class='JBTextField']")).getText();
+        }
+        assertTrue(newProjectName.equals(projectNameFromInputField), "Project name in the input field (" + projectNameFromInputField + ") is different from the expected project name (" + newProjectName + ").");
+
         newProjectDialog.previous();
+        if (newProjectType == NewProjectType.PLAIN_JAVA) {
+            newProjectDialog.previous();
+        }
         newProjectDialog.cancel();
+    }
+
+    private enum NewProjectType {
+        PLAIN_JAVA("Java"),
+        MAVEN("Maven"),
+        GRADLE("Gradle");
+
+        private final String projectType;
+
+        NewProjectType(String projectType) {
+            this.projectType = projectType;
+        }
+
+        @Override
+        public String toString() {
+            return this.projectType;
+        }
     }
 }

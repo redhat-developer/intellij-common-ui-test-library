@@ -11,7 +11,6 @@
 package com.redhat.devtools.intellij.commonUiTestLibrary.utilsTest.toolWindowsPaneTest;
 
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.AfterEach;
@@ -33,14 +32,13 @@ public class ProjectViewUtilsTest extends LibraryTestBase {
     private final String projectName = "project_view_utils_java_project";
 
     @BeforeEach
-    public void prepareTheProject() {
+    public void prepareProject() {
         createNewProject(projectName, "Java");
     }
 
     @AfterEach
-    public void closeTheProject() {
-        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
-        mainIdeWindow.closeProject();
+    public void closeProject() {
+        super.closeProject();
     }
 
     @Test

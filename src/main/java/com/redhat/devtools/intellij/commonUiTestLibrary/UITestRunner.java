@@ -30,7 +30,6 @@ import java.time.Duration;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
-import static com.intellij.remoterobot.utils.UtilsKt.getIdeBuildNumber;
 
 /**
  * Basic methods for starting and quiting the IntelliJ Idea IDE for UI tests
@@ -41,7 +40,7 @@ public class UITestRunner {
     private static final int defaultPort = 8580;
     private static RemoteRobot remoteRobot = null;
     private static Process ideProcess;
-    private static int intelliJIdeaVersion;
+    private static IdeaVersion ideaVersion;
 
     /**
      * Start the given version of IntelliJ Idea listening on the given port
@@ -50,15 +49,12 @@ public class UITestRunner {
      * @param port        port number on which will the IntelliJ Idea be listening
      */
     public static RemoteRobot runIde(IdeaVersion ideaVersion, int port) {
+        UITestRunner.ideaVersion = ideaVersion;
         makeSureAllTermsAndConditionsAreAccepted();
 
         String osName = System.getProperty("os.name").toLowerCase();
-        ProcessBuilder pb;
-        if (osName.contains("windows")) {
-            pb = new ProcessBuilder(".\\gradlew.bat", "runIdeForUiTests", "-PideaVersion=" + ideaVersion.toString(), "-Drobot-server.port=" + port);
-        } else {
-            pb = new ProcessBuilder("./gradlew", "runIdeForUiTests", "-PideaVersion=" + ideaVersion.toString(), "-Drobot-server.port=" + port);
-        }
+        String fileExtension = osName.contains("windows") ? ".bat" : "";
+        ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion.toString(), "-Drobot-server.port=" + port);
 
         try {
             ideProcess = pb.start();
@@ -67,9 +63,6 @@ public class UITestRunner {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-
-        String intelliJBuildNumber = getIdeBuildNumber(remoteRobot);
-        intelliJIdeaVersion = Integer.parseInt(intelliJBuildNumber.substring(3, 6));
 
         FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.clearWorkspace();
@@ -102,8 +95,8 @@ public class UITestRunner {
      *
      * @return version of the currently running IntelliJ Idea
      */
-    public static int getIntelliJIdeaVersion() {
-        return intelliJIdeaVersion;
+    public static IdeaVersion getIdeaVersion() {
+        return ideaVersion;
     }
 
     /**
@@ -150,6 +143,11 @@ public class UITestRunner {
         @Override
         public String toString() {
             return ideaVersionStringRepresentation;
+        }
+
+        public int toInt() {
+            String ideaVersion = this.ideaVersionStringRepresentation.substring(3).replace(".", "");
+            return Integer.parseInt(ideaVersion);
         }
     }
 
