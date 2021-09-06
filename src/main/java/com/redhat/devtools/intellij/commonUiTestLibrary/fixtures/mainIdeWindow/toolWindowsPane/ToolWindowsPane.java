@@ -55,6 +55,7 @@ public class ToolWindowsPane extends CommonContainerFixture {
     /**
      * Create fixture for the Stripe button
      *
+     * @param label label text of the stripe button
      * @return fixture for the Stripe button
      */
     public ComponentFixture stripeButton(String label) {
@@ -113,7 +114,8 @@ public class ToolWindowsPane extends CommonContainerFixture {
     /**
      * Test is a file with given name on given path is available in the project tree
      *
-     * @param path        path to navigate
+     * @param path path to navigate to
+     * @return true if the given file exists on the given path in the project
      */
     public boolean isAProjectFilePresent(String... path) {
         try {
