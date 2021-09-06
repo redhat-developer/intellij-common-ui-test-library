@@ -25,9 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.event.KeyEvent;
 import java.time.Duration;
 
-import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils.listOfRemoteTextToString;
-
 /**
  * Main IDE window fixture
  *
@@ -73,17 +70,13 @@ public class MainIdeWindow extends CommonContainerFixture {
     }
 
     /**
-     * Invoke a command using the Seach Everywhere popup
+     * Invoke a command using the Search Everywhere popup
      *
      * @param cmdToInvoke String representation of command which will be executed using the Search Everywhere popup
      */
     public void invokeCmdUsingSearchEverywherePopup(String cmdToInvoke) {
         SearchEverywherePopup searchEverywherePopup = openSearchEverywherePopup("All");
-        searchEverywherePopup.activateSearchField();
-        Keyboard keyboard = new Keyboard(remoteRobot);
-        keyboard.enterText(cmdToInvoke);
-        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(1), "The search in the Search Everywhere popup did not finish in 30 seconds.", () -> didSearchInSearchEverywherePopupFinish(cmdToInvoke));
-        keyboard.hotKey(KeyEvent.VK_ENTER);
+        searchEverywherePopup.invokeCmd(cmdToInvoke);
     }
 
     private SearchEverywherePopup openSearchEverywherePopup(String tab) {
@@ -102,11 +95,5 @@ public class MainIdeWindow extends CommonContainerFixture {
             searchEverywherePopup.activateTab(tab);
             return searchEverywherePopup;
         }
-    }
-
-    private boolean didSearchInSearchEverywherePopupFinish(String cmdToInvoke) {
-        SearchEverywherePopup searchEverywherePopup = find(SearchEverywherePopup.class, Duration.ofSeconds(10));
-        String searchResultsString = listOfRemoteTextToString(searchEverywherePopup.getSearchResults());
-        return searchResultsString.toLowerCase().contains(cmdToInvoke.toLowerCase());
     }
 }
