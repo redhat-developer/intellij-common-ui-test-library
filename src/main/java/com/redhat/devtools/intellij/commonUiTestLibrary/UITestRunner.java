@@ -47,6 +47,7 @@ public class UITestRunner {
      *
      * @param ideaVersion version of the IntelliJ Idea to start
      * @param port        port number on which will the IntelliJ Idea be listening
+     * @return instance of the RemoteRobot
      */
     public static RemoteRobot runIde(IdeaVersion ideaVersion, int port) {
         UITestRunner.ideaVersion = ideaVersion;
@@ -73,6 +74,7 @@ public class UITestRunner {
      * Start the given version of IntelliJ Idea listening on the default port
      *
      * @param ideaVersion version of the IntelliJ Idea to start
+     * @return instance of the RemoteRobot
      */
     public static RemoteRobot runIde(IdeaVersion ideaVersion) {
         return runIde(ideaVersion, defaultPort);
@@ -113,6 +115,7 @@ public class UITestRunner {
      *
      * @param port port number
      * @return instance of the RemoteRobot
+     * @throws InterruptedException may be thrown in Thread.sleep()
      */
     public static RemoteRobot getRemoteRobotConnection(int port) throws InterruptedException {
         RemoteRobot remoteRobot = new RemoteRobot("http://127.0.0.1:" + port);

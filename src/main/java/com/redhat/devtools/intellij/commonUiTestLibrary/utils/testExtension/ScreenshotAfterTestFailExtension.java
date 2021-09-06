@@ -25,10 +25,10 @@ import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.screenshot.
 
 /**
  * ScreenshotAfterTestFailExtension takes screenshot immediately after test has failed
- * and perform a clean up to ensure no dialog or windows is opened
+ * and perform a clean up to ensure no dialog or windows is opened<br>
  *
- * USAGE: Add the following annotation before every class with JUnit tests
- *        @ExtendWith(ScreenshotAfterTestFailExtension.class)
+ * <b>USAGE:</b> Add the following annotation before every class with JUnit tests:
+ * {@code @ExtendWith(ScreenshotAfterTestFailExtension.class)}<br>
  *
  * @author zcervink@redhat.com
  *
