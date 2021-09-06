@@ -30,7 +30,7 @@ task integrationTest(type: Test) {
 }
 
 dependencies {
-    compile 'org.jboss.tools.intellij.commonUiTestLibrary:intellij-common-ui-test-library:0.0.1-SNAPSHOT'
+    compile 'com.redhat.devtools.intellij:intellij-common-ui-test-library:0.0.2-SNAPSHOT'
 }
 
 runIdeForUiTests {
@@ -50,7 +50,7 @@ private static RemoteRobot robot;
 
 @BeforeAll
 public static void runIdeForUiTests() {
-    robot = UITestRunner.runIde("IC-2020.2", 8082);
+    robot = UITestRunner.runIde("IC-2020.3", 8580);
 }
 
 @AfterAll
