@@ -30,7 +30,7 @@ task integrationTest(type: Test) {
 }
 
 dependencies {
-    compile 'com.redhat.devtools.intellij:intellij-common-ui-test-library:0.0.2-SNAPSHOT'
+    compile 'com.redhat.devtools.intellij:intellij-common-ui-test-library:0.0.2'
 }
 
 runIdeForUiTests {
