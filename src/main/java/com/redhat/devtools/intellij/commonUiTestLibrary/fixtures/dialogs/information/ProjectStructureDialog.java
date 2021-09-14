@@ -39,11 +39,5 @@ public class ProjectStructureDialog extends CommonContainerFixture {
      */
     public void cancel() {
         button(cancelLabel).click();
-//        try {
-//            ProjectStructureDialog projectStructureDialog = remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(20));
-//            projectStructureDialog.button(cancelLabel).click();
-//        } catch (WaitForConditionTimeoutException e) {
-//            e.printStackTrace();
-//        }
     }
 }
