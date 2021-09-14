@@ -34,7 +34,7 @@ class ToolWindowsPaneTest extends LibraryTestBase {
     private final String gradleProjectName = "tool_windows_pane_java_gradle_project";
 
     @AfterEach
-    public void closeProject() {
+    public void closeCurrentProject() {
         super.closeProject();
     }
 

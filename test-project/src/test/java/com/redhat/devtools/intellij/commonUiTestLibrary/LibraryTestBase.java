@@ -11,7 +11,7 @@
 package com.redhat.devtools.intellij.commonUiTestLibrary;
 
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.time.Duration;
@@ -33,8 +33,8 @@ public class LibraryTestBase extends AbstractLibraryTestBase {
         }
     }
 
-    @AfterEach
-    protected void finishTestRun() {
+    @AfterAll
+    protected static void finishTestRun() {
         FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.clearExceptions();
         flatWelcomeFrame.clearWorkspace();
