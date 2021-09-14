@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.dialogs.navigation;
 
+import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
@@ -20,7 +21,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterAll;
 
+import java.lang.reflect.Array;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog.closeTipDialogIfItAppears;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -43,25 +48,29 @@ public class ProjectStructureAndTipDialogs extends LibraryTestBase {
         LibraryTestBase.closeProject();
     }
 
-    @Test
-    public void projectStructureDialogTest() {
-        makeSureDialogIsVisible(ProjectStructureDialog.class, "Project Structure");
-        assertTrue(isDialogVisible(ProjectStructureDialog.class), "The 'Project Structure' dialog should be visible but is not.");
+    private void dialogTest(Runnable selectedImpl, Class dialogClass, String dialogTitle) {
+        makeSureDialogIsVisible(dialogClass, dialogTitle);
+        assertTrue(isDialogVisible(dialogClass), "The '" + dialogTitle + "' dialog should be visible but is not.");
         ProjectStructureDialog projectStructureDialog = remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(10));
-        projectStructureDialog.cancel();
-        assertTrue(!isDialogVisible(ProjectStructureDialog.class), "The 'Project Structure' dialog should be closed but is not.");
+        selectedImpl.run();
+        assertTrue(!isDialogVisible(dialogClass), "The '" + dialogTitle + "' dialog should be visible but is not.");
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilAllBgTasksFinish();
     }
 
     @Test
+    public void projectStructureDialogTest() {
+        dialogTest(() -> {
+            ProjectStructureDialog projectStructureDialog = remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(10));
+            projectStructureDialog.cancel();
+        }, ProjectStructureDialog.class, "Project Structure");
+    }
+
+    @Test
     public void tipDialogTest() {
-        makeSureDialogIsVisible(TipDialog.class, "Tip of the Day");
-        assertTrue(isDialogVisible(TipDialog.class), "The 'Tip of the Day' dialog should be visible but is not.");
-        closeTipDialogIfItAppears(remoteRobot);
-        assertTrue(!isDialogVisible(TipDialog.class), "The 'Tip of the Day' dialog should be closed but is not.");
-        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
-        ideStatusBar.waitUntilAllBgTasksFinish();
+        dialogTest(() -> {
+            closeTipDialogIfItAppears(remoteRobot);
+        }, TipDialog.class, "Tip of the Day");
     }
 
     private void makeSureDialogIsVisible(Class dialogClass, String dialogTitle) {
