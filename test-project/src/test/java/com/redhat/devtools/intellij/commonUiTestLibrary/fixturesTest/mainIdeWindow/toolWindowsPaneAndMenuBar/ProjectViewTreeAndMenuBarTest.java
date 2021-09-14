@@ -17,9 +17,9 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.informa
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.menuBar.MenuBar;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
@@ -34,16 +34,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(ScreenshotAfterTestFailExtension.class)
 class ProjectViewTreeAndMenuBarTest extends LibraryTestBase {
-    private final String projectName = "project_view_tree_java_project";
+    private static final String projectName = "project_view_tree_java_project";
 
-    @BeforeEach
-    public void prepareProject() {
+    @BeforeAll
+    public static void prepareProject() {
         createNewProject(projectName, "Java");
     }
 
-    @AfterEach
-    public void closeCurrentProject() {
-        super.closeProject();
+    @AfterAll
+    public static void closeCurrentProject() {
+        LibraryTestBase.closeProject();
     }
 
     @Test
