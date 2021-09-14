@@ -37,7 +37,7 @@ class IdeStatusBarTest extends LibraryTestBase {
     private final String projectName = "ide_status_bar_java_project";
 
     @AfterEach
-    public void closeProject() {
+    public void closeCurrentProject() {
         super.closeProject();
     }
 

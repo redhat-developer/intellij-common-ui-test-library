@@ -37,7 +37,7 @@ public class ProjectViewUtilsTest extends LibraryTestBase {
     }
 
     @AfterEach
-    public void closeProject() {
+    public void closeCurrentProject() {
         super.closeProject();
     }
 

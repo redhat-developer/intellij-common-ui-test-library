@@ -35,16 +35,15 @@ public class ProjectStructureDialog extends CommonContainerFixture {
     }
 
     /**
-     * Cancel the 'Project Structure' dialog if it appears
-     *
-     * @param remoteRobot reference to the RemoteRobot instance
+     * Cancel the 'Project Structure'
      */
-    public static void cancelProjectStructureDialogIfItAppears(RemoteRobot remoteRobot) {
-        try {
-            ProjectStructureDialog projectStructureDialog = remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(20));
-            projectStructureDialog.button(cancelLabel).click();
-        } catch (WaitForConditionTimeoutException e) {
-            e.printStackTrace();
-        }
+    public void cancel() {
+        button(cancelLabel).click();
+//        try {
+//            ProjectStructureDialog projectStructureDialog = remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(20));
+//            projectStructureDialog.button(cancelLabel).click();
+//        } catch (WaitForConditionTimeoutException e) {
+//            e.printStackTrace();
+//        }
     }
 }

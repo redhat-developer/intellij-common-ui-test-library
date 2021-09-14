@@ -28,7 +28,7 @@ import static com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.
 public abstract class AbstractLibraryTestBase {
     protected static RemoteRobot remoteRobot;
 
-    protected void createNewProject(String projectName, String projectType) {
+    protected static void createNewProject(String projectName, String projectType) {
         openNewProjectDialogFromWelcomeDialog();
         NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
         newProjectDialog.selectNewProjectType(projectType);
@@ -50,12 +50,12 @@ public abstract class AbstractLibraryTestBase {
         ideStatusBar.waitUntilAllBgTasksFinish();
     }
 
-    protected void openNewProjectDialogFromWelcomeDialog() {
+    protected static void openNewProjectDialogFromWelcomeDialog() {
         FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.createNewProject();
     }
 
-    protected void closeProject() {
+    protected static void closeProject() {
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
         mainIdeWindow.closeProject();
     }
