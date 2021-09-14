@@ -51,7 +51,6 @@ public class ProjectStructureAndTipDialogs extends LibraryTestBase {
     private void dialogTest(Runnable selectedImpl, Class dialogClass, String dialogTitle) {
         makeSureDialogIsVisible(dialogClass, dialogTitle);
         assertTrue(isDialogVisible(dialogClass), "The '" + dialogTitle + "' dialog should be visible but is not.");
-        ProjectStructureDialog projectStructureDialog = remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(10));
         selectedImpl.run();
         assertTrue(!isDialogVisible(dialogClass), "The '" + dialogTitle + "' dialog should be visible but is not.");
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
