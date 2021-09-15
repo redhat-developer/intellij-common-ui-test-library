@@ -82,11 +82,11 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ runner.os }}-test-reports
-        path: src\test-project/build/reports/tests/test
+        path: src\test-project\build\reports\tests\test
       if: always()
     - name: Archiving screenshots
       uses: actions/upload-artifact@v2
       with: 
         name: ${{ runner.os }}-screenshots
-        path: src\test-project/build/screenshots/*
+        path: src\test-project\build\screenshots\*
       if: always()
