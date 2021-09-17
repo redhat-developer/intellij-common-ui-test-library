@@ -23,19 +23,19 @@ jobs:
       run: |
         export DISPLAY=:99.0
         Xvfb -ac :99 -screen 0 1920x1080x24 &
-        cd test-project
+        cd src/test-project
         chmod +x gradlew
         ./gradlew clean test --warning-mode none
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ runner.os }}-test-reports
-        path: test-project/build/reports/tests/test
+        path: src/test-project/build/reports/tests/test
       if: always()
     - name: Archiving screenshots
       uses: actions/upload-artifact@v2
       with: 
         name: ${{ runner.os }}-screenshots
-        path: test-project/build/screenshots/*
+        path: src/test-project/build/screenshots/*
       if: always()
 
   build-macos:
@@ -49,19 +49,19 @@ jobs:
         java-version: 11
     - name: Run integration tests
       run: |
-        cd test-project
+        cd src/test-project
         chmod +x gradlew
         ./gradlew clean test --warning-mode none
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ runner.os }}-test-reports
-        path: test-project/build/reports/tests/test
+        path: src/test-project/build/reports/tests/test
       if: always()
     - name: Archiving screenshots
       uses: actions/upload-artifact@v2
       with: 
         name: ${{ runner.os }}-screenshots
-        path: test-project/build/screenshots/*
+        path: src/test-project/build/screenshots/*
       if: always()
 
   build-windows:
@@ -75,18 +75,18 @@ jobs:
         java-version: 11
     - name: Run integration tests
       run: |
-        cd test-project
+        cd src\test-project
         chmod +x gradlew.bat
         .\gradlew.bat clean test --warning-mode none
       shell: powershell
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ runner.os }}-test-reports
-        path: test-project/build/reports/tests/test
+        path: src\test-project\build\reports\tests\test
       if: always()
     - name: Archiving screenshots
       uses: actions/upload-artifact@v2
       with: 
         name: ${{ runner.os }}-screenshots
-        path: test-project/build/screenshots/*
+        path: src\test-project\build\screenshots\*
       if: always()

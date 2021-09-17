@@ -30,7 +30,7 @@ task integrationTest(type: Test) {
 }
 
 dependencies {
-    compile 'com.redhat.devtools.intellij:intellij-common-ui-test-library:0.0.2'
+    compile 'com.redhat.devtools.intellij:intellij-common-ui-test-library:0.0.3-SNAPSHOT'
 }
 
 runIdeForUiTests {
@@ -64,6 +64,6 @@ public static void closeIde() {
 You can run JUnit tests contained in this repository to test this library by executing the following command:
 
 ```sh
-cd test-project
+cd src/test-project
 ./gradlew test
 ```
