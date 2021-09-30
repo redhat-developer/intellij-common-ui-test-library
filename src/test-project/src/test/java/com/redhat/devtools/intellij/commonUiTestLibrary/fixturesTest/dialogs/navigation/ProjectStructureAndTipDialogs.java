@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.dialogs.navigation;
 
-import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
@@ -21,11 +20,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterAll;
 
-import java.lang.reflect.Array;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog.closeTipDialogIfItAppears;
 import static org.junit.jupiter.api.Assertions.assertTrue;

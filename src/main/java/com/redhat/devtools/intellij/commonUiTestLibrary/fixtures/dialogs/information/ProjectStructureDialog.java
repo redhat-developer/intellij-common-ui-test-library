@@ -15,10 +15,7 @@ import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
-import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import org.jetbrains.annotations.NotNull;
-
-import java.time.Duration;
 
 import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.cancelLabel;
 

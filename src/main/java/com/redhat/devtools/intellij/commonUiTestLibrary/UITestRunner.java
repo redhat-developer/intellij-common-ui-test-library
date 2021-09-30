@@ -11,7 +11,6 @@
 package com.redhat.devtools.intellij.commonUiTestLibrary;
 
 import com.intellij.remoterobot.RemoteRobot;
-import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
 
@@ -28,7 +27,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 
-import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 
 /**
@@ -65,8 +63,7 @@ public class UITestRunner {
             e.printStackTrace();
         }
 
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-        flatWelcomeFrame.clearWorkspace();
+        remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).clearWorkspace();
         return remoteRobot;
     }
 
@@ -85,8 +82,8 @@ public class UITestRunner {
      */
     public static void closeIde() {
         if (remoteRobot.isWin()) {
-            ComponentFixture windowsCloseButton = remoteRobot.find(ComponentFixture.class, byXpath("//div[@accessiblename='Close' and @class='JButton']"), Duration.ofSeconds(10));
-            windowsCloseButton.click();
+            remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).runJs("const horizontal_offset = component.getWidth() - 24;\n" +
+                    "robot.click(component, new Point(horizontal_offset, 14), MouseButton.LEFT_BUTTON, 2);");
         } else {
             ideProcess.destroy();
         }

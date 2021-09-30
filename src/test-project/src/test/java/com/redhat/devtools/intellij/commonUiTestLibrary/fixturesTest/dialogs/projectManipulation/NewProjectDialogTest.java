@@ -19,7 +19,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
-import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -48,7 +47,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         testProjectDialog(NewProjectType.GRADLE, gradleProjectName);
     }
 
-    private void testProjectDialog(NewProjectType newProjectType, String newProjectName) {
+    private void testProjectDialog(NewProjectType newProjectType, String projectName) {
         openNewProjectDialogFromWelcomeDialog();
         NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
         newProjectDialog.selectNewProjectType(newProjectType.toString());
@@ -57,13 +56,10 @@ public class NewProjectDialogTest extends LibraryTestBase {
         String projectNameFromInputField;
         if (newProjectType == NewProjectType.PLAIN_JAVA) {
             newProjectDialog.next();
-            newProjectDialog.setProjectNameForJavaProject(newProjectName);
-            projectNameFromInputField = remoteRobot.findAll(JTextFieldFixture.class, byXpath("//div[@accessiblename='Project name:' and @class='JTextField']")).get(0).getText();
-        } else {
-            newProjectDialog.setProjectNameForMavenOrGradleProject(newProjectName);
-            projectNameFromInputField = remoteRobot.find(JTextFieldFixture.class, byXpath("//div[@class='JBTextField']")).getText();
         }
-        assertTrue(newProjectName.equals(projectNameFromInputField), "Project name in the input field (" + projectNameFromInputField + ") is different from the expected project name (" + newProjectName + ").");
+        newProjectDialog.setProjectName(projectName);
+        projectNameFromInputField = remoteRobot.findAll(JTextFieldFixture.class, JTextFieldFixture.Companion.byType()).get(0).getText();
+        assertTrue(projectName.equals(projectNameFromInputField), "Project name in the input field (" + projectNameFromInputField + ") is different from the expected project name (" + projectName + ").");
 
         newProjectDialog.previous();
         if (newProjectType == NewProjectType.PLAIN_JAVA) {

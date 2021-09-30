@@ -64,8 +64,7 @@ public class MainIdeWindow extends CommonContainerFixture {
             new MenuBar(remoteRobot).navigateTo("File", "Close Project");
         }
 
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-        flatWelcomeFrame.runJs("const horizontal_offset = component.getWidth()/2;\n" +
+        remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).runJs("const horizontal_offset = component.getWidth()/2;\n" +
                 "robot.click(component, new Point(horizontal_offset, 10), MouseButton.LEFT_BUTTON, 1);");
     }
 

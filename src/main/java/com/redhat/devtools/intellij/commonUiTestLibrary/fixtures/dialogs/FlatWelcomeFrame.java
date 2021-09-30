@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.UtilsKt.hasAnyComponent;
@@ -65,12 +66,12 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
         // delete all the projects' links from the 'Welcome to IntelliJ IDEA' dialog
         int numberOfLinks = getNumberOfProjectLinks();
         for (int i = 0; i < numberOfLinks; i++) {
-            ComponentFixture recentProjectsList = find(ComponentFixture.class, byXpath("//div[@accessiblename='Recent Projects' and @class='MyList']"), Duration.ofSeconds(10));
+            JListFixture recentProjectsList = jLists(byXpath("//div[@accessiblename='Recent Projects']")).get(0);
             recentProjectsList.runJs("const horizontal_offset = component.getWidth()-22;\n" +
                     "robot.click(component, new Point(horizontal_offset, 22), MouseButton.LEFT_BUTTON, 1);");
             // Code for IntelliJ Idea 2020.3 or newer
             if (intelliJVersion.toInt() >= 20203) {
-                JPopupMenuFixture contextMenu = find(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType(), Duration.ofSeconds(10));
+                JPopupMenuFixture contextMenu = jPopupMenus(JPopupMenuFixture.Companion.byType()).get(0);
                 contextMenu.select("Remove from Recent Projects");
             }
         }
@@ -100,27 +101,26 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             return;
         }
 
-        IdeFatalErrorsDialog ideFatalErrorsDialog = find(IdeFatalErrorsDialog.class, Duration.ofSeconds(10));
-        ideFatalErrorsDialog.clearAll();
+        find(IdeFatalErrorsDialog.class, Duration.ofSeconds(10)).clearAll();
     }
 
     // Works for IntelliJ Idea 2020.3+
-    private ComponentFixture welcomeFrameLink(String text) {
+    private JButtonFixture welcomeFrameLink(String text) {
         if (hasAnyComponent(this, byXpath("//div[@class='NewRecentProjectPanel']"))) {
-            return find(ComponentFixture.class, byXpath("//div[@class='JBOptionButton' and @text='" + text + "']"));
+            return button(byXpath("//div[@class='JBOptionButton' and @text='" + text + "']"), Duration.ofSeconds(2));
         }
-        return find(ComponentFixture.class, byXpath("//div[@class='NonOpaquePanel'][./div[@text='" + text + "']]//div[@class='JButton']"));
+        return button(byXpath("//div[@class='NonOpaquePanel'][./div[@text='" + text + "']]"), Duration.ofSeconds(2));
     }
 
     private int getNumberOfProjectLinks() {
-        try {
-            ComponentFixture recentProjectsList = find(ComponentFixture.class, byXpath("//div[@accessiblename='Recent Projects' and @class='MyList']"), Duration.ofSeconds(10));
-            int numberOfProjectsLinks = recentProjectsList.findAllText().size() / 2;    // 2 items per 1 project link (project path and project name)
-            return numberOfProjectsLinks;
-        } catch (WaitForConditionTimeoutException e) {
+        List<JListFixture> allJLists = jLists(byXpath("//div[@accessiblename='Recent Projects']"));
+        if (allJLists.isEmpty()) {
             // the list with accessible name 'Recent Projects' is not available -> 0 links in the 'Welcome to IntelliJ IDEA' dialog
             return 0;
         }
+        JListFixture recentProjectsList = allJLists.get(0);
+        int numberOfProjectsLinks = recentProjectsList.findAllText().size() / 2;    // 2 items per 1 project link (project path and project name)
+        return numberOfProjectsLinks;
     }
 
     private ComponentFixture ideErrorsIcon() {

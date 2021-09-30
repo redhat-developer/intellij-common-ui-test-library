@@ -57,8 +57,7 @@ public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallb
     private void cleanAfterTestFail() {
         // New Project Dialog is visible -> close it
         try {
-            NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
-            newProjectDialog.cancel();
+            remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10)).cancel();
             return;
         } catch (WaitForConditionTimeoutException e2) {
             // New Project Dialog is not visible -> continue
@@ -71,9 +70,7 @@ public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallb
         } catch (WaitForConditionTimeoutException e) {
             // Main IDE Window is visible -> close it
             try {
-                remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
-                MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
-                mainIdeWindow.closeProject();
+                remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10)).closeProject();
                 return;
             } catch (WaitForConditionTimeoutException e2) {
                 // Main IDE Window is not visible -> continue

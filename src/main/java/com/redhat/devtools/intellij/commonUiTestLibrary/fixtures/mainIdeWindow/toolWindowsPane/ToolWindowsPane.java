@@ -16,6 +16,9 @@ import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
+import com.intellij.remoterobot.fixtures.JButtonFixture;
+import com.intellij.remoterobot.fixtures.JTreeFixture;
+import com.intellij.remoterobot.fixtures.TextEditorFixture;
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import org.assertj.swing.core.MouseButton;
@@ -58,8 +61,8 @@ public class ToolWindowsPane extends CommonContainerFixture {
      * @param label label text of the stripe button
      * @return fixture for the Stripe button
      */
-    public ComponentFixture stripeButton(String label) {
-        return find(ComponentFixture.class, byXpath("//div[@accessiblename='" + label + "' and @class='StripeButton' and @text='" + label + "']"));
+    public JButtonFixture stripeButton(String label) {
+        return button(byXpath("//div[@text='" + label + "']"), Duration.ofSeconds(2));
     }
 
     /**
@@ -67,8 +70,8 @@ public class ToolWindowsPane extends CommonContainerFixture {
      *
      * @return fixture for the options tree in the 'Maven' right side panel
      */
-    public ComponentFixture mavenTabTree() {
-        return find(ComponentFixture.class, byXpath("//div[@class='SimpleTree']"));
+    public JTreeFixture mavenTabTree() {
+        return find(JTreeFixture.class, byXpath("//div[@class='SimpleTree']"));
     }
 
     /**
@@ -76,8 +79,8 @@ public class ToolWindowsPane extends CommonContainerFixture {
      *
      * @return fixture for the options tree in the 'Gradle' right side panel
      */
-    public ComponentFixture gradleTabTree() {
-        return find(ComponentFixture.class, byXpath("//div[@class='ExternalProjectTree']"));
+    public JTreeFixture gradleTabTree() {
+        return find(JTreeFixture.class, byXpath("//div[@class='ExternalProjectTree']"));
     }
 
     /**
@@ -128,7 +131,6 @@ public class ToolWindowsPane extends CommonContainerFixture {
 
     /**
      * Test if build is successful
-     *
      */
     public void testIfBuildIsSuccessful() {
         ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class);
@@ -160,8 +162,8 @@ public class ToolWindowsPane extends CommonContainerFixture {
      *
      * @return fixture for the ProjectViewTree
      */
-    public ComponentFixture projectViewTree() {
-        return find(ComponentFixture.class, byXpath("//div[@class='ProjectViewTree']"), Duration.ofSeconds(10));
+    public JTreeFixture projectViewTree() {
+        return find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
     }
 
     private void expandMavenTargetTreeIfNecessary() {
@@ -206,11 +208,9 @@ public class ToolWindowsPane extends CommonContainerFixture {
         return !treeContent.toLowerCase(Locale.ROOT).contains("nothing") && !treeContent.equals("");
     }
 
-
     private boolean isStripeButtonAvailable(String label) {
         try {
-            ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-            toolWindowsPane.stripeButton(label);
+            remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10)).stripeButton(label);
         } catch (WaitForConditionTimeoutException e) {
             return false;
         }
@@ -262,12 +262,12 @@ public class ToolWindowsPane extends CommonContainerFixture {
         return buildStatusTreeText;
     }
 
-    private ComponentFixture buildStatusTree() {
-        return find(ComponentFixture.class, byXpath("//div[@class='Tree']"));
+    private JTreeFixture buildStatusTree() {
+        return find(JTreeFixture.class, byXpath("//div[@class='Tree']"));
     }
 
-    private ComponentFixture runConsole() {
-        return find(ComponentFixture.class, byXpath("//div[@accessiblename='Editor' and @class='EditorComponentImpl']"));
+    private TextEditorFixture runConsole() {
+        return textEditor(byXpath("//div[@accessiblename='Editor']"), Duration.ofSeconds(2));
     }
 
     private enum ActionToPerform {

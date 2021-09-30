@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.dialogs;
 
-import com.intellij.remoterobot.fixtures.ComponentFixture;
+import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
@@ -68,7 +68,7 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
     private int getNumberOfProjectLinksInFlatWelcomeFrame() {
         try {
             FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-            ComponentFixture recentProjectsList = flatWelcomeFrame.find(ComponentFixture.class, byXpath("//div[@accessiblename='Recent Projects' and @class='MyList']"));
+            JListFixture recentProjectsList = flatWelcomeFrame.find(JListFixture.class, byXpath("//div[@accessiblename='Recent Projects']"), Duration.ofSeconds(10));
             int numberOfProjectsLinks = recentProjectsList.findAllText().size() / 2;    // 2 items per 1 project link (project path and project name)
             return numberOfProjectsLinks;
         } catch (WaitForConditionTimeoutException e) {
