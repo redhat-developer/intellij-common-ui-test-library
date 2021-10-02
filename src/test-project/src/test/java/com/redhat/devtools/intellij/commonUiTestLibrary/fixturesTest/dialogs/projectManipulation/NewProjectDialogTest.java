@@ -10,8 +10,14 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.dialogs.projectManipulation;
 
+import com.intellij.remoterobot.fixtures.ComboBoxFixture;
+import com.intellij.remoterobot.fixtures.JLabelFixture;
+import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.fixtures.JTextFieldFixture;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialog;
 import org.junit.jupiter.api.Test;
@@ -19,6 +25,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
+import static com.intellij.remoterobot.search.locators.Locators.byXpath;
+import static com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog.closeTipDialogIfItAppears;
+import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils.listOfRemoteTextToString;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -33,38 +42,100 @@ public class NewProjectDialogTest extends LibraryTestBase {
     private final String gradleProjectName = "gradle_project_name_test";
 
     @Test
-    public void newProjectDialogJavaTest() {
-        testProjectDialog(NewProjectType.PLAIN_JAVA, plainJavaProjectName);
+    public void setProjectNamePlainJavaProjectTest() {
+        testProjectNameInputField(plainJavaProjectName,NewProjectType.PLAIN_JAVA);
     }
 
     @Test
-    public void newProjectDialogMavenTest() {
-        testProjectDialog(NewProjectType.MAVEN, mavenProjectName);
+    public void setProjectNameMavenProjectTest() {
+        testProjectNameInputField(mavenProjectName,NewProjectType.MAVEN);
     }
 
     @Test
-    public void newProjectDialogGradleTest() {
-        testProjectDialog(NewProjectType.GRADLE, gradleProjectName);
+    public void setProjectNameGradleProjectTest() {
+        testProjectNameInputField(gradleProjectName,NewProjectType.GRADLE);
     }
 
-    private void testProjectDialog(NewProjectType newProjectType, String projectName) {
+    @Test
+    public void nextPreviousFinishButtonTest() {
         openNewProjectDialogFromWelcomeDialog();
+        NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
+        newProjectDialog.selectNewProjectType("Java");
+        newProjectDialog.setProjectSdkIfAvailable("11");
+        newProjectDialog.next();
+        newProjectDialog.next();
+        boolean isProjectNameLabelPresent = newProjectDialog.findAll(JLabelFixture.class, byXpath("//div[@text='Project name:']")).size() == 1;
+        assertTrue(isProjectNameLabelPresent, "The 'Project name:' label should be present but is not.");
+        newProjectDialog.previous();
+        boolean isCommandLineAppTextPresent = listOfRemoteTextToString(newProjectDialog.findAllText()).contains("Command Line App");
+        assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present but is not.");
+        newProjectDialog.next();
+        newProjectDialog.setProjectName(plainJavaProjectName);
+        newProjectDialog.finish();
+        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
+        ideStatusBar.waitUntilProjectImportIsComplete();
+        closeTipDialogIfItAppears(remoteRobot);
+        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
+        mainIdeWindow.maximizeIdeWindow();
+        ideStatusBar.waitUntilAllBgTasksFinish();
+        closeProject();
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame.clearWorkspace();
+    }
+
+    @Test
+    public void cancelButtonTest() {
+        openNewProjectDialogFromWelcomeDialog();
+        NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
+        newProjectDialog.cancel();
+        remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+    }
+
+    @Test
+    public void setProjectSdkIfAvailableTest() {
+        openNewProjectDialogFromWelcomeDialog();
+        NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
+        newProjectDialog.selectNewProjectType("Java");
+        newProjectDialog.setProjectSdkIfAvailable("8");
+        ComboBoxFixture projectJdkComboBox = remoteRobot.find(ComboBoxFixture.class, byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
+        String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
+        assertTrue(currentlySelectedProjectSdk.contains("8"), "Selected project SDK should be Java 8 but is '" + currentlySelectedProjectSdk +"'");
+        newProjectDialog.setProjectSdkIfAvailable("11");
+        currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
+        assertTrue(currentlySelectedProjectSdk.contains("11"), "Selected project SDK should be Java 11 but is '" + currentlySelectedProjectSdk +"'");
+        newProjectDialog.cancel();
+    }
+
+    @Test
+    public void selectNewProjectTypeTest() {
+        openNewProjectDialogFromWelcomeDialog();
+        NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
+        newProjectDialog.selectNewProjectType("Empty Project");
+        boolean isEmptyProjectLabelVisible = !newProjectDialog.findAll(JListFixture.class, byXpath("//div[@visible_text='Empty Project']")).isEmpty();
+        assertTrue(isEmptyProjectLabelVisible, "The 'Empty Project' label should be visible but is not.");
+
+        newProjectDialog.selectNewProjectType("Java FX");
+        boolean isJavaFXApplicationLabelVisible = !newProjectDialog.findAll(JListFixture.class, byXpath("//div[@visible_text='JavaFX Application']")).isEmpty();
+        assertTrue(isJavaFXApplicationLabelVisible, "The 'Java FX' label should be visible but is not.");
+        newProjectDialog.cancel();
+    }
+
+    private void navigateToSetProjectNamePage(NewProjectType newProjectType) {
         NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
         newProjectDialog.selectNewProjectType(newProjectType.toString());
         newProjectDialog.next();
-
-        String projectNameFromInputField;
         if (newProjectType == NewProjectType.PLAIN_JAVA) {
             newProjectDialog.next();
         }
-        newProjectDialog.setProjectName(projectName);
-        projectNameFromInputField = remoteRobot.findAll(JTextFieldFixture.class, JTextFieldFixture.Companion.byType()).get(0).getText();
-        assertTrue(projectName.equals(projectNameFromInputField), "Project name in the input field (" + projectNameFromInputField + ") is different from the expected project name (" + projectName + ").");
+    }
 
-        newProjectDialog.previous();
-        if (newProjectType == NewProjectType.PLAIN_JAVA) {
-            newProjectDialog.previous();
-        }
+    private void testProjectNameInputField(String projectName, NewProjectType newProjectType) {
+        openNewProjectDialogFromWelcomeDialog();
+        navigateToSetProjectNamePage(newProjectType);
+        NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
+        newProjectDialog.setProjectName(projectName);
+        String projectNameFromInputField = remoteRobot.findAll(JTextFieldFixture.class, JTextFieldFixture.Companion.byType()).get(0).getText();
+        assertTrue(projectName.equals(projectNameFromInputField), "Project name in the input field (" + projectNameFromInputField + ") is different from the expected project name (" + projectName + ").");
         newProjectDialog.cancel();
     }
 

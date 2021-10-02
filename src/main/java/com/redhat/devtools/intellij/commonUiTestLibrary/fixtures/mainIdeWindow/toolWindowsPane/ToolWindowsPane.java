@@ -66,24 +66,6 @@ public class ToolWindowsPane extends CommonContainerFixture {
     }
 
     /**
-     * Create fixture for the options tree in the 'Maven' right side panel
-     *
-     * @return fixture for the options tree in the 'Maven' right side panel
-     */
-    public JTreeFixture mavenTabTree() {
-        return find(JTreeFixture.class, byXpath("//div[@class='SimpleTree']"));
-    }
-
-    /**
-     * Create fixture for the options tree in the 'Gradle' right side panel
-     *
-     * @return fixture for the options tree in the 'Gradle' right side panel
-     */
-    public JTreeFixture gradleTabTree() {
-        return find(JTreeFixture.class, byXpath("//div[@class='ExternalProjectTree']"));
-    }
-
-    /**
      * Build the project
      *
      * @param toolToBuildProject project management tool to manage this project
@@ -120,7 +102,7 @@ public class ToolWindowsPane extends CommonContainerFixture {
      * @param path path to navigate to
      * @return true if the given file exists on the given path in the project
      */
-    public boolean isAProjectFilePresent(String... path) {
+    public boolean isProjectFilePresent(String... path) {
         try {
             navigateThroughProjectTree(ActionToPerform.HIGHLIGHT, path);
         } catch (NoSuchElementException e) {
@@ -157,13 +139,16 @@ public class ToolWindowsPane extends CommonContainerFixture {
         }
     }
 
-    /**
-     * Create fixture for the ProjectViewTree
-     *
-     * @return fixture for the ProjectViewTree
-     */
-    public JTreeFixture projectViewTree() {
+    private JTreeFixture projectViewTree() {
         return find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
+    }
+
+    private JTreeFixture mavenTabTree() {
+        return find(JTreeFixture.class, byXpath("//div[@class='SimpleTree']"));
+    }
+
+    private JTreeFixture gradleTabTree() {
+        return find(JTreeFixture.class, byXpath("//div[@class='ExternalProjectTree']"));
     }
 
     private void expandMavenTargetTreeIfNecessary() {

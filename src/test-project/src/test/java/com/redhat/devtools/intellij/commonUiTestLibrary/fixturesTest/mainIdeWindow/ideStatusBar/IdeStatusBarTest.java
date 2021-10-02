@@ -42,7 +42,7 @@ class IdeStatusBarTest extends LibraryTestBase {
     }
 
     @Test
-    public void ideStatusBarTest() {
+    public void progressBarTest() {
         openNewProjectDialogFromWelcomeDialog();
         NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
         newProjectDialog.selectNewProjectType("Maven");
@@ -50,7 +50,7 @@ class IdeStatusBarTest extends LibraryTestBase {
         newProjectDialog.setProjectName(projectName);
         newProjectDialog.finish();
 
-        waitFor(Duration.ofSeconds(60), Duration.ofSeconds(1), "The progress bar in status bar did not appear in 60 seconds.", () -> isProgressbarWithLabelVisible());
+        waitFor(Duration.ofSeconds(60), Duration.ofSeconds(1), "The progress bar in status bar did not appear in 60 seconds.", () -> isProgressBarWithLabelVisible());
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilProjectImportIsComplete();
         closeTipDialogIfItAppears(remoteRobot);
@@ -59,7 +59,7 @@ class IdeStatusBarTest extends LibraryTestBase {
         ideStatusBar.waitUntilAllBgTasksFinish();
     }
 
-    private static boolean isProgressbarWithLabelVisible() {
+    private static boolean isProgressBarWithLabelVisible() {
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         List<RemoteText> inlineProgressPanelContent = ideStatusBar.inlineProgressPanel().findAllText();
         String inlineProgressPanelText = listOfRemoteTextToString(inlineProgressPanelContent);
