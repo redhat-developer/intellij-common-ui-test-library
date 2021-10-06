@@ -11,6 +11,7 @@
 package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.menuBar;
 
 import com.intellij.remoterobot.RemoteRobot;
+import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
@@ -73,15 +74,15 @@ public class MenuBar {
             return null;
         }
 
-        ContainerFixture cf;
+        CommonContainerFixture cf;
         if (remoteRobot.isLinux()) {
-            cf = remoteRobot.find(ContainerFixture.class, byXpath("//div[@class='LinuxIdeMenuBar']"), Duration.ofSeconds(10));
+            cf = remoteRobot.find(CommonContainerFixture.class, byXpath("//div[@class='LinuxIdeMenuBar']"), Duration.ofSeconds(10));
         } else if (remoteRobot.isWin() && ideaVersion.toInt() >= 20203) {
-            cf = remoteRobot.find(ContainerFixture.class, byXpath("//div[@class='MenuFrameHeader']"), Duration.ofSeconds(10));
+            cf = remoteRobot.find(CommonContainerFixture.class, byXpath("//div[@class='MenuFrameHeader']"), Duration.ofSeconds(10));
         } else {
-            cf = remoteRobot.find(ContainerFixture.class, byXpath("//div[@class='CustomHeaderMenuBar']"), Duration.ofSeconds(10));
+            cf = remoteRobot.find(CommonContainerFixture.class, byXpath("//div[@class='CustomHeaderMenuBar']"), Duration.ofSeconds(10));
         }
 
-        return cf.find(JButtonFixture.class, byXpath("//div[@text='" + label + "']"), Duration.ofSeconds(10));
+        return cf.button(byXpath("//div[@text='" + label + "']"), Duration.ofSeconds(10));
     }
 }
