@@ -15,6 +15,7 @@ import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.*;
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.Keyboard;
+import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.KeyEvent;
@@ -46,7 +47,11 @@ public class SearchEverywherePopup extends CommonContainerFixture {
      * @param tabName name of the tab in the Search Everywhere popup
      */
     public void activateTab(String tabName) {
-        button(byXpath("//div[@text='" + tabName + "']"), Duration.ofSeconds(2)).click();
+        try {
+            button(byXpath("//div[@text='" + tabName + "']"), Duration.ofSeconds(2)).click();
+        } catch (WaitForConditionTimeoutException e) {
+            throw new RuntimeException("The '" + tabName + "' tab cannot be found.");
+        }
     }
 
     /**
