@@ -12,6 +12,7 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projec
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
+import com.intellij.remoterobot.fixtures.ComboBoxFixture;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
@@ -71,7 +72,7 @@ public class NewProjectDialog extends CommonContainerFixture {
      * @param targetSdkName name of the SDK to which will be changed the current settings
      */
     public void setProjectSdkIfAvailable(String targetSdkName) {
-        ComponentFixture projectJdkComboBox = findAll(ComponentFixture.class, byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']")).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/106
+        ComboBoxFixture projectJdkComboBox = comboBox(byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
         String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
         if (currentlySelectedProjectSdk.contains(targetSdkName)) {
             return;
