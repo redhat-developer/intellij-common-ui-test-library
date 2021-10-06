@@ -14,7 +14,6 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.ComponentFixture;
-import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
@@ -48,7 +47,7 @@ public class IdeStatusBar extends CommonContainerFixture {
      * @return fixture for the InlineProgressPanel
      */
     public ComponentFixture inlineProgressPanel() {
-        return find(ContainerFixture.class, byXpath("//div[@class='InlineProgressPanel']"));
+        return find(ComponentFixture.class, byXpath("//div[@class='InlineProgressPanel']"));
     }
 
     /**

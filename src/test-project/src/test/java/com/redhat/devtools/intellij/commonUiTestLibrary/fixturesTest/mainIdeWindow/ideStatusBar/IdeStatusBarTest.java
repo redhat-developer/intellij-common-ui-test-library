@@ -47,7 +47,7 @@ class IdeStatusBarTest extends LibraryTestBase {
         NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
         newProjectDialog.selectNewProjectType("Maven");
         newProjectDialog.next();
-        newProjectDialog.setProjectNameForMavenOrGradleProject(projectName);
+        newProjectDialog.setProjectName(projectName);
         newProjectDialog.finish();
 
         waitFor(Duration.ofSeconds(60), Duration.ofSeconds(1), "The progress bar in status bar did not appear in 60 seconds.", () -> isProgressbarWithLabelVisible());

@@ -12,10 +12,13 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projec
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
+import com.intellij.remoterobot.fixtures.ComboBoxFixture;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
+import com.intellij.remoterobot.fixtures.JListFixture;
+import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.fixtures.JTextFieldFixture;
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import org.jetbrains.annotations.NotNull;
@@ -46,21 +49,12 @@ public class NewProjectDialog extends CommonContainerFixture {
     }
 
     /**
-     * Set the project name for new maven of gradle project in the 'New Project' dialog
+     * Set the project name for new project in the 'New Project' dialog
      *
      * @param projectName name of the new project
      */
-    public void setProjectNameForMavenOrGradleProject(String projectName) {
-        find(JTextFieldFixture.class, byXpath("//div[@class='JBTextField']"), Duration.ofSeconds(10)).setText(projectName);
-    }
-
-    /**
-     * Set the project name for new java project in the 'New Project' dialog
-     *
-     * @param projectName name of the new project
-     */
-    public void setProjectNameForJavaProject(String projectName) {
-        findAll(JTextFieldFixture.class, byXpath("//div[@accessiblename='Project name:' and @class='JTextField']")).get(0).setText(projectName);
+    public void setProjectName(String projectName) {
+        textFields(JTextFieldFixture.Companion.byType()).get(0).setText(projectName);
     }
 
     /**
@@ -69,8 +63,7 @@ public class NewProjectDialog extends CommonContainerFixture {
      * @param projectType name of the project type to which will be changed the current settings
      */
     public void selectNewProjectType(String projectType) {
-        ComponentFixture newProjectTypeList = findAll(ComponentFixture.class, byXpath("JBList", "//div[@class='JBList']")).get(0);
-        newProjectTypeList.findText(projectType).click();
+        jLists(JListFixture.Companion.byType()).get(0).findText(projectType).click();
     }
 
     /**
@@ -79,7 +72,7 @@ public class NewProjectDialog extends CommonContainerFixture {
      * @param targetSdkName name of the SDK to which will be changed the current settings
      */
     public void setProjectSdkIfAvailable(String targetSdkName) {
-        ComponentFixture projectJdkComboBox = findAll(ComponentFixture.class, byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']")).get(0);
+        ComboBoxFixture projectJdkComboBox = comboBox(byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
         String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
         if (currentlySelectedProjectSdk.contains(targetSdkName)) {
             return;
@@ -87,7 +80,7 @@ public class NewProjectDialog extends CommonContainerFixture {
         projectJdkComboBox.click();
 
         waitFor(Duration.ofSeconds(20), Duration.ofSeconds(2), "The project JDK list did not load all items in 20 seconds.", () -> didProjectSdkListLoadAllItems());
-        ComponentFixture projectSdkList = find(ComponentFixture.class, byXpath("//div[@class='HeavyWeightWindow']"), Duration.ofSeconds(10));
+        JPopupMenuFixture projectSdkList = jPopupMenus(byXpath("//div[@class='HeavyWeightWindow']")).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
         List<RemoteText> sdkItems = projectSdkList.findAllText();
         for (RemoteText sdkItem : sdkItems) {
             if (sdkItem.getText().contains(targetSdkName)) {
@@ -130,7 +123,7 @@ public class NewProjectDialog extends CommonContainerFixture {
     }
 
     private boolean didProjectSdkListLoadAllItems() {
-        ComponentFixture projectSdkList = find(ComponentFixture.class, byXpath("//div[@class='HeavyWeightWindow']"), Duration.ofSeconds(10));
+        JPopupMenuFixture projectSdkList = jPopupMenus(byXpath("//div[@class='HeavyWeightWindow']")).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
         List<RemoteText> sdkItems = projectSdkList.findAllText();
         int currentSdkItemsCount = sdkItems.size();
 

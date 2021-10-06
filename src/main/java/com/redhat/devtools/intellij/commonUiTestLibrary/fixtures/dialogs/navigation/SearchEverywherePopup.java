@@ -15,6 +15,7 @@ import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.*;
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.Keyboard;
+import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.KeyEvent;
@@ -46,8 +47,11 @@ public class SearchEverywherePopup extends CommonContainerFixture {
      * @param tabName name of the tab in the Search Everywhere popup
      */
     public void activateTab(String tabName) {
-        ComponentFixture tab = find(ComponentFixture.class, byXpath("//div[@accessiblename='" + tabName + "' and @class='SETab' and @text='" + tabName + "']"));
-        tab.click();
+        try {
+            button(byXpath("//div[@text='" + tabName + "']"), Duration.ofSeconds(2)).click();
+        } catch (WaitForConditionTimeoutException e) {
+            throw new RuntimeException("The '" + tabName + "' tab cannot be found.");
+        }
     }
 
     /**
@@ -56,7 +60,7 @@ public class SearchEverywherePopup extends CommonContainerFixture {
      * @param cmdToEnter command that will be invoked using the search field
      */
     public void invokeCmd(String cmdToEnter) {
-        JTextFieldFixture searchField = find(JTextFieldFixture.class, JTextFieldFixture.Companion.byType(), Duration.ofSeconds(10));
+        JTextFieldFixture searchField = textField(JTextFieldFixture.Companion.byType(), Duration.ofSeconds(10));
         searchField.click();
         searchField.setText(cmdToEnter);
         waitFor(Duration.ofSeconds(30), Duration.ofSeconds(1), "The search in the Search Everywhere popup did not finish in 30 seconds.", () -> didSearchFinish(cmdToEnter));
@@ -69,7 +73,7 @@ public class SearchEverywherePopup extends CommonContainerFixture {
     }
 
     private List<RemoteText> getSearchResults() {
-        ComponentFixture searchResultsList = find(ComponentFixture.class, byXpath("//div[@class='JBList']"));
+        JListFixture searchResultsList = jLists(JListFixture.Companion.byType()).get(0);
         return searchResultsList.findAllText();
     }
 }

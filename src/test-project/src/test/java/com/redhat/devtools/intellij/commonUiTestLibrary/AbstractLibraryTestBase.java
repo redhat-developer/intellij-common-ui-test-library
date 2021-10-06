@@ -37,10 +37,8 @@ public abstract class AbstractLibraryTestBase {
         // Plain java project has more pages in the 'New project' dialog
         if (projectType.equals("Java")) {
             newProjectDialog.next();
-            newProjectDialog.setProjectNameForJavaProject(projectName);
-        } else {
-            newProjectDialog.setProjectNameForMavenOrGradleProject(projectName);
         }
+        newProjectDialog.setProjectName(projectName);
         newProjectDialog.finish();
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilProjectImportIsComplete();

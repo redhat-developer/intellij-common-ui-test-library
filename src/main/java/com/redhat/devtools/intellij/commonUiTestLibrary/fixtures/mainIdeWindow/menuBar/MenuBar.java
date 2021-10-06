@@ -11,8 +11,10 @@
 package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.menuBar;
 
 import com.intellij.remoterobot.RemoteRobot;
-import com.intellij.remoterobot.fixtures.ComponentFixture;
+import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.ContainerFixture;
+import com.intellij.remoterobot.fixtures.JButtonFixture;
+import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.redhat.devtools.intellij.commonUiTestLibrary.UITestRunner;
 
 import java.time.Duration;
@@ -52,13 +54,13 @@ public class MenuBar {
         }
 
         for (int i = 1; i < path.length - 1; i++) {
-            List<ContainerFixture> allContextMenus = remoteRobot.findAll(ContainerFixture.class, byXpath("//div[@class='HeavyWeightWindow']"));
-            ContainerFixture lastContextMenu = allContextMenus.get(allContextMenus.size() - 1);
+            List<JPopupMenuFixture> allContextMenus = remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType());
+            JPopupMenuFixture lastContextMenu = allContextMenus.get(allContextMenus.size() - 1);
             lastContextMenu.findText((path[i])).moveMouse();
         }
 
-        List<ContainerFixture> allContextMenus = remoteRobot.findAll(ContainerFixture.class, byXpath("//div[@class='HeavyWeightWindow']"));
-        ContainerFixture lastContextMenu = allContextMenus.get(allContextMenus.size() - 1);
+        List<JPopupMenuFixture> allContextMenus = remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType());
+        JPopupMenuFixture lastContextMenu = allContextMenus.get(allContextMenus.size() - 1);
         lastContextMenu.findText((path[path.length - 1])).click();
     }
 
@@ -67,19 +69,20 @@ public class MenuBar {
      *
      * @param label label text
      */
-    private ComponentFixture mainMenuItem(String label) {
-        if (remoteRobot.isLinux()) {
-            ContainerFixture cf = remoteRobot.find(ContainerFixture.class, byXpath("//div[@class='LinuxIdeMenuBar']"), Duration.ofSeconds(10));
-            return cf.find(ComponentFixture.class, byXpath("//div[@accessiblename='" + label + "' and @class='ActionMenu' and @text='" + label + "']"), Duration.ofSeconds(10));
-        } else if (remoteRobot.isWin()) {
-            if (ideaVersion.toInt() >= 20203) {
-                ContainerFixture cf = remoteRobot.find(ContainerFixture.class, byXpath("//div[@class='MenuFrameHeader']"), Duration.ofSeconds(10));
-                return cf.find(ComponentFixture.class, byXpath("//div[@text='" + label + "']"), Duration.ofSeconds(10));
-            } else {
-                ContainerFixture cf = remoteRobot.find(ContainerFixture.class, byXpath("//div[@class='CustomHeaderMenuBar']"), Duration.ofSeconds(10));
-                return cf.find(ComponentFixture.class, byXpath("//div[@accessiblename='" + label + "' and @class='ActionMenu' and @text='" + label + "']"), Duration.ofSeconds(10));
-            }
+    private JButtonFixture mainMenuItem(String label) {
+        if (remoteRobot.isMac()) {
+            return null;
         }
-        return null;
+
+        CommonContainerFixture cf;
+        if (remoteRobot.isLinux()) {
+            cf = remoteRobot.find(CommonContainerFixture.class, byXpath("//div[@class='LinuxIdeMenuBar']"), Duration.ofSeconds(10));
+        } else if (remoteRobot.isWin() && ideaVersion.toInt() >= 20203) {
+            cf = remoteRobot.find(CommonContainerFixture.class, byXpath("//div[@class='MenuFrameHeader']"), Duration.ofSeconds(10));
+        } else {
+            cf = remoteRobot.find(CommonContainerFixture.class, byXpath("//div[@class='CustomHeaderMenuBar']"), Duration.ofSeconds(10));
+        }
+
+        return cf.button(byXpath("//div[@text='" + label + "']"), Duration.ofSeconds(10));
     }
 }
