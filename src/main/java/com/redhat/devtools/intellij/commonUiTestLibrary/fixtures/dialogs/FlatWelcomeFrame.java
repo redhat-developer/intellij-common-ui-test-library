@@ -12,7 +12,13 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs;
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
-import com.intellij.remoterobot.fixtures.*;
+import com.intellij.remoterobot.fixtures.CommonContainerFixture;
+import com.intellij.remoterobot.fixtures.ComponentFixture;
+import com.intellij.remoterobot.fixtures.DefaultXpath;
+import com.intellij.remoterobot.fixtures.FixtureName;
+import com.intellij.remoterobot.fixtures.JButtonFixture;
+import com.intellij.remoterobot.fixtures.JListFixture;
+import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.UITestRunner;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.errors.IdeFatalErrorsDialog;
@@ -64,9 +70,12 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      */
     public void clearWorkspace() {
         // delete all the projects' links from the 'Welcome to IntelliJ IDEA' dialog
-        int numberOfLinks = getNumberOfProjectLinks();
-        for (int i = 0; i < numberOfLinks; i++) {
-            JListFixture recentProjectsList = jLists(byXpath("//div[@accessiblename='Recent Projects']")).get(0);
+        do {
+            List<JListFixture> jListFixtures = jLists(byXpath("//div[@accessiblename='Recent Projects']"));
+            if (jListFixtures.isEmpty() || jListFixtures.get(0).findAllText().size() == 1) {
+                break;
+            }
+            JListFixture recentProjectsList = jListFixtures.get(0);
             recentProjectsList.runJs("const horizontal_offset = component.getWidth()-22;\n" +
                     "robot.click(component, new Point(horizontal_offset, 22), MouseButton.LEFT_BUTTON, 1);");
             // Code for IntelliJ Idea 2020.3 or newer
@@ -74,7 +83,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
                 JPopupMenuFixture contextMenu = jPopupMenus(JPopupMenuFixture.Companion.byType()).get(0);
                 contextMenu.select("Remove from Recent Projects");
             }
-        }
+        } while (true);
 
         // delete all the files and folders in the IdeaProjects folder
         try {
@@ -110,17 +119,6 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             return button(byXpath("//div[@class='JBOptionButton' and @text='" + text + "']"), Duration.ofSeconds(2));
         }
         return button(byXpath("//div[@class='NonOpaquePanel'][./div[@text='" + text + "']]"), Duration.ofSeconds(2));
-    }
-
-    private int getNumberOfProjectLinks() {
-        List<JListFixture> allJLists = jLists(byXpath("//div[@accessiblename='Recent Projects']"));
-        if (allJLists.isEmpty()) {
-            // the list with accessible name 'Recent Projects' is not available -> 0 links in the 'Welcome to IntelliJ IDEA' dialog
-            return 0;
-        }
-        JListFixture recentProjectsList = allJLists.get(0);
-        int numberOfProjectsLinks = recentProjectsList.findAllText().size() / 2;    // 2 items per 1 project link (project path and project name)
-        return numberOfProjectsLinks;
     }
 
     private ComponentFixture ideErrorsIcon() {
