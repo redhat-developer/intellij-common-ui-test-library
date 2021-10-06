@@ -70,11 +70,8 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      */
     public void clearWorkspace() {
         // delete all the projects' links from the 'Welcome to IntelliJ IDEA' dialog
-        do {
-            List<JListFixture> jListFixtures = jLists(byXpath("//div[@accessiblename='Recent Projects']"));
-            if (jListFixtures.isEmpty() || jListFixtures.get(0).findAllText().size() == 1) {
-                break;
-            }
+        List<JListFixture> jListFixtures = jLists(byXpath("//div[@accessiblename='Recent Projects']"));
+        while (!jListFixtures.isEmpty() && jListFixtures.get(0).findAllText().size() != 1) {
             JListFixture recentProjectsList = jListFixtures.get(0);
             recentProjectsList.runJs("const horizontal_offset = component.getWidth()-22;\n" +
                     "robot.click(component, new Point(horizontal_offset, 22), MouseButton.LEFT_BUTTON, 1);");
@@ -83,7 +80,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
                 JPopupMenuFixture contextMenu = jPopupMenus(JPopupMenuFixture.Companion.byType()).get(0);
                 contextMenu.select("Remove from Recent Projects");
             }
-        } while (true);
+        }
 
         // delete all the files and folders in the IdeaProjects folder
         try {
