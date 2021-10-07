@@ -14,12 +14,14 @@ import com.intellij.remoterobot.fixtures.ComboBoxFixture;
 import com.intellij.remoterobot.fixtures.JLabelFixture;
 import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.fixtures.JTextFieldFixture;
+import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialog;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,19 +52,37 @@ public class NewProjectDialogTest extends LibraryTestBase {
         newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
     }
 
+    @AfterEach
+    public void cleanUp() {
+        try {
+            // tests ending with opened New Project Dialog needs to close the dialog
+            remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10)).cancel();
+        } catch (WaitForConditionTimeoutException e) {
+            try {
+                // tests ending with opened Main Ide Window needs to close the project and clear workspace
+                remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
+                closeProject();
+                FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+                flatWelcomeFrame.clearWorkspace();
+            } catch (WaitForConditionTimeoutException e2) {
+                // tests ending with opened Flat Welcome Frame does not need any assistance
+            }
+        }
+    }
+
     @Test
     public void setProjectNamePlainJavaProjectTest() {
-        testProjectNameInputField(plainJavaProjectName,NewProjectType.PLAIN_JAVA);
+        testProjectNameInputField(plainJavaProjectName, NewProjectType.PLAIN_JAVA);
     }
 
     @Test
     public void setProjectNameMavenProjectTest() {
-        testProjectNameInputField(mavenProjectName,NewProjectType.MAVEN);
+        testProjectNameInputField(mavenProjectName, NewProjectType.MAVEN);
     }
 
     @Test
     public void setProjectNameGradleProjectTest() {
-        testProjectNameInputField(gradleProjectName,NewProjectType.GRADLE);
+        testProjectNameInputField(gradleProjectName, NewProjectType.GRADLE);
     }
 
     @Test
@@ -85,9 +105,6 @@ public class NewProjectDialogTest extends LibraryTestBase {
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
         mainIdeWindow.maximizeIdeWindow();
         ideStatusBar.waitUntilAllBgTasksFinish();
-        closeProject();
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-        flatWelcomeFrame.clearWorkspace();
     }
 
     @Test
@@ -102,11 +119,10 @@ public class NewProjectDialogTest extends LibraryTestBase {
         newProjectDialog.setProjectSdkIfAvailable("8");
         ComboBoxFixture projectJdkComboBox = remoteRobot.find(ComboBoxFixture.class, byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
         String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
-        assertTrue(currentlySelectedProjectSdk.contains("8"), "Selected project SDK should be Java 8 but is '" + currentlySelectedProjectSdk +"'");
+        assertTrue(currentlySelectedProjectSdk.contains("8"), "Selected project SDK should be Java 8 but is '" + currentlySelectedProjectSdk + "'");
         newProjectDialog.setProjectSdkIfAvailable("11");
         currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
-        assertTrue(currentlySelectedProjectSdk.contains("11"), "Selected project SDK should be Java 11 but is '" + currentlySelectedProjectSdk +"'");
-        newProjectDialog.cancel();
+        assertTrue(currentlySelectedProjectSdk.contains("11"), "Selected project SDK should be Java 11 but is '" + currentlySelectedProjectSdk + "'");
     }
 
     @Test
@@ -118,7 +134,6 @@ public class NewProjectDialogTest extends LibraryTestBase {
         newProjectDialog.selectNewProjectType("Java FX");
         boolean isJavaFXApplicationLabelVisible = !newProjectDialog.findAll(JListFixture.class, byXpath("//div[@visible_text='JavaFX Application']")).isEmpty();
         assertTrue(isJavaFXApplicationLabelVisible, "The 'Java FX' label should be visible but is not.");
-        newProjectDialog.cancel();
     }
 
     private void navigateToSetProjectNamePage(NewProjectType newProjectType) {
@@ -135,7 +150,6 @@ public class NewProjectDialogTest extends LibraryTestBase {
         newProjectDialog.setProjectName(projectName);
         String projectNameFromInputField = remoteRobot.findAll(JTextFieldFixture.class, JTextFieldFixture.Companion.byType()).get(0).getText();
         assertTrue(projectName.equals(projectNameFromInputField), "Project name in the input field (" + projectNameFromInputField + ") is different from the expected project name (" + projectName + ").");
-        newProjectDialog.cancel();
     }
 
     private enum NewProjectType {
