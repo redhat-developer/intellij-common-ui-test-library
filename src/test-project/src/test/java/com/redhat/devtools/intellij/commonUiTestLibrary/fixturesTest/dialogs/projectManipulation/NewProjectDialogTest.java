@@ -20,6 +20,7 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.M
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialog;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -41,6 +42,14 @@ public class NewProjectDialogTest extends LibraryTestBase {
     private final String mavenProjectName = "maven_project_name_test";
     private final String gradleProjectName = "gradle_project_name_test";
 
+    private NewProjectDialog newProjectDialog;
+
+    @BeforeEach
+    public void penNewProjectDialog() {
+        openNewProjectDialogFromWelcomeDialog();
+        newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
+    }
+
     @Test
     public void setProjectNamePlainJavaProjectTest() {
         testProjectNameInputField(plainJavaProjectName,NewProjectType.PLAIN_JAVA);
@@ -58,8 +67,6 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void nextPreviousFinishButtonTest() {
-        openNewProjectDialogFromWelcomeDialog();
-        NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
         newProjectDialog.selectNewProjectType("Java");
         newProjectDialog.setProjectSdkIfAvailable("11");
         newProjectDialog.next();
@@ -85,16 +92,12 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void cancelButtonTest() {
-        openNewProjectDialogFromWelcomeDialog();
-        NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
         newProjectDialog.cancel();
         remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
     }
 
     @Test
     public void setProjectSdkIfAvailableTest() {
-        openNewProjectDialogFromWelcomeDialog();
-        NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
         newProjectDialog.selectNewProjectType("Java");
         newProjectDialog.setProjectSdkIfAvailable("8");
         ComboBoxFixture projectJdkComboBox = remoteRobot.find(ComboBoxFixture.class, byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
@@ -108,8 +111,6 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void selectNewProjectTypeTest() {
-        openNewProjectDialogFromWelcomeDialog();
-        NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
         newProjectDialog.selectNewProjectType("Empty Project");
         boolean isEmptyProjectLabelVisible = !newProjectDialog.findAll(JListFixture.class, byXpath("//div[@visible_text='Empty Project']")).isEmpty();
         assertTrue(isEmptyProjectLabelVisible, "The 'Empty Project' label should be visible but is not.");
@@ -121,7 +122,6 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     private void navigateToSetProjectNamePage(NewProjectType newProjectType) {
-        NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
         newProjectDialog.selectNewProjectType(newProjectType.toString());
         newProjectDialog.next();
         if (newProjectType == NewProjectType.PLAIN_JAVA) {
@@ -130,7 +130,6 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     private void testProjectNameInputField(String projectName, NewProjectType newProjectType) {
-        openNewProjectDialogFromWelcomeDialog();
         navigateToSetProjectNamePage(newProjectType);
         NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
         newProjectDialog.setProjectName(projectName);

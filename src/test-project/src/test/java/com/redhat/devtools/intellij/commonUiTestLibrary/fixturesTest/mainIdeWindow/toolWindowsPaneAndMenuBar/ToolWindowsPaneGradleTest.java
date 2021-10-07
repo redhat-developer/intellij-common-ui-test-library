@@ -16,6 +16,7 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.Scre
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -32,6 +33,7 @@ import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.Butt
 @ExtendWith(ScreenshotAfterTestFailExtension.class)
 class ToolWindowsPaneGradleTest extends LibraryTestBase {
     private static final String projectName = "tool_windows_pane_java_gradle_project";
+    private ToolWindowsPane toolWindowsPane;
 
     @BeforeAll
     public static void prepareProject() {
@@ -43,9 +45,13 @@ class ToolWindowsPaneGradleTest extends LibraryTestBase {
         closeProject();
     }
 
+    @BeforeEach
+    public void createToolWindowsPaneFixture() {
+        toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+    }
+
     @Test
     public void gradleBuildTest() {
-        ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
         toolWindowsPane.buildProject(GRADLE);
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilAllBgTasksFinish();
@@ -54,7 +60,6 @@ class ToolWindowsPaneGradleTest extends LibraryTestBase {
 
     @Test
     public void stripeButtonTest() {
-        ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
         toolWindowsPane.stripeButton(gradleStripeButtonLabel);
     }
 }

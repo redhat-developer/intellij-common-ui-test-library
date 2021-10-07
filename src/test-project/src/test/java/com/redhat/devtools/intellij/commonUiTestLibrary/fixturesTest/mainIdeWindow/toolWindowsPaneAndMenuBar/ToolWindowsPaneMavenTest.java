@@ -16,6 +16,7 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.t
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -33,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(ScreenshotAfterTestFailExtension.class)
 class ToolWindowsPaneMavenTest extends LibraryTestBase {
     private static final String projectName = "tool_windows_pane_java_maven_project";
+    private ToolWindowsPane toolWindowsPane;
 
     @BeforeAll
     public static void prepareProject() {
@@ -44,9 +46,13 @@ class ToolWindowsPaneMavenTest extends LibraryTestBase {
         closeProject();
     }
 
+    @BeforeEach
+    public void createToolWindowsPaneFixture() {
+        toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+    }
+
     @Test
     public void mavenBuildTest() {
-        ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
         toolWindowsPane.buildProject(MAVEN);
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilAllBgTasksFinish();
@@ -55,7 +61,6 @@ class ToolWindowsPaneMavenTest extends LibraryTestBase {
 
     @Test
     public void isProjectFilePresentTest() {
-        ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
         boolean isImlFilePresent = toolWindowsPane.isProjectFilePresent(projectName, projectName + ".iml");
         assertTrue(isImlFilePresent, "File '" + projectName + ".iml" + "' should be present in the project view structure.");
     }
