@@ -47,7 +47,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
     private NewProjectDialog newProjectDialog;
 
     @BeforeEach
-    public void penNewProjectDialog() {
+    public void openNewProjectDialog() {
         openNewProjectDialogFromWelcomeDialog();
         newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
     }
