@@ -50,8 +50,7 @@ class IdeStatusBarTest extends LibraryTestBase {
         newProjectDialog.setProjectName(projectName);
         newProjectDialog.finish();
 
-        waitFor(Duration.ofSeconds(60), Duration.ofSeconds(1), "The progress bar in status bar did not appear in 60 seconds.", () -> isProgressBarWithLabelVisible());
-        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
+        IdeStatusBar ideStatusBar = waitFor(Duration.ofSeconds(60), Duration.ofSeconds(1), "The progress bar in status bar did not appear in 60 seconds.", () -> isProgressbarWithLabelVisible());
         ideStatusBar.waitUntilProjectImportIsComplete();
         closeTipDialogIfItAppears(remoteRobot);
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
@@ -59,10 +58,10 @@ class IdeStatusBarTest extends LibraryTestBase {
         ideStatusBar.waitUntilAllBgTasksFinish();
     }
 
-    private static boolean isProgressBarWithLabelVisible() {
+    private static kotlin.Pair<Boolean, IdeStatusBar> isProgressbarWithLabelVisible() {
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         List<RemoteText> inlineProgressPanelContent = ideStatusBar.inlineProgressPanel().findAllText();
         String inlineProgressPanelText = listOfRemoteTextToString(inlineProgressPanelContent);
-        return !inlineProgressPanelText.equals("");
+        return new kotlin.Pair(!inlineProgressPanelText.equals(""), ideStatusBar);
     }
 }
