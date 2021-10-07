@@ -12,7 +12,6 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
-import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.redhat.devtools.intellij.commonUiTestLibrary.UITestRunner;
@@ -64,11 +63,6 @@ public class MenuBar {
         lastContextMenu.findText((path[path.length - 1])).click();
     }
 
-    /**
-     * Create fixture for main menu item
-     *
-     * @param label label text
-     */
     private JButtonFixture mainMenuItem(String label) {
         if (remoteRobot.isMac()) {
             return null;

@@ -43,15 +43,6 @@ public class ProjectStructureAndTipDialogs extends LibraryTestBase {
         LibraryTestBase.closeProject();
     }
 
-    private void dialogTest(Runnable selectedImpl, Class dialogClass, String dialogTitle) {
-        makeSureDialogIsVisible(dialogClass, dialogTitle);
-        assertTrue(isDialogVisible(dialogClass), "The '" + dialogTitle + "' dialog should be visible but is not.");
-        selectedImpl.run();
-        assertTrue(!isDialogVisible(dialogClass), "The '" + dialogTitle + "' dialog should be visible but is not.");
-        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
-        ideStatusBar.waitUntilAllBgTasksFinish();
-    }
-
     @Test
     public void projectStructureDialogTest() {
         dialogTest(() -> {
@@ -65,6 +56,15 @@ public class ProjectStructureAndTipDialogs extends LibraryTestBase {
         dialogTest(() -> {
             closeTipDialogIfItAppears(remoteRobot);
         }, TipDialog.class, "Tip of the Day");
+    }
+
+    private void dialogTest(Runnable selectedImpl, Class dialogClass, String dialogTitle) {
+        makeSureDialogIsVisible(dialogClass, dialogTitle);
+        assertTrue(isDialogVisible(dialogClass), "The '" + dialogTitle + "' dialog should be visible but is not.");
+        selectedImpl.run();
+        assertTrue(!isDialogVisible(dialogClass), "The '" + dialogTitle + "' dialog should be visible but is not.");
+        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
+        ideStatusBar.waitUntilAllBgTasksFinish();
     }
 
     private void makeSureDialogIsVisible(Class dialogClass, String dialogTitle) {

@@ -17,6 +17,7 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.Scre
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialog;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -36,22 +37,24 @@ import static com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.
 class IdeStatusBarTest extends LibraryTestBase {
     private final String projectName = "ide_status_bar_java_project";
 
-    @AfterEach
-    public void closeCurrentProject() {
-        super.closeProject();
-    }
-
-    @Test
-    public void ideStatusBarTest() {
+    @BeforeEach
+    public void prepareProject() {
         openNewProjectDialogFromWelcomeDialog();
         NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
         newProjectDialog.selectNewProjectType("Maven");
         newProjectDialog.next();
         newProjectDialog.setProjectName(projectName);
         newProjectDialog.finish();
+    }
 
-        waitFor(Duration.ofSeconds(60), Duration.ofSeconds(1), "The progress bar in status bar did not appear in 60 seconds.", () -> isProgressbarWithLabelVisible());
-        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
+    @AfterEach
+    public void closeCurrentProject() {
+        super.closeProject();
+    }
+
+    @Test
+    public void progressBarTest() {
+        IdeStatusBar ideStatusBar = waitFor(Duration.ofSeconds(60), Duration.ofSeconds(1), "The progress bar in status bar did not appear in 60 seconds.", () -> isProgressbarWithLabelVisible());
         ideStatusBar.waitUntilProjectImportIsComplete();
         closeTipDialogIfItAppears(remoteRobot);
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
@@ -59,10 +62,10 @@ class IdeStatusBarTest extends LibraryTestBase {
         ideStatusBar.waitUntilAllBgTasksFinish();
     }
 
-    private static boolean isProgressbarWithLabelVisible() {
+    private static kotlin.Pair<Boolean, IdeStatusBar> isProgressbarWithLabelVisible() {
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         List<RemoteText> inlineProgressPanelContent = ideStatusBar.inlineProgressPanel().findAllText();
         String inlineProgressPanelText = listOfRemoteTextToString(inlineProgressPanelContent);
-        return !inlineProgressPanelText.equals("");
+        return new kotlin.Pair(!inlineProgressPanelText.equals(""), ideStatusBar);
     }
 }

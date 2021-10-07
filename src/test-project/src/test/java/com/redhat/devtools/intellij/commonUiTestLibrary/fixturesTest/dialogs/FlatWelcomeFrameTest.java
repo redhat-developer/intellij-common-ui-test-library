@@ -13,11 +13,12 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.dialogs;
 import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialog;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
 import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -36,18 +37,25 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(ScreenshotAfterTestFailExtension.class)
 class FlatWelcomeFrameTest extends LibraryTestBase {
     private final String projectName = "welcome_frame_java_project";
+    private FlatWelcomeFrame flatWelcomeFrame;
 
-    @BeforeEach
-    public void prepareProject() {
-        createNewProject(projectName, "Java");
+    @AfterEach
+    public void cleanUp() {
+        flatWelcomeFrame.clearWorkspace();
     }
 
     @Test
-    public void flatWelcomeFrameTest() {
-        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
-        mainIdeWindow.closeProject();
+    public void createNewProjectLinkTest() {
+        flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame.createNewProject();
+        NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
+        newProjectDialog.cancel();
+    }
 
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+    @Test
+    public void clearWorkspaceTest() {
+        prepareWorkspace();
+        flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         int projectsOnDisk = getNumberOfProjectsOnDisk();
         int projectLinks = getNumberOfProjectLinksInFlatWelcomeFrame();
         assertTrue(projectsOnDisk == 1, "Number of projects in the IntelliJ's project folder should be 1 but is " + projectsOnDisk + ".");
@@ -57,6 +65,19 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
         int projectLinks2 = getNumberOfProjectLinksInFlatWelcomeFrame();
         assertTrue(projectCount2 == 0, "Number of projects in the IntelliJ's project folder should be 0 but is " + projectCount2 + ".");
         assertTrue(projectLinks2 == 0, "Number of projects' links in the IntelliJ's 'Welcome Frame Dialog' should be 0 but is " + projectLinks2 + ".");
+    }
+
+    @Test
+    public void clearExceptionsTest() {
+        prepareWorkspace();
+        flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame.clearExceptions();
+    }
+
+    private void prepareWorkspace() {
+        createNewProject(projectName, "Java");
+        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
+        mainIdeWindow.closeProject();
     }
 
     private int getNumberOfProjectsOnDisk() {

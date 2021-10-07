@@ -15,7 +15,6 @@ import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.menuBar.MenuBar;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,16 +24,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.time.Duration;
 
 import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.closeLabel;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils.listOfRemoteTextToString;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * ProjectViewTree and MenuBar test
+ * MenuBar test
  *
  * @author zcervink@redhat.com
  */
 @ExtendWith(ScreenshotAfterTestFailExtension.class)
-class ProjectViewTreeAndMenuBarTest extends LibraryTestBase {
+class MenuBarTest extends LibraryTestBase {
     private static final String projectName = "project_view_tree_java_project";
 
     @BeforeAll
@@ -48,14 +46,7 @@ class ProjectViewTreeAndMenuBarTest extends LibraryTestBase {
     }
 
     @Test
-    public void projectViewTreeTest() {
-        ToolWindowsPane projectViewTree = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        String projectViewTreeContent = listOfRemoteTextToString(projectViewTree.projectViewTree().findAllText());
-        assertTrue(projectViewTreeContent.contains(projectName), "The 'ProjectViewTree' does not contain the project name (" + projectName + ").");
-    }
-
-    @Test
-    public void menuBarTest() {
+    public void openTipDialogUsingMenuBarTest() {
         if (remoteRobot.isWin() || remoteRobot.isLinux()) {
             new MenuBar(remoteRobot).navigateTo("Help", "Tip of the Day");
             assertTrue(isTipDialogVisible(remoteRobot), "The 'Tip of the Day' dialog should be visible but is not");
