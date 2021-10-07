@@ -77,18 +77,15 @@ public class ToolWindowsPane extends CommonContainerFixture {
                 ToolWindowsPane toolWindowsPaneMaven = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
                 toolWindowsPaneMaven.stripeButton(mavenStripeButtonLabel).click();
                 waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The Maven target tree did not appear in 30 seconds.", () -> isMavenOrGradleTreeVisible(MAVEN));
-                expandMavenTargetTreeIfNecessary();
-                toolWindowsPaneMaven.mavenTabTree().findText("Lifecycle").doubleClick();
-                toolWindowsPaneMaven.mavenTabTree().findText("install").doubleClick();
+                toolWindowsPaneMaven.mavenTabTree().expandAll();
+                toolWindowsPaneMaven.mavenTabTree().findAllText("install").get(0).doubleClick();
                 break;
             case GRADLE:
                 waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The 'Gradle' stripe button is not available.", () -> isStripeButtonAvailable("Gradle"));
                 ToolWindowsPane toolWindowsPaneGradle = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
                 toolWindowsPaneGradle.stripeButton(gradleStripeButtonLabel).click();
                 waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The Gradle tasks tree did not appear in 30 seconds.", () -> isMavenOrGradleTreeVisible(GRADLE));
-                expandGradleTasksTreeIfNecessary();
-                toolWindowsPaneGradle.gradleTabTree().findText("Tasks").doubleClick();
-                toolWindowsPaneGradle.gradleTabTree().findText("build").doubleClick();
+                actionButton(byXpath("//div[contains(@myvisibleactions, 'IDE')]//div[@myicon='expandall.svg']"), Duration.ofSeconds(10)).click();
                 toolWindowsPaneGradle.gradleTabTree().findAllText("build").get(1).doubleClick();
                 break;
         }
@@ -161,15 +158,6 @@ public class ToolWindowsPane extends CommonContainerFixture {
             for (RemoteText label : mavenBuildLabels) {
                 label.doubleClick();
             }
-        }
-    }
-
-    private void expandGradleTasksTreeIfNecessary() {
-        ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        String labels = listOfRemoteTextToString(toolWindowsPane.gradleTabTree().findAllText());
-        // if the Gradle tasks tree is collapsed -> expand it
-        if (!labels.contains("Tasks")) {
-            toolWindowsPane.gradleTabTree().findText(labels).doubleClick();
         }
     }
 

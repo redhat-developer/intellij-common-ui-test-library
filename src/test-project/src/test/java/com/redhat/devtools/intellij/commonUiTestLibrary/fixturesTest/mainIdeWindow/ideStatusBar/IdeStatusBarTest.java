@@ -12,9 +12,11 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWin
 
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.MavenProjectSecondPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.NewProjectDialogFirstPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialog;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,11 +42,13 @@ class IdeStatusBarTest extends LibraryTestBase {
     @BeforeEach
     public void prepareProject() {
         openNewProjectDialogFromWelcomeDialog();
-        NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
-        newProjectDialog.selectNewProjectType("Maven");
-        newProjectDialog.next();
-        newProjectDialog.setProjectName(projectName);
-        newProjectDialog.finish();
+        NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
+        NewProjectDialogFirstPage newProjectDialogFirstPage = newProjectDialogWizard.find(NewProjectDialogFirstPage.class, Duration.ofSeconds(10));
+        newProjectDialogFirstPage.selectNewProjectType("Maven");
+        newProjectDialogFirstPage.next();
+        MavenProjectSecondPage mavenProjectSecondPage = newProjectDialogWizard.find(MavenProjectSecondPage.class, Duration.ofSeconds(10));
+        mavenProjectSecondPage.setProjectName(projectName);
+        mavenProjectSecondPage.finish();
     }
 
     @AfterEach

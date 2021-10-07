@@ -12,7 +12,10 @@ package com.redhat.devtools.intellij.commonUiTestLibrary;
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialog;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialogWizard;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.JavaProjectSecondPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.NewProjectDialogFirstPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractTerminalPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 
@@ -30,16 +33,18 @@ public abstract class AbstractLibraryTestBase {
 
     protected static void createNewProject(String projectName, String projectType) {
         openNewProjectDialogFromWelcomeDialog();
-        NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
-        newProjectDialog.selectNewProjectType(projectType);
-        newProjectDialog.setProjectSdkIfAvailable("11");
-        newProjectDialog.next();
+        NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
+        NewProjectDialogFirstPage newProjectDialogFirstPage = newProjectDialogWizard.find(NewProjectDialogFirstPage.class, Duration.ofSeconds(10));
+        newProjectDialogFirstPage.selectNewProjectType(projectType);
+        newProjectDialogFirstPage.setProjectSdkIfAvailable("11");
+        newProjectDialogFirstPage.next();
         // Plain java project has more pages in the 'New project' dialog
         if (projectType.equals("Java")) {
-            newProjectDialog.next();
+            newProjectDialogWizard.find(JavaProjectSecondPage.class, Duration.ofSeconds(10)).next();
         }
-        newProjectDialog.setProjectName(projectName);
-        newProjectDialog.finish();
+        AbstractTerminalPage abstractTerminalPage = newProjectDialogWizard.find(AbstractTerminalPage.class, Duration.ofSeconds(10));
+        abstractTerminalPage.setProjectName(projectName);
+        abstractTerminalPage.finish();
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilProjectImportIsComplete();
         closeTipDialogIfItAppears(remoteRobot);
