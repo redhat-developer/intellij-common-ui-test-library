@@ -2,12 +2,7 @@
 
 ### Add this library to an existing IntelliJ Plugin project
 
-1) Install the plugin to your local maven repository (use Java 8 to run the following cmd)
-```
-./gradlew publishToMavenLocal
-```
-
-2) Extend the build.gradle file of the IntelliJ Plugin repo
+1) Extend the build.gradle file of the IntelliJ Plugin repo
 
 ```
 sourceSets {
@@ -44,7 +39,7 @@ repositories {
 }
 ```
 
-3) Run and close the IntelliJ Idea before and after all the UI tests
+2) Run and close the IntelliJ Idea before and after all the UI tests
 ```
 private static RemoteRobot robot;
 
@@ -57,13 +52,4 @@ public static void runIdeForUiTests() {
 public static void closeIde() {
     UITestRunner.closeIde();
 }
-```
-
-### Run JUnit tests to test this library
-
-You can run JUnit tests contained in this repository to test this library by executing the following command:
-
-```sh
-cd src/test-project
-./gradlew test
 ```
