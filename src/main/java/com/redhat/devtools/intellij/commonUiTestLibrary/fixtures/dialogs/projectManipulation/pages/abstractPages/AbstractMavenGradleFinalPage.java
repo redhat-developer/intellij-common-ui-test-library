@@ -29,8 +29,8 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
  */
 @DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
 @FixtureName(name = "New Project Dialog")
-public class AbstractMavenGradleTerminalPage extends AbstractTerminalPage {
-    public AbstractMavenGradleTerminalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
+public class AbstractMavenGradleFinalPage extends AbstractFinalPage {
+    public AbstractMavenGradleFinalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
     }
 

@@ -14,7 +14,7 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractMavenGradleTerminalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractMavenGradleFinalPage;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
 @FixtureName(name = "New Project Dialog")
-public class MavenProjectSecondPage extends AbstractMavenGradleTerminalPage {
+public class MavenProjectSecondPage extends AbstractMavenGradleFinalPage {
     public MavenProjectSecondPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
     }

@@ -15,7 +15,6 @@ import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialogWizard;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.NewProjectDialogFirstPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -50,7 +49,7 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
         flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.createNewProject();
         NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
-        newProjectDialogWizard.find(NewProjectDialogFirstPage.class, Duration.ofSeconds(10)).cancel();
+        newProjectDialogWizard.cancel();
     }
 
     @Test

@@ -12,10 +12,10 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projec
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
+import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JCheckboxFixture;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractNonterminalPage;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
 @FixtureName(name = "New Project Dialog")
-public class JavaProjectSecondPage extends AbstractNonterminalPage {
+public class JavaProjectSecondPage extends CommonContainerFixture {
     public JavaProjectSecondPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
     }

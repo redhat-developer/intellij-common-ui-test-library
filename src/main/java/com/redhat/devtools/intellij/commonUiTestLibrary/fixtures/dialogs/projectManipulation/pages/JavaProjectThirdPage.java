@@ -17,7 +17,7 @@ import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.IntelliJCommonUiTestLibException;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractTerminalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractFinalPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +32,7 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
  */
 @DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
 @FixtureName(name = "New Project Dialog")
-public class JavaProjectThirdPage extends AbstractTerminalPage {
+public class JavaProjectThirdPage extends AbstractFinalPage {
     private RemoteRobot remoteRobot;
 
     public JavaProjectThirdPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {

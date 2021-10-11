@@ -45,10 +45,10 @@ class IdeStatusBarTest extends LibraryTestBase {
         NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
         NewProjectDialogFirstPage newProjectDialogFirstPage = newProjectDialogWizard.find(NewProjectDialogFirstPage.class, Duration.ofSeconds(10));
         newProjectDialogFirstPage.selectNewProjectType("Maven");
-        newProjectDialogFirstPage.next();
+        newProjectDialogWizard.next();
         MavenProjectSecondPage mavenProjectSecondPage = newProjectDialogWizard.find(MavenProjectSecondPage.class, Duration.ofSeconds(10));
         mavenProjectSecondPage.setProjectName(projectName);
-        mavenProjectSecondPage.finish();
+        newProjectDialogWizard.finish();
     }
 
     @AfterEach

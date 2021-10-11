@@ -12,10 +12,10 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projec
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
+import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JTextFieldFixture;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -25,8 +25,8 @@ import org.jetbrains.annotations.NotNull;
  */
 @DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
 @FixtureName(name = "New Project Dialog")
-public class AbstractTerminalPage extends AbstractPage {
-    public AbstractTerminalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
+public class AbstractFinalPage extends CommonContainerFixture {
+    public AbstractFinalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
     }
 
@@ -64,19 +64,5 @@ public class AbstractTerminalPage extends AbstractPage {
      */
     public void setProjectLocation(String projectLocation) {
         textFields(JTextFieldFixture.Companion.byType()).get(1).setText(projectLocation);
-    }
-
-    /**
-     * Move to the previous page of the 'New Project' dialog by clicking on the 'Previous' button
-     */
-    public void previous() {
-        button(ButtonLabels.previousLabel).click();
-    }
-
-    /**
-     * Finish the 'New Project' dialog by clicking on the 'Finish' button
-     */
-    public void finish() {
-        button(ButtonLabels.finishLabel).click();
     }
 }

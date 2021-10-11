@@ -25,9 +25,8 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.JavaProjectThirdPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.MavenProjectSecondPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.NewProjectDialogFirstPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractMavenGradleTerminalPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractTerminalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractMavenGradleFinalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractFinalPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
@@ -80,7 +79,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         } else {
             try {
                 // tests ending with opened New Project Dialog needs to close the dialog
-                newProjectDialogWizard.find(AbstractPage.class, Duration.ofSeconds(10)).cancel();
+                newProjectDialogWizard.cancel();
             } catch (WaitForConditionTimeoutException e) {
                 // tests ending with opened Flat Welcome Frame does not need any assistance
             }
@@ -151,7 +150,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
     @Test
     public void createNewProjectFromTemplateTest() {
         newProjectDialogFirstPage.selectNewProjectType("Java");
-        newProjectDialogFirstPage.next();
+        newProjectDialogWizard.next();
         JavaProjectSecondPage javaProjectSecondPage = newProjectDialogWizard.find(JavaProjectSecondPage.class, Duration.ofSeconds(10));
         javaProjectSecondPage.selectCreateProjectFromTemplateCheckBox();
         assertTrue(javaProjectSecondPage.isCreateProjectFromTemplateCheckBoxSelected(), "The 'Create project from template' checkbox should be selected but is not.");
@@ -163,24 +162,24 @@ public class NewProjectDialogTest extends LibraryTestBase {
     public void nextPreviousFinishButtonTest() {
         newProjectDialogFirstPage.selectNewProjectType("Java");
         newProjectDialogFirstPage.setProjectSdkIfAvailable("11");
-        newProjectDialogFirstPage.next();
+        newProjectDialogWizard.next();
         JavaProjectSecondPage javaProjectSecondPage = newProjectDialogWizard.find(JavaProjectSecondPage.class, Duration.ofSeconds(10));
-        javaProjectSecondPage.next();
+        newProjectDialogWizard.next();
         JavaProjectThirdPage javaProjectThirdPage = newProjectDialogWizard.find(JavaProjectThirdPage.class, Duration.ofSeconds(10));
         boolean isProjectNameLabelPresent = javaProjectThirdPage.findAll(JLabelFixture.class, byXpath("//div[@text='Project name:']")).size() == 1;
         assertTrue(isProjectNameLabelPresent, "The 'Project name' label should be present but is not.");
-        javaProjectThirdPage.previous();
+        newProjectDialogWizard.previous();
         boolean isCommandLineAppTextPresent = TextUtils.listOfRemoteTextToString(javaProjectSecondPage.findAllText()).contains("Command Line App");
         assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present but is not.");
-        javaProjectSecondPage.next();
+        newProjectDialogWizard.next();
         javaProjectThirdPage.setProjectName(plainJavaProjectName);
-        javaProjectThirdPage.finish();
+        newProjectDialogWizard.finish();
         mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
     }
 
     @Test
     public void cancelButtonTest() {
-        newProjectDialogFirstPage.cancel();
+        newProjectDialogWizard.cancel();
         remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
     }
 
@@ -209,33 +208,33 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     private void navigateToSetProjectNamePage(NewProjectType newProjectType) {
         newProjectDialogFirstPage.selectNewProjectType(newProjectType.toString());
-        newProjectDialogFirstPage.next();
+        newProjectDialogWizard.next();
         if (newProjectType == NewProjectType.PLAIN_JAVA) {
-            newProjectDialogWizard.find(JavaProjectSecondPage.class, Duration.ofSeconds(10)).next();
+            newProjectDialogWizard.next();
         }
     }
 
     private void testProjectNameInputField(NewProjectType newProjectType) {
         navigateToSetProjectNamePage(newProjectType);
-        AbstractTerminalPage abstractTerminalPage = newProjectDialogWizard.find(AbstractTerminalPage.class, Duration.ofSeconds(10));
+        AbstractFinalPage abstractFinalPage = newProjectDialogWizard.find(AbstractFinalPage.class, Duration.ofSeconds(10));
 
-        String currentProjectName = abstractTerminalPage.getProjectName();
+        String currentProjectName = abstractFinalPage.getProjectName();
         String newProjectName = currentProjectName + "1";
-        abstractTerminalPage.setProjectName(newProjectName);
-        currentProjectName = abstractTerminalPage.getProjectName();
+        abstractFinalPage.setProjectName(newProjectName);
+        currentProjectName = abstractFinalPage.getProjectName();
         assertTrue(currentProjectName.equals(newProjectName), "Currently set project name should be '" + newProjectName + "' but is '" + currentProjectName + "'.");
 
-        String currentProjectLocation = abstractTerminalPage.getProjectLocation();
+        String currentProjectLocation = abstractFinalPage.getProjectLocation();
         String newProjectLocation = currentProjectLocation + "2";
-        abstractTerminalPage.setProjectLocation(newProjectLocation);
-        currentProjectLocation = abstractTerminalPage.getProjectLocation();
+        abstractFinalPage.setProjectLocation(newProjectLocation);
+        currentProjectLocation = abstractFinalPage.getProjectLocation();
         assertTrue(currentProjectLocation.equals(newProjectLocation), "Currently set project location should be '" + newProjectLocation + "' but is '" + currentProjectLocation + "'.");
     }
 
     private void testArtifactCoordinatesMavenGradle(NewProjectType newProjectType) {
         navigateToSetProjectNamePage(newProjectType);
 
-        AbstractMavenGradleTerminalPage mavenGradleProjectSecondPage;
+        AbstractMavenGradleFinalPage mavenGradleProjectSecondPage;
         if (newProjectType.equals(NewProjectType.MAVEN)) {
             mavenGradleProjectSecondPage = newProjectDialogWizard.find(MavenProjectSecondPage.class, Duration.ofSeconds(10));
         } else if (newProjectType.equals(NewProjectType.GRADLE)) {
@@ -279,14 +278,14 @@ public class NewProjectDialogTest extends LibraryTestBase {
         return javaProjectThirdPage.findAll(ContainerFixture.class, byXpath("//div[@class='TitledSeparator']/../../*")).size() == 2;
     }
 
-    private void makeSureArtifactCoordinatesIsClosed(AbstractMavenGradleTerminalPage abstractMavenGradleTerminalPage) {
-        if (isArtifactCoordinatesOpened(abstractMavenGradleTerminalPage)) {
-            abstractMavenGradleTerminalPage.jLabel(ButtonLabels.artifactCoordinates).click();
+    private void makeSureArtifactCoordinatesIsClosed(AbstractMavenGradleFinalPage abstractMavenGradleFinalPage) {
+        if (isArtifactCoordinatesOpened(abstractMavenGradleFinalPage)) {
+            abstractMavenGradleFinalPage.jLabel(ButtonLabels.artifactCoordinates).click();
         }
     }
 
-    private boolean isArtifactCoordinatesOpened(AbstractMavenGradleTerminalPage abstractMavenGradleTerminalPage) {
-        List<ContainerFixture> cf = abstractMavenGradleTerminalPage.findAll(ContainerFixture.class, byXpath("//div[@class='HideableTitledSeparator']/../*"));
+    private boolean isArtifactCoordinatesOpened(AbstractMavenGradleFinalPage abstractMavenGradleFinalPage) {
+        List<ContainerFixture> cf = abstractMavenGradleFinalPage.findAll(ContainerFixture.class, byXpath("//div[@class='HideableTitledSeparator']/../*"));
         return cf.size() > 5;
     }
 

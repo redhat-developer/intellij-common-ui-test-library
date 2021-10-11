@@ -19,8 +19,6 @@ import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +35,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  */
 @DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
 @FixtureName(name = "New Project Dialog")
-public class NewProjectDialogFirstPage extends AbstractPage {
+public class NewProjectDialogFirstPage extends CommonContainerFixture {
     private static RemoteRobot remoteRobot;
     private int projectSdkItemsCount = -1;
 
@@ -81,13 +79,6 @@ public class NewProjectDialogFirstPage extends AbstractPage {
                 }
             }
         }
-    }
-
-    /**
-     * Move to the next page of the 'New Project' dialog by clicking on the 'Next' button
-     */
-    public void next() {
-        button(ButtonLabels.nextLabel).click();
     }
 
     private kotlin.Pair<Boolean, CommonContainerFixture> didProjectSdkListLoadAllItems() {

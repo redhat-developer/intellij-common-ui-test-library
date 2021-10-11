@@ -15,7 +15,6 @@ import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.UITestRunner;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialogWizard;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.screenshot.ScreenshotUtils;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
@@ -57,7 +56,7 @@ public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallb
         // New Project Dialog is visible -> close it
         try {
             NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
-            newProjectDialogWizard.find(AbstractPage.class, Duration.ofSeconds(10)).cancel();
+            newProjectDialogWizard.cancel();
             return;
         } catch (WaitForConditionTimeoutException e2) {
             // New Project Dialog is not visible -> continue
