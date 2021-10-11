@@ -16,6 +16,7 @@ import com.intellij.remoterobot.fixtures.JLabelFixture;
 import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
+import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.IntelliJCommonUiTestLibException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.GradleProjectSecondPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.JavaProjectSecondPage;
@@ -241,7 +242,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         } else if (newProjectType.equals(NewProjectType.GRADLE)) {
             mavenGradleProjectSecondPage = newProjectDialogWizard.find(GradleProjectSecondPage.class, Duration.ofSeconds(10));
         } else {
-            throw new RuntimeException("Unsupported new project type.");
+            throw new IntelliJCommonUiTestLibException("Unsupported new project type.");
         }
 
         makeSureArtifactCoordinatesIsClosed(mavenGradleProjectSecondPage);
