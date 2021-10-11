@@ -54,13 +54,22 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      * Click on the 'New Project' link
      */
     public void createNewProject() {
+        clickOnLink("New Project");
+    }
+
+    /**
+     * Click on the link according to given label
+     *
+     * @param label label of the link to click on
+     */
+    public void clickOnLink(String label) {
         // Code for IntelliJ Idea 2020.3 or newer
         if (intelliJVersion.toInt() >= 20203) {
-            welcomeFrameLink("New Project").click();
+            welcomeFrameLink(label).click();
         }
         // Code for IntelliJ Idea 2020.2 or earlier
         else {
-            actionLink("New Project").click();
+            actionLink(label).click();
         }
     }
 

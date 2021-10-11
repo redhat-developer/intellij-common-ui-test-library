@@ -53,7 +53,12 @@ public class JavaProjectSecondPage extends CommonContainerFixture {
         return createNewProjectFromTemplateCheckBox().isSelected();
     }
 
-    private JCheckboxFixture createNewProjectFromTemplateCheckBox() {
+    /**
+     * Get the 'Create project from template' checkbox fixture
+     *
+     * @return checkbox fixture
+     */
+    public JCheckboxFixture createNewProjectFromTemplateCheckBox() {
         return checkBox("Create project from template", true);
     }
 }

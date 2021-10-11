@@ -19,7 +19,6 @@ import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.intellij.remoterobot.fixtures.TextEditorFixture;
-import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils;
@@ -27,8 +26,6 @@ import org.assertj.swing.core.MouseButton;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 
@@ -115,6 +112,42 @@ public class ToolWindowsPane extends CommonContainerFixture {
     }
 
     /**
+     * Get the Project View tree fixture
+     *
+     * @return Project View tree fixture
+     */
+    public JTreeFixture projectViewTree() {
+        return find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
+    }
+
+    /**
+     * Get the Maven Tab tree fixture
+     *
+     * @return Maven Tab tree fixture
+     */
+    public JTreeFixture mavenTabTree() {
+        return find(JTreeFixture.class, byXpath("//div[@class='SimpleTree']"));
+    }
+
+    /**
+     * Get the Gradle Tab tree fixture
+     *
+     * @return Gradle Tab tree fixture
+     */
+    public JTreeFixture gradleTabTree() {
+        return find(JTreeFixture.class, byXpath("//div[@class='ExternalProjectTree']"));
+    }
+
+    /**
+     * Get the Build Status tree fixture
+     *
+     * @return Build Status tree fixture
+     */
+    private JTreeFixture buildStatusTree() {
+        return find(JTreeFixture.class, byXpath("//div[@class='Tree']"));
+    }
+
+    /**
      * Enumeration with building tools
      */
     public enum ToolToBuildProject {
@@ -130,31 +163,6 @@ public class ToolWindowsPane extends CommonContainerFixture {
         @Override
         public String toString() {
             return textRepresentation;
-        }
-    }
-
-    private JTreeFixture projectViewTree() {
-        return find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
-    }
-
-    private JTreeFixture mavenTabTree() {
-        return find(JTreeFixture.class, byXpath("//div[@class='SimpleTree']"));
-    }
-
-    private JTreeFixture gradleTabTree() {
-        return find(JTreeFixture.class, byXpath("//div[@class='ExternalProjectTree']"));
-    }
-
-    private void expandMavenTargetTreeIfNecessary() {
-        ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        try {
-            toolWindowsPane.mavenTabTree().findText("Lifecycle");
-        } catch (NoSuchElementException e) {
-            List<RemoteText> mavenBuildLabels = toolWindowsPane.mavenTabTree().findAllText();
-            Collections.reverse(mavenBuildLabels);
-            for (RemoteText label : mavenBuildLabels) {
-                label.doubleClick();
-            }
         }
     }
 
@@ -230,10 +238,6 @@ public class ToolWindowsPane extends CommonContainerFixture {
         ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class);
         String buildStatusTreeText = TextUtils.listOfRemoteTextToString(toolWindowsPane.buildStatusTree().findAllText());
         return buildStatusTreeText;
-    }
-
-    private JTreeFixture buildStatusTree() {
-        return find(JTreeFixture.class, byXpath("//div[@class='Tree']"));
     }
 
     private TextEditorFixture runConsole() {
