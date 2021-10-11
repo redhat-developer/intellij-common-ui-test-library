@@ -13,6 +13,8 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWin
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane.ToolToBuildProject;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,8 +24,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
-import static com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane.ToolToBuildProject.MAVEN;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.mavenStripeButtonLabel;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -38,7 +38,7 @@ class ToolWindowsPaneMavenTest extends LibraryTestBase {
 
     @BeforeAll
     public static void prepareProject() {
-        createNewProject(projectName, mavenStripeButtonLabel);
+        createNewProject(projectName, ButtonLabels.mavenStripeButtonLabel);
     }
 
     @AfterAll
@@ -53,7 +53,7 @@ class ToolWindowsPaneMavenTest extends LibraryTestBase {
 
     @Test
     public void mavenBuildTest() {
-        toolWindowsPane.buildProject(MAVEN);
+        toolWindowsPane.buildProject(ToolToBuildProject.MAVEN);
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilAllBgTasksFinish();
         toolWindowsPane.testIfBuildIsSuccessful();

@@ -17,12 +17,11 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWel
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.screenshot.ScreenshotUtils;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.time.Duration;
-
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.screenshot.ScreenshotUtils.takeScreenshot;
 
 /**
  * ScreenshotAfterTestFailExtension takes screenshot immediately after test has failed
@@ -32,7 +31,6 @@ import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.screenshot.
  * {@code @ExtendWith(ScreenshotAfterTestFailExtension.class)}<br>
  *
  * @author zcervink@redhat.com
- *
  */
 public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallback {
     private RemoteRobot remoteRobot;
@@ -50,7 +48,7 @@ public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallb
     public void afterTestExecution(ExtensionContext extensionContext) {
         boolean testFailed = extensionContext.getExecutionException().isPresent();
         if (testFailed) {
-            takeScreenshot(remoteRobot);
+            ScreenshotUtils.takeScreenshot(remoteRobot);
             cleanAfterTestFail();
         }
     }

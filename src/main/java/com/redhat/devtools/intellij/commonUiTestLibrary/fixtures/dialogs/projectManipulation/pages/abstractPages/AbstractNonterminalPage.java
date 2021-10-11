@@ -14,10 +14,8 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
-
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.nextLabel;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.previousLabel;
 
 /**
  * New Project dialog abstract non-terminal page fixture
@@ -35,13 +33,13 @@ public class AbstractNonterminalPage extends AbstractPage {
      * Move to the next page of the 'New Project' dialog by clicking on the 'Next' button
      */
     public void next() {
-        button(nextLabel).click();
+        button(ButtonLabels.nextLabel).click();
     }
 
     /**
      * Move to the previous page of the 'New Project' dialog by clicking on the 'Previous' button
      */
     public void previous() {
-        button(previousLabel).click();
+        button(ButtonLabels.previousLabel).click();
     }
 }

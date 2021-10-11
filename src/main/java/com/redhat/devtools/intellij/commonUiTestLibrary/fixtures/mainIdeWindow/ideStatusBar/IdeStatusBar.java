@@ -52,7 +52,6 @@ public class IdeStatusBar extends CommonContainerFixture {
 
     /**
      * Wait until the project has finished the import
-     *
      */
     public void waitUntilProjectImportIsComplete() {
         waitFor(Duration.ofSeconds(300), Duration.ofSeconds(5), "The project import did not finish in 5 minutes.", () -> didProjectImportFinish());
@@ -60,7 +59,6 @@ public class IdeStatusBar extends CommonContainerFixture {
 
     /**
      * Wait until all the background tasks finish
-     *
      */
     public void waitUntilAllBgTasksFinish() {
         waitFor(Duration.ofSeconds(300), Duration.ofSeconds(10), "The background tasks did not finish in 5 minutes.", () -> didAllBgTasksFinish());

@@ -18,6 +18,8 @@ import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.IntelliJCommonUiTestLibException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.GradleProjectSecondPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.JavaProjectSecondPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.JavaProjectThirdPage;
@@ -28,8 +30,9 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractTerminalPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialogWizard;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,10 +42,6 @@ import java.time.Duration;
 import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog.closeTipDialogIfItAppears;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.artifactCoordinates;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.moreSettings;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils.listOfRemoteTextToString;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -72,7 +71,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
             // tests ending with opened Main Ide Window needs to close the project and clear workspace
             IdeStatusBar ideStatusBar = mainIdeWindow.find(IdeStatusBar.class, Duration.ofSeconds(10));
             ideStatusBar.waitUntilProjectImportIsComplete();
-            closeTipDialogIfItAppears(remoteRobot);
+            TipDialog.closeTipDialogIfItAppears(remoteRobot);
             mainIdeWindow.maximizeIdeWindow();
             ideStatusBar.waitUntilAllBgTasksFinish();
             mainIdeWindow.closeProject();
@@ -171,7 +170,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         boolean isProjectNameLabelPresent = javaProjectThirdPage.findAll(JLabelFixture.class, byXpath("//div[@text='Project name:']")).size() == 1;
         assertTrue(isProjectNameLabelPresent, "The 'Project name' label should be present but is not.");
         javaProjectThirdPage.previous();
-        boolean isCommandLineAppTextPresent = listOfRemoteTextToString(javaProjectSecondPage.findAllText()).contains("Command Line App");
+        boolean isCommandLineAppTextPresent = TextUtils.listOfRemoteTextToString(javaProjectSecondPage.findAllText()).contains("Command Line App");
         assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present but is not.");
         javaProjectSecondPage.next();
         javaProjectThirdPage.setProjectName(plainJavaProjectName);
@@ -190,10 +189,10 @@ public class NewProjectDialogTest extends LibraryTestBase {
         newProjectDialogFirstPage.selectNewProjectType("Java");
         newProjectDialogFirstPage.setProjectSdkIfAvailable("8");
         ComboBoxFixture projectJdkComboBox = newProjectDialogFirstPage.find(ComboBoxFixture.class, byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
-        String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
+        String currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
         assertTrue(currentlySelectedProjectSdk.contains("8"), "Selected project SDK should be Java 8 but is '" + currentlySelectedProjectSdk + "'");
         newProjectDialogFirstPage.setProjectSdkIfAvailable("11");
-        currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
+        currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
         assertTrue(currentlySelectedProjectSdk.contains("11"), "Selected project SDK should be Java 11 but is '" + currentlySelectedProjectSdk + "'");
     }
 
@@ -272,7 +271,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     private void makeSureMoreSettingsIsClosed(JavaProjectThirdPage javaProjectThirdPage) {
         if (isMoreSettingsOpened(javaProjectThirdPage)) {
-            javaProjectThirdPage.jLabel(moreSettings).click();
+            javaProjectThirdPage.jLabel(ButtonLabels.moreSettings).click();
         }
     }
 
@@ -282,7 +281,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     private void makeSureArtifactCoordinatesIsClosed(AbstractMavenGradleTerminalPage abstractMavenGradleTerminalPage) {
         if (isArtifactCoordinatesOpened(abstractMavenGradleTerminalPage)) {
-            abstractMavenGradleTerminalPage.jLabel(artifactCoordinates).click();
+            abstractMavenGradleTerminalPage.jLabel(ButtonLabels.artifactCoordinates).click();
         }
     }
 

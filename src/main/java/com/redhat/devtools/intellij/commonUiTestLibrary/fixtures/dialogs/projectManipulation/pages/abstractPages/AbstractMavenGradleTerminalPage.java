@@ -15,12 +15,12 @@ import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.artifactCoordinates;
 
 /**
  * New Project dialog abstract terminal page fixture for Maven and Gradle projects
@@ -41,7 +41,7 @@ public class AbstractMavenGradleTerminalPage extends AbstractTerminalPage {
         List<ContainerFixture> cf = findAll(ContainerFixture.class, byXpath("//div[@class='HideableTitledSeparator']/../*"));
         boolean isAlreadyOpened = cf.size() > 5;
         if (!isAlreadyOpened) {
-            jLabel(artifactCoordinates).click();
+            jLabel(ButtonLabels.artifactCoordinates).click();
         }
     }
 

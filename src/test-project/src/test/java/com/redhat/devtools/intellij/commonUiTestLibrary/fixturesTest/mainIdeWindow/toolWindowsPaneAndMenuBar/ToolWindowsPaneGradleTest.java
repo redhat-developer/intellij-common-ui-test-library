@@ -12,8 +12,10 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWin
 
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane.ToolToBuildProject;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,9 +23,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
-
-import static com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane.ToolToBuildProject.GRADLE;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.gradleStripeButtonLabel;
 
 /**
  * ToolWindowsPane Gradle test
@@ -37,7 +36,7 @@ class ToolWindowsPaneGradleTest extends LibraryTestBase {
 
     @BeforeAll
     public static void prepareProject() {
-        createNewProject(projectName, gradleStripeButtonLabel);
+        createNewProject(projectName, ButtonLabels.gradleStripeButtonLabel);
     }
 
     @AfterAll
@@ -52,7 +51,7 @@ class ToolWindowsPaneGradleTest extends LibraryTestBase {
 
     @Test
     public void gradleBuildTest() {
-        toolWindowsPane.buildProject(GRADLE);
+        toolWindowsPane.buildProject(ToolToBuildProject.GRADLE);
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilAllBgTasksFinish();
         toolWindowsPane.testIfBuildIsSuccessful();
@@ -60,6 +59,6 @@ class ToolWindowsPaneGradleTest extends LibraryTestBase {
 
     @Test
     public void stripeButtonTest() {
-        toolWindowsPane.stripeButton(gradleStripeButtonLabel);
+        toolWindowsPane.stripeButton(ButtonLabels.gradleStripeButtonLabel);
     }
 }

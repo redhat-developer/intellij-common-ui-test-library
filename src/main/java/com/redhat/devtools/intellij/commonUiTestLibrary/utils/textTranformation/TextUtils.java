@@ -24,8 +24,8 @@ public class TextUtils {
     /**
      * Transform a List of RemoteText labels to one String
      *
-     * @param data List of RemoteText instancies
-     * @return     String containing a concatenation of all the labels in the 'data' List
+     * @param data List of RemoteText instances
+     * @return String containing a concatenation of all the labels in the 'data' List
      */
     public static String listOfRemoteTextToString(List<RemoteText> data) {
         List<String> listOfStrings = data

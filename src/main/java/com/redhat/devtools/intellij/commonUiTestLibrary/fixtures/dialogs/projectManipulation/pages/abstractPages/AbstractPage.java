@@ -15,9 +15,8 @@ import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
-
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.cancelLabel;
 
 /**
  * New Project dialog abstract page fixture
@@ -35,6 +34,6 @@ public class AbstractPage extends CommonContainerFixture {
      * Close the 'New Project' dialog by clicking on the 'Cancel' button
      */
     public void cancel() {
-        button(cancelLabel).click();
+        button(ButtonLabels.cancelLabel).click();
     }
 }

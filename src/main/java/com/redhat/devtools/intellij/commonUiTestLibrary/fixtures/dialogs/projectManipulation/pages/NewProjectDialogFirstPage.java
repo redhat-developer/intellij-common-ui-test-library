@@ -20,6 +20,8 @@ import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -27,8 +29,6 @@ import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.nextLabel;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils.listOfRemoteTextToString;
 
 /**
  * New Project dialog first page fixture
@@ -62,7 +62,7 @@ public class NewProjectDialogFirstPage extends AbstractPage {
      */
     public void setProjectSdkIfAvailable(String targetSdkName) {
         ComboBoxFixture projectJdkComboBox = comboBox(byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
-        String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
+        String currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
         if (currentlySelectedProjectSdk.contains(targetSdkName)) {
             return;
         }
@@ -87,7 +87,7 @@ public class NewProjectDialogFirstPage extends AbstractPage {
      * Move to the next page of the 'New Project' dialog by clicking on the 'Next' button
      */
     public void next() {
-        button(nextLabel).click();
+        button(ButtonLabels.nextLabel).click();
     }
 
     private kotlin.Pair<Boolean, CommonContainerFixture> didProjectSdkListLoadAllItems() {

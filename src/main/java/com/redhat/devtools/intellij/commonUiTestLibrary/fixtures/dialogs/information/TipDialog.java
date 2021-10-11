@@ -16,11 +16,10 @@ import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
-
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.closeLabel;
 
 /**
  * Tip of the Day dialog fixture
@@ -42,7 +41,7 @@ public class TipDialog extends CommonContainerFixture {
     public static void closeTipDialogIfItAppears(RemoteRobot remoteRobot) {
         try {
             TipDialog tipDialog = remoteRobot.find(TipDialog.class, Duration.ofSeconds(20));
-            tipDialog.button(closeLabel).click();
+            tipDialog.button(ButtonLabels.closeLabel).click();
         } catch (WaitForConditionTimeoutException e) {
             e.printStackTrace();
         }

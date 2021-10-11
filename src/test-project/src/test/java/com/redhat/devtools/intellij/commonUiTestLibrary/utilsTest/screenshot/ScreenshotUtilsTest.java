@@ -11,8 +11,9 @@
 package com.redhat.devtools.intellij.commonUiTestLibrary.utilsTest.screenshot;
 
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.screenshot.ScreenshotUtils;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +22,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.time.Duration;
 
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.screenshot.ScreenshotUtils.takeScreenshot;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -36,7 +36,7 @@ class ScreenshotUtilsTest extends LibraryTestBase {
         remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
 
         int numberOfScreenshotBefore = getNumberOfSavedScreenshot();
-        File screenshotFile = takeScreenshot(remoteRobot);
+        File screenshotFile = ScreenshotUtils.takeScreenshot(remoteRobot);
         int numberOfScreenshotAfter = getNumberOfSavedScreenshot();
         assertTrue(numberOfScreenshotAfter == numberOfScreenshotBefore + 1, "Screenshot should be already saved but is not.");
         if (screenshotFile != null) {

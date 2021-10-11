@@ -15,10 +15,8 @@ import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JTextFieldFixture;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
-
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.finishLabel;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.previousLabel;
 
 /**
  * New Project dialog abstract terminal page fixture
@@ -72,13 +70,13 @@ public class AbstractTerminalPage extends AbstractPage {
      * Move to the previous page of the 'New Project' dialog by clicking on the 'Previous' button
      */
     public void previous() {
-        button(previousLabel).click();
+        button(ButtonLabels.previousLabel).click();
     }
 
     /**
      * Finish the 'New Project' dialog by clicking on the 'Finish' button
      */
     public void finish() {
-        button(finishLabel).click();
+        button(ButtonLabels.finishLabel).click();
     }
 }

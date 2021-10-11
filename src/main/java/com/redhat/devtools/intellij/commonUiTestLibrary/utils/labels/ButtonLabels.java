@@ -24,6 +24,6 @@ public class ButtonLabels {
     public static final String finishLabel = "Finish";
     public static final String mavenStripeButtonLabel = "Maven";
     public static final String gradleStripeButtonLabel = "Gradle";
-    public static final String moreSettings="More Settings";
+    public static final String moreSettings = "More Settings";
     public static final String artifactCoordinates = "Artifact Coordinates";
 }

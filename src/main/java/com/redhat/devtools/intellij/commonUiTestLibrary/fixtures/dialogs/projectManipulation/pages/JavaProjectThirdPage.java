@@ -18,12 +18,12 @@ import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.IntelliJCommonUiTestLibException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractTerminalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.moreSettings;
 
 /**
  * New Project dialog java project third page fixture
@@ -46,7 +46,7 @@ public class JavaProjectThirdPage extends AbstractTerminalPage {
     public void openMoreSettings() {
         boolean isAlreadyOpened = findAll(ContainerFixture.class, byXpath("//div[@class='TitledSeparator']/../../*")).size() == 2;
         if (!isAlreadyOpened) {
-            jLabel(moreSettings).click();
+            jLabel(ButtonLabels.moreSettings).click();
         }
     }
 
