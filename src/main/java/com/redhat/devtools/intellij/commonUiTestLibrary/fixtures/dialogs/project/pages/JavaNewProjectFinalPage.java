@@ -31,10 +31,10 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
  */
 @DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
 @FixtureName(name = "New Project Dialog")
-public class JavaFinalPage extends AbstractFinalPage {
+public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
     private RemoteRobot remoteRobot;
 
-    public JavaFinalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
+    public JavaNewProjectFinalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
         this.remoteRobot = remoteRobot;
     }

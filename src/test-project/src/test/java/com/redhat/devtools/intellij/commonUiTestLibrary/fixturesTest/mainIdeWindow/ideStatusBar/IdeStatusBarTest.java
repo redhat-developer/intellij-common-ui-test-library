@@ -14,8 +14,8 @@ import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.NewProjectDialogWizard;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.MavenGradleFinalPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.FirstPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.MavenGradleNewProjectFinalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.NewProjectFirstPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
@@ -43,10 +43,10 @@ class IdeStatusBarTest extends LibraryTestBase {
     public void prepareProject() {
         openNewProjectDialogFromWelcomeDialog();
         NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
-        FirstPage firstPage = newProjectDialogWizard.find(FirstPage.class, Duration.ofSeconds(10));
-        firstPage.selectNewProjectType("Maven");
+        NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
+        newProjectFirstPage.selectNewProjectType("Maven");
         newProjectDialogWizard.next();
-        MavenGradleFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleFinalPage.class, Duration.ofSeconds(10));
+        MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
         mavenGradleFinalPage.setProjectName(projectName);
         newProjectDialogWizard.finish();
     }

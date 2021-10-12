@@ -25,8 +25,8 @@ import org.jetbrains.annotations.NotNull;
  */
 @DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
 @FixtureName(name = "New Project Dialog")
-public class AbstractFinalPage extends CommonContainerFixture {
-    public AbstractFinalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
+abstract public class AbstractNewProjectFinalPage extends CommonContainerFixture {
+    public AbstractNewProjectFinalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
     }
 

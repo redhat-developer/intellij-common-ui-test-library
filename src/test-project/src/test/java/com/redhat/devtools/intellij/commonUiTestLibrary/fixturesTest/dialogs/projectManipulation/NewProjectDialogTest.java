@@ -19,11 +19,11 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.UITestExcepti
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.NewProjectDialogWizard;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.AbstractFinalPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.JavaFinalPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.JavaSecondPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.MavenGradleFinalPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.FirstPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.AbstractNewProjectFinalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.JavaNewProjectFinalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.JavaNewProjectSecondPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.MavenGradleNewProjectFinalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.NewProjectFirstPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
@@ -52,14 +52,14 @@ public class NewProjectDialogTest extends LibraryTestBase {
     private final String plainJavaProjectName = "plain_java_project_name_test";
 
     private NewProjectDialogWizard newProjectDialogWizard;
-    private FirstPage firstPage;
+    private NewProjectFirstPage newProjectFirstPage;
     private MainIdeWindow mainIdeWindow;
 
     @BeforeEach
     public void openNewProjectDialog() {
         openNewProjectDialogFromWelcomeDialog();
         newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
-        firstPage = newProjectDialogWizard.find(FirstPage.class, Duration.ofSeconds(10));
+        newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
     }
 
     @AfterEach
@@ -102,7 +102,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
     @Test
     public void javaMoreSettingsTest() {
         navigateToSetProjectNamePage(NewProjectType.PLAIN_JAVA);
-        JavaFinalPage javaFinalPage = newProjectDialogWizard.find(JavaFinalPage.class, Duration.ofSeconds(10));
+        JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         makeSureMoreSettingsIsClosed(javaFinalPage);
         javaFinalPage.openMoreSettings();
         assertTrue(isMoreSettingsOpened(javaFinalPage), "The 'More Settings' should be visible.");
@@ -127,12 +127,12 @@ public class NewProjectDialogTest extends LibraryTestBase {
         currentModuleFileLocation = javaFinalPage.getModuleFileLocation();
         assertTrue(currentModuleFileLocation.equals(newModuleFileLocation), "Currently set module file location should be '" + newModuleFileLocation + "' but is '" + currentModuleFileLocation + "'.");
 
-        javaFinalPage.setProjectFormat(JavaFinalPage.ProjectFormatType.IPR_FILE_BASED);
-        JavaFinalPage.ProjectFormatType currentlySetProjectFormatType = javaFinalPage.getProjectFormat();
-        assertTrue(currentlySetProjectFormatType.equals(JavaFinalPage.ProjectFormatType.IPR_FILE_BASED), "Currently set value in the 'Project format' combo box should be '" + JavaFinalPage.ProjectFormatType.IPR_FILE_BASED + "' but is '" + currentlySetProjectFormatType + "'.");
-        javaFinalPage.setProjectFormat(JavaFinalPage.ProjectFormatType.IDEA_DIRECTORY_BASED);
+        javaFinalPage.setProjectFormat(JavaNewProjectFinalPage.ProjectFormatType.IPR_FILE_BASED);
+        JavaNewProjectFinalPage.ProjectFormatType currentlySetProjectFormatType = javaFinalPage.getProjectFormat();
+        assertTrue(currentlySetProjectFormatType.equals(JavaNewProjectFinalPage.ProjectFormatType.IPR_FILE_BASED), "Currently set value in the 'Project format' combo box should be '" + JavaNewProjectFinalPage.ProjectFormatType.IPR_FILE_BASED + "' but is '" + currentlySetProjectFormatType + "'.");
+        javaFinalPage.setProjectFormat(JavaNewProjectFinalPage.ProjectFormatType.IDEA_DIRECTORY_BASED);
         currentlySetProjectFormatType = javaFinalPage.getProjectFormat();
-        assertTrue(currentlySetProjectFormatType.equals(JavaFinalPage.ProjectFormatType.IDEA_DIRECTORY_BASED), "Currently set value in the 'Project format' combo box should be '" + JavaFinalPage.ProjectFormatType.IDEA_DIRECTORY_BASED + "' but is '" + currentlySetProjectFormatType + "'.");
+        assertTrue(currentlySetProjectFormatType.equals(JavaNewProjectFinalPage.ProjectFormatType.IDEA_DIRECTORY_BASED), "Currently set value in the 'Project format' combo box should be '" + JavaNewProjectFinalPage.ProjectFormatType.IDEA_DIRECTORY_BASED + "' but is '" + currentlySetProjectFormatType + "'.");
     }
 
     @Test
@@ -147,31 +147,31 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void toggleFromTemplateTest() {
-        firstPage.selectNewProjectType("Java");
+        newProjectFirstPage.selectNewProjectType("Java");
         newProjectDialogWizard.next();
-        JavaSecondPage javaSecondPage = newProjectDialogWizard.find(JavaSecondPage.class, Duration.ofSeconds(10));
-        boolean isSelected = javaSecondPage.fromTemplateCheckBox().isSelected();
+        JavaNewProjectSecondPage javaNewProjectSecondPage = newProjectDialogWizard.find(JavaNewProjectSecondPage.class, Duration.ofSeconds(10));
+        boolean isSelected = javaNewProjectSecondPage.fromTemplateCheckBox().isSelected();
         if (isSelected) {
-            javaSecondPage.fromTemplateCheckBox().setValue(false);
+            javaNewProjectSecondPage.fromTemplateCheckBox().setValue(false);
         }
-        javaSecondPage.toggleFromTemplate(true);
-        assertTrue(javaSecondPage.fromTemplateCheckBox().isSelected(), "The 'Create project from template' checkbox should be checked but is not.");
-        javaSecondPage.fromTemplateCheckBox().setValue(isSelected);
+        javaNewProjectSecondPage.toggleFromTemplate(true);
+        assertTrue(javaNewProjectSecondPage.fromTemplateCheckBox().isSelected(), "The 'Create project from template' checkbox should be checked but is not.");
+        javaNewProjectSecondPage.fromTemplateCheckBox().setValue(isSelected);
     }
 
     @Test
     public void previousButtonTest() {
-        firstPage.selectNewProjectType("Java");
-        firstPage.setProjectSdkIfAvailable("11");
+        newProjectFirstPage.selectNewProjectType("Java");
+        newProjectFirstPage.setProjectSdkIfAvailable("11");
         assertThrows(UITestException.class, () -> {
             newProjectDialogWizard.previous();
         }, "The 'UITestException' should be thrown because the 'Previous' button is not enabled on the first page of the 'New Project'.");
         newProjectDialogWizard.next();
-        boolean isCommandLineAppTextPresent = TextUtils.listOfRemoteTextToString(firstPage.findAllText()).contains("Command Line App");
+        boolean isCommandLineAppTextPresent = TextUtils.listOfRemoteTextToString(newProjectFirstPage.findAllText()).contains("Command Line App");
         assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present on the second page of the 'New Project' wizard for java project.");
         newProjectDialogWizard.previous();
         try {
-            firstPage.comboBox(byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
+            newProjectFirstPage.comboBox(byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
         } catch (WaitForConditionTimeoutException e) {
             fail("The 'Project SDK' should be available but is not.");
         }
@@ -179,10 +179,10 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void nextButtonTest() {
-        firstPage.selectNewProjectType("Java");
-        firstPage.setProjectSdkIfAvailable("11");
+        newProjectFirstPage.selectNewProjectType("Java");
+        newProjectFirstPage.setProjectSdkIfAvailable("11");
         newProjectDialogWizard.next();
-        boolean isCommandLineAppTextPresent = TextUtils.listOfRemoteTextToString(firstPage.findAllText()).contains("Command Line App");
+        boolean isCommandLineAppTextPresent = TextUtils.listOfRemoteTextToString(newProjectFirstPage.findAllText()).contains("Command Line App");
         assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present on the second page of the 'New Project' wizard for java project.");
         newProjectDialogWizard.next();
         assertThrows(UITestException.class, () -> {
@@ -192,8 +192,8 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void finishButtonTest() {
-        firstPage.selectNewProjectType("Java");
-        firstPage.setProjectSdkIfAvailable("11");
+        newProjectFirstPage.selectNewProjectType("Java");
+        newProjectFirstPage.setProjectSdkIfAvailable("11");
         assertThrows(UITestException.class, () -> {
             newProjectDialogWizard.finish();
         }, "The 'UITestException' should be thrown because the 'Finish' button is not available on the first page of the 'New Project' wizard for java project.");
@@ -202,7 +202,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         assertThrows(UITestException.class, () -> {
             newProjectDialogWizard.next();
         }, "The 'UITestException' should be thrown because the 'Next' button is not available on the last page of the 'New Project' wizard.");
-        newProjectDialogWizard.find(JavaFinalPage.class, Duration.ofSeconds(10)).setProjectName(plainJavaProjectName);
+        newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10)).setProjectName(plainJavaProjectName);
         newProjectDialogWizard.finish();
         mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
     }
@@ -215,29 +215,29 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void setProjectSdkIfAvailableTest() {
-        firstPage.selectNewProjectType("Java");
-        firstPage.setProjectSdkIfAvailable("8");
-        ComboBoxFixture projectJdkComboBox = firstPage.find(ComboBoxFixture.class, byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
+        newProjectFirstPage.selectNewProjectType("Java");
+        newProjectFirstPage.setProjectSdkIfAvailable("8");
+        ComboBoxFixture projectJdkComboBox = newProjectFirstPage.find(ComboBoxFixture.class, byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
         String currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
         assertTrue(currentlySelectedProjectSdk.contains("8"), "Selected project SDK should be Java 8 but is '" + currentlySelectedProjectSdk + "'");
-        firstPage.setProjectSdkIfAvailable("11");
+        newProjectFirstPage.setProjectSdkIfAvailable("11");
         currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
         assertTrue(currentlySelectedProjectSdk.contains("11"), "Selected project SDK should be Java 11 but is '" + currentlySelectedProjectSdk + "'");
     }
 
     @Test
     public void selectNewProjectTypeTest() {
-        firstPage.selectNewProjectType("Empty Project");
-        boolean isEmptyProjectLabelVisible = !firstPage.findAll(JListFixture.class, byXpath("//div[@visible_text='Empty Project']")).isEmpty();
+        newProjectFirstPage.selectNewProjectType("Empty Project");
+        boolean isEmptyProjectLabelVisible = !newProjectFirstPage.findAll(JListFixture.class, byXpath("//div[@visible_text='Empty Project']")).isEmpty();
         assertTrue(isEmptyProjectLabelVisible, "The 'Empty Project' label should be visible but is not.");
 
-        firstPage.selectNewProjectType("Java FX");
-        boolean isJavaFXApplicationLabelVisible = !firstPage.findAll(JListFixture.class, byXpath("//div[@visible_text='JavaFX Application']")).isEmpty();
+        newProjectFirstPage.selectNewProjectType("Java FX");
+        boolean isJavaFXApplicationLabelVisible = !newProjectFirstPage.findAll(JListFixture.class, byXpath("//div[@visible_text='JavaFX Application']")).isEmpty();
         assertTrue(isJavaFXApplicationLabelVisible, "The 'Java FX' label should be visible but is not.");
     }
 
     private void navigateToSetProjectNamePage(NewProjectType newProjectType) {
-        firstPage.selectNewProjectType(newProjectType.toString());
+        newProjectFirstPage.selectNewProjectType(newProjectType.toString());
         newProjectDialogWizard.next();
         if (newProjectType == NewProjectType.PLAIN_JAVA) {
             newProjectDialogWizard.next();
@@ -246,15 +246,15 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     private void testProjectNameInputField(NewProjectType newProjectType) {
         navigateToSetProjectNamePage(newProjectType);
-        AbstractFinalPage finalPage;
+        AbstractNewProjectFinalPage finalPage;
 
         switch (newProjectType) {
             case PLAIN_JAVA:
-                finalPage = newProjectDialogWizard.find(JavaFinalPage.class, Duration.ofSeconds(10));
+                finalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
                 break;
             case MAVEN:
             case GRADLE:
-                finalPage = newProjectDialogWizard.find(MavenGradleFinalPage.class, Duration.ofSeconds(10));
+                finalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
                 break;
             default:
                 throw new UITestException("Unsupported project type.");
@@ -275,7 +275,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     private void testArtifactCoordinatesMavenGradle(NewProjectType newProjectType) {
         navigateToSetProjectNamePage(newProjectType);
-        MavenGradleFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleFinalPage.class, Duration.ofSeconds(10));
+        MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
 
         makeSureArtifactCoordinatesIsClosed(mavenGradleFinalPage);
         mavenGradleFinalPage.openArtifactCoordinates();
@@ -302,23 +302,23 @@ public class NewProjectDialogTest extends LibraryTestBase {
         assertTrue(currentVersion.equals(newVersion), "Currently set version should be '" + newVersion + "' but is '" + currentVersion + "'.");
     }
 
-    private void makeSureMoreSettingsIsClosed(JavaFinalPage javaFinalPage) {
+    private void makeSureMoreSettingsIsClosed(JavaNewProjectFinalPage javaFinalPage) {
         if (isMoreSettingsOpened(javaFinalPage)) {
             javaFinalPage.jLabel(ButtonLabels.moreSettings).click();
         }
     }
 
-    private boolean isMoreSettingsOpened(JavaFinalPage javaFinalPage) {
+    private boolean isMoreSettingsOpened(JavaNewProjectFinalPage javaFinalPage) {
         return javaFinalPage.findAll(ContainerFixture.class, byXpath("//div[@class='TitledSeparator']/../../*")).size() == 2;
     }
 
-    private void makeSureArtifactCoordinatesIsClosed(MavenGradleFinalPage mavenGradleFinalPage) {
+    private void makeSureArtifactCoordinatesIsClosed(MavenGradleNewProjectFinalPage mavenGradleFinalPage) {
         if (isArtifactCoordinatesOpened(mavenGradleFinalPage)) {
             mavenGradleFinalPage.jLabel(ButtonLabels.artifactCoordinates).click();
         }
     }
 
-    private boolean isArtifactCoordinatesOpened(MavenGradleFinalPage mavenGradleFinalPage) {
+    private boolean isArtifactCoordinatesOpened(MavenGradleNewProjectFinalPage mavenGradleFinalPage) {
         List<ContainerFixture> cf = mavenGradleFinalPage.findAll(ContainerFixture.class, byXpath("//div[@class='HideableTitledSeparator']/../*"));
         return cf.size() > 5;
     }
