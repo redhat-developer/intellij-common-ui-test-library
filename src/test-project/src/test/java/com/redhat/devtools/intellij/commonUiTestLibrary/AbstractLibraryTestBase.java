@@ -11,11 +11,14 @@
 package com.redhat.devtools.intellij.commonUiTestLibrary;
 
 import com.intellij.remoterobot.RemoteRobot;
+import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.NewProjectDialogWizard;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.NewProjectFirstPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.AbstractNewProjectFinalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.JavaNewProjectFinalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.MavenGradleNewProjectFinalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.NewProjectFirstPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 
@@ -40,8 +43,20 @@ public abstract class AbstractLibraryTestBase {
         if (projectType.equals("Java")) {
             newProjectDialogWizard.next();
         }
-        AbstractNewProjectFinalPage abstractNewProjectFinalPage = newProjectDialogWizard.find(AbstractNewProjectFinalPage.class, Duration.ofSeconds(10));
-        abstractNewProjectFinalPage.setProjectName(projectName);
+
+        AbstractNewProjectFinalPage finalPage;
+        switch (projectType) {
+            case "Java":
+                finalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
+                break;
+            case "Maven":
+            case "Gradle":
+                finalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
+                break;
+            default:
+                throw new UITestException("Unsupported project type.");
+        }
+        finalPage.setProjectName(projectName);
         newProjectDialogWizard.finish();
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilProjectImportIsComplete();
