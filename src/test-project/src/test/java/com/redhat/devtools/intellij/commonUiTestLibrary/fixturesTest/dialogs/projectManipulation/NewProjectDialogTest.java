@@ -19,11 +19,11 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.UITestExcepti
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.NewProjectDialogWizard;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.AbstractFinalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.JavaFinalPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.JavaProjectSecondPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.JavaProjectThirdPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.MavenGradleFinalPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.NewProjectDialogFirstPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.AbstractFinalPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
@@ -102,37 +102,37 @@ public class NewProjectDialogTest extends LibraryTestBase {
     @Test
     public void javaMoreSettingsTest() {
         navigateToSetProjectNamePage(NewProjectType.PLAIN_JAVA);
-        JavaProjectThirdPage javaProjectThirdPage = newProjectDialogWizard.find(JavaProjectThirdPage.class, Duration.ofSeconds(10));
-        makeSureMoreSettingsIsClosed(javaProjectThirdPage);
-        javaProjectThirdPage.openMoreSettings();
-        assertTrue(isMoreSettingsOpened(javaProjectThirdPage), "The 'More Settings' should be visible.");
-        javaProjectThirdPage.openMoreSettings();
-        assertTrue(isMoreSettingsOpened(javaProjectThirdPage), "The 'More Settings' should be visible.");
+        JavaFinalPage javaFinalPage = newProjectDialogWizard.find(JavaFinalPage.class, Duration.ofSeconds(10));
+        makeSureMoreSettingsIsClosed(javaFinalPage);
+        javaFinalPage.openMoreSettings();
+        assertTrue(isMoreSettingsOpened(javaFinalPage), "The 'More Settings' should be visible.");
+        javaFinalPage.openMoreSettings();
+        assertTrue(isMoreSettingsOpened(javaFinalPage), "The 'More Settings' should be visible.");
 
-        String currentModuleName = javaProjectThirdPage.getModuleName();
+        String currentModuleName = javaFinalPage.getModuleName();
         String newModuleName = currentModuleName + "1";
-        javaProjectThirdPage.setModuleName(newModuleName);
-        currentModuleName = javaProjectThirdPage.getModuleName();
+        javaFinalPage.setModuleName(newModuleName);
+        currentModuleName = javaFinalPage.getModuleName();
         assertTrue(currentModuleName.equals(newModuleName), "Currently set module name should be '" + newModuleName + "' but is '" + currentModuleName + "'.");
 
-        String currentContentRoot = javaProjectThirdPage.getContentRoot();
+        String currentContentRoot = javaFinalPage.getContentRoot();
         String newContentRoot = currentContentRoot + "2";
-        javaProjectThirdPage.setContentRoot(newContentRoot);
-        currentContentRoot = javaProjectThirdPage.getContentRoot();
+        javaFinalPage.setContentRoot(newContentRoot);
+        currentContentRoot = javaFinalPage.getContentRoot();
         assertTrue(currentContentRoot.equals(newContentRoot), "Currently set content root location should be '" + newContentRoot + "' but is '" + currentContentRoot + "'.");
 
-        String currentModuleFileLocation = javaProjectThirdPage.getModuleFileLocation();
+        String currentModuleFileLocation = javaFinalPage.getModuleFileLocation();
         String newModuleFileLocation = currentModuleFileLocation + "3";
-        javaProjectThirdPage.setModuleFileLocation(newModuleFileLocation);
-        currentModuleFileLocation = javaProjectThirdPage.getModuleFileLocation();
+        javaFinalPage.setModuleFileLocation(newModuleFileLocation);
+        currentModuleFileLocation = javaFinalPage.getModuleFileLocation();
         assertTrue(currentModuleFileLocation.equals(newModuleFileLocation), "Currently set module file location should be '" + newModuleFileLocation + "' but is '" + currentModuleFileLocation + "'.");
 
-        javaProjectThirdPage.setProjectFormat(JavaProjectThirdPage.ProjectFormatType.IPR_FILE_BASED);
-        JavaProjectThirdPage.ProjectFormatType currentlySetProjectFormatType = javaProjectThirdPage.getProjectFormat();
-        assertTrue(currentlySetProjectFormatType.equals(JavaProjectThirdPage.ProjectFormatType.IPR_FILE_BASED), "Currently set value in the 'Project format' combo box should be '" + JavaProjectThirdPage.ProjectFormatType.IPR_FILE_BASED + "' but is '" + currentlySetProjectFormatType + "'.");
-        javaProjectThirdPage.setProjectFormat(JavaProjectThirdPage.ProjectFormatType.IDEA_DIRECTORY_BASED);
-        currentlySetProjectFormatType = javaProjectThirdPage.getProjectFormat();
-        assertTrue(currentlySetProjectFormatType.equals(JavaProjectThirdPage.ProjectFormatType.IDEA_DIRECTORY_BASED), "Currently set value in the 'Project format' combo box should be '" + JavaProjectThirdPage.ProjectFormatType.IDEA_DIRECTORY_BASED + "' but is '" + currentlySetProjectFormatType + "'.");
+        javaFinalPage.setProjectFormat(JavaFinalPage.ProjectFormatType.IPR_FILE_BASED);
+        JavaFinalPage.ProjectFormatType currentlySetProjectFormatType = javaFinalPage.getProjectFormat();
+        assertTrue(currentlySetProjectFormatType.equals(JavaFinalPage.ProjectFormatType.IPR_FILE_BASED), "Currently set value in the 'Project format' combo box should be '" + JavaFinalPage.ProjectFormatType.IPR_FILE_BASED + "' but is '" + currentlySetProjectFormatType + "'.");
+        javaFinalPage.setProjectFormat(JavaFinalPage.ProjectFormatType.IDEA_DIRECTORY_BASED);
+        currentlySetProjectFormatType = javaFinalPage.getProjectFormat();
+        assertTrue(currentlySetProjectFormatType.equals(JavaFinalPage.ProjectFormatType.IDEA_DIRECTORY_BASED), "Currently set value in the 'Project format' combo box should be '" + JavaFinalPage.ProjectFormatType.IDEA_DIRECTORY_BASED + "' but is '" + currentlySetProjectFormatType + "'.");
     }
 
     @Test
@@ -202,7 +202,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         assertThrows(UITestException.class, () -> {
             newProjectDialogWizard.next();
         }, "The 'UITestException' should be thrown because the 'Next' button is not available on the last page of the 'New Project' wizard.");
-        newProjectDialogWizard.find(JavaProjectThirdPage.class, Duration.ofSeconds(10)).setProjectName(plainJavaProjectName);
+        newProjectDialogWizard.find(JavaFinalPage.class, Duration.ofSeconds(10)).setProjectName(plainJavaProjectName);
         newProjectDialogWizard.finish();
         mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
     }
@@ -246,18 +246,30 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     private void testProjectNameInputField(NewProjectType newProjectType) {
         navigateToSetProjectNamePage(newProjectType);
-        AbstractFinalPage abstractFinalPage = newProjectDialogWizard.find(AbstractFinalPage.class, Duration.ofSeconds(10));
+        AbstractFinalPage finalPage;
 
-        String currentProjectName = abstractFinalPage.getProjectName();
+        switch (newProjectType) {
+            case PLAIN_JAVA:
+                finalPage = newProjectDialogWizard.find(JavaFinalPage.class, Duration.ofSeconds(10));
+                break;
+            case MAVEN:
+            case GRADLE:
+                finalPage = newProjectDialogWizard.find(MavenGradleFinalPage.class, Duration.ofSeconds(10));
+                break;
+            default:
+                throw new UITestException("Unsupported project type.");
+        }
+
+        String currentProjectName = finalPage.getProjectName();
         String newProjectName = currentProjectName + "1";
-        abstractFinalPage.setProjectName(newProjectName);
-        currentProjectName = abstractFinalPage.getProjectName();
+        finalPage.setProjectName(newProjectName);
+        currentProjectName = finalPage.getProjectName();
         assertTrue(currentProjectName.equals(newProjectName), "Currently set project name should be '" + newProjectName + "' but is '" + currentProjectName + "'.");
 
-        String currentProjectLocation = abstractFinalPage.getProjectLocation();
+        String currentProjectLocation = finalPage.getProjectLocation();
         String newProjectLocation = currentProjectLocation + "2";
-        abstractFinalPage.setProjectLocation(newProjectLocation);
-        currentProjectLocation = abstractFinalPage.getProjectLocation();
+        finalPage.setProjectLocation(newProjectLocation);
+        currentProjectLocation = finalPage.getProjectLocation();
         assertTrue(currentProjectLocation.equals(newProjectLocation), "Currently set project location should be '" + newProjectLocation + "' but is '" + currentProjectLocation + "'.");
     }
 
@@ -290,14 +302,14 @@ public class NewProjectDialogTest extends LibraryTestBase {
         assertTrue(currentVersion.equals(newVersion), "Currently set version should be '" + newVersion + "' but is '" + currentVersion + "'.");
     }
 
-    private void makeSureMoreSettingsIsClosed(JavaProjectThirdPage javaProjectThirdPage) {
-        if (isMoreSettingsOpened(javaProjectThirdPage)) {
-            javaProjectThirdPage.jLabel(ButtonLabels.moreSettings).click();
+    private void makeSureMoreSettingsIsClosed(JavaFinalPage javaFinalPage) {
+        if (isMoreSettingsOpened(javaFinalPage)) {
+            javaFinalPage.jLabel(ButtonLabels.moreSettings).click();
         }
     }
 
-    private boolean isMoreSettingsOpened(JavaProjectThirdPage javaProjectThirdPage) {
-        return javaProjectThirdPage.findAll(ContainerFixture.class, byXpath("//div[@class='TitledSeparator']/../../*")).size() == 2;
+    private boolean isMoreSettingsOpened(JavaFinalPage javaFinalPage) {
+        return javaFinalPage.findAll(ContainerFixture.class, byXpath("//div[@class='TitledSeparator']/../../*")).size() == 2;
     }
 
     private void makeSureArtifactCoordinatesIsClosed(MavenGradleFinalPage mavenGradleFinalPage) {
