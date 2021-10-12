@@ -155,7 +155,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         navigateToSetProjectNamePage(NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         javaFinalPage.openMoreSettings();
-        
+
         javaFinalPage.setProjectFormat(JavaNewProjectFinalPage.ProjectFormatType.IPR_FILE_BASED);
         JavaNewProjectFinalPage.ProjectFormatType currentlySetProjectFormatType = javaFinalPage.getProjectFormat();
         assertTrue(currentlySetProjectFormatType.equals(JavaNewProjectFinalPage.ProjectFormatType.IPR_FILE_BASED), "Currently set value in the 'Project format' combo box should be '" + JavaNewProjectFinalPage.ProjectFormatType.IPR_FILE_BASED + "' but is '" + currentlySetProjectFormatType + "'.");
@@ -165,13 +165,43 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void mavenArtifactCoordinatesTest() {
-        testArtifactCoordinatesMavenGradle(NewProjectType.MAVEN);
+    public void openArtifactCoordinatesMavenTest() {
+        testOpenArtifactCoordinatesMavenGradle(NewProjectType.MAVEN);
     }
 
     @Test
-    public void gradleArtifactCoordinatesTest() {
-        testArtifactCoordinatesMavenGradle(NewProjectType.GRADLE);
+    public void openArtifactCoordinatesGradleTest() {
+        testOpenArtifactCoordinatesMavenGradle(NewProjectType.GRADLE);
+    }
+
+    @Test
+    public void getSetGroupIdMavenTest() {
+        testGetSetGroupIdMavenGradle(NewProjectType.MAVEN);
+    }
+
+    @Test
+    public void getSetGroupIdGradleTest() {
+        testGetSetGroupIdMavenGradle(NewProjectType.GRADLE);
+    }
+
+    @Test
+    public void getSetArtifactIdMavenTest() {
+        testGetSetArtifactIdMavenGradle(NewProjectType.MAVEN);
+    }
+
+    @Test
+    public void getSetArtifactIdGradleTest() {
+        testGetSetArtifactIdMavenGradle(NewProjectType.GRADLE);
+    }
+
+    @Test
+    public void getSetVersionMavenTest() {
+        testGetSetVersionMavenGradle(NewProjectType.MAVEN);
+    }
+
+    @Test
+    public void getSetVersionGradleTest() {
+        testGetSetVersionMavenGradle(NewProjectType.GRADLE);
     }
 
     @Test
@@ -302,30 +332,44 @@ public class NewProjectDialogTest extends LibraryTestBase {
         assertTrue(currentProjectLocation.equals(newProjectLocation), "Currently set project location should be '" + newProjectLocation + "' but is '" + currentProjectLocation + "'.");
     }
 
-    private void testArtifactCoordinatesMavenGradle(NewProjectType newProjectType) {
+    private void testOpenArtifactCoordinatesMavenGradle(NewProjectType newProjectType) {
         navigateToSetProjectNamePage(newProjectType);
         MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
-
         makeSureArtifactCoordinatesIsClosed(mavenGradleFinalPage);
         mavenGradleFinalPage.openArtifactCoordinates();
         assertTrue(isArtifactCoordinatesOpened(mavenGradleFinalPage), "The 'Artifact Coordinates' settings should be visible.");
         mavenGradleFinalPage.openArtifactCoordinates();
         assertTrue(isArtifactCoordinatesOpened(mavenGradleFinalPage), "The 'Artifact Coordinates' settings should be visible.");
+    }
 
+    private void testGetSetGroupIdMavenGradle(NewProjectType newProjectType) {
+        navigateToSetProjectNamePage(newProjectType);
+        MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
+        mavenGradleFinalPage.openArtifactCoordinates();
         String currentGroupId = mavenGradleFinalPage.getGroupId();
         String newGroupId = currentGroupId + "1";
         mavenGradleFinalPage.setGroupId(newGroupId);
         currentGroupId = mavenGradleFinalPage.getGroupId();
         assertTrue(currentGroupId.equals(newGroupId), "Currently set group ID should be '" + newGroupId + "' but is '" + currentGroupId + "'.");
+    }
 
+    private void testGetSetArtifactIdMavenGradle(NewProjectType newProjectType) {
+        navigateToSetProjectNamePage(newProjectType);
+        MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
+        mavenGradleFinalPage.openArtifactCoordinates();
         String currentArtifactId = mavenGradleFinalPage.getArtifactId();
-        String newArtifactId = currentArtifactId + "2";
+        String newArtifactId = currentArtifactId + "1";
         mavenGradleFinalPage.setArtifactId(newArtifactId);
         currentArtifactId = mavenGradleFinalPage.getArtifactId();
         assertTrue(currentArtifactId.equals(newArtifactId), "Currently set artifact ID should be '" + newArtifactId + "' but is '" + currentArtifactId + "'.");
+    }
 
+    private void testGetSetVersionMavenGradle(NewProjectType newProjectType) {
+        navigateToSetProjectNamePage(newProjectType);
+        MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
+        mavenGradleFinalPage.openArtifactCoordinates();
         String currentVersion = mavenGradleFinalPage.getVersion();
-        String newVersion = currentVersion + "3";
+        String newVersion = currentVersion + "1";
         mavenGradleFinalPage.setVersion(newVersion);
         currentVersion = mavenGradleFinalPage.getVersion();
         assertTrue(currentVersion.equals(newVersion), "Currently set version should be '" + newVersion + "' but is '" + currentVersion + "'.");
