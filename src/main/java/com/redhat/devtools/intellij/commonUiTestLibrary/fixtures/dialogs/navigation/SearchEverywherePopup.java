@@ -20,7 +20,7 @@ import com.intellij.remoterobot.fixtures.JTextFieldFixture;
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.Keyboard;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
-import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.IntelliJCommonUiTestLibException;
+import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.UiTestException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -55,7 +55,7 @@ public class SearchEverywherePopup extends CommonContainerFixture {
         try {
             button(byXpath("//div[@text='" + tabName + "']"), Duration.ofSeconds(2)).click();
         } catch (WaitForConditionTimeoutException e) {
-            throw new IntelliJCommonUiTestLibException("The '" + tabName + "' tab cannot be found.");
+            throw new UiTestException("The '" + tabName + "' tab cannot be found.");
         }
     }
 

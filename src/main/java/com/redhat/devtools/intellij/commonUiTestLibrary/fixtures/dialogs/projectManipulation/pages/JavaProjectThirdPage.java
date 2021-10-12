@@ -16,7 +16,7 @@ import com.intellij.remoterobot.fixtures.ComboBoxFixture;
 import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
-import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.IntelliJCommonUiTestLibException;
+import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.UiTestException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractFinalPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
@@ -108,7 +108,7 @@ public class JavaProjectThirdPage extends AbstractFinalPage {
      * Get the project format currently set in the 'Project format' combo box
      *
      * @return project format currently set in the combo box
-     * @throws IntelliJCommonUiTestLibException when there is set another value than defined by the 'ProjectFormatType' enumeration in the combo box
+     * @throws UiTestException when there is set another value than defined by the 'ProjectFormatType' enumeration in the combo box
      */
     public ProjectFormatType getProjectFormat() {
         ComboBoxFixture projectFormatComboBox = comboBox(byXpath("//div[@class='JComboBox']"), Duration.ofSeconds(10));
@@ -118,7 +118,7 @@ public class JavaProjectThirdPage extends AbstractFinalPage {
         } else if (projectFormatComboBox.selectedText().contains(ProjectFormatType.IPR_FILE_BASED.toString())) {
             return ProjectFormatType.IPR_FILE_BASED;
         } else {
-            throw new IntelliJCommonUiTestLibException("Currently selected project format is not supported.");
+            throw new UiTestException("Currently selected project format is not supported.");
         }
     }
 
