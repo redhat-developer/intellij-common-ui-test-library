@@ -100,7 +100,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void javaMoreSettingsTest() {
+    public void openMoreSettingsTest() {
         navigateToSetProjectNamePage(NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         makeSureMoreSettingsIsClosed(javaFinalPage);
@@ -108,25 +108,54 @@ public class NewProjectDialogTest extends LibraryTestBase {
         assertTrue(isMoreSettingsOpened(javaFinalPage), "The 'More Settings' should be visible.");
         javaFinalPage.openMoreSettings();
         assertTrue(isMoreSettingsOpened(javaFinalPage), "The 'More Settings' should be visible.");
+    }
+
+    @Test
+    public void getSetModuleNameTest() {
+        navigateToSetProjectNamePage(NewProjectType.PLAIN_JAVA);
+        JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
+        javaFinalPage.openMoreSettings();
 
         String currentModuleName = javaFinalPage.getModuleName();
         String newModuleName = currentModuleName + "1";
         javaFinalPage.setModuleName(newModuleName);
         currentModuleName = javaFinalPage.getModuleName();
         assertTrue(currentModuleName.equals(newModuleName), "Currently set module name should be '" + newModuleName + "' but is '" + currentModuleName + "'.");
+    }
+
+    @Test
+    public void getSetContentRootTest() {
+        navigateToSetProjectNamePage(NewProjectType.PLAIN_JAVA);
+        JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
+        javaFinalPage.openMoreSettings();
 
         String currentContentRoot = javaFinalPage.getContentRoot();
-        String newContentRoot = currentContentRoot + "2";
+        String newContentRoot = currentContentRoot + "1";
         javaFinalPage.setContentRoot(newContentRoot);
         currentContentRoot = javaFinalPage.getContentRoot();
         assertTrue(currentContentRoot.equals(newContentRoot), "Currently set content root location should be '" + newContentRoot + "' but is '" + currentContentRoot + "'.");
+    }
+
+    @Test
+    public void getSetModuleFileLocationTest() {
+        navigateToSetProjectNamePage(NewProjectType.PLAIN_JAVA);
+        JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
+        javaFinalPage.openMoreSettings();
 
         String currentModuleFileLocation = javaFinalPage.getModuleFileLocation();
-        String newModuleFileLocation = currentModuleFileLocation + "3";
+        String newModuleFileLocation = currentModuleFileLocation + "1";
         javaFinalPage.setModuleFileLocation(newModuleFileLocation);
         currentModuleFileLocation = javaFinalPage.getModuleFileLocation();
         assertTrue(currentModuleFileLocation.equals(newModuleFileLocation), "Currently set module file location should be '" + newModuleFileLocation + "' but is '" + currentModuleFileLocation + "'.");
+    }
 
+
+    @Test
+    public void getSetProjectFormat() {
+        navigateToSetProjectNamePage(NewProjectType.PLAIN_JAVA);
+        JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
+        javaFinalPage.openMoreSettings();
+        
         javaFinalPage.setProjectFormat(JavaNewProjectFinalPage.ProjectFormatType.IPR_FILE_BASED);
         JavaNewProjectFinalPage.ProjectFormatType currentlySetProjectFormatType = javaFinalPage.getProjectFormat();
         assertTrue(currentlySetProjectFormatType.equals(JavaNewProjectFinalPage.ProjectFormatType.IPR_FILE_BASED), "Currently set value in the 'Project format' combo box should be '" + JavaNewProjectFinalPage.ProjectFormatType.IPR_FILE_BASED + "' but is '" + currentlySetProjectFormatType + "'.");
