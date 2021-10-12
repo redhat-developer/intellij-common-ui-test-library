@@ -14,7 +14,7 @@ import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialogWizard;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.apache.commons.io.filefilter.FileFilterUtils;

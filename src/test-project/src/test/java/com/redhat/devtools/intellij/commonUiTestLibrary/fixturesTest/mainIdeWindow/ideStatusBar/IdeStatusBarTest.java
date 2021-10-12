@@ -13,9 +13,9 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWin
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialogWizard;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.MavenProjectSecondPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.NewProjectDialogFirstPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.NewProjectDialogWizard;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.MavenGradleFinalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.NewProjectDialogFirstPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
@@ -46,8 +46,8 @@ class IdeStatusBarTest extends LibraryTestBase {
         NewProjectDialogFirstPage newProjectDialogFirstPage = newProjectDialogWizard.find(NewProjectDialogFirstPage.class, Duration.ofSeconds(10));
         newProjectDialogFirstPage.selectNewProjectType("Maven");
         newProjectDialogWizard.next();
-        MavenProjectSecondPage mavenProjectSecondPage = newProjectDialogWizard.find(MavenProjectSecondPage.class, Duration.ofSeconds(10));
-        mavenProjectSecondPage.setProjectName(projectName);
+        MavenGradleFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleFinalPage.class, Duration.ofSeconds(10));
+        mavenGradleFinalPage.setProjectName(projectName);
         newProjectDialogWizard.finish();
     }
 

@@ -8,7 +8,7 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages;
+package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages;
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
@@ -17,7 +17,6 @@ import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.UITestException;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractFinalPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
 

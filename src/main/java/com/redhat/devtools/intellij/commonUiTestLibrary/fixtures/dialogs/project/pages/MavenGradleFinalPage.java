@@ -8,7 +8,7 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages;
+package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages;
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
@@ -23,16 +23,17 @@ import java.util.List;
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 
 /**
- * New Project dialog abstract terminal page fixture for Maven and Gradle projects
+ * New Project dialog maven project second page fixture
  *
  * @author zcervink@redhat.com
  */
 @DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
 @FixtureName(name = "New Project Dialog")
-public class AbstractMavenGradleFinalPage extends AbstractFinalPage {
-    public AbstractMavenGradleFinalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
+public class MavenGradleFinalPage extends AbstractFinalPage {
+    public MavenGradleFinalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
     }
+
 
     /**
      * Open the 'Artifact Coordinates' options

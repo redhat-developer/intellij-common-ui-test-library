@@ -8,24 +8,43 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages;
+package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages;
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
+import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractMavenGradleFinalPage;
+import com.intellij.remoterobot.fixtures.JCheckboxFixture;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * New Project dialog maven project second page fixture
+ * New Project dialog java project second page fixture
  *
  * @author zcervink@redhat.com
  */
 @DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
 @FixtureName(name = "New Project Dialog")
-public class MavenProjectSecondPage extends AbstractMavenGradleFinalPage {
-    public MavenProjectSecondPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
+public class JavaProjectSecondPage extends CommonContainerFixture {
+    public JavaProjectSecondPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
+    }
+
+    /**
+     * Toggle the 'Create project from template' checkbox
+     *
+     * @param toggle value to set to the checkbox
+     */
+    public void toggleFromTemplate(boolean toggle) {
+        fromTemplateCheckBox().setValue(toggle);
+    }
+
+    /**
+     * Get the 'Create project from template' checkbox fixture
+     *
+     * @return checkbox fixture
+     */
+    public JCheckboxFixture fromTemplateCheckBox() {
+        return checkBox("Create project from template", true);
     }
 }

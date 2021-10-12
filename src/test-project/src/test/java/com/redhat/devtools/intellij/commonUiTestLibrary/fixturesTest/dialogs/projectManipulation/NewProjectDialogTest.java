@@ -18,14 +18,12 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialogWizard;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.GradleProjectSecondPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.JavaProjectSecondPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.JavaProjectThirdPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.MavenProjectSecondPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.NewProjectDialogFirstPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractFinalPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractMavenGradleFinalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.NewProjectDialogWizard;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.JavaProjectSecondPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.JavaProjectThirdPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.MavenGradleFinalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.NewProjectDialogFirstPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.AbstractFinalPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
@@ -265,38 +263,30 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     private void testArtifactCoordinatesMavenGradle(NewProjectType newProjectType) {
         navigateToSetProjectNamePage(newProjectType);
+        MavenGradleFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleFinalPage.class, Duration.ofSeconds(10));
 
-        AbstractMavenGradleFinalPage mavenGradleProjectSecondPage;
-        if (newProjectType.equals(NewProjectType.MAVEN)) {
-            mavenGradleProjectSecondPage = newProjectDialogWizard.find(MavenProjectSecondPage.class, Duration.ofSeconds(10));
-        } else if (newProjectType.equals(NewProjectType.GRADLE)) {
-            mavenGradleProjectSecondPage = newProjectDialogWizard.find(GradleProjectSecondPage.class, Duration.ofSeconds(10));
-        } else {
-            throw new UITestException("Unsupported new project type.");
-        }
+        makeSureArtifactCoordinatesIsClosed(mavenGradleFinalPage);
+        mavenGradleFinalPage.openArtifactCoordinates();
+        assertTrue(isArtifactCoordinatesOpened(mavenGradleFinalPage), "The 'Artifact Coordinates' settings should be visible.");
+        mavenGradleFinalPage.openArtifactCoordinates();
+        assertTrue(isArtifactCoordinatesOpened(mavenGradleFinalPage), "The 'Artifact Coordinates' settings should be visible.");
 
-        makeSureArtifactCoordinatesIsClosed(mavenGradleProjectSecondPage);
-        mavenGradleProjectSecondPage.openArtifactCoordinates();
-        assertTrue(isArtifactCoordinatesOpened(mavenGradleProjectSecondPage), "The 'Artifact Coordinates' settings should be visible.");
-        mavenGradleProjectSecondPage.openArtifactCoordinates();
-        assertTrue(isArtifactCoordinatesOpened(mavenGradleProjectSecondPage), "The 'Artifact Coordinates' settings should be visible.");
-
-        String currentGroupId = mavenGradleProjectSecondPage.getGroupId();
+        String currentGroupId = mavenGradleFinalPage.getGroupId();
         String newGroupId = currentGroupId + "1";
-        mavenGradleProjectSecondPage.setGroupId(newGroupId);
-        currentGroupId = mavenGradleProjectSecondPage.getGroupId();
+        mavenGradleFinalPage.setGroupId(newGroupId);
+        currentGroupId = mavenGradleFinalPage.getGroupId();
         assertTrue(currentGroupId.equals(newGroupId), "Currently set group ID should be '" + newGroupId + "' but is '" + currentGroupId + "'.");
 
-        String currentArtifactId = mavenGradleProjectSecondPage.getArtifactId();
+        String currentArtifactId = mavenGradleFinalPage.getArtifactId();
         String newArtifactId = currentArtifactId + "2";
-        mavenGradleProjectSecondPage.setArtifactId(newArtifactId);
-        currentArtifactId = mavenGradleProjectSecondPage.getArtifactId();
+        mavenGradleFinalPage.setArtifactId(newArtifactId);
+        currentArtifactId = mavenGradleFinalPage.getArtifactId();
         assertTrue(currentArtifactId.equals(newArtifactId), "Currently set artifact ID should be '" + newArtifactId + "' but is '" + currentArtifactId + "'.");
 
-        String currentVersion = mavenGradleProjectSecondPage.getVersion();
+        String currentVersion = mavenGradleFinalPage.getVersion();
         String newVersion = currentVersion + "3";
-        mavenGradleProjectSecondPage.setVersion(newVersion);
-        currentVersion = mavenGradleProjectSecondPage.getVersion();
+        mavenGradleFinalPage.setVersion(newVersion);
+        currentVersion = mavenGradleFinalPage.getVersion();
         assertTrue(currentVersion.equals(newVersion), "Currently set version should be '" + newVersion + "' but is '" + currentVersion + "'.");
     }
 
@@ -310,14 +300,14 @@ public class NewProjectDialogTest extends LibraryTestBase {
         return javaProjectThirdPage.findAll(ContainerFixture.class, byXpath("//div[@class='TitledSeparator']/../../*")).size() == 2;
     }
 
-    private void makeSureArtifactCoordinatesIsClosed(AbstractMavenGradleFinalPage abstractMavenGradleFinalPage) {
-        if (isArtifactCoordinatesOpened(abstractMavenGradleFinalPage)) {
-            abstractMavenGradleFinalPage.jLabel(ButtonLabels.artifactCoordinates).click();
+    private void makeSureArtifactCoordinatesIsClosed(MavenGradleFinalPage mavenGradleFinalPage) {
+        if (isArtifactCoordinatesOpened(mavenGradleFinalPage)) {
+            mavenGradleFinalPage.jLabel(ButtonLabels.artifactCoordinates).click();
         }
     }
 
-    private boolean isArtifactCoordinatesOpened(AbstractMavenGradleFinalPage abstractMavenGradleFinalPage) {
-        List<ContainerFixture> cf = abstractMavenGradleFinalPage.findAll(ContainerFixture.class, byXpath("//div[@class='HideableTitledSeparator']/../*"));
+    private boolean isArtifactCoordinatesOpened(MavenGradleFinalPage mavenGradleFinalPage) {
+        List<ContainerFixture> cf = mavenGradleFinalPage.findAll(ContainerFixture.class, byXpath("//div[@class='HideableTitledSeparator']/../*"));
         return cf.size() > 5;
     }
 
