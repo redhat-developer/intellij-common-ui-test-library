@@ -15,6 +15,9 @@ import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
+import com.intellij.remoterobot.fixtures.JButtonFixture;
+import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
+import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,21 +37,51 @@ public class NewProjectDialogWizard extends CommonContainerFixture {
      * Move to the previous page of the 'New Project' dialog by clicking on the 'Previous' button
      */
     public void previous() {
-        button(ButtonLabels.previousLabel).click();
+        JButtonFixture previousButton = button(ButtonLabels.previousLabel);
+        if (previousButton.isEnabled()) {
+            previousButton.click();
+        }
+        else {
+            throw new UITestException("The '" + ButtonLabels.previousLabel + "' button is not enabled.");
+        }
     }
 
     /**
      * Move to the next page of the 'New Project' dialog by clicking on the 'Next' button
      */
     public void next() {
-        button(ButtonLabels.nextLabel).click();
+        JButtonFixture nextButton;
+        try {
+            nextButton = button(ButtonLabels.nextLabel);
+        } catch (WaitForConditionTimeoutException e) {
+            throw new UITestException("The '" + ButtonLabels.nextLabel + "' button has not been found.");
+        }
+
+        if (nextButton.isEnabled()) {
+            button(ButtonLabels.nextLabel).click();
+        }
+        else {
+            throw new UITestException("The '" + ButtonLabels.nextLabel + "' button is not enabled.");
+        }
     }
     
     /**
      * Finish the 'New Project' dialog by clicking on the 'Finish' button
      */
     public void finish() {
-        button(ButtonLabels.finishLabel).click();
+        JButtonFixture finishButton;
+        try {
+            finishButton = button(ButtonLabels.finishLabel);
+        } catch (WaitForConditionTimeoutException e) {
+            throw new UITestException("The '" + ButtonLabels.finishLabel + "' button has not been found.");
+        }
+
+        if (finishButton.isEnabled()) {
+            button(ButtonLabels.finishLabel).click();
+        }
+        else {
+            throw new UITestException("The '" + ButtonLabels.finishLabel + "' button is not enabled.");
+        }
     }
 
     /**

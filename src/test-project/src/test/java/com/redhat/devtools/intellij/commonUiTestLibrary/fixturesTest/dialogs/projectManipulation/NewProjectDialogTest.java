@@ -12,7 +12,6 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.dialogs.pr
 
 import com.intellij.remoterobot.fixtures.ComboBoxFixture;
 import com.intellij.remoterobot.fixtures.ContainerFixture;
-import com.intellij.remoterobot.fixtures.JLabelFixture;
 import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
@@ -41,7 +40,9 @@ import java.time.Duration;
 import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * NewProjectDialog wizard and pages test
@@ -161,20 +162,49 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void nextPreviousFinishButtonTest() {
+    public void previousButtonTest() {
+        newProjectDialogFirstPage.selectNewProjectType("Java");
+        newProjectDialogFirstPage.setProjectSdkIfAvailable("11");
+        assertThrows(UITestException.class, () -> {
+            newProjectDialogWizard.previous();
+        }, "The 'UITestException' should be thrown because the 'Previous' button is not enabled on the first page of the 'New Project'.");
+        newProjectDialogWizard.next();
+        boolean isCommandLineAppTextPresent = TextUtils.listOfRemoteTextToString(newProjectDialogFirstPage.findAllText()).contains("Command Line App");
+        assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present on the second page of the 'New Project' wizard for java project.");
+        newProjectDialogWizard.previous();
+        try {
+            newProjectDialogFirstPage.comboBox(byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
+        } catch (WaitForConditionTimeoutException e) {
+            fail("The 'Project SDK' should be available but is not.");
+        }
+    }
+
+    @Test
+    public void nextButtonTest() {
         newProjectDialogFirstPage.selectNewProjectType("Java");
         newProjectDialogFirstPage.setProjectSdkIfAvailable("11");
         newProjectDialogWizard.next();
-        JavaProjectSecondPage javaProjectSecondPage = newProjectDialogWizard.find(JavaProjectSecondPage.class, Duration.ofSeconds(10));
+        boolean isCommandLineAppTextPresent = TextUtils.listOfRemoteTextToString(newProjectDialogFirstPage.findAllText()).contains("Command Line App");
+        assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present on the second page of the 'New Project' wizard for java project.");
         newProjectDialogWizard.next();
-        JavaProjectThirdPage javaProjectThirdPage = newProjectDialogWizard.find(JavaProjectThirdPage.class, Duration.ofSeconds(10));
-        boolean isProjectNameLabelPresent = javaProjectThirdPage.findAll(JLabelFixture.class, byXpath("//div[@text='Project name:']")).size() == 1;
-        assertTrue(isProjectNameLabelPresent, "The 'Project name' label should be present but is not.");
-        newProjectDialogWizard.previous();
-        boolean isCommandLineAppTextPresent = TextUtils.listOfRemoteTextToString(javaProjectSecondPage.findAllText()).contains("Command Line App");
-        assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present but is not.");
+        assertThrows(UITestException.class, () -> {
+            newProjectDialogWizard.next();
+        }, "The 'UITestException' should be thrown because the 'Next' button is not available on the last page of the 'New Project' wizard.");
+    }
+
+    @Test
+    public void finishButtonTest() {
+        newProjectDialogFirstPage.selectNewProjectType("Java");
+        newProjectDialogFirstPage.setProjectSdkIfAvailable("11");
+        assertThrows(UITestException.class, () -> {
+            newProjectDialogWizard.finish();
+        }, "The 'UITestException' should be thrown because the 'Finish' button is not available on the first page of the 'New Project' wizard for java project.");
         newProjectDialogWizard.next();
-        javaProjectThirdPage.setProjectName(plainJavaProjectName);
+        newProjectDialogWizard.next();
+        assertThrows(UITestException.class, () -> {
+            newProjectDialogWizard.next();
+        }, "The 'UITestException' should be thrown because the 'Next' button is not available on the last page of the 'New Project' wizard.");
+        newProjectDialogWizard.find(JavaProjectThirdPage.class, Duration.ofSeconds(10)).setProjectName(plainJavaProjectName);
         newProjectDialogWizard.finish();
         mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
     }
