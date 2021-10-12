@@ -15,8 +15,8 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.exceptions;
  *
  * @author zcervink@redhat.com
  */
-public class UiTestException extends RuntimeException {
-    public UiTestException(String errorMsg) {
+public class UITestException extends RuntimeException {
+    public UITestException(String errorMsg) {
         super(errorMsg);
     }
 }
