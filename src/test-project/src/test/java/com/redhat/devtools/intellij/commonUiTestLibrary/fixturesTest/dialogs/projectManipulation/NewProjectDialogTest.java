@@ -21,9 +21,9 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.informa
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.AbstractFinalPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.JavaFinalPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.JavaProjectSecondPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.JavaSecondPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.MavenGradleFinalPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.NewProjectDialogFirstPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.FirstPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
@@ -52,14 +52,14 @@ public class NewProjectDialogTest extends LibraryTestBase {
     private final String plainJavaProjectName = "plain_java_project_name_test";
 
     private NewProjectDialogWizard newProjectDialogWizard;
-    private NewProjectDialogFirstPage newProjectDialogFirstPage;
+    private FirstPage firstPage;
     private MainIdeWindow mainIdeWindow;
 
     @BeforeEach
     public void openNewProjectDialog() {
         openNewProjectDialogFromWelcomeDialog();
         newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
-        newProjectDialogFirstPage = newProjectDialogWizard.find(NewProjectDialogFirstPage.class, Duration.ofSeconds(10));
+        firstPage = newProjectDialogWizard.find(FirstPage.class, Duration.ofSeconds(10));
     }
 
     @AfterEach
@@ -147,31 +147,31 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void toggleFromTemplateTest() {
-        newProjectDialogFirstPage.selectNewProjectType("Java");
+        firstPage.selectNewProjectType("Java");
         newProjectDialogWizard.next();
-        JavaProjectSecondPage javaProjectSecondPage = newProjectDialogWizard.find(JavaProjectSecondPage.class, Duration.ofSeconds(10));
-        boolean isSelected = javaProjectSecondPage.fromTemplateCheckBox().isSelected();
+        JavaSecondPage javaSecondPage = newProjectDialogWizard.find(JavaSecondPage.class, Duration.ofSeconds(10));
+        boolean isSelected = javaSecondPage.fromTemplateCheckBox().isSelected();
         if (isSelected) {
-            javaProjectSecondPage.fromTemplateCheckBox().setValue(false);
+            javaSecondPage.fromTemplateCheckBox().setValue(false);
         }
-        javaProjectSecondPage.toggleFromTemplate(true);
-        assertTrue(javaProjectSecondPage.fromTemplateCheckBox().isSelected(), "The 'Create project from template' checkbox should be checked but is not.");
-        javaProjectSecondPage.fromTemplateCheckBox().setValue(isSelected);
+        javaSecondPage.toggleFromTemplate(true);
+        assertTrue(javaSecondPage.fromTemplateCheckBox().isSelected(), "The 'Create project from template' checkbox should be checked but is not.");
+        javaSecondPage.fromTemplateCheckBox().setValue(isSelected);
     }
 
     @Test
     public void previousButtonTest() {
-        newProjectDialogFirstPage.selectNewProjectType("Java");
-        newProjectDialogFirstPage.setProjectSdkIfAvailable("11");
+        firstPage.selectNewProjectType("Java");
+        firstPage.setProjectSdkIfAvailable("11");
         assertThrows(UITestException.class, () -> {
             newProjectDialogWizard.previous();
         }, "The 'UITestException' should be thrown because the 'Previous' button is not enabled on the first page of the 'New Project'.");
         newProjectDialogWizard.next();
-        boolean isCommandLineAppTextPresent = TextUtils.listOfRemoteTextToString(newProjectDialogFirstPage.findAllText()).contains("Command Line App");
+        boolean isCommandLineAppTextPresent = TextUtils.listOfRemoteTextToString(firstPage.findAllText()).contains("Command Line App");
         assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present on the second page of the 'New Project' wizard for java project.");
         newProjectDialogWizard.previous();
         try {
-            newProjectDialogFirstPage.comboBox(byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
+            firstPage.comboBox(byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
         } catch (WaitForConditionTimeoutException e) {
             fail("The 'Project SDK' should be available but is not.");
         }
@@ -179,10 +179,10 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void nextButtonTest() {
-        newProjectDialogFirstPage.selectNewProjectType("Java");
-        newProjectDialogFirstPage.setProjectSdkIfAvailable("11");
+        firstPage.selectNewProjectType("Java");
+        firstPage.setProjectSdkIfAvailable("11");
         newProjectDialogWizard.next();
-        boolean isCommandLineAppTextPresent = TextUtils.listOfRemoteTextToString(newProjectDialogFirstPage.findAllText()).contains("Command Line App");
+        boolean isCommandLineAppTextPresent = TextUtils.listOfRemoteTextToString(firstPage.findAllText()).contains("Command Line App");
         assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present on the second page of the 'New Project' wizard for java project.");
         newProjectDialogWizard.next();
         assertThrows(UITestException.class, () -> {
@@ -192,8 +192,8 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void finishButtonTest() {
-        newProjectDialogFirstPage.selectNewProjectType("Java");
-        newProjectDialogFirstPage.setProjectSdkIfAvailable("11");
+        firstPage.selectNewProjectType("Java");
+        firstPage.setProjectSdkIfAvailable("11");
         assertThrows(UITestException.class, () -> {
             newProjectDialogWizard.finish();
         }, "The 'UITestException' should be thrown because the 'Finish' button is not available on the first page of the 'New Project' wizard for java project.");
@@ -215,29 +215,29 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void setProjectSdkIfAvailableTest() {
-        newProjectDialogFirstPage.selectNewProjectType("Java");
-        newProjectDialogFirstPage.setProjectSdkIfAvailable("8");
-        ComboBoxFixture projectJdkComboBox = newProjectDialogFirstPage.find(ComboBoxFixture.class, byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
+        firstPage.selectNewProjectType("Java");
+        firstPage.setProjectSdkIfAvailable("8");
+        ComboBoxFixture projectJdkComboBox = firstPage.find(ComboBoxFixture.class, byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
         String currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
         assertTrue(currentlySelectedProjectSdk.contains("8"), "Selected project SDK should be Java 8 but is '" + currentlySelectedProjectSdk + "'");
-        newProjectDialogFirstPage.setProjectSdkIfAvailable("11");
+        firstPage.setProjectSdkIfAvailable("11");
         currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
         assertTrue(currentlySelectedProjectSdk.contains("11"), "Selected project SDK should be Java 11 but is '" + currentlySelectedProjectSdk + "'");
     }
 
     @Test
     public void selectNewProjectTypeTest() {
-        newProjectDialogFirstPage.selectNewProjectType("Empty Project");
-        boolean isEmptyProjectLabelVisible = !newProjectDialogFirstPage.findAll(JListFixture.class, byXpath("//div[@visible_text='Empty Project']")).isEmpty();
+        firstPage.selectNewProjectType("Empty Project");
+        boolean isEmptyProjectLabelVisible = !firstPage.findAll(JListFixture.class, byXpath("//div[@visible_text='Empty Project']")).isEmpty();
         assertTrue(isEmptyProjectLabelVisible, "The 'Empty Project' label should be visible but is not.");
 
-        newProjectDialogFirstPage.selectNewProjectType("Java FX");
-        boolean isJavaFXApplicationLabelVisible = !newProjectDialogFirstPage.findAll(JListFixture.class, byXpath("//div[@visible_text='JavaFX Application']")).isEmpty();
+        firstPage.selectNewProjectType("Java FX");
+        boolean isJavaFXApplicationLabelVisible = !firstPage.findAll(JListFixture.class, byXpath("//div[@visible_text='JavaFX Application']")).isEmpty();
         assertTrue(isJavaFXApplicationLabelVisible, "The 'Java FX' label should be visible but is not.");
     }
 
     private void navigateToSetProjectNamePage(NewProjectType newProjectType) {
-        newProjectDialogFirstPage.selectNewProjectType(newProjectType.toString());
+        firstPage.selectNewProjectType(newProjectType.toString());
         newProjectDialogWizard.next();
         if (newProjectType == NewProjectType.PLAIN_JAVA) {
             newProjectDialogWizard.next();

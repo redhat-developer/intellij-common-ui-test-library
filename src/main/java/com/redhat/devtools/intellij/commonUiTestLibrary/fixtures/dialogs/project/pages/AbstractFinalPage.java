@@ -65,4 +65,23 @@ public class AbstractFinalPage extends CommonContainerFixture {
     public void setProjectLocation(String projectLocation) {
         textFields(JTextFieldFixture.Companion.byType()).get(1).setText(projectLocation);
     }
+
+    /**
+     * Enumeration defining values of the 'Project format' combo box
+     */
+    public enum ProjectFormatType {
+        IDEA_DIRECTORY_BASED(".idea"),
+        IPR_FILE_BASED(".ipr");
+
+        private String textRepresentation;
+
+        ProjectFormatType(String textRepresentation) {
+            this.textRepresentation = textRepresentation;
+        }
+
+        @Override
+        public String toString() {
+            return this.textRepresentation;
+        }
+    }
 }

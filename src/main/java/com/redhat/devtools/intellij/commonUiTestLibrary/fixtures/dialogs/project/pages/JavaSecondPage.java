@@ -25,8 +25,8 @@ import org.jetbrains.annotations.NotNull;
  */
 @DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
 @FixtureName(name = "New Project Dialog")
-public class JavaProjectSecondPage extends CommonContainerFixture {
-    public JavaProjectSecondPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
+public class JavaSecondPage extends CommonContainerFixture {
+    public JavaSecondPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
     }
 

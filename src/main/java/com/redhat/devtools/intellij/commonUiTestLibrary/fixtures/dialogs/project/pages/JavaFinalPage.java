@@ -130,23 +130,4 @@ public class JavaFinalPage extends AbstractFinalPage {
         ComboBoxFixture projectFormatComboBox = comboBox(byXpath("//div[@class='JComboBox']"), Duration.ofSeconds(10));
         projectFormatComboBox.selectItemContains(projectFormatType.toString());
     }
-
-    /**
-     * Enumeration defining values of the 'Project format' combo box
-     */
-    public enum ProjectFormatType {
-        IDEA_DIRECTORY_BASED(".idea"),
-        IPR_FILE_BASED(".ipr");
-
-        private String textRepresentation;
-
-        ProjectFormatType(String textRepresentation) {
-            this.textRepresentation = textRepresentation;
-        }
-
-        @Override
-        public String toString() {
-            return this.textRepresentation;
-        }
-    }
 }

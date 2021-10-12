@@ -14,7 +14,7 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.NewProjectDialogWizard;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.NewProjectDialogFirstPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.FirstPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.AbstractFinalPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
@@ -32,9 +32,9 @@ public abstract class AbstractLibraryTestBase {
     protected static void createNewProject(String projectName, String projectType) {
         openNewProjectDialogFromWelcomeDialog();
         NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
-        NewProjectDialogFirstPage newProjectDialogFirstPage = newProjectDialogWizard.find(NewProjectDialogFirstPage.class, Duration.ofSeconds(10));
-        newProjectDialogFirstPage.selectNewProjectType(projectType);
-        newProjectDialogFirstPage.setProjectSdkIfAvailable("11");
+        FirstPage firstPage = newProjectDialogWizard.find(FirstPage.class, Duration.ofSeconds(10));
+        firstPage.selectNewProjectType(projectType);
+        firstPage.setProjectSdkIfAvailable("11");
         newProjectDialogWizard.next();
         // Plain java project has more pages in the 'New project' dialog
         if (projectType.equals("Java")) {

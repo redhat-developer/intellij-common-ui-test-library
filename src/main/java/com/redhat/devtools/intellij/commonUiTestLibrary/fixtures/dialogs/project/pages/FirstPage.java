@@ -35,11 +35,11 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  */
 @DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
 @FixtureName(name = "New Project Dialog")
-public class NewProjectDialogFirstPage extends CommonContainerFixture {
+public class FirstPage extends CommonContainerFixture {
     private static RemoteRobot remoteRobot;
     private int projectSdkItemsCount = -1;
 
-    public NewProjectDialogFirstPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
+    public FirstPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
         this.remoteRobot = remoteRobot;
     }
