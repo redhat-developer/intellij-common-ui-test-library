@@ -31,26 +31,12 @@ public class JavaProjectSecondPage extends CommonContainerFixture {
     }
 
     /**
-     * Check the 'Create project from template' checkbox
-     */
-    public void selectCreateProjectFromTemplateCheckBox() {
-        createNewProjectFromTemplateCheckBox().select();
-    }
-
-    /**
-     * Uncheck the 'Create project from template' checkbox
-     */
-    public void unselectCreateProjectFromTemplateCheckBox() {
-        createNewProjectFromTemplateCheckBox().unselect();
-    }
-
-    /**
-     * Tell whether the 'Create project from template' checkbox is or is not checked
+     * Toggle the 'Create project from template' checkbox
      *
-     * @return true whether the checkbox is checked
+     * @param toggle value to set to the checkbox
      */
-    public boolean isCreateProjectFromTemplateCheckBoxSelected() {
-        return createNewProjectFromTemplateCheckBox().isSelected();
+    public void toggleFromTemplate(boolean toggle) {
+        fromTemplateCheckBox().setValue(toggle);
     }
 
     /**
@@ -58,7 +44,7 @@ public class JavaProjectSecondPage extends CommonContainerFixture {
      *
      * @return checkbox fixture
      */
-    public JCheckboxFixture createNewProjectFromTemplateCheckBox() {
+    public JCheckboxFixture fromTemplateCheckBox() {
         return checkBox("Create project from template", true);
     }
 }

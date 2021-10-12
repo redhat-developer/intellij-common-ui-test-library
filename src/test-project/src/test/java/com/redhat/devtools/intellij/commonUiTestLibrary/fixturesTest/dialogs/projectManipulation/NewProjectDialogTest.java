@@ -25,8 +25,8 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.JavaProjectThirdPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.MavenProjectSecondPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.NewProjectDialogFirstPage;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractMavenGradleFinalPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractFinalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.pages.abstractPages.AbstractMavenGradleFinalPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
@@ -41,7 +41,6 @@ import java.time.Duration;
 import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -148,14 +147,17 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void createNewProjectFromTemplateTest() {
+    public void toggleFromTemplateTest() {
         newProjectDialogFirstPage.selectNewProjectType("Java");
         newProjectDialogWizard.next();
         JavaProjectSecondPage javaProjectSecondPage = newProjectDialogWizard.find(JavaProjectSecondPage.class, Duration.ofSeconds(10));
-        javaProjectSecondPage.selectCreateProjectFromTemplateCheckBox();
-        assertTrue(javaProjectSecondPage.isCreateProjectFromTemplateCheckBoxSelected(), "The 'Create project from template' checkbox should be selected but is not.");
-        javaProjectSecondPage.unselectCreateProjectFromTemplateCheckBox();
-        assertFalse(javaProjectSecondPage.isCreateProjectFromTemplateCheckBoxSelected(), "The 'Create project from template' checkbox should not be selected but is.");
+        boolean isSelected = javaProjectSecondPage.fromTemplateCheckBox().isSelected();
+        if (isSelected) {
+            javaProjectSecondPage.fromTemplateCheckBox().setValue(false);
+        }
+        javaProjectSecondPage.toggleFromTemplate(true);
+        assertTrue(javaProjectSecondPage.fromTemplateCheckBox().isSelected(), "The 'Create project from template' checkbox should be checked but is not.");
+        javaProjectSecondPage.fromTemplateCheckBox().setValue(isSelected);
     }
 
     @Test
