@@ -37,51 +37,21 @@ public class NewProjectDialogWizard extends CommonContainerFixture {
      * Move to the previous page of the 'New Project' dialog by clicking on the 'Previous' button
      */
     public void previous() {
-        JButtonFixture previousButton = button(ButtonLabels.previousLabel);
-        if (previousButton.isEnabled()) {
-            previousButton.click();
-        }
-        else {
-            throw new UITestException("The '" + ButtonLabels.previousLabel + "' button is not enabled.");
-        }
+        clickOnButton(ButtonLabels.previousLabel);
     }
 
     /**
      * Move to the next page of the 'New Project' dialog by clicking on the 'Next' button
      */
     public void next() {
-        JButtonFixture nextButton;
-        try {
-            nextButton = button(ButtonLabels.nextLabel);
-        } catch (WaitForConditionTimeoutException e) {
-            throw new UITestException("The '" + ButtonLabels.nextLabel + "' button has not been found.");
-        }
-
-        if (nextButton.isEnabled()) {
-            button(ButtonLabels.nextLabel).click();
-        }
-        else {
-            throw new UITestException("The '" + ButtonLabels.nextLabel + "' button is not enabled.");
-        }
+        clickOnButton(ButtonLabels.nextLabel);
     }
-    
+
     /**
      * Finish the 'New Project' dialog by clicking on the 'Finish' button
      */
     public void finish() {
-        JButtonFixture finishButton;
-        try {
-            finishButton = button(ButtonLabels.finishLabel);
-        } catch (WaitForConditionTimeoutException e) {
-            throw new UITestException("The '" + ButtonLabels.finishLabel + "' button has not been found.");
-        }
-
-        if (finishButton.isEnabled()) {
-            button(ButtonLabels.finishLabel).click();
-        }
-        else {
-            throw new UITestException("The '" + ButtonLabels.finishLabel + "' button is not enabled.");
-        }
+        clickOnButton(ButtonLabels.finishLabel);
     }
 
     /**
@@ -89,5 +59,20 @@ public class NewProjectDialogWizard extends CommonContainerFixture {
      */
     public void cancel() {
         button(ButtonLabels.cancelLabel).click();
+    }
+
+    private void clickOnButton(String label) {
+        JButtonFixture button;
+        try {
+            button = button(label);
+        } catch (WaitForConditionTimeoutException e) {
+            throw new UITestException("The '" + label + "' button has not been found.");
+        }
+
+        if (button.isEnabled()) {
+            button(label).click();
+        } else {
+            throw new UITestException("The '" + label + "' button is not enabled.");
+        }
     }
 }

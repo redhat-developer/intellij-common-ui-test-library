@@ -34,7 +34,6 @@ public class MavenGradleNewProjectFinalPage extends AbstractNewProjectFinalPage 
         super(remoteRobot, remoteComponent);
     }
 
-
     /**
      * Open the 'Artifact Coordinates' options
      */
