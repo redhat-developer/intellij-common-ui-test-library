@@ -38,9 +38,16 @@ public class MavenGradleNewProjectFinalPage extends AbstractNewProjectFinalPage 
      * Open the 'Artifact Coordinates' options
      */
     public void openArtifactCoordinates() {
-        List<ContainerFixture> cf = findAll(ContainerFixture.class, byXpath("//div[@class='HideableTitledSeparator']/../*"));
-        boolean isAlreadyOpened = cf.size() > 5;
-        if (!isAlreadyOpened) {
+        if (!isArtifactCoordinatesOpened()) {
+            jLabel(ButtonLabels.artifactCoordinates).click();
+        }
+    }
+
+    /**
+     * Close the 'Artifact Coordinates' options
+     */
+    public void closeArtifactCoordinates() {
+        if (isArtifactCoordinatesOpened()) {
             jLabel(ButtonLabels.artifactCoordinates).click();
         }
     }
@@ -97,5 +104,10 @@ public class MavenGradleNewProjectFinalPage extends AbstractNewProjectFinalPage 
      */
     public void setVersion(String version) {
         textField("Version:", true).setText(version);
+    }
+
+    private boolean isArtifactCoordinatesOpened() {
+        List<ContainerFixture> cf = findAll(ContainerFixture.class, byXpath("//div[@class='DialogPanel']/*"));
+        return cf.size() > 5;
     }
 }

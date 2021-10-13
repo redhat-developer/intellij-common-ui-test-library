@@ -26,7 +26,7 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.NewProjectFirstPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -38,6 +38,7 @@ import java.time.Duration;
 import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -57,7 +58,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @BeforeEach
     public void openNewProjectDialog() {
-        openNewProjectDialogFromWelcomeDialog();
+        CreateCloseUtils.openNewProjectDialogFromWelcomeDialog(remoteRobot);
         newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
         newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
     }
@@ -86,24 +87,25 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void setProjectNamePlainJavaProjectTest() {
-        testProjectNameInputField(NewProjectType.PLAIN_JAVA);
+        testProjectNameInputField(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
     }
 
     @Test
     public void setProjectNameMavenProjectTest() {
-        testProjectNameInputField(NewProjectType.MAVEN);
+        testProjectNameInputField(CreateCloseUtils.NewProjectType.MAVEN);
     }
 
     @Test
     public void setProjectNameGradleProjectTest() {
-        testProjectNameInputField(NewProjectType.GRADLE);
+        testProjectNameInputField(CreateCloseUtils.NewProjectType.GRADLE);
     }
 
     @Test
     public void openMoreSettingsTest() {
-        navigateToSetProjectNamePage(NewProjectType.PLAIN_JAVA);
+        navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
-        makeSureMoreSettingsIsClosed(javaFinalPage);
+        javaFinalPage.closeMoreSettings();
+        assertFalse(isMoreSettingsOpened(javaFinalPage), "The 'More Settings' should be hidden.");
         javaFinalPage.openMoreSettings();
         assertTrue(isMoreSettingsOpened(javaFinalPage), "The 'More Settings' should be visible.");
         javaFinalPage.openMoreSettings();
@@ -111,8 +113,20 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
+    public void closeMoreSettingsTest() {
+        navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
+        JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
+        javaFinalPage.openMoreSettings();
+        assertTrue(isMoreSettingsOpened(javaFinalPage), "The 'More Settings' should be visible.");
+        javaFinalPage.closeMoreSettings();
+        assertFalse(isMoreSettingsOpened(javaFinalPage), "The 'More Settings' should be hidden.");
+        javaFinalPage.closeMoreSettings();
+        assertFalse(isMoreSettingsOpened(javaFinalPage), "The 'More Settings' should be hidden.");
+    }
+
+    @Test
     public void getSetModuleNameTest() {
-        navigateToSetProjectNamePage(NewProjectType.PLAIN_JAVA);
+        navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         javaFinalPage.openMoreSettings();
 
@@ -125,7 +139,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void getSetContentRootTest() {
-        navigateToSetProjectNamePage(NewProjectType.PLAIN_JAVA);
+        navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         javaFinalPage.openMoreSettings();
 
@@ -138,7 +152,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void getSetModuleFileLocationTest() {
-        navigateToSetProjectNamePage(NewProjectType.PLAIN_JAVA);
+        navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         javaFinalPage.openMoreSettings();
 
@@ -152,7 +166,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void getSetProjectFormat() {
-        navigateToSetProjectNamePage(NewProjectType.PLAIN_JAVA);
+        navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         javaFinalPage.openMoreSettings();
 
@@ -166,47 +180,47 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void openArtifactCoordinatesMavenTest() {
-        testOpenArtifactCoordinatesMavenGradle(NewProjectType.MAVEN);
+        testOpenArtifactCoordinatesMavenGradle(CreateCloseUtils.NewProjectType.MAVEN);
     }
 
     @Test
     public void openArtifactCoordinatesGradleTest() {
-        testOpenArtifactCoordinatesMavenGradle(NewProjectType.GRADLE);
+        testOpenArtifactCoordinatesMavenGradle(CreateCloseUtils.NewProjectType.GRADLE);
     }
 
     @Test
     public void getSetGroupIdMavenTest() {
-        testArtifactCoordinatesAttributes(NewProjectType.MAVEN, ArtifactCoordinatesAttributes.GROUP_ID);
+        testArtifactCoordinatesAttributes(CreateCloseUtils.NewProjectType.MAVEN, ArtifactCoordinatesAttributes.GROUP_ID);
     }
 
     @Test
     public void getSetGroupIdGradleTest() {
-        testArtifactCoordinatesAttributes(NewProjectType.GRADLE, ArtifactCoordinatesAttributes.GROUP_ID);
+        testArtifactCoordinatesAttributes(CreateCloseUtils.NewProjectType.GRADLE, ArtifactCoordinatesAttributes.GROUP_ID);
     }
 
     @Test
     public void getSetArtifactIdMavenTest() {
-        testArtifactCoordinatesAttributes(NewProjectType.MAVEN, ArtifactCoordinatesAttributes.ARTIFACT_ID);
+        testArtifactCoordinatesAttributes(CreateCloseUtils.NewProjectType.MAVEN, ArtifactCoordinatesAttributes.ARTIFACT_ID);
     }
 
     @Test
     public void getSetArtifactIdGradleTest() {
-        testArtifactCoordinatesAttributes(NewProjectType.GRADLE, ArtifactCoordinatesAttributes.ARTIFACT_ID);
+        testArtifactCoordinatesAttributes(CreateCloseUtils.NewProjectType.GRADLE, ArtifactCoordinatesAttributes.ARTIFACT_ID);
     }
 
     @Test
     public void getSetVersionMavenTest() {
-        testArtifactCoordinatesAttributes(NewProjectType.MAVEN, ArtifactCoordinatesAttributes.VERSION);
+        testArtifactCoordinatesAttributes(CreateCloseUtils.NewProjectType.MAVEN, ArtifactCoordinatesAttributes.VERSION);
     }
 
     @Test
     public void getSetVersionGradleTest() {
-        testArtifactCoordinatesAttributes(NewProjectType.GRADLE, ArtifactCoordinatesAttributes.VERSION);
+        testArtifactCoordinatesAttributes(CreateCloseUtils.NewProjectType.GRADLE, ArtifactCoordinatesAttributes.VERSION);
     }
 
     @Test
     public void toggleFromTemplateTest() {
-        newProjectFirstPage.selectNewProjectType("Java");
+        newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
         newProjectDialogWizard.next();
         JavaNewProjectSecondPage javaNewProjectSecondPage = newProjectDialogWizard.find(JavaNewProjectSecondPage.class, Duration.ofSeconds(10));
         boolean isSelected = javaNewProjectSecondPage.fromTemplateCheckBox().isSelected();
@@ -220,7 +234,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void previousButtonTest() {
-        newProjectFirstPage.selectNewProjectType("Java");
+        newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
         newProjectFirstPage.setProjectSdkIfAvailable("11");
         assertThrows(UITestException.class, () -> {
             newProjectDialogWizard.previous();
@@ -238,7 +252,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void nextButtonTest() {
-        newProjectFirstPage.selectNewProjectType("Java");
+        newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
         newProjectFirstPage.setProjectSdkIfAvailable("11");
         newProjectDialogWizard.next();
         boolean isCommandLineAppTextPresent = TextUtils.listOfRemoteTextToString(newProjectFirstPage.findAllText()).contains("Command Line App");
@@ -251,7 +265,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void finishButtonTest() {
-        newProjectFirstPage.selectNewProjectType("Java");
+        newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
         newProjectFirstPage.setProjectSdkIfAvailable("11");
         assertThrows(UITestException.class, () -> {
             newProjectDialogWizard.finish();
@@ -274,7 +288,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void setProjectSdkIfAvailableTest() {
-        newProjectFirstPage.selectNewProjectType("Java");
+        newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.MAVEN.toString());
         newProjectFirstPage.setProjectSdkIfAvailable("8");
         ComboBoxFixture projectJdkComboBox = newProjectFirstPage.find(ComboBoxFixture.class, byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
         String currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
@@ -295,30 +309,17 @@ public class NewProjectDialogTest extends LibraryTestBase {
         assertTrue(isJavaFXApplicationLabelVisible, "The 'Java FX' label should be visible but is not.");
     }
 
-    private void navigateToSetProjectNamePage(NewProjectType newProjectType) {
+    private void navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType newProjectType) {
         newProjectFirstPage.selectNewProjectType(newProjectType.toString());
         newProjectDialogWizard.next();
-        if (newProjectType == NewProjectType.PLAIN_JAVA) {
+        if (newProjectType == CreateCloseUtils.NewProjectType.PLAIN_JAVA) {
             newProjectDialogWizard.next();
         }
     }
 
-    private void testProjectNameInputField(NewProjectType newProjectType) {
+    private void testProjectNameInputField(CreateCloseUtils.NewProjectType newProjectType) {
         navigateToSetProjectNamePage(newProjectType);
-        AbstractNewProjectFinalPage finalPage;
-
-        switch (newProjectType) {
-            case PLAIN_JAVA:
-                finalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
-                break;
-            case MAVEN:
-            case GRADLE:
-                finalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
-                break;
-            default:
-                throw new UITestException("Unsupported project type.");
-        }
-
+        AbstractNewProjectFinalPage finalPage = CreateCloseUtils.getFinalPage(newProjectDialogWizard, newProjectType);
         String currentProjectName = finalPage.getProjectName();
         String newProjectName = currentProjectName + "1";
         finalPage.setProjectName(newProjectName);
@@ -332,17 +333,17 @@ public class NewProjectDialogTest extends LibraryTestBase {
         assertTrue(currentProjectLocation.equals(newProjectLocation), "Currently set project location should be '" + newProjectLocation + "' but is '" + currentProjectLocation + "'.");
     }
 
-    private void testOpenArtifactCoordinatesMavenGradle(NewProjectType newProjectType) {
+    private void testOpenArtifactCoordinatesMavenGradle(CreateCloseUtils.NewProjectType newProjectType) {
         navigateToSetProjectNamePage(newProjectType);
         MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
-        makeSureArtifactCoordinatesIsClosed(mavenGradleFinalPage);
+        mavenGradleFinalPage.closeArtifactCoordinates();
         mavenGradleFinalPage.openArtifactCoordinates();
         assertTrue(isArtifactCoordinatesOpened(mavenGradleFinalPage), "The 'Artifact Coordinates' settings should be visible.");
         mavenGradleFinalPage.openArtifactCoordinates();
         assertTrue(isArtifactCoordinatesOpened(mavenGradleFinalPage), "The 'Artifact Coordinates' settings should be visible.");
     }
 
-    private void testArtifactCoordinatesAttributes(NewProjectType newProjectType, ArtifactCoordinatesAttributes attribute) {
+    private void testArtifactCoordinatesAttributes(CreateCloseUtils.NewProjectType newProjectType, ArtifactCoordinatesAttributes attribute) {
         navigateToSetProjectNamePage(newProjectType);
         MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
         mavenGradleFinalPage.openArtifactCoordinates();
@@ -351,16 +352,16 @@ public class NewProjectDialogTest extends LibraryTestBase {
         String newValue = "";
         switch (attribute) {
             case GROUP_ID:
-                currentValue = mavenGradleFinalPage.getVersion();
+                currentValue = mavenGradleFinalPage.getGroupId();
                 newValue = currentValue + "1";
-                mavenGradleFinalPage.setVersion(newValue);
-                currentValue = mavenGradleFinalPage.getVersion();
+                mavenGradleFinalPage.setGroupId(newValue);
+                currentValue = mavenGradleFinalPage.getGroupId();
                 break;
             case ARTIFACT_ID:
-                currentValue = mavenGradleFinalPage.getVersion();
+                currentValue = mavenGradleFinalPage.getArtifactId();
                 newValue = currentValue + "1";
-                mavenGradleFinalPage.setVersion(newValue);
-                currentValue = mavenGradleFinalPage.getVersion();
+                mavenGradleFinalPage.setArtifactId(newValue);
+                currentValue = mavenGradleFinalPage.getArtifactId();
                 break;
             case VERSION:
                 currentValue = mavenGradleFinalPage.getVersion();
@@ -372,42 +373,13 @@ public class NewProjectDialogTest extends LibraryTestBase {
         assertTrue(currentValue.equals(newValue), "Currently set '" + attribute + "' should be '" + newValue + "' but is '" + currentValue + "'.");
     }
 
-    private void makeSureMoreSettingsIsClosed(JavaNewProjectFinalPage javaFinalPage) {
-        if (isMoreSettingsOpened(javaFinalPage)) {
-            javaFinalPage.jLabel(ButtonLabels.moreSettings).click();
-        }
-    }
-
     private boolean isMoreSettingsOpened(JavaNewProjectFinalPage javaFinalPage) {
         return javaFinalPage.findAll(ContainerFixture.class, byXpath("//div[@class='TitledSeparator']/../../*")).size() == 2;
     }
 
-    private void makeSureArtifactCoordinatesIsClosed(MavenGradleNewProjectFinalPage mavenGradleFinalPage) {
-        if (isArtifactCoordinatesOpened(mavenGradleFinalPage)) {
-            mavenGradleFinalPage.jLabel(ButtonLabels.artifactCoordinates).click();
-        }
-    }
-
     private boolean isArtifactCoordinatesOpened(MavenGradleNewProjectFinalPage mavenGradleFinalPage) {
-        List<ContainerFixture> cf = mavenGradleFinalPage.findAll(ContainerFixture.class, byXpath("//div[@class='HideableTitledSeparator']/../*"));
+        List<ContainerFixture> cf = mavenGradleFinalPage.findAll(ContainerFixture.class, byXpath("//div[@class='DialogPanel']/*"));
         return cf.size() > 5;
-    }
-
-    private enum NewProjectType {
-        PLAIN_JAVA("Java"),
-        MAVEN("Maven"),
-        GRADLE("Gradle");
-
-        private final String projectType;
-
-        NewProjectType(String projectType) {
-            this.projectType = projectType;
-        }
-
-        @Override
-        public String toString() {
-            return this.projectType;
-        }
     }
 
     private enum ArtifactCoordinatesAttributes {

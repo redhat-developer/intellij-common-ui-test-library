@@ -43,8 +43,18 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      * Open the 'More settings' options
      */
     public void openMoreSettings() {
-        boolean isAlreadyOpened = findAll(ContainerFixture.class, byXpath("//div[@class='TitledSeparator']/../../*")).size() == 2;
+        boolean isAlreadyOpened = isMoreSettingOpened();
         if (!isAlreadyOpened) {
+            jLabel(ButtonLabels.moreSettings).click();
+        }
+    }
+
+    /**
+     * Close the 'More settings' options
+     */
+    public void closeMoreSettings() {
+        boolean isAlreadyOpened = isMoreSettingOpened();
+        if (isAlreadyOpened) {
             jLabel(ButtonLabels.moreSettings).click();
         }
     }
@@ -129,5 +139,9 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
     public void setProjectFormat(ProjectFormatType projectFormatType) {
         ComboBoxFixture projectFormatComboBox = comboBox(byXpath("//div[@class='JComboBox']"), Duration.ofSeconds(10));
         projectFormatComboBox.selectItemContains(projectFormatType.toString());
+    }
+    
+    private boolean isMoreSettingOpened() {
+        return findAll(ContainerFixture.class, byXpath("//div[@class='TitledSeparator']/../../*")).size() == 2;
     }
 }

@@ -18,6 +18,7 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.NewProjectFirstPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -41,10 +42,10 @@ class IdeStatusBarTest extends LibraryTestBase {
 
     @BeforeEach
     public void prepareProject() {
-        openNewProjectDialogFromWelcomeDialog();
+        CreateCloseUtils.openNewProjectDialogFromWelcomeDialog(remoteRobot);
         NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
-        newProjectFirstPage.selectNewProjectType("Maven");
+        newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.MAVEN.toString());
         newProjectDialogWizard.next();
         MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
         mavenGradleFinalPage.setProjectName(projectName);
@@ -53,7 +54,7 @@ class IdeStatusBarTest extends LibraryTestBase {
 
     @AfterEach
     public void closeCurrentProject() {
-        super.closeProject();
+        CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @Test

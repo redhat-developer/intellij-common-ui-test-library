@@ -8,7 +8,7 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package com.redhat.devtools.intellij.commonUiTestLibrary;
+package com.redhat.devtools.intellij.commonUiTestLibrary.utils.project;
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.UITestException;
@@ -25,37 +25,24 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.i
 import java.time.Duration;
 
 /**
- * Abstract base class for all JUnit tests in the IntelliJ common UI test library
+ * Project creation utilities
  *
  * @author zcervink@redhat.com
  */
-public abstract class AbstractLibraryTestBase {
-    protected static RemoteRobot remoteRobot;
-
-    protected static void createNewProject(String projectName, String projectType) {
-        openNewProjectDialogFromWelcomeDialog();
+public class CreateCloseUtils {
+    public static void createNewProject(RemoteRobot remoteRobot, String projectName, NewProjectType newProjectType) {
+        openNewProjectDialogFromWelcomeDialog(remoteRobot);
         NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
-        newProjectFirstPage.selectNewProjectType(projectType);
+        newProjectFirstPage.selectNewProjectType(newProjectType.toString());
         newProjectFirstPage.setProjectSdkIfAvailable("11");
         newProjectDialogWizard.next();
         // Plain java project has more pages in the 'New project' dialog
-        if (projectType.equals("Java")) {
+        if (newProjectType.equals(NewProjectType.PLAIN_JAVA)) {
             newProjectDialogWizard.next();
         }
 
-        AbstractNewProjectFinalPage finalPage;
-        switch (projectType) {
-            case "Java":
-                finalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
-                break;
-            case "Maven":
-            case "Gradle":
-                finalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
-                break;
-            default:
-                throw new UITestException("Unsupported project type.");
-        }
+        AbstractNewProjectFinalPage finalPage = getFinalPage(newProjectDialogWizard, newProjectType);
         finalPage.setProjectName(projectName);
         newProjectDialogWizard.finish();
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
@@ -66,13 +53,42 @@ public abstract class AbstractLibraryTestBase {
         ideStatusBar.waitUntilAllBgTasksFinish();
     }
 
-    protected static void openNewProjectDialogFromWelcomeDialog() {
+    public static void openNewProjectDialogFromWelcomeDialog(RemoteRobot remoteRobot) {
         FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.createNewProject();
     }
 
-    protected static void closeProject() {
+    public static void closeProject(RemoteRobot remoteRobot) {
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
         mainIdeWindow.closeProject();
+    }
+
+    public static AbstractNewProjectFinalPage getFinalPage(NewProjectDialogWizard newProjectDialogWizard, NewProjectType newProjectType) {
+        switch (newProjectType) {
+            case PLAIN_JAVA:
+                return newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
+            case MAVEN:
+            case GRADLE:
+                return newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
+            default:
+                throw new UITestException("Unsupported project type.");
+        }
+    }
+
+    public enum NewProjectType {
+        PLAIN_JAVA("Java"),
+        MAVEN("Maven"),
+        GRADLE("Gradle");
+
+        private final String projectType;
+
+        NewProjectType(String projectType) {
+            this.projectType = projectType;
+        }
+
+        @Override
+        public String toString() {
+            return this.projectType;
+        }
     }
 }

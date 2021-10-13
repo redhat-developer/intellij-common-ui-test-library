@@ -70,7 +70,7 @@ public class NewProjectDialogWizard extends CommonContainerFixture {
         }
 
         if (button.isEnabled()) {
-            button(label).click();
+            button.click();
         } else {
             throw new UITestException("The '" + label + "' button is not enabled.");
         }
