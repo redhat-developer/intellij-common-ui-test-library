@@ -140,7 +140,7 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
         ComboBoxFixture projectFormatComboBox = comboBox(byXpath("//div[@class='JComboBox']"), Duration.ofSeconds(10));
         projectFormatComboBox.selectItemContains(projectFormatType.toString());
     }
-    
+
     private boolean isMoreSettingOpened() {
         return findAll(ContainerFixture.class, byXpath("//div[@class='TitledSeparator']/../../*")).size() == 2;
     }
