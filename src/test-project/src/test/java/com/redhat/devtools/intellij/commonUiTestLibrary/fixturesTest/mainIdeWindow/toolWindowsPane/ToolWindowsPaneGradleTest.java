@@ -11,9 +11,8 @@
 package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWindow.toolWindowsPane;
 
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane.ToolToBuildProject;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.buildToolPane.GradleBuildToolPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
@@ -52,10 +51,9 @@ class ToolWindowsPaneGradleTest extends LibraryTestBase {
 
     @Test
     public void gradleBuildTest() {
-        toolWindowsPane.buildProject(ToolToBuildProject.GRADLE);
-        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
-        ideStatusBar.waitUntilAllBgTasksFinish();
-        toolWindowsPane.testIfBuildIsSuccessful();
+        toolWindowsPane.openGradleBuildToolPane();
+        GradleBuildToolPane gradleBuildToolPane = toolWindowsPane.find(GradleBuildToolPane.class, Duration.ofSeconds(10));
+        gradleBuildToolPane.buildProject();
     }
 
     @Test

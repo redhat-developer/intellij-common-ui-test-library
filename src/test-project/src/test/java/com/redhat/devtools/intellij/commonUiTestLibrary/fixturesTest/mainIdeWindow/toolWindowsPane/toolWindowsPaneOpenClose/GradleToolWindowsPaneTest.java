@@ -8,50 +8,43 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWindow.toolWindowsPane;
+package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWindow.toolWindowsPane.toolWindowsPaneOpenClose;
 
-import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.buildToolPane.MavenBuildToolPane;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.buildToolPane.GradleBuildToolPane;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
- * ToolWindowsPane Maven test
+ * GradleToolWindowsPane test
  *
  * @author zcervink@redhat.com
  */
 @ExtendWith(ScreenshotAfterTestFailExtension.class)
-class ToolWindowsPaneMavenTest extends LibraryTestBase {
-    private static final String projectName = "tool_windows_pane_java_maven_project";
-    private ToolWindowsPane toolWindowsPane;
-
+class GradleToolWindowsPaneTest extends AbstractToolWindowsPaneTest {
     @BeforeAll
     public static void prepareProject() {
-        CreateCloseUtils.createNewProject(remoteRobot, projectName, CreateCloseUtils.NewProjectType.MAVEN);
-    }
-
-    @AfterAll
-    public static void closeCurrentProject() {
-        CreateCloseUtils.closeProject(remoteRobot);
-    }
-
-    @BeforeEach
-    public void createToolWindowsPaneFixture() {
+        CreateCloseUtils.createNewProject(remoteRobot, gradleProjectName, CreateCloseUtils.NewProjectType.GRADLE);
         toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
     }
 
     @Test
-    public void mavenBuildTest() {
-        toolWindowsPane.openMavenBuildToolPane();
-        MavenBuildToolPane mavenBuildToolPane = toolWindowsPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10));
-        mavenBuildToolPane.buildProject();
+    public void gradleBuildToolPaneOpenCloseTest() {
+        if (isPaneOpened(GradleBuildToolPane.class)) {
+            closePane(ButtonLabels.gradleStripeButtonLabel, GradleBuildToolPane.class);
+        }
+        toolWindowsPane.openGradleBuildToolPane();
+        assertTrue(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be opened but is closed.");
+        toolWindowsPane.closeGradleBuildToolPane();
+        assertFalse(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be closed but is opened.");
     }
 }
