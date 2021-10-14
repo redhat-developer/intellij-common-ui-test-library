@@ -12,10 +12,16 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.naviga
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
-import com.intellij.remoterobot.fixtures.*;
+import com.intellij.remoterobot.fixtures.CommonContainerFixture;
+import com.intellij.remoterobot.fixtures.DefaultXpath;
+import com.intellij.remoterobot.fixtures.FixtureName;
+import com.intellij.remoterobot.fixtures.JListFixture;
+import com.intellij.remoterobot.fixtures.JTextFieldFixture;
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.Keyboard;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
+import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.UITestException;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.KeyEvent;
@@ -24,7 +30,6 @@ import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils.listOfRemoteTextToString;
 
 /**
  * Search everywhere popup fixture
@@ -50,7 +55,7 @@ public class SearchEverywherePopup extends CommonContainerFixture {
         try {
             button(byXpath("//div[@text='" + tabName + "']"), Duration.ofSeconds(2)).click();
         } catch (WaitForConditionTimeoutException e) {
-            throw new RuntimeException("The '" + tabName + "' tab cannot be found.");
+            throw new UITestException("The '" + tabName + "' tab cannot be found.");
         }
     }
 
@@ -68,7 +73,7 @@ public class SearchEverywherePopup extends CommonContainerFixture {
     }
 
     private boolean didSearchFinish(String cmdToInvoke) {
-        String searchResultsString = listOfRemoteTextToString(getSearchResults());
+        String searchResultsString = TextUtils.listOfRemoteTextToString(getSearchResults());
         return searchResultsString.toLowerCase().contains(cmdToInvoke.toLowerCase());
     }
 

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonUiTestLibrary;
 
+import com.intellij.remoterobot.RemoteRobot;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,7 +22,8 @@ import java.time.Duration;
  *
  * @author zcervink@redhat.com
  */
-public class LibraryTestBase extends AbstractLibraryTestBase {
+public class LibraryTestBase {
+    protected static RemoteRobot remoteRobot;
     private static boolean intelliJHasStarted = false;
 
     @BeforeAll

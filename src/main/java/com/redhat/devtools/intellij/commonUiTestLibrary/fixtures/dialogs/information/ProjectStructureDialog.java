@@ -15,9 +15,8 @@ import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
-
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.cancelLabel;
 
 /**
  * Project Structure dialog fixture
@@ -35,6 +34,6 @@ public class ProjectStructureDialog extends CommonContainerFixture {
      * Cancel the 'Project Structure'
      */
     public void cancel() {
-        button(cancelLabel).click();
+        button(ButtonLabels.cancelLabel).click();
     }
 }

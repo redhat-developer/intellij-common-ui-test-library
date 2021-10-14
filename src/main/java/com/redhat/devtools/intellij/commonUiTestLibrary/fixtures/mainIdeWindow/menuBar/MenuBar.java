@@ -20,7 +20,7 @@ import java.time.Duration;
 import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.UITestRunner.getIdeaVersion;
+
 
 /**
  * Top menu fixture
@@ -33,7 +33,7 @@ public class MenuBar {
 
     public MenuBar(RemoteRobot remoteRobot) {
         this.remoteRobot = remoteRobot;
-        this.ideaVersion = getIdeaVersion();
+        this.ideaVersion = UITestRunner.getIdeaVersion();
     }
 
     /**

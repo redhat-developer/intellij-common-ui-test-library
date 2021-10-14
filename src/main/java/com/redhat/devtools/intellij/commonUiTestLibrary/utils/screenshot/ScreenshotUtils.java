@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonUiTestLibrary.utils.screenshot;
 
+import com.intellij.remoterobot.RemoteRobot;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -18,8 +20,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
-import com.intellij.remoterobot.RemoteRobot;
 
 /**
  * Static utilities for taking screenshots
@@ -36,7 +36,7 @@ public class ScreenshotUtils {
      * Take screenshot of the entire screen and save it on disk
      *
      * @param remoteRobot reference to the RemoteRobot instance
-     * @return            the screenshot as a File object
+     * @return the screenshot as a File object
      */
     public static File takeScreenshot(RemoteRobot remoteRobot) {
         try {

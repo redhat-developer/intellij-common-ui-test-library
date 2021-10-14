@@ -12,10 +12,15 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWin
 
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.NewProjectDialogWizard;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.MavenGradleNewProjectFinalPage;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages.NewProjectFirstPage;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialog;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,8 +30,6 @@ import java.time.Duration;
 import java.util.List;
 
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils.listOfRemoteTextToString;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog.closeTipDialogIfItAppears;
 
 /**
  * IdeStatusBar test
@@ -39,24 +42,26 @@ class IdeStatusBarTest extends LibraryTestBase {
 
     @BeforeEach
     public void prepareProject() {
-        openNewProjectDialogFromWelcomeDialog();
-        NewProjectDialog newProjectDialog = remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10));
-        newProjectDialog.selectNewProjectType("Maven");
-        newProjectDialog.next();
-        newProjectDialog.setProjectName(projectName);
-        newProjectDialog.finish();
+        CreateCloseUtils.openNewProjectDialogFromWelcomeDialog(remoteRobot);
+        NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
+        NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
+        newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.MAVEN.toString());
+        newProjectDialogWizard.next();
+        MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
+        mavenGradleFinalPage.setProjectName(projectName);
+        newProjectDialogWizard.finish();
     }
 
     @AfterEach
     public void closeCurrentProject() {
-        super.closeProject();
+        CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @Test
     public void progressBarTest() {
         IdeStatusBar ideStatusBar = waitFor(Duration.ofSeconds(60), Duration.ofSeconds(1), "The progress bar in status bar did not appear in 60 seconds.", () -> isProgressbarWithLabelVisible());
         ideStatusBar.waitUntilProjectImportIsComplete();
-        closeTipDialogIfItAppears(remoteRobot);
+        TipDialog.closeTipDialogIfItAppears(remoteRobot);
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
         mainIdeWindow.maximizeIdeWindow();
         ideStatusBar.waitUntilAllBgTasksFinish();
@@ -65,7 +70,7 @@ class IdeStatusBarTest extends LibraryTestBase {
     private static kotlin.Pair<Boolean, IdeStatusBar> isProgressbarWithLabelVisible() {
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         List<RemoteText> inlineProgressPanelContent = ideStatusBar.inlineProgressPanel().findAllText();
-        String inlineProgressPanelText = listOfRemoteTextToString(inlineProgressPanelContent);
+        String inlineProgressPanelText = TextUtils.listOfRemoteTextToString(inlineProgressPanelContent);
         return new kotlin.Pair(!inlineProgressPanelText.equals(""), ideStatusBar);
     }
 }

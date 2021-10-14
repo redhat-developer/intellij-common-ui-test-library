@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Red Hat, Inc.
+ * Copyright (c) 2021 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v2.0 which accompanies this distribution,
@@ -8,19 +8,18 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation;
+package com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.pages;
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.ComboBoxFixture;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
-import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
-import com.intellij.remoterobot.fixtures.JTextFieldFixture;
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -28,33 +27,21 @@ import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.nextLabel;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.finishLabel;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.cancelLabel;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.previousLabel;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils.listOfRemoteTextToString;
 
 /**
- * New Project dialog fixture
+ * New Project dialog first page fixture
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "MyDialog type", xpath = "//div[@accessiblename='New Project' and @class='MyDialog']")
+@DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
 @FixtureName(name = "New Project Dialog")
-public class NewProjectDialog extends CommonContainerFixture {
+public class NewProjectFirstPage extends CommonContainerFixture {
+    private static RemoteRobot remoteRobot;
     private int projectSdkItemsCount = -1;
 
-    public NewProjectDialog(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
+    public NewProjectFirstPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-    }
-
-    /**
-     * Set the project name for new project in the 'New Project' dialog
-     *
-     * @param projectName name of the new project
-     */
-    public void setProjectName(String projectName) {
-        textFields(JTextFieldFixture.Companion.byType()).get(0).setText(projectName);
+        this.remoteRobot = remoteRobot;
     }
 
     /**
@@ -73,14 +60,14 @@ public class NewProjectDialog extends CommonContainerFixture {
      */
     public void setProjectSdkIfAvailable(String targetSdkName) {
         ComboBoxFixture projectJdkComboBox = comboBox(byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
-        String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
+        String currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
         if (currentlySelectedProjectSdk.contains(targetSdkName)) {
             return;
         }
         projectJdkComboBox.click();
 
-        waitFor(Duration.ofSeconds(20), Duration.ofSeconds(2), "The project JDK list did not load all items in 20 seconds.", () -> didProjectSdkListLoadAllItems());
-        JPopupMenuFixture projectSdkList = jPopupMenus(byXpath("//div[@class='HeavyWeightWindow']")).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
+        CommonContainerFixture parentFixture = waitFor(Duration.ofSeconds(20), Duration.ofSeconds(2), "The project JDK list did not load all items in 20 seconds.", () -> didProjectSdkListLoadAllItems());
+        JPopupMenuFixture projectSdkList = parentFixture.jPopupMenus(byXpath("//div[@class='HeavyWeightWindow']")).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
         List<RemoteText> sdkItems = projectSdkList.findAllText();
         for (RemoteText sdkItem : sdkItems) {
             if (sdkItem.getText().contains(targetSdkName)) {
@@ -94,46 +81,19 @@ public class NewProjectDialog extends CommonContainerFixture {
         }
     }
 
-    /**
-     * Move to the next page of the 'New Project' dialog by clicking on the 'Next' button
-     */
-    public void next() {
-        button(nextLabel).click();
-    }
-
-    /**
-     * Finish the 'New Project' dialog by clicking on the 'Finish' button
-     */
-    public void finish() {
-        button(finishLabel).click();
-    }
-
-    /**
-     * Close the 'New Project' dialog by clicking on the 'Cancel' button
-     */
-    public void cancel() {
-        button(cancelLabel).click();
-    }
-
-    /**
-     * Move to the previous page of the 'New Project' dialog by clicking on the 'Previous' button
-     */
-    public void previous() {
-        button(previousLabel).click();
-    }
-
-    private boolean didProjectSdkListLoadAllItems() {
-        JPopupMenuFixture projectSdkList = jPopupMenus(byXpath("//div[@class='HeavyWeightWindow']")).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
+    private kotlin.Pair<Boolean, CommonContainerFixture> didProjectSdkListLoadAllItems() {
+        CommonContainerFixture parentFixture = remoteRobot.find(CommonContainerFixture.class, byXpath("//div[@class='MyDialog']"));
+        JPopupMenuFixture projectSdkList = parentFixture.jPopupMenus(byXpath("//div[@class='HeavyWeightWindow']")).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
         List<RemoteText> sdkItems = projectSdkList.findAllText();
         int currentSdkItemsCount = sdkItems.size();
 
         if (projectSdkItemsCount == -1) {
             projectSdkItemsCount = currentSdkItemsCount;
-            return false;
+            return new kotlin.Pair(false, parentFixture);
         } else if (projectSdkItemsCount != currentSdkItemsCount) {
             projectSdkItemsCount = currentSdkItemsCount;
-            return false;
+            return new kotlin.Pair(false, parentFixture);
         }
-        return true;
+        return new kotlin.Pair(true, parentFixture);
     }
 }

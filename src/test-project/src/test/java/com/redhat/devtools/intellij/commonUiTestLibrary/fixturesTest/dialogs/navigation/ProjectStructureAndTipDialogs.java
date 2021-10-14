@@ -12,17 +12,17 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.dialogs.na
 
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.ProjectStructureDialog;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.ProjectStructureDialog;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterAll;
 
 import java.time.Duration;
 
-import static com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.information.TipDialog.closeTipDialogIfItAppears;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -35,12 +35,12 @@ public class ProjectStructureAndTipDialogs extends LibraryTestBase {
 
     @BeforeAll
     public static void prepareProject() {
-        createNewProject(projectName, "Java");
+        CreateCloseUtils.createNewProject(remoteRobot, projectName, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
     }
 
     @AfterAll
     public static void closeProject() {
-        LibraryTestBase.closeProject();
+        CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class ProjectStructureAndTipDialogs extends LibraryTestBase {
     @Test
     public void tipDialogTest() {
         dialogTest(() -> {
-            closeTipDialogIfItAppears(remoteRobot);
+            TipDialog.closeTipDialogIfItAppears(remoteRobot);
         }, TipDialog.class, "Tip of the Day");
     }
 

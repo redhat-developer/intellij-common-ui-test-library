@@ -19,6 +19,7 @@ import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
+import com.intellij.remoterobot.utils.UtilsKt;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.UITestRunner;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.errors.IdeFatalErrorsDialog;
@@ -33,8 +34,6 @@ import java.time.Duration;
 import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static com.intellij.remoterobot.utils.UtilsKt.hasAnyComponent;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.UITestRunner.getIdeaVersion;
 
 /**
  * Welcome to IntelliJ IDEA dialog fixture
@@ -48,20 +47,29 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
 
     public FlatWelcomeFrame(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        this.intelliJVersion = getIdeaVersion();
+        this.intelliJVersion = UITestRunner.getIdeaVersion();
     }
 
     /**
      * Click on the 'New Project' link
      */
     public void createNewProject() {
+        clickOnLink("New Project");
+    }
+
+    /**
+     * Click on the link according to given label
+     *
+     * @param label label of the link to click on
+     */
+    public void clickOnLink(String label) {
         // Code for IntelliJ Idea 2020.3 or newer
         if (intelliJVersion.toInt() >= 20203) {
-            welcomeFrameLink("New Project").click();
+            welcomeFrameLink(label).click();
         }
         // Code for IntelliJ Idea 2020.2 or earlier
         else {
-            actionLink("New Project").click();
+            actionLink(label).click();
         }
     }
 
@@ -112,7 +120,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
 
     // Works for IntelliJ Idea 2020.3+
     private JButtonFixture welcomeFrameLink(String text) {
-        if (hasAnyComponent(this, byXpath("//div[@class='NewRecentProjectPanel']"))) {
+        if (UtilsKt.hasAnyComponent(this, byXpath("//div[@class='NewRecentProjectPanel']"))) {
             return button(byXpath("//div[@class='JBOptionButton' and @text='" + text + "']"), Duration.ofSeconds(2));
         }
         return button(byXpath("//div[@class='NonOpaquePanel'][./div[@text='" + text + "']]"), Duration.ofSeconds(2));

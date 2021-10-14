@@ -8,12 +8,14 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWindow.toolWindowsPaneAndMenuBar;
+package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWindow.toolWindowsPane;
 
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane.ToolToBuildProject;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,27 +24,26 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
-import static com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane.ToolToBuildProject.GRADLE;
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels.gradleStripeButtonLabel;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * ToolWindowsPane Gradle test
+ * ToolWindowsPane Maven test
  *
  * @author zcervink@redhat.com
  */
 @ExtendWith(ScreenshotAfterTestFailExtension.class)
-class ToolWindowsPaneGradleTest extends LibraryTestBase {
-    private static final String projectName = "tool_windows_pane_java_gradle_project";
+class ToolWindowsPaneMavenTest extends LibraryTestBase {
+    private static final String projectName = "tool_windows_pane_java_maven_project";
     private ToolWindowsPane toolWindowsPane;
 
     @BeforeAll
     public static void prepareProject() {
-        createNewProject(projectName, gradleStripeButtonLabel);
+        CreateCloseUtils.createNewProject(remoteRobot, projectName, CreateCloseUtils.NewProjectType.MAVEN);
     }
 
     @AfterAll
     public static void closeCurrentProject() {
-        closeProject();
+        CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @BeforeEach
@@ -51,15 +52,16 @@ class ToolWindowsPaneGradleTest extends LibraryTestBase {
     }
 
     @Test
-    public void gradleBuildTest() {
-        toolWindowsPane.buildProject(GRADLE);
+    public void mavenBuildTest() {
+        toolWindowsPane.buildProject(ToolToBuildProject.MAVEN);
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilAllBgTasksFinish();
         toolWindowsPane.testIfBuildIsSuccessful();
     }
 
     @Test
-    public void stripeButtonTest() {
-        toolWindowsPane.stripeButton(gradleStripeButtonLabel);
+    public void isProjectFilePresentTest() {
+        boolean isImlFilePresent = toolWindowsPane.isProjectFilePresent(projectName, projectName + ".iml");
+        assertTrue(isImlFilePresent, "File '" + projectName + ".iml" + "' should be present in the project view structure.");
     }
 }

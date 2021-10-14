@@ -14,14 +14,13 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.UITestRunner;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.projectManipulation.NewProjectDialog;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.screenshot.ScreenshotUtils;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.time.Duration;
-
-import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.screenshot.ScreenshotUtils.takeScreenshot;
 
 /**
  * ScreenshotAfterTestFailExtension takes screenshot immediately after test has failed
@@ -31,7 +30,6 @@ import static com.redhat.devtools.intellij.commonUiTestLibrary.utils.screenshot.
  * {@code @ExtendWith(ScreenshotAfterTestFailExtension.class)}<br>
  *
  * @author zcervink@redhat.com
- *
  */
 public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallback {
     private RemoteRobot remoteRobot;
@@ -49,7 +47,7 @@ public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallb
     public void afterTestExecution(ExtensionContext extensionContext) {
         boolean testFailed = extensionContext.getExecutionException().isPresent();
         if (testFailed) {
-            takeScreenshot(remoteRobot);
+            ScreenshotUtils.takeScreenshot(remoteRobot);
             cleanAfterTestFail();
         }
     }
@@ -57,7 +55,8 @@ public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallb
     private void cleanAfterTestFail() {
         // New Project Dialog is visible -> close it
         try {
-            remoteRobot.find(NewProjectDialog.class, Duration.ofSeconds(10)).cancel();
+            NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
+            newProjectDialogWizard.cancel();
             return;
         } catch (WaitForConditionTimeoutException e2) {
             // New Project Dialog is not visible -> continue
