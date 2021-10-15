@@ -10,12 +10,15 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWindow.toolWindowsPane.toolWindowsPaneOpenClose;
 
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ProjectExplorer;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.buildToolPane.GradleBuildToolPane;
+import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.buildToolPane.MavenBuildToolPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -37,11 +40,15 @@ class GradleToolWindowsPaneTest extends AbstractToolWindowsPaneTest {
         toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
     }
 
-    @Test
-    public void gradleBuildToolPaneOpenCloseTest() {
+    @BeforeEach
+    public void preparePanes() {
         if (isPaneOpened(GradleBuildToolPane.class)) {
             closePane(ButtonLabels.gradleStripeButtonLabel, GradleBuildToolPane.class);
         }
+    }
+
+    @Test
+    public void gradleBuildToolPaneOpenCloseTest() {
         toolWindowsPane.openGradleBuildToolPane();
         assertTrue(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be opened but is closed.");
         toolWindowsPane.closeGradleBuildToolPane();

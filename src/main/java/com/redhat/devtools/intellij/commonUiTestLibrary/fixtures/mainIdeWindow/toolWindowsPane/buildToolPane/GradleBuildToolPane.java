@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Red Hat, Inc.
+ * Copyright (c) 2021 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v2.0 which accompanies this distribution,
@@ -68,7 +68,7 @@ public class GradleBuildToolPane extends CommonContainerFixture {
      */
     public void buildProject() {
         waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The Gradle tasks tree did not appear in 30 seconds.", () -> isGradleTreeVisible());
-        actionButton(byXpath("//div[contains(@myvisibleactions, 'IDE')]//div[@myicon='expandall.svg']"), Duration.ofSeconds(10)).click();
+        gradleTaskTree().expandAll();
         gradleTaskTree().findAllText("build").get(1).doubleClick();
         remoteRobot.find(ToolWindowsPane.class).find(BuildView.class).waitUntilBuildHasFinished();
     }
@@ -80,15 +80,6 @@ public class GradleBuildToolPane extends CommonContainerFixture {
      */
     public JTreeFixture gradleTaskTree() {
         return find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
-    }
-
-    private void expandGradleTasksTreeIfNecessary() {
-        ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        String labels = TextUtils.listOfRemoteTextToString(gradleTaskTree().findAllText());
-        // if the Gradle tasks tree is collapsed -> expand it
-        if (!labels.contains("Tasks")) {
-            gradleTaskTree().findText(labels).doubleClick();
-        }
     }
 
     private boolean isGradleTreeVisible() {

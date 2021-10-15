@@ -14,6 +14,7 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
+import com.intellij.remoterobot.fixtures.Fixture;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
@@ -44,44 +45,50 @@ public class ToolWindowsPane extends CommonContainerFixture {
 
     /**
      * Open project explorer
+     *
+     * @return the Project Explorer fixture
      */
-    public void openProjectExplorer() {
-        openPane(ButtonLabels.projectStripeButtonLabel, ProjectExplorer.class);
+    public ProjectExplorer openProjectExplorer() {
+        return togglePane(ButtonLabels.projectStripeButtonLabel, ProjectExplorer.class, true);
     }
 
     /**
      * Close project explorer
      */
     public void closeProjectExplorer() {
-        closePane(ButtonLabels.projectStripeButtonLabel, ProjectExplorer.class);
+        togglePane(ButtonLabels.projectStripeButtonLabel, ProjectExplorer.class, false);
     }
 
     /**
      * Open maven build tool pane
+     *
+     * @return the Maven Build Tool Pane fixture
      */
-    public void openMavenBuildToolPane() {
-        openPane(ButtonLabels.mavenStripeButtonLabel, MavenBuildToolPane.class);
+    public MavenBuildToolPane openMavenBuildToolPane() {
+        return togglePane(ButtonLabels.mavenStripeButtonLabel, MavenBuildToolPane.class, true);
     }
 
     /**
      * Close maven build tool pane
      */
     public void closeMavenBuildToolPane() {
-        closePane(ButtonLabels.mavenStripeButtonLabel, MavenBuildToolPane.class);
+        togglePane(ButtonLabels.mavenStripeButtonLabel, MavenBuildToolPane.class, false);
     }
 
     /**
      * Open gradle build tool pane
+     *
+     * @return the Gradle Build Tool Pane fixture
      */
-    public void openGradleBuildToolPane() {
-        openPane(ButtonLabels.gradleStripeButtonLabel, GradleBuildToolPane.class);
+    public GradleBuildToolPane openGradleBuildToolPane() {
+        return togglePane(ButtonLabels.gradleStripeButtonLabel, GradleBuildToolPane.class, true);
     }
 
     /**
      * Close gradle build tool pane
      */
     public void closeGradleBuildToolPane() {
-        closePane(ButtonLabels.gradleStripeButtonLabel, GradleBuildToolPane.class);
+        togglePane(ButtonLabels.gradleStripeButtonLabel, GradleBuildToolPane.class, false);
     }
 
     /**
@@ -112,16 +119,14 @@ public class ToolWindowsPane extends CommonContainerFixture {
         return button(byXpath("//div[@text='" + label + "']"), Duration.ofSeconds(2));
     }
 
-    private void openPane(String label, Class fixtureClass) {
-        if (!isPaneOpened(fixtureClass)) {
-            clickOnStripeButton(label);
-        }
-    }
-
-    private void closePane(String label, Class fixtureClass) {
-        if (isPaneOpened(fixtureClass)) {
+    private <T extends Fixture> T togglePane(String label, Class<T> fixtureClass, boolean openPane) {
+        if ((!isPaneOpened(fixtureClass) && openPane)) {
+            clickOnStripeButton(label, false);
+            return find(fixtureClass, Duration.ofSeconds(10));
+        } else if (isPaneOpened(fixtureClass) && !openPane) {
             clickOnStripeButton(label, true);
         }
+        return null;
     }
 
     private boolean isPaneOpened(Class fixtureClass) {
@@ -132,10 +137,6 @@ public class ToolWindowsPane extends CommonContainerFixture {
         } catch (WaitForConditionTimeoutException e) {
             return false;
         }
-    }
-
-    private void clickOnStripeButton(String label) {
-        clickOnStripeButton(label, false);
     }
 
     private void clickOnStripeButton(String label, boolean isPaneOpened) {

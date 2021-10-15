@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Red Hat, Inc.
+ * Copyright (c) 2021 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v2.0 which accompanies this distribution,
@@ -15,7 +15,10 @@ import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
+import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.fixtures.JTreeFixture;
+import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
+import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.UITestException;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -70,17 +73,30 @@ public class ProjectExplorer extends CommonContainerFixture {
      * Open context menu on item according to given path
      *
      * @param path path to navigate through
+     * @return fixture for the context menu
      */
-    public void openContextMenuOn(String... path) {
+    public JPopupMenuFixture openContextMenuOn(String... path) {
         projectViewTree().expand(path);
         projectViewTree().rightClickPath(path, true);
+        try {
+            return remoteRobot.find(JPopupMenuFixture.class, byXpath("//div[@class='HeavyWeightWindow']"), Duration.ofSeconds(10));
+        } catch (WaitForConditionTimeoutException e) {
+            throw new UITestException("The context menu for a file in Project Explorer has not been found.");
+        }
     }
 
     /**
      * Open the 'Views' popup menu
+     *
+     * @return Views popup fixture
      */
-    public void openViewsPopup() {
+    public JPopupMenuFixture openViewsPopup() {
         actionButton(byXpath("//div[@class='ContentComboLabel']"), Duration.ofSeconds(2)).click();
+        try {
+            return remoteRobot.find(JPopupMenuFixture.class, byXpath("//div[@class='HeavyWeightWindow']"), Duration.ofSeconds(10));
+        } catch (WaitForConditionTimeoutException e) {
+            throw new UITestException(e.getMessage());
+        }
     }
 
     /**
@@ -105,10 +121,17 @@ public class ProjectExplorer extends CommonContainerFixture {
     }
 
     /**
-     * Invoke settings popup
+     * Open settings popup
+     *
+     * @return settings popup fixture
      */
-    public void openSettingsPopup() {
+    public JPopupMenuFixture openSettingsPopup() {
         actionButton(byXpath("//div[contains(@myvisibleactions, 'View),')]//div[@myicon='gearPlain.svg']"), Duration.ofSeconds(2)).click();
+        try {
+            return remoteRobot.find(JPopupMenuFixture.class, byXpath("//div[@class='HeavyWeightWindow']"), Duration.ofSeconds(10));
+        } catch (WaitForConditionTimeoutException e) {
+            throw new UITestException(e.getMessage());
+        }
     }
 
     /**

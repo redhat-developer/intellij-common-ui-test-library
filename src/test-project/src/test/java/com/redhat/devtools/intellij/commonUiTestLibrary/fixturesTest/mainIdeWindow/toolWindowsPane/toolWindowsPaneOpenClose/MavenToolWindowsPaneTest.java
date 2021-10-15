@@ -17,6 +17,7 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabel
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -38,11 +39,18 @@ class MavenToolWindowsPaneTest extends AbstractToolWindowsPaneTest {
         toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
     }
 
-    @Test
-    public void mavenBuildToolPaneOpenCloseTest() {
+    @BeforeEach
+    public void preparePanes() {
+        if (isPaneOpened(ProjectExplorer.class)) {
+            closePane(ButtonLabels.projectStripeButtonLabel, ProjectExplorer.class);
+        }
         if (isPaneOpened(MavenBuildToolPane.class)) {
             closePane(ButtonLabels.mavenStripeButtonLabel, MavenBuildToolPane.class);
         }
+    }
+
+    @Test
+    public void mavenBuildToolPaneOpenCloseTest() {
         toolWindowsPane.openMavenBuildToolPane();
         assertTrue(isPaneOpened(MavenBuildToolPane.class), "The 'Maven Build Tool Pane' should be opened but is closed.");
         toolWindowsPane.closeMavenBuildToolPane();
@@ -51,9 +59,6 @@ class MavenToolWindowsPaneTest extends AbstractToolWindowsPaneTest {
 
     @Test
     public void projectExplorerPaneOpenCloseTest() {
-        if (isPaneOpened(ProjectExplorer.class)) {
-            closePane(ButtonLabels.projectStripeButtonLabel, ProjectExplorer.class);
-        }
         toolWindowsPane.openProjectExplorer();
         assertTrue(isPaneOpened(ProjectExplorer.class), "The 'Project Explorer' should be opened but is closed.");
         toolWindowsPane.closeProjectExplorer();

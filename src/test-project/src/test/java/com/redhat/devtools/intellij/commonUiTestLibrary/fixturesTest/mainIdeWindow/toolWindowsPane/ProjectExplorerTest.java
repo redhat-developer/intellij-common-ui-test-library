@@ -12,9 +12,8 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWin
 
 import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
-import com.intellij.remoterobot.fixtures.JTreeFixture;
-import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
+import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ProjectExplorer;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
@@ -29,6 +28,7 @@ import java.time.Duration;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Project Explorer test
@@ -71,68 +71,57 @@ class ProjectExplorerTest extends LibraryTestBase {
 
     @Test
     public void openContextMenuOnTest() {
-        projectExplorer.openContextMenuOn(projectName, projectName + ".iml");
-        boolean isContextMenuOpened = isPopupWithContentAvailable(new String[]{"New"});
-        assertTrue(isContextMenuOpened, "The context menu on file '" + projectName + ".iml' should be opened but is not.");
+        try {
+            JPopupMenuFixture contextMenu = projectExplorer.openContextMenuOn(projectName, projectName + ".iml");
+            assertTrue(contextMenu.hasText("New"), "The context menu on file '" + projectName + ".iml' should be opened but is not.");
+        } catch (UITestException e) {
+            fail(e.getMessage());
+        }
     }
 
     @Test
     public void openViewsPopupTest() {
-        projectExplorer.openViewsPopup();
-        boolean isContextMenuOpened = isPopupWithContentAvailable(new String[]{"Packages"});
-        assertTrue(isContextMenuOpened, "The View popup menu should be opened but is not.");
+        try {
+            JPopupMenuFixture contextMenu = projectExplorer.openViewsPopup();
+            assertTrue(contextMenu.hasText("Packages"), "The View popup menu should be opened but is not.");
+        } catch (UITestException e) {
+            fail(e.getMessage());
+        }
     }
 
     @Test
     public void selectOpenedFileTest() {
         projectExplorer.openFile(projectName, projectName + ".iml");
-        projectViewTree().clickPath(new String[]{projectName}, true);
+        projectExplorer.projectViewTree().clickPath(new String[]{projectName}, true);
         projectExplorer.selectOpenedFile();
-        assertTrue(projectViewTree().isPathSelected(projectName, projectName + ".iml"), "The file '" + projectName + ".iml' should be selected but is not.");
+        assertTrue(projectExplorer.projectViewTree().isPathSelected(projectName, projectName + ".iml"), "The file '" + projectName + ".iml' should be selected but is not.");
     }
 
     @Test
     public void expandAllTest() {
         projectExplorer.collapseAll();
-        int itemsInTreeBeforeExpanding = projectViewTree().collectRows().size();
+        int itemsInTreeBeforeExpanding = projectExplorer.projectViewTree().collectRows().size();
         projectExplorer.expandAll();
-        int itemsInTreeAfterExpanding = projectViewTree().collectRows().size();
+        int itemsInTreeAfterExpanding = projectExplorer.projectViewTree().collectRows().size();
         assertTrue(itemsInTreeAfterExpanding > itemsInTreeBeforeExpanding, "Expanding of the 'Project View' tree was not successful.");
     }
 
     @Test
     public void collapseAllTest() {
-        projectViewTree().expand(new String[]{projectName});
-        int itemsInTreeBeforeCollapsing = projectViewTree().collectRows().size();
+        projectExplorer.projectViewTree().expand(new String[]{projectName});
+        int itemsInTreeBeforeCollapsing = projectExplorer.projectViewTree().collectRows().size();
         projectExplorer.collapseAll();
-        int itemsInTreeAfterCollapsing = projectViewTree().collectRows().size();
+        int itemsInTreeAfterCollapsing = projectExplorer.projectViewTree().collectRows().size();
         assertTrue(itemsInTreeAfterCollapsing < itemsInTreeBeforeCollapsing, "Collapsing of the 'Project View' tree was not successful.");
     }
 
     @Test
     public void openSettingsPopupTest() {
-        projectExplorer.openSettingsPopup();
-        boolean isContextMenuOpened = isPopupWithContentAvailable(new String[]{"Flatten Packages"});
-        assertTrue(isContextMenuOpened, "The Settings popup menu should be opened but is not.");
-    }
-
-    private boolean isPopupWithContentAvailable(String[] content) {
-        JPopupMenuFixture contentMenu;
         try {
-            contentMenu = remoteRobot.find(JPopupMenuFixture.class, byXpath("//div[@class='HeavyWeightWindow']"), Duration.ofSeconds(10));
-        } catch (WaitForConditionTimeoutException e) {
-            return false;
+            JPopupMenuFixture contextMenu = projectExplorer.openSettingsPopup();
+            assertTrue(contextMenu.hasText("Flatten Packages"), "The Settings popup menu should be opened but is not.");
+        } catch (UITestException e) {
+            fail(e.getMessage());
         }
-
-        for (String item : content) {
-            if (!contentMenu.hasText(item)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private JTreeFixture projectViewTree() {
-        return projectExplorer.find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
     }
 }

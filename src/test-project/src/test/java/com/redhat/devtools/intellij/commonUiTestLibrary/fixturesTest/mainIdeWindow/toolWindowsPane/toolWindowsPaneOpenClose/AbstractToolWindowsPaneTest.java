@@ -59,27 +59,15 @@ abstract class AbstractToolWindowsPaneTest extends LibraryTestBase {
 
     protected void clickOnStripeButton(String label, boolean isPaneOpened) {
         waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The '" + label + "' stripe button is not available.", () -> isStripeButtonAvailable(label, isPaneOpened));
-        stripeButton(label, isPaneOpened).click();
+        toolWindowsPane.stripeButton(label, isPaneOpened).click();
     }
 
     protected boolean isStripeButtonAvailable(String label, boolean isPaneOpened) {
         try {
-            stripeButton(label, isPaneOpened);
+            toolWindowsPane.stripeButton(label, isPaneOpened);
         } catch (WaitForConditionTimeoutException e) {
             return false;
         }
         return true;
-    }
-
-    protected JButtonFixture stripeButton(String label, boolean isPaneOpened) {
-        ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        if (isPaneOpened) {
-            if ((label.equals(ButtonLabels.mavenStripeButtonLabel) || label.equals(ButtonLabels.gradleStripeButtonLabel))) {
-                return toolWindowsPane.find(JButtonFixture.class, byXpath("//div[@disabledicon='toolWindow" + label + ".svg']"), Duration.ofSeconds(10));
-            } else if (label.equals(ButtonLabels.projectStripeButtonLabel)) {
-                return toolWindowsPane.find(JButtonFixture.class, byXpath("//div[@tooltiptext='Project']"), Duration.ofSeconds(10));
-            }
-        }
-        return toolWindowsPane.find(JButtonFixture.class, byXpath("//div[@text='" + label + "']"), Duration.ofSeconds(10));
     }
 }

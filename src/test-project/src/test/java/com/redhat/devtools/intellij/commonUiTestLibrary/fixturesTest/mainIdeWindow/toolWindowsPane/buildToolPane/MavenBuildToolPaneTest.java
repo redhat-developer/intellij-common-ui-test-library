@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWindow.toolWindowsPane.buildToolPane;
 
-import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.BuildView;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
@@ -52,8 +51,9 @@ class MavenBuildToolPaneTest extends LibraryTestBase {
 
     @Test
     public void buildProjectTest() {
-        mavenBuildToolPane.buildProject();
-        toolWindowsPane.find(BuildView.class, Duration.ofSeconds(10)).testIfBuildIsSuccessful();
+        mavenBuildToolPane.buildProject("install");
+        boolean isBuildSuccessful = toolWindowsPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
+        assertTrue(isBuildSuccessful, "The build should be successful but is not.");
     }
 
     @Test
@@ -63,14 +63,10 @@ class MavenBuildToolPaneTest extends LibraryTestBase {
 
     @Test
     public void collapseAllTest() {
-        mavenTargetTree().expandAll();
-        int itemsCountBeforeCollapsing = mavenTargetTree().collectRows().size();
+        mavenBuildToolPane.mavenTargetTree().expandAll();
+        int itemsCountBeforeCollapsing = mavenBuildToolPane.mavenTargetTree().collectRows().size();
         mavenBuildToolPane.collapseAll();
-        int itemsCountAfterCollapsing = mavenTargetTree().collectRows().size();
+        int itemsCountAfterCollapsing = mavenBuildToolPane.mavenTargetTree().collectRows().size();
         assertTrue(itemsCountAfterCollapsing < itemsCountBeforeCollapsing, "The 'Collapse All' operation was unsuccessful.");
-    }
-
-    private JTreeFixture mavenTargetTree() {
-        return mavenBuildToolPane.find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
     }
 }

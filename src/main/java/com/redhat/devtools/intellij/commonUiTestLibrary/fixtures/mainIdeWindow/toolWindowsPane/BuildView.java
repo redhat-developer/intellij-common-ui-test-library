@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Red Hat, Inc.
+ * Copyright (c) 2021 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v2.0 which accompanies this distribution,
@@ -24,7 +24,6 @@ import java.time.Duration;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Build View fixture
@@ -34,12 +33,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DefaultXpath(by = "ToolWindowsPane type", xpath = "//div[@class='BuildView']")
 @FixtureName(name = "Tool Windows Pane")
 public class BuildView extends CommonContainerFixture {
-    private RemoteRobot remoteRobot;
-    private static String lastBuildStatusTreeText;
+    private String lastBuildStatusTreeText;
 
     public BuildView(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        this.remoteRobot = remoteRobot;
     }
 
     /**
@@ -51,10 +48,12 @@ public class BuildView extends CommonContainerFixture {
 
     /**
      * Test if build is successful
+     *
+     * @return true if the build is successful
      */
-    public void testIfBuildIsSuccessful() {
-        String runConsoleOutput = TextUtils.listOfRemoteTextToString(runConsole().findAllText());
-        assertTrue(runConsoleOutput.contains("BUILD SUCCESS"), "The build should be successful but is not.");
+    public boolean isBuildSuccessful() {
+        String runConsoleOutput = TextUtils.listOfRemoteTextToString(buildConsole().findAllText());
+        return runConsoleOutput.contains("BUILD SUCCESS");
     }
 
     /**
@@ -64,6 +63,15 @@ public class BuildView extends CommonContainerFixture {
      */
     public JTreeFixture buildStatusTree() {
         return find(JTreeFixture.class, byXpath("//div[@class='Tree']"));
+    }
+
+    /**
+     * Get the build console
+     *
+     * @return build console fixture
+     */
+    public TextEditorFixture buildConsole() {
+        return textEditor(byXpath("//div[@accessiblename='Editor']"), Duration.ofSeconds(2));
     }
 
     private boolean didBuildStatusTreeTextStopChanging() {
@@ -81,9 +89,5 @@ public class BuildView extends CommonContainerFixture {
     private String getBuildStatusTreeText() {
         String buildStatusTreeText = TextUtils.listOfRemoteTextToString(buildStatusTree().findAllText());
         return buildStatusTreeText;
-    }
-
-    private TextEditorFixture runConsole() {
-        return textEditor(byXpath("//div[@accessiblename='Editor']"), Duration.ofSeconds(2));
     }
 }

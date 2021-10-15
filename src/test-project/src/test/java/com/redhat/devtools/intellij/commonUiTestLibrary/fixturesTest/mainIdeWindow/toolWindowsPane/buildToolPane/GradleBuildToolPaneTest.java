@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWindow.toolWindowsPane.buildToolPane;
 
-import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.BuildView;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
@@ -53,7 +52,8 @@ class GradleBuildToolPaneTest extends LibraryTestBase {
     @Test
     public void buildProjectTest() {
         gradleBuildToolPane.buildProject();
-        toolWindowsPane.find(BuildView.class, Duration.ofSeconds(10)).testIfBuildIsSuccessful();
+        boolean isBuildSuccessful = toolWindowsPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
+        assertTrue(isBuildSuccessful, "The build should be successful but is not.");
     }
 
     @Test
@@ -64,22 +64,18 @@ class GradleBuildToolPaneTest extends LibraryTestBase {
     @Test
     public void expandAll() {
         gradleBuildToolPane.collapseAll();
-        int itemsCountBeforeExpanding = gradleTaskTree().collectRows().size();
+        int itemsCountBeforeExpanding = gradleBuildToolPane.gradleTaskTree().collectRows().size();
         gradleBuildToolPane.expandAll();
-        int itemsCountAfterExpanding = gradleTaskTree().collectRows().size();
+        int itemsCountAfterExpanding = gradleBuildToolPane.gradleTaskTree().collectRows().size();
         assertTrue(itemsCountAfterExpanding > itemsCountBeforeExpanding, "The 'Expand All' operation was unsuccessful.");
     }
 
     @Test
     public void collapseAll() {
-        gradleTaskTree().expandAll();
-        int itemsCountBeforeCollapsing = gradleTaskTree().collectRows().size();
+        gradleBuildToolPane.gradleTaskTree().expandAll();
+        int itemsCountBeforeCollapsing = gradleBuildToolPane.gradleTaskTree().collectRows().size();
         gradleBuildToolPane.collapseAll();
-        int itemsCountAfterCollapsing = gradleTaskTree().collectRows().size();
+        int itemsCountAfterCollapsing = gradleBuildToolPane.gradleTaskTree().collectRows().size();
         assertTrue(itemsCountAfterCollapsing < itemsCountBeforeCollapsing, "The 'Collapse All' operation was unsuccessful.");
-    }
-
-    private JTreeFixture gradleTaskTree() {
-        return gradleBuildToolPane.find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
     }
 }

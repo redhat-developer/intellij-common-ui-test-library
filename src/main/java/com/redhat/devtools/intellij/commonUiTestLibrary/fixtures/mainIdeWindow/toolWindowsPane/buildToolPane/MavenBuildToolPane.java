@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Red Hat, Inc.
+ * Copyright (c) 2021 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v2.0 which accompanies this distribution,
@@ -16,17 +16,13 @@ import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JTreeFixture;
-import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.BuildView;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
-import java.util.NoSuchElementException;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
@@ -62,11 +58,13 @@ public class MavenBuildToolPane extends CommonContainerFixture {
 
     /**
      * Build the project
+     *
+     * @param lifecycle name of the lifecycle you want to invoke (clean, validate, compile, test, package, verify, install, site, deploy)
      */
-    public void buildProject() {
+    public void buildProject(String lifecycle) {
         waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The Maven target tree did not appear in 30 seconds.", () -> isMavenTreeVisible());
         mavenTargetTree().expandAll();
-        mavenTargetTree().findAllText("install").get(0).doubleClick();
+        mavenTargetTree().findAllText(lifecycle).get(0).doubleClick();
         remoteRobot.find(ToolWindowsPane.class).find(BuildView.class).waitUntilBuildHasFinished();
     }
 
@@ -77,18 +75,6 @@ public class MavenBuildToolPane extends CommonContainerFixture {
      */
     public JTreeFixture mavenTargetTree() {
         return find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
-    }
-
-    private void expandMavenTargetTreeIfNecessary() {
-        try {
-            mavenTargetTree().findText("Lifecycle");
-        } catch (NoSuchElementException e) {
-            List<RemoteText> mavenBuildLabels = mavenTargetTree().findAllText();
-            Collections.reverse(mavenBuildLabels);
-            for (RemoteText label : mavenBuildLabels) {
-                label.doubleClick();
-            }
-        }
     }
 
     private boolean isMavenTreeVisible() {

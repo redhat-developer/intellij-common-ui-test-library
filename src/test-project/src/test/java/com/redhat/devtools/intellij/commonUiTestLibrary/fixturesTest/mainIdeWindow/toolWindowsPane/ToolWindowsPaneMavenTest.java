@@ -52,6 +52,6 @@ class ToolWindowsPaneMavenTest extends LibraryTestBase {
     public void mavenBuildTest() {
         toolWindowsPane.openMavenBuildToolPane();
         MavenBuildToolPane mavenBuildToolPane = toolWindowsPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10));
-        mavenBuildToolPane.buildProject();
+        mavenBuildToolPane.buildProject("install");
     }
 }

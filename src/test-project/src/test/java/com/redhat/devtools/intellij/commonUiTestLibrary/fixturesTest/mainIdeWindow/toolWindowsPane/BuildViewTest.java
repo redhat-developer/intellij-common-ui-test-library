@@ -23,6 +23,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
  * Build View test
  *
@@ -40,7 +42,7 @@ class BuildViewTest extends LibraryTestBase {
         toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
         toolWindowsPane.openMavenBuildToolPane();
         mavenBuildToolPane = toolWindowsPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10));
-        mavenBuildToolPane.buildProject();
+        mavenBuildToolPane.buildProject("install");
     }
 
     @AfterAll
@@ -52,6 +54,6 @@ class BuildViewTest extends LibraryTestBase {
     public void WaitForSuccessfulBuildTest() {
         BuildView buildView = toolWindowsPane.find(BuildView.class, Duration.ofSeconds(10));
         buildView.waitUntilBuildHasFinished();
-        buildView.testIfBuildIsSuccessful();
+        assertTrue(buildView.isBuildSuccessful(), "The build should be successful but is not.");
     }
 }
