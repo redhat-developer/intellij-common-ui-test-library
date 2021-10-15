@@ -94,16 +94,6 @@ public class ToolWindowsPane extends CommonContainerFixture {
     /**
      * Create fixture for the Stripe button
      *
-     * @param label label text of the stripe button
-     * @return fixture for the Stripe button
-     */
-    public JButtonFixture stripeButton(String label) {
-        return stripeButton(label, false);
-    }
-
-    /**
-     * Create fixture for the Stripe button
-     *
      * @param label        label text of the stripe button
      * @param isPaneOpened true if the pane is already opened
      * @return fixture for the Stripe button

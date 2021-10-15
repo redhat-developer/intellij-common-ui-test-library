@@ -10,10 +10,10 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWindow.toolWindowsPane.toolWindowsPaneOpenClose;
 
+import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
+import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ProjectExplorer;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.buildToolPane.GradleBuildToolPane;
-import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.buildToolPane.MavenBuildToolPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
@@ -28,30 +28,39 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * GradleToolWindowsPane test
+ * Project Explorer Tool Windows Pane test
  *
  * @author zcervink@redhat.com
  */
 @ExtendWith(ScreenshotAfterTestFailExtension.class)
-class GradleToolWindowsPaneTest extends AbstractToolWindowsPaneTest {
+class PEPaneAndStripeButtonTest extends AbstractToolWindowsPaneTest {
     @BeforeAll
     public static void prepareProject() {
-        CreateCloseUtils.createNewProject(remoteRobot, gradleProjectName, CreateCloseUtils.NewProjectType.GRADLE);
+        CreateCloseUtils.createNewProject(remoteRobot, mavenProjectName, CreateCloseUtils.NewProjectType.MAVEN);
         toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
     }
 
     @BeforeEach
     public void preparePanes() {
-        if (isPaneOpened(GradleBuildToolPane.class)) {
-            closePane(ButtonLabels.gradleStripeButtonLabel, GradleBuildToolPane.class);
+        if (isPaneOpened(ProjectExplorer.class)) {
+            closePane(ButtonLabels.projectStripeButtonLabel, ProjectExplorer.class);
         }
     }
 
     @Test
-    public void gradleBuildToolPaneOpenCloseTest() {
-        toolWindowsPane.openGradleBuildToolPane();
-        assertTrue(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be opened but is closed.");
-        toolWindowsPane.closeGradleBuildToolPane();
-        assertFalse(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be closed but is opened.");
+    public void projectExplorerPaneOpenCloseTest() {
+        toolWindowsPane.openProjectExplorer();
+        assertTrue(isPaneOpened(ProjectExplorer.class), "The 'Project Explorer' should be opened but is closed.");
+        toolWindowsPane.closeProjectExplorer();
+        assertFalse(isPaneOpened(ProjectExplorer.class), "The 'Project Explorer' should be closed but is opened.");
+    }
+
+    @Test
+    public void stripeButtonTest() {
+        try {
+            toolWindowsPane.stripeButton(ButtonLabels.mavenStripeButtonLabel, false);
+        } catch (WaitForConditionTimeoutException e) {
+            throw new UITestException(e.getMessage());
+        }
     }
 }
