@@ -18,6 +18,8 @@ import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JCheckboxFixture;
 import org.jetbrains.annotations.NotNull;
 
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
+
 /**
  * New Project dialog java project second page fixture
  *
@@ -28,6 +30,8 @@ import org.jetbrains.annotations.NotNull;
 public class JavaNewProjectSecondPage extends CommonContainerFixture {
     public JavaNewProjectSecondPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
+        step("Create fixture - New Project dialog java project second page", () -> {
+        });
     }
 
     /**
@@ -36,7 +40,9 @@ public class JavaNewProjectSecondPage extends CommonContainerFixture {
      * @param toggle value to set to the checkbox
      */
     public void toggleFromTemplate(boolean toggle) {
-        fromTemplateCheckBox().setValue(toggle);
+        step("Toggle the 'Create project from template' checkbox", () -> {
+            fromTemplateCheckBox().setValue(toggle);
+        });
     }
 
     /**
@@ -45,6 +51,8 @@ public class JavaNewProjectSecondPage extends CommonContainerFixture {
      * @return checkbox fixture
      */
     public JCheckboxFixture fromTemplateCheckBox() {
-        return checkBox("Create project from template", true);
+        return step("Get the 'Create project from template' checkbox fixture", () -> {
+            return checkBox("Create project from template", true);
+        });
     }
 }

@@ -15,14 +15,13 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.t
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.buildToolPane.MavenBuildToolPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -50,22 +49,28 @@ class MavenBuildToolPaneTest extends LibraryTestBase {
 
     @Test
     public void buildProjectTest() {
-        mavenBuildToolPane.buildProject("install");
-        boolean isBuildSuccessful = toolWindowsPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
-        assertTrue(isBuildSuccessful, "The build should be successful but is not.");
+        step("@Test - build the maven project", () -> {
+            mavenBuildToolPane.buildProject("install");
+            boolean isBuildSuccessful = toolWindowsPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
+            assertTrue(isBuildSuccessful, "The build should be successful but is not.");
+        });
     }
 
     @Test
     public void reloadAllMavenProjectsTest() {
-        mavenBuildToolPane.reloadAllMavenProjects();
+        step("@Test - click the 'Reload All Maven Projects' button", () -> {
+            mavenBuildToolPane.reloadAllMavenProjects();
+        });
     }
 
     @Test
     public void collapseAllTest() {
-        mavenBuildToolPane.mavenTargetTree().expandAll();
-        int itemsCountBeforeCollapsing = mavenBuildToolPane.mavenTargetTree().collectRows().size();
-        mavenBuildToolPane.collapseAll();
-        int itemsCountAfterCollapsing = mavenBuildToolPane.mavenTargetTree().collectRows().size();
-        assertTrue(itemsCountAfterCollapsing < itemsCountBeforeCollapsing, "The 'Collapse All' operation was unsuccessful.");
+        step("@Test - click the 'Collapse All' button", () -> {
+            mavenBuildToolPane.mavenTargetTree().expandAll();
+            int itemsCountBeforeCollapsing = mavenBuildToolPane.mavenTargetTree().collectRows().size();
+            mavenBuildToolPane.collapseAll();
+            int itemsCountAfterCollapsing = mavenBuildToolPane.mavenTargetTree().collectRows().size();
+            assertTrue(itemsCountAfterCollapsing < itemsCountBeforeCollapsing, "The 'Collapse All' operation was unsuccessful.");
+        });
     }
 }

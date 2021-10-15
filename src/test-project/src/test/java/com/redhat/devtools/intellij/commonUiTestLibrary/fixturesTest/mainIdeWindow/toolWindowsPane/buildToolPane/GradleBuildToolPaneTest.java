@@ -15,14 +15,13 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.t
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.buildToolPane.GradleBuildToolPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -50,31 +49,39 @@ class GradleBuildToolPaneTest extends LibraryTestBase {
 
     @Test
     public void buildProjectTest() {
-        gradleBuildToolPane.buildProject();
-        boolean isBuildSuccessful = toolWindowsPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
-        assertTrue(isBuildSuccessful, "The build should be successful but is not.");
+        step("@Test - build the gradle project", () -> {
+            gradleBuildToolPane.buildProject();
+            boolean isBuildSuccessful = toolWindowsPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
+            assertTrue(isBuildSuccessful, "The build should be successful but is not.");
+        });
     }
 
     @Test
     public void reloadAllGradleProjects() {
-        gradleBuildToolPane.reloadAllGradleProjects();
+        step("@Test - click the 'Reload All Gradle Projects' button", () -> {
+            gradleBuildToolPane.reloadAllGradleProjects();
+        });
     }
 
     @Test
     public void expandAll() {
-        gradleBuildToolPane.collapseAll();
-        int itemsCountBeforeExpanding = gradleBuildToolPane.gradleTaskTree().collectRows().size();
-        gradleBuildToolPane.expandAll();
-        int itemsCountAfterExpanding = gradleBuildToolPane.gradleTaskTree().collectRows().size();
-        assertTrue(itemsCountAfterExpanding > itemsCountBeforeExpanding, "The 'Expand All' operation was unsuccessful.");
+        step("@Test - click the 'Expand All' button", () -> {
+            gradleBuildToolPane.collapseAll();
+            int itemsCountBeforeExpanding = gradleBuildToolPane.gradleTaskTree().collectRows().size();
+            gradleBuildToolPane.expandAll();
+            int itemsCountAfterExpanding = gradleBuildToolPane.gradleTaskTree().collectRows().size();
+            assertTrue(itemsCountAfterExpanding > itemsCountBeforeExpanding, "The 'Expand All' operation was unsuccessful.");
+        });
     }
 
     @Test
     public void collapseAll() {
-        gradleBuildToolPane.gradleTaskTree().expandAll();
-        int itemsCountBeforeCollapsing = gradleBuildToolPane.gradleTaskTree().collectRows().size();
-        gradleBuildToolPane.collapseAll();
-        int itemsCountAfterCollapsing = gradleBuildToolPane.gradleTaskTree().collectRows().size();
-        assertTrue(itemsCountAfterCollapsing < itemsCountBeforeCollapsing, "The 'Collapse All' operation was unsuccessful.");
+        step("@Test - click the 'Collapse All' button", () -> {
+            gradleBuildToolPane.gradleTaskTree().expandAll();
+            int itemsCountBeforeCollapsing = gradleBuildToolPane.gradleTaskTree().collectRows().size();
+            gradleBuildToolPane.collapseAll();
+            int itemsCountAfterCollapsing = gradleBuildToolPane.gradleTaskTree().collectRows().size();
+            assertTrue(itemsCountAfterCollapsing < itemsCountBeforeCollapsing, "The 'Collapse All' operation was unsuccessful.");
+        });
     }
 }

@@ -24,57 +24,94 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.i
 
 import java.time.Duration;
 
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
+
 /**
  * Project creation utilities
  *
  * @author zcervink@redhat.com
  */
 public class CreateCloseUtils {
+    /**
+     * Create new project with given project name according to given project type
+     *
+     * @param remoteRobot    reference to the RemoteRobot instance
+     * @param projectName    name of new project
+     * @param newProjectType type of new project
+     */
     public static void createNewProject(RemoteRobot remoteRobot, String projectName, NewProjectType newProjectType) {
-        openNewProjectDialogFromWelcomeDialog(remoteRobot);
-        NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
-        NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
-        newProjectFirstPage.selectNewProjectType(newProjectType.toString());
-        newProjectFirstPage.setProjectSdkIfAvailable("11");
-        newProjectDialogWizard.next();
-        // Plain java project has more pages in the 'New project' dialog
-        if (newProjectType.equals(NewProjectType.PLAIN_JAVA)) {
+        step("Create new project (" + newProjectType.toString() + ")", () -> {
+            openNewProjectDialogFromWelcomeDialog(remoteRobot);
+            NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
+            NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
+            newProjectFirstPage.selectNewProjectType(newProjectType.toString());
+            newProjectFirstPage.setProjectSdkIfAvailable("11");
             newProjectDialogWizard.next();
-        }
+            // Plain java project has more pages in the 'New project' dialog
+            if (newProjectType.equals(NewProjectType.PLAIN_JAVA)) {
+                newProjectDialogWizard.next();
+            }
 
-        AbstractNewProjectFinalPage finalPage = getFinalPage(newProjectDialogWizard, newProjectType);
-        finalPage.setProjectName(projectName);
-        newProjectDialogWizard.finish();
-        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
-        ideStatusBar.waitUntilProjectImportIsComplete();
-        TipDialog.closeTipDialogIfItAppears(remoteRobot);
-        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
-        mainIdeWindow.maximizeIdeWindow();
-        ideStatusBar.waitUntilAllBgTasksFinish();
+            AbstractNewProjectFinalPage finalPage = getFinalPage(newProjectDialogWizard, newProjectType);
+            finalPage.setProjectName(projectName);
+            newProjectDialogWizard.finish();
+            IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
+            ideStatusBar.waitUntilProjectImportIsComplete();
+            TipDialog.closeTipDialogIfItAppears(remoteRobot);
+            MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
+            mainIdeWindow.maximizeIdeWindow();
+            ideStatusBar.waitUntilAllBgTasksFinish();
+        });
     }
 
+    /**
+     * Open 'New Project' dialog from 'Welcome to IntelliJ IDEA' dialog
+     *
+     * @param remoteRobot reference to the RemoteRobot instance
+     */
     public static void openNewProjectDialogFromWelcomeDialog(RemoteRobot remoteRobot) {
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-        flatWelcomeFrame.createNewProject();
+        step("Open 'New Project' dialog from 'Welcome to IntelliJ IDEA' dialog", () -> {
+            FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+            flatWelcomeFrame.createNewProject();
+        });
     }
 
+    /**
+     * Close currently opened project
+     *
+     * @param remoteRobot reference to the RemoteRobot instance
+     */
     public static void closeProject(RemoteRobot remoteRobot) {
-        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
-        mainIdeWindow.closeProject();
+        step("Close currently opened project", () -> {
+            MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
+            mainIdeWindow.closeProject();
+        });
     }
 
+    /**
+     * Get appropriate final page instance
+     *
+     * @param newProjectDialogWizard instance of the 'New Project' dialog fixture
+     * @param newProjectType         type of new project
+     * @return final page instance
+     */
     public static AbstractNewProjectFinalPage getFinalPage(NewProjectDialogWizard newProjectDialogWizard, NewProjectType newProjectType) {
-        switch (newProjectType) {
-            case PLAIN_JAVA:
-                return newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
-            case MAVEN:
-            case GRADLE:
-                return newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
-            default:
-                throw new UITestException("Unsupported project type.");
-        }
+        return step("Get appropriate final page instance", () -> {
+            switch (newProjectType) {
+                case PLAIN_JAVA:
+                    return newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
+                case MAVEN:
+                case GRADLE:
+                    return newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
+                default:
+                    throw new UITestException("Unsupported project type.");
+            }
+        });
     }
 
+    /**
+     * Enumeration for new project type
+     */
     public enum NewProjectType {
         PLAIN_JAVA("Java"),
         MAVEN("Maven"),

@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 
 /**
  * New Project dialog java project third page fixture
@@ -32,31 +33,34 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 @DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
 @FixtureName(name = "New Project Dialog")
 public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
-    private RemoteRobot remoteRobot;
-
     public JavaNewProjectFinalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        this.remoteRobot = remoteRobot;
+        step("Create fixture - New Project dialog java project third page", () -> {
+        });
     }
 
     /**
      * Open the 'More settings' options
      */
     public void openMoreSettings() {
-        boolean isAlreadyOpened = isMoreSettingOpened();
-        if (!isAlreadyOpened) {
-            jLabel(ButtonLabels.moreSettings).click();
-        }
+        step("Open the 'More settings' options", () -> {
+            boolean isAlreadyOpened = isMoreSettingOpened();
+            if (!isAlreadyOpened) {
+                jLabel(ButtonLabels.moreSettings).click();
+            }
+        });
     }
 
     /**
      * Close the 'More settings' options
      */
     public void closeMoreSettings() {
-        boolean isAlreadyOpened = isMoreSettingOpened();
-        if (isAlreadyOpened) {
-            jLabel(ButtonLabels.moreSettings).click();
-        }
+        step("Close the 'More settings' options", () -> {
+            boolean isAlreadyOpened = isMoreSettingOpened();
+            if (isAlreadyOpened) {
+                jLabel(ButtonLabels.moreSettings).click();
+            }
+        });
     }
 
     /**
@@ -65,7 +69,9 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      * @return name of the module currently inserted in the input field
      */
     public String getModuleName() {
-        return textField("Module name:", true).getText();
+        return step("Get the name of the module currently inserted in the 'Module name' input field", () -> {
+            return textField("Module name:", true).getText();
+        });
     }
 
     /**
@@ -74,7 +80,9 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      * @param moduleName name of the module that will be set into the input field
      */
     public void setModuleName(String moduleName) {
-        textField("Module name:", true).setText(moduleName);
+        step("Insert the name of the module into the 'Module name' input field", () -> {
+            textField("Module name:", true).setText(moduleName);
+        });
     }
 
     /**
@@ -83,7 +91,9 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      * @return location of the content root currently inserted in the input field
      */
     public String getContentRoot() {
-        return textField("Content root:", true).getText();
+        return step("Get the location of the content root currently inserted in the 'Content root' input field", () -> {
+            return textField("Content root:", true).getText();
+        });
     }
 
     /**
@@ -92,7 +102,9 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      * @param contentRoot location of the content root that will be set into the input field
      */
     public void setContentRoot(String contentRoot) {
-        textField("Content root:", true).setText(contentRoot);
+        step("Insert the location of the content root into the 'Content root' input field", () -> {
+            textField("Content root:", true).setText(contentRoot);
+        });
     }
 
     /**
@@ -101,7 +113,9 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      * @return location of the module file currently inserted in the input field
      */
     public String getModuleFileLocation() {
-        return textField("Module file location:", true).getText();
+        return step("Get the location of the module file currently inserted in the 'Module file location' input field", () -> {
+            return textField("Module file location:", true).getText();
+        });
     }
 
     /**
@@ -110,7 +124,9 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      * @param moduleFileLocation location of the module file that will be set into the input field
      */
     public void setModuleFileLocation(String moduleFileLocation) {
-        textField("Module file location:", true).setText(moduleFileLocation);
+        step("Insert the location of the module file into the 'Module file location' input field", () -> {
+            textField("Module file location:", true).setText(moduleFileLocation);
+        });
     }
 
     /**
@@ -120,15 +136,17 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      * @throws UITestException when there is set another value than defined by the 'ProjectFormatType' enumeration in the combo box
      */
     public ProjectFormatType getProjectFormat() {
-        ComboBoxFixture projectFormatComboBox = comboBox(byXpath("//div[@class='JComboBox']"), Duration.ofSeconds(10));
+        return step("Get the project format currently set in the 'Project format' combo box'", () -> {
+            ComboBoxFixture projectFormatComboBox = comboBox(byXpath("//div[@class='JComboBox']"), Duration.ofSeconds(10));
 
-        if (projectFormatComboBox.selectedText().contains(ProjectFormatType.IDEA_DIRECTORY_BASED.toString())) {
-            return ProjectFormatType.IDEA_DIRECTORY_BASED;
-        } else if (projectFormatComboBox.selectedText().contains(ProjectFormatType.IPR_FILE_BASED.toString())) {
-            return ProjectFormatType.IPR_FILE_BASED;
-        } else {
-            throw new UITestException("Currently selected project format is not supported.");
-        }
+            if (projectFormatComboBox.selectedText().contains(ProjectFormatType.IDEA_DIRECTORY_BASED.toString())) {
+                return ProjectFormatType.IDEA_DIRECTORY_BASED;
+            } else if (projectFormatComboBox.selectedText().contains(ProjectFormatType.IPR_FILE_BASED.toString())) {
+                return ProjectFormatType.IPR_FILE_BASED;
+            } else {
+                throw new UITestException("Currently selected project format is not supported.");
+            }
+        });
     }
 
     /**
@@ -137,11 +155,15 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      * @param projectFormatType project format that will be set into the combo box
      */
     public void setProjectFormat(ProjectFormatType projectFormatType) {
-        ComboBoxFixture projectFormatComboBox = comboBox(byXpath("//div[@class='JComboBox']"), Duration.ofSeconds(10));
-        projectFormatComboBox.selectItemContains(projectFormatType.toString());
+        step("Set the project format into the 'Project format' combo box", () -> {
+            ComboBoxFixture projectFormatComboBox = comboBox(byXpath("//div[@class='JComboBox']"), Duration.ofSeconds(10));
+            projectFormatComboBox.selectItemContains(projectFormatType.toString());
+        });
     }
 
     private boolean isMoreSettingOpened() {
-        return findAll(ContainerFixture.class, byXpath("//div[@class='TitledSeparator']/../../*")).size() == 2;
+        return step("Test whether the 'More Settings is opened'", () -> {
+            return findAll(ContainerFixture.class, byXpath("//div[@class='TitledSeparator']/../../*")).size() == 2;
+        });
     }
 }

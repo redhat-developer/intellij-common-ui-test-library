@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 
 /**
  * Project Explorer fixture
@@ -37,7 +38,9 @@ public class ProjectExplorer extends CommonContainerFixture {
 
     public ProjectExplorer(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        this.remoteRobot = remoteRobot;
+        step("Create fixture - Project Explorer", () -> {
+            this.remoteRobot = remoteRobot;
+        });
     }
 
     /**
@@ -47,16 +50,18 @@ public class ProjectExplorer extends CommonContainerFixture {
      * @return true if the given file exists on the given path in the project
      */
     public boolean isItemPresent(String... path) {
-        try {
-            projectViewTree().expand(path);
-            projectViewTree().clickPath(path, true);
-        } catch (Exception e) {
-            if (!(e instanceof JTreeFixture.PathNotFoundException)) { // Kotlin PathNotFoundException could not be used in catch()
-                throw e;
+        return step("Test is a file with given name on given path is available in the project tree", () -> {
+            try {
+                projectViewTree().expand(path);
+                projectViewTree().clickPath(path, true);
+            } catch (Exception e) {
+                if (!(e instanceof JTreeFixture.PathNotFoundException)) { // Kotlin PathNotFoundException could not be used in catch()
+                    throw e;
+                }
+                return false;
             }
-            return false;
-        }
-        return true;
+            return true;
+        });
     }
 
     /**
@@ -65,8 +70,10 @@ public class ProjectExplorer extends CommonContainerFixture {
      * @param path path to navigate through
      */
     public void openFile(String... path) {
-        projectViewTree().expand(path);
-        projectViewTree().doubleClickPath(path, true);
+        step("Open file according to given path", () -> {
+            projectViewTree().expand(path);
+            projectViewTree().doubleClickPath(path, true);
+        });
     }
 
     /**
@@ -76,13 +83,15 @@ public class ProjectExplorer extends CommonContainerFixture {
      * @return fixture for the context menu
      */
     public JPopupMenuFixture openContextMenuOn(String... path) {
-        projectViewTree().expand(path);
-        projectViewTree().rightClickPath(path, true);
-        try {
-            return remoteRobot.find(JPopupMenuFixture.class, byXpath("//div[@class='HeavyWeightWindow']"), Duration.ofSeconds(10));
-        } catch (WaitForConditionTimeoutException e) {
-            throw new UITestException("The context menu for a file in Project Explorer has not been found.");
-        }
+        return step("Open context menu on item according to given path", () -> {
+            projectViewTree().expand(path);
+            projectViewTree().rightClickPath(path, true);
+            try {
+                return remoteRobot.find(JPopupMenuFixture.class, byXpath("//div[@class='HeavyWeightWindow']"), Duration.ofSeconds(10));
+            } catch (WaitForConditionTimeoutException e) {
+                throw new UITestException("The context menu for a file in Project Explorer has not been found.");
+            }
+        });
     }
 
     /**
@@ -91,33 +100,41 @@ public class ProjectExplorer extends CommonContainerFixture {
      * @return Views popup fixture
      */
     public JPopupMenuFixture openViewsPopup() {
-        actionButton(byXpath("//div[@class='ContentComboLabel']"), Duration.ofSeconds(2)).click();
-        try {
-            return remoteRobot.find(JPopupMenuFixture.class, byXpath("//div[@class='HeavyWeightWindow']"), Duration.ofSeconds(10));
-        } catch (WaitForConditionTimeoutException e) {
-            throw new UITestException(e.getMessage());
-        }
+        return step("Open the 'Views' popup menu", () -> {
+            actionButton(byXpath("//div[@class='ContentComboLabel']"), Duration.ofSeconds(2)).click();
+            try {
+                return remoteRobot.find(JPopupMenuFixture.class, byXpath("//div[@class='HeavyWeightWindow']"), Duration.ofSeconds(10));
+            } catch (WaitForConditionTimeoutException e) {
+                throw new UITestException(e.getMessage());
+            }
+        });
     }
 
     /**
      * Locate and select opened file
      */
     public void selectOpenedFile() {
-        actionButton(byXpath("//div[@myicon='locate.svg']"), Duration.ofSeconds(2)).click();
+        step("Locate and select opened file", () -> {
+            actionButton(byXpath("//div[@myicon='locate.svg']"), Duration.ofSeconds(2)).click();
+        });
     }
 
     /**
      * Expand all
      */
     public void expandAll() {
-        actionButton(byXpath("//div[contains(@myvisibleactions, 'View),')]//div[@myicon='expandall.svg']"), Duration.ofSeconds(2)).click();
+        step("Expand all", () -> {
+            actionButton(byXpath("//div[contains(@myvisibleactions, 'View),')]//div[@myicon='expandall.svg']"), Duration.ofSeconds(2)).click();
+        });
     }
 
     /**
      * Collapse all
      */
     public void collapseAll() {
-        actionButton(byXpath("//div[contains(@myvisibleactions, 'View),')]//div[@myicon='collapseall.svg']"), Duration.ofSeconds(2)).click();
+        step("Collapse all", () -> {
+            actionButton(byXpath("//div[contains(@myvisibleactions, 'View),')]//div[@myicon='collapseall.svg']"), Duration.ofSeconds(2)).click();
+        });
     }
 
     /**
@@ -126,19 +143,23 @@ public class ProjectExplorer extends CommonContainerFixture {
      * @return settings popup fixture
      */
     public JPopupMenuFixture openSettingsPopup() {
-        actionButton(byXpath("//div[contains(@myvisibleactions, 'View),')]//div[@myicon='gearPlain.svg']"), Duration.ofSeconds(2)).click();
-        try {
-            return remoteRobot.find(JPopupMenuFixture.class, byXpath("//div[@class='HeavyWeightWindow']"), Duration.ofSeconds(10));
-        } catch (WaitForConditionTimeoutException e) {
-            throw new UITestException(e.getMessage());
-        }
+        return step("Open settings popup", () -> {
+            actionButton(byXpath("//div[contains(@myvisibleactions, 'View),')]//div[@myicon='gearPlain.svg']"), Duration.ofSeconds(2)).click();
+            try {
+                return remoteRobot.find(JPopupMenuFixture.class, byXpath("//div[@class='HeavyWeightWindow']"), Duration.ofSeconds(10));
+            } catch (WaitForConditionTimeoutException e) {
+                throw new UITestException(e.getMessage());
+            }
+        });
     }
 
     /**
      * Hide Project Explorer
      */
     public void hide() {
-        actionButton(byXpath("//div[contains(@myvisibleactions, 'View),')]//div[@tooltiptext='Hide']"), Duration.ofSeconds(2)).click();
+        step("Hide Project Explorer", () -> {
+            actionButton(byXpath("//div[contains(@myvisibleactions, 'View),')]//div[@tooltiptext='Hide']"), Duration.ofSeconds(2)).click();
+        });
     }
 
     /**
@@ -147,6 +168,8 @@ public class ProjectExplorer extends CommonContainerFixture {
      * @return Project View tree fixture
      */
     public JTreeFixture projectViewTree() {
-        return find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
+        return step("Get the Project View tree fixture", () -> {
+            return find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
+        });
     }
 }

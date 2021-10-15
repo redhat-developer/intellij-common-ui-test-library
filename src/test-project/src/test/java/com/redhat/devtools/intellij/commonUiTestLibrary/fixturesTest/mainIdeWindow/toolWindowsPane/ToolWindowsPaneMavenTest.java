@@ -14,14 +14,14 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.buildToolPane.MavenBuildToolPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
+
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 
 /**
  * ToolWindowsPane Maven test
@@ -49,8 +49,10 @@ class ToolWindowsPaneMavenTest extends LibraryTestBase {
 
     @Test
     public void mavenBuildTest() {
-        toolWindowsPane.openMavenBuildToolPane();
-        MavenBuildToolPane mavenBuildToolPane = toolWindowsPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10));
-        mavenBuildToolPane.buildProject("install");
+        step("@Test - build maven project", () -> {
+            toolWindowsPane.openMavenBuildToolPane();
+            MavenBuildToolPane mavenBuildToolPane = toolWindowsPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10));
+            mavenBuildToolPane.buildProject("install");
+        });
     }
 }

@@ -13,16 +13,15 @@ package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWin
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.buildToolPane.GradleBuildToolPane;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
+
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 
 /**
  * ToolWindowsPane Gradle test
@@ -50,8 +49,10 @@ class ToolWindowsPaneGradleTest extends LibraryTestBase {
 
     @Test
     public void gradleBuildTest() {
-        toolWindowsPane.openGradleBuildToolPane();
-        GradleBuildToolPane gradleBuildToolPane = toolWindowsPane.find(GradleBuildToolPane.class, Duration.ofSeconds(10));
-        gradleBuildToolPane.buildProject();
+        step("@Test - build gradle project", () -> {
+            toolWindowsPane.openGradleBuildToolPane();
+            GradleBuildToolPane gradleBuildToolPane = toolWindowsPane.find(GradleBuildToolPane.class, Duration.ofSeconds(10));
+            gradleBuildToolPane.buildProject();
+        });
     }
 }

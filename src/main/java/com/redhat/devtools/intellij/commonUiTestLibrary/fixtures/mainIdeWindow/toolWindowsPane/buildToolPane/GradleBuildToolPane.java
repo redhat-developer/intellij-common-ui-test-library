@@ -25,6 +25,7 @@ import java.time.Duration;
 import java.util.Locale;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 
 /**
@@ -39,38 +40,48 @@ public class GradleBuildToolPane extends CommonContainerFixture {
 
     public GradleBuildToolPane(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        this.remoteRobot = remoteRobot;
+        step("Create fixture - Gradle Build Tool Pane", () -> {
+            this.remoteRobot = remoteRobot;
+        });
     }
 
     /**
      * Reload all Gradle projects
      */
     public void reloadAllGradleProjects() {
-        actionButton(byXpath("//div[@myicon='refresh.svg']"), Duration.ofSeconds(2)).click();
+        step("Reload all Gradle projects", () -> {
+            actionButton(byXpath("//div[@myicon='refresh.svg']"), Duration.ofSeconds(2)).click();
+        });
     }
 
     /**
      * Expand all
      */
     public void expandAll() {
-        actionButton(byXpath("//div[contains(@myvisibleactions, 'IDE')]//div[@myicon='expandall.svg']"), Duration.ofSeconds(2)).click();
+        step("Expand all", () -> {
+            actionButton(byXpath("//div[contains(@myvisibleactions, 'IDE')]//div[@myicon='expandall.svg']"), Duration.ofSeconds(2)).click();
+        });
     }
 
     /**
      * Collapse all
      */
     public void collapseAll() {
-        actionButton(byXpath("//div[contains(@myvisibleactions, 'IDE')]//div[@myicon='collapseall.svg']"), Duration.ofSeconds(2)).click();
+        step("Collapse all", () -> {
+            actionButton(byXpath("//div[contains(@myvisibleactions, 'IDE')]//div[@myicon='collapseall.svg']"), Duration.ofSeconds(2)).click();
+        });
     }
 
     /**
      * Build the project
      */
     public void buildProject() {
-        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The Gradle tasks tree did not appear in 30 seconds.", () -> isGradleTreeVisible());
-        gradleTaskTree().expandAll();
-        gradleTaskTree().findAllText("build").get(1).doubleClick();
-        remoteRobot.find(ToolWindowsPane.class).find(BuildView.class).waitUntilBuildHasFinished();
+        step("Build the project", () -> {
+            waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The Gradle tasks tree did not appear in 30 seconds.", () -> isGradleTreeVisible());
+            gradleTaskTree().expandAll();
+            gradleTaskTree().findAllText("build").get(1).doubleClick();
+            remoteRobot.find(ToolWindowsPane.class).find(BuildView.class).waitUntilBuildHasFinished();
+        });
     }
 
     /**
@@ -79,11 +90,15 @@ public class GradleBuildToolPane extends CommonContainerFixture {
      * @return Gradle Tab tree fixture
      */
     public JTreeFixture gradleTaskTree() {
-        return find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
+        return step("Get the Gradle Tab tree fixture", () -> {
+            return find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
+        });
     }
 
     private boolean isGradleTreeVisible() {
-        String treeContent = TextUtils.listOfRemoteTextToString(gradleTaskTree().findAllText());
-        return !treeContent.toLowerCase(Locale.ROOT).contains("nothing") && !treeContent.equals("");
+        return step("Test whether the gradle tree is visible", () -> {
+            String treeContent = TextUtils.listOfRemoteTextToString(gradleTaskTree().findAllText());
+            return !treeContent.toLowerCase(Locale.ROOT).contains("nothing") && !treeContent.equals("");
+        });
     }
 }

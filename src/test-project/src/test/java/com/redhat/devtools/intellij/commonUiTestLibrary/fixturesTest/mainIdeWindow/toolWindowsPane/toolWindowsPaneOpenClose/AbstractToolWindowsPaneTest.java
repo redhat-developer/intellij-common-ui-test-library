@@ -10,19 +10,15 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWindow.toolWindowsPane.toolWindowsPaneOpenClose;
 
-import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
-import static com.intellij.remoterobot.search.locators.Locators.byXpath;
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 
 /**
@@ -41,32 +37,40 @@ abstract class AbstractToolWindowsPaneTest extends LibraryTestBase {
     }
 
     protected void closePane(String label, Class fixtureClass) {
-        if (isPaneOpened(fixtureClass)) {
-            clickOnStripeButton(label, true);
-        }
+        step("Close the '" + label + "' pane", () -> {
+            if (isPaneOpened(fixtureClass)) {
+                clickOnStripeButton(label, true);
+            }
+        });
     }
 
     protected boolean isPaneOpened(Class fixtureClass) {
-        ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        try {
-            toolWindowsPane.find(fixtureClass, Duration.ofSeconds(5));
-            return true;
-        } catch (WaitForConditionTimeoutException e) {
-            return false;
-        }
+        return step("Test whether the pane is opened", () -> {
+            ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+            try {
+                toolWindowsPane.find(fixtureClass, Duration.ofSeconds(5));
+                return true;
+            } catch (WaitForConditionTimeoutException e) {
+                return false;
+            }
+        });
     }
 
     protected void clickOnStripeButton(String label, boolean isPaneOpened) {
-        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The '" + label + "' stripe button is not available.", () -> isStripeButtonAvailable(label, isPaneOpened));
-        toolWindowsPane.stripeButton(label, isPaneOpened).click();
+        step("Click on the '" + label + "' stripe button", () -> {
+            waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The '" + label + "' stripe button is not available.", () -> isStripeButtonAvailable(label, isPaneOpened));
+            toolWindowsPane.stripeButton(label, isPaneOpened).click();
+        });
     }
 
     protected boolean isStripeButtonAvailable(String label, boolean isPaneOpened) {
-        try {
-            toolWindowsPane.stripeButton(label, isPaneOpened);
-        } catch (WaitForConditionTimeoutException e) {
-            return false;
-        }
-        return true;
+        return step("Test whether the '" + label + "' stripe button is available", () -> {
+            try {
+                toolWindowsPane.stripeButton(label, isPaneOpened);
+            } catch (WaitForConditionTimeoutException e) {
+                return false;
+            }
+            return true;
+        });
     }
 }

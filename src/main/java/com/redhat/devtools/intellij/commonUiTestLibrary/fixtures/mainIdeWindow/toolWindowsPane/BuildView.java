@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 
 /**
@@ -37,13 +38,17 @@ public class BuildView extends CommonContainerFixture {
 
     public BuildView(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
+        step("Create fixture - Build View", () -> {
+        });
     }
 
     /**
      * Wait until build has finished
      */
     public void waitUntilBuildHasFinished() {
-        waitFor(Duration.ofSeconds(300), Duration.ofSeconds(3), "The build did not finish in 5 minutes.", () -> didBuildStatusTreeTextStopChanging());
+        step("Wait until build has finished", () -> {
+            waitFor(Duration.ofSeconds(300), Duration.ofSeconds(3), "The build did not finish in 5 minutes.", () -> didBuildStatusTreeTextStopChanging());
+        });
     }
 
     /**
@@ -52,8 +57,10 @@ public class BuildView extends CommonContainerFixture {
      * @return true if the build is successful
      */
     public boolean isBuildSuccessful() {
-        String runConsoleOutput = TextUtils.listOfRemoteTextToString(buildConsole().findAllText());
-        return runConsoleOutput.contains("BUILD SUCCESS");
+        return step("Test if build is successful", () -> {
+            String runConsoleOutput = TextUtils.listOfRemoteTextToString(buildConsole().findAllText());
+            return runConsoleOutput.contains("BUILD SUCCESS");
+        });
     }
 
     /**
@@ -62,7 +69,9 @@ public class BuildView extends CommonContainerFixture {
      * @return Build Status tree fixture
      */
     public JTreeFixture buildStatusTree() {
-        return find(JTreeFixture.class, byXpath("//div[@class='Tree']"));
+        return step("Get the Build Status tree fixture", () -> {
+            return find(JTreeFixture.class, byXpath("//div[@class='Tree']"));
+        });
     }
 
     /**
@@ -71,23 +80,29 @@ public class BuildView extends CommonContainerFixture {
      * @return build console fixture
      */
     public TextEditorFixture buildConsole() {
-        return textEditor(byXpath("//div[@accessiblename='Editor']"), Duration.ofSeconds(2));
+        return step("Get the build console", () -> {
+            return textEditor(byXpath("//div[@accessiblename='Editor']"), Duration.ofSeconds(2));
+        });
     }
 
     private boolean didBuildStatusTreeTextStopChanging() {
-        String updatedBuildStatusTreeText = getBuildStatusTreeText();
+        return step("Test whether the build status tree stopped changing", () -> {
+            String updatedBuildStatusTreeText = getBuildStatusTreeText();
 
-        if (lastBuildStatusTreeText != null && lastBuildStatusTreeText.equals(updatedBuildStatusTreeText)) {
-            lastBuildStatusTreeText = null;
-            return true;
-        } else {
-            lastBuildStatusTreeText = updatedBuildStatusTreeText;
-            return false;
-        }
+            if (lastBuildStatusTreeText != null && lastBuildStatusTreeText.equals(updatedBuildStatusTreeText)) {
+                lastBuildStatusTreeText = null;
+                return true;
+            } else {
+                lastBuildStatusTreeText = updatedBuildStatusTreeText;
+                return false;
+            }
+        });
     }
 
     private String getBuildStatusTreeText() {
-        String buildStatusTreeText = TextUtils.listOfRemoteTextToString(buildStatusTree().findAllText());
-        return buildStatusTreeText;
+        return step("Get the build status tree text", () -> {
+            String buildStatusTreeText = TextUtils.listOfRemoteTextToString(buildStatusTree().findAllText());
+            return buildStatusTreeText;
+        });
     }
 }

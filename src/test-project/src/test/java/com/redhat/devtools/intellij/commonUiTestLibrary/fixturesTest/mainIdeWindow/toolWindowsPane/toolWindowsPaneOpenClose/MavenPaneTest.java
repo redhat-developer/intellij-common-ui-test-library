@@ -14,14 +14,13 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.t
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.buildToolPane.MavenBuildToolPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -46,9 +45,11 @@ class MavenPaneTest extends AbstractToolWindowsPaneTest {
 
     @Test
     public void mavenBuildToolPaneOpenCloseTest() {
-        toolWindowsPane.openMavenBuildToolPane();
-        assertTrue(isPaneOpened(MavenBuildToolPane.class), "The 'Maven Build Tool Pane' should be opened but is closed.");
-        toolWindowsPane.closeMavenBuildToolPane();
-        assertFalse(isPaneOpened(MavenBuildToolPane.class), "The 'Maven Build Tool Pane' should be closed but is opened.");
+        step("@Test - open and close the maven build tool pane", () -> {
+            toolWindowsPane.openMavenBuildToolPane();
+            assertTrue(isPaneOpened(MavenBuildToolPane.class), "The 'Maven Build Tool Pane' should be opened but is closed.");
+            toolWindowsPane.closeMavenBuildToolPane();
+            assertFalse(isPaneOpened(MavenBuildToolPane.class), "The 'Maven Build Tool Pane' should be closed but is opened.");
+        });
     }
 }

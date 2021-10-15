@@ -14,14 +14,13 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.t
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.buildToolPane.GradleBuildToolPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -46,9 +45,11 @@ class GradlePaneTest extends AbstractToolWindowsPaneTest {
 
     @Test
     public void gradleBuildToolPaneOpenCloseTest() {
-        toolWindowsPane.openGradleBuildToolPane();
-        assertTrue(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be opened but is closed.");
-        toolWindowsPane.closeGradleBuildToolPane();
-        assertFalse(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be closed but is opened.");
+        step("@Test - open and close the gradle build tool pane", () -> {
+            toolWindowsPane.openGradleBuildToolPane();
+            assertTrue(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be opened but is closed.");
+            toolWindowsPane.closeGradleBuildToolPane();
+            assertFalse(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be closed but is opened.");
+        });
     }
 }

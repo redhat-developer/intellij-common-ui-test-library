@@ -17,14 +17,13 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.informa
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.menuBar.MenuBar;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -48,18 +47,22 @@ class MenuBarTest extends LibraryTestBase {
     @Test
     public void openTipDialogUsingMenuBarTest() {
         if (remoteRobot.isWin() || remoteRobot.isLinux()) {
-            new MenuBar(remoteRobot).navigateTo("Help", "Tip of the Day");
-            assertTrue(isTipDialogVisible(remoteRobot), "The 'Tip of the Day' dialog should be visible but is not");
-            remoteRobot.find(TipDialog.class, Duration.ofSeconds(10)).button(ButtonLabels.closeLabel).click();
+            step("@Test - open the 'Tip Dialog' using top menu", () -> {
+                new MenuBar(remoteRobot).navigateTo("Help", "Tip of the Day");
+                assertTrue(isTipDialogVisible(remoteRobot), "The 'Tip of the Day' dialog should be visible but is not");
+                remoteRobot.find(TipDialog.class, Duration.ofSeconds(10)).button(ButtonLabels.closeLabel).click();
+            });
         }
     }
 
     private boolean isTipDialogVisible(RemoteRobot remoteRobot) {
-        try {
-            remoteRobot.find(TipDialog.class, Duration.ofSeconds(10));
-        } catch (WaitForConditionTimeoutException e) {
-            return false;
-        }
-        return true;
+        return step("Test whether the 'Tip Dialog' is visible", () -> {
+            try {
+                remoteRobot.find(TipDialog.class, Duration.ofSeconds(10));
+            } catch (WaitForConditionTimeoutException e) {
+                return false;
+            }
+            return true;
+        });
     }
 }

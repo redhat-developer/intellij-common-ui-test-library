@@ -15,14 +15,13 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.t
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static org.assertj.core.api.Fail.fail;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -48,18 +47,22 @@ class PEPaneAndStripeButtonTest extends AbstractToolWindowsPaneTest {
 
     @Test
     public void projectExplorerPaneOpenCloseTest() {
-        toolWindowsPane.openProjectExplorer();
-        assertTrue(isPaneOpened(ProjectExplorer.class), "The 'Project Explorer' should be opened but is closed.");
-        toolWindowsPane.closeProjectExplorer();
-        assertFalse(isPaneOpened(ProjectExplorer.class), "The 'Project Explorer' should be closed but is opened.");
+        step("@Test - open and close the Project Explorer", () -> {
+            toolWindowsPane.openProjectExplorer();
+            assertTrue(isPaneOpened(ProjectExplorer.class), "The 'Project Explorer' should be opened but is closed.");
+            toolWindowsPane.closeProjectExplorer();
+            assertFalse(isPaneOpened(ProjectExplorer.class), "The 'Project Explorer' should be closed but is opened.");
+        });
     }
 
     @Test
     public void stripeButtonTest() {
-        try {
-            toolWindowsPane.stripeButton(ButtonLabels.mavenStripeButtonLabel, false);
-        } catch (WaitForConditionTimeoutException e) {
-            fail(e.getMessage());
-        }
+        step("@Test - create stripe button fixture", () -> {
+            try {
+                toolWindowsPane.stripeButton(ButtonLabels.mavenStripeButtonLabel, false);
+            } catch (WaitForConditionTimeoutException e) {
+                fail(e.getMessage());
+            }
+        });
     }
 }

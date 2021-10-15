@@ -19,6 +19,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
+
 /**
  * Base class for all JUnit tests in the IntelliJ common UI test library
  *
@@ -31,11 +33,13 @@ public class LibraryTestBase {
 
     @BeforeAll
     protected static void startIntelliJ() {
-        if (!intelliJHasStarted) {
-            remoteRobot = UITestRunner.runIde(UITestRunner.IdeaVersion.V_2020_3, 8580);
-            intelliJHasStarted = true;
-            Runtime.getRuntime().addShutdownHook(new CloseIntelliJBeforeQuit());
-        }
+        step("Start IntelliJ IDEA for UI tests before executing the first test", () -> {
+            if (!intelliJHasStarted) {
+                remoteRobot = UITestRunner.runIde(UITestRunner.IdeaVersion.V_2020_3, 8580);
+                intelliJHasStarted = true;
+                Runtime.getRuntime().addShutdownHook(new CloseIntelliJBeforeQuit());
+            }
+        });
     }
 
     @AfterAll

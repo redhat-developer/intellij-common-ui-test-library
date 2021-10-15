@@ -18,6 +18,8 @@ import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JTextFieldFixture;
 import org.jetbrains.annotations.NotNull;
 
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
+
 /**
  * New Project dialog abstract terminal page fixture
  *
@@ -36,7 +38,9 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      * @return currently set new project name
      */
     public String getProjectName() {
-        return textFields(JTextFieldFixture.Companion.byType()).get(0).getText();
+        return step("Get the project name for new project in the 'New Project' dialog", () -> {
+            return textFields(JTextFieldFixture.Companion.byType()).get(0).getText();
+        });
     }
 
     /**
@@ -45,7 +49,9 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      * @param projectName name of the new project
      */
     public void setProjectName(String projectName) {
-        textFields(JTextFieldFixture.Companion.byType()).get(0).setText(projectName);
+        step("Set the project name for new project in the 'New Project' dialog", () -> {
+            textFields(JTextFieldFixture.Companion.byType()).get(0).setText(projectName);
+        });
     }
 
     /**
@@ -54,7 +60,9 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      * @return currently set new project location
      */
     public String getProjectLocation() {
-        return textFields(JTextFieldFixture.Companion.byType()).get(1).getText();
+        return step("Get the project location for new project in the 'New Project' dialog", () -> {
+            return textFields(JTextFieldFixture.Companion.byType()).get(1).getText();
+        });
     }
 
     /**
@@ -63,7 +71,9 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      * @param projectLocation project location of the new project
      */
     public void setProjectLocation(String projectLocation) {
-        textFields(JTextFieldFixture.Companion.byType()).get(1).setText(projectLocation);
+        step("Set the project location for new project in the 'New Project' dialog", () -> {
+            textFields(JTextFieldFixture.Companion.byType()).get(1).setText(projectLocation);
+        });
     }
 
     /**
