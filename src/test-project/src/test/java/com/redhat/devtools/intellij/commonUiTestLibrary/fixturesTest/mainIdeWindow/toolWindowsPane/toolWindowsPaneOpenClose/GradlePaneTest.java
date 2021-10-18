@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com
  */
-@ExtendWith(ScreenshotAfterTestFailExtension.class)
 class GradlePaneTest extends AbstractToolWindowsPaneTest {
     @BeforeAll
     public static void prepareProject() {

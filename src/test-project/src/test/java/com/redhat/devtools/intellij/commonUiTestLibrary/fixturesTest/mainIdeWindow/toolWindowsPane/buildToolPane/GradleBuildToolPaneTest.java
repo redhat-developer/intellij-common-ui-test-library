@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com
  */
-@ExtendWith(ScreenshotAfterTestFailExtension.class)
 class GradleBuildToolPaneTest extends LibraryTestBase {
     private static final String projectName = "gradle_build_tool_pane_java_project";
     private static ToolWindowsPane toolWindowsPane;

@@ -28,7 +28,6 @@ import java.time.Duration;
  *
  * @author zcervink@redhat.com
  */
-@ExtendWith(ScreenshotAfterTestFailExtension.class)
 class ToolWindowsPaneMavenTest extends LibraryTestBase {
     private static final String projectName = "tool_windows_pane_java_maven_project";
     private ToolWindowsPane toolWindowsPane;

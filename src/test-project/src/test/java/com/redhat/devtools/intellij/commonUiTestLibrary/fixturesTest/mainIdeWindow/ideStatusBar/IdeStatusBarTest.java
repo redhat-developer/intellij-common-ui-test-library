@@ -36,7 +36,6 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  *
  * @author zcervink@redhat.com
  */
-@ExtendWith(ScreenshotAfterTestFailExtension.class)
 class IdeStatusBarTest extends LibraryTestBase {
     private final String projectName = "ide_status_bar_java_project";
 

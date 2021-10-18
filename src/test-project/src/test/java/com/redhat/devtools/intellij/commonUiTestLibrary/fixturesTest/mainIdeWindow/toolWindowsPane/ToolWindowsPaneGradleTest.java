@@ -29,7 +29,6 @@ import java.time.Duration;
  *
  * @author zcervink@redhat.com
  */
-@ExtendWith(ScreenshotAfterTestFailExtension.class)
 class ToolWindowsPaneGradleTest extends LibraryTestBase {
     private static final String projectName = "tool_windows_pane_java_gradle_project";
     private ToolWindowsPane toolWindowsPane;

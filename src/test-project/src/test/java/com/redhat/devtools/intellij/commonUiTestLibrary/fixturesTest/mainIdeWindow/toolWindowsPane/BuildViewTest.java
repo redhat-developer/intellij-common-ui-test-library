@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com
  */
-@ExtendWith(ScreenshotAfterTestFailExtension.class)
 class BuildViewTest extends LibraryTestBase {
     private static final String projectName = "build_view_java_project";
     private static ToolWindowsPane toolWindowsPane;

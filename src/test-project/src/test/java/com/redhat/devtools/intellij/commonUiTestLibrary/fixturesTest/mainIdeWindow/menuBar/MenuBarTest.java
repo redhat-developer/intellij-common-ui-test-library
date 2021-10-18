@@ -32,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com
  */
-@ExtendWith(ScreenshotAfterTestFailExtension.class)
 class MenuBarTest extends LibraryTestBase {
     private static final String projectName = "project_view_tree_java_project";
 

@@ -30,7 +30,6 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  *
  * @author zcervink@redhat.com
  */
-@ExtendWith(ScreenshotAfterTestFailExtension.class)
 abstract class AbstractToolWindowsPaneTest extends LibraryTestBase {
     protected static final String mavenProjectName = "tool_windows_pane_java_maven_project";
     protected static final String gradleProjectName = "tool_windows_pane_java_gradle_project";

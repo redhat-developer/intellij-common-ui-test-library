@@ -32,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com
  */
-@ExtendWith(ScreenshotAfterTestFailExtension.class)
 class PEPaneAndStripeButtonTest extends AbstractToolWindowsPaneTest {
     @BeforeAll
     public static void prepareProject() {

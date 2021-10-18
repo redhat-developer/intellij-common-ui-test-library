@@ -35,7 +35,6 @@ import static org.junit.jupiter.api.Assertions.fail;
  *
  * @author zcervink@redhat.com
  */
-@ExtendWith(ScreenshotAfterTestFailExtension.class)
 class ProjectExplorerTest extends LibraryTestBase {
     private static final String projectName = "project_explorer_java_project";
     private static ToolWindowsPane toolWindowsPane;
