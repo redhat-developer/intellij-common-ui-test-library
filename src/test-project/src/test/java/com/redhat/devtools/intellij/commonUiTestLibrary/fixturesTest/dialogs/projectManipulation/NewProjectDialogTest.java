@@ -48,7 +48,6 @@ import static org.junit.jupiter.api.Assertions.fail;
  *
  * @author zcervink@redhat.com
  */
-@ExtendWith(ScreenshotAfterTestFailExtension.class)
 public class NewProjectDialogTest extends LibraryTestBase {
     private final String plainJavaProjectName = "plain_java_project_name_test";
 

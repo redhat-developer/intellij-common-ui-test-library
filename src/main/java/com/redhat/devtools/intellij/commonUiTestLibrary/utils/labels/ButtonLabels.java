@@ -22,6 +22,7 @@ public class ButtonLabels {
     public static final String nextLabel = "Next";
     public static final String previousLabel = "Previous";
     public static final String finishLabel = "Finish";
+    public static final String projectStripeButtonLabel = "Project";
     public static final String mavenStripeButtonLabel = "Maven";
     public static final String gradleStripeButtonLabel = "Gradle";
     public static final String moreSettings = "More Settings";

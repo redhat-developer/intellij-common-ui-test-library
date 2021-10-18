@@ -35,7 +35,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com
  */
-@ExtendWith(ScreenshotAfterTestFailExtension.class)
 class FlatWelcomeFrameTest extends LibraryTestBase {
     private final String projectName = "welcome_frame_java_project";
     private FlatWelcomeFrame flatWelcomeFrame;

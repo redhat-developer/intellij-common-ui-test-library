@@ -8,15 +8,13 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWindow.toolWindowsPane;
+package com.redhat.devtools.intellij.commonUiTestLibrary.fixturesTest.mainIdeWindow.toolWindowsPane.toolWindowsPaneOpenClose;
 
-import com.redhat.devtools.intellij.commonUiTestLibrary.LibraryTestBase;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.buildToolPane.GradleBuildToolPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,34 +22,33 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
- * ToolWindowsPane Gradle test
+ * Gradle Tool Windows Pane test
  *
  * @author zcervink@redhat.com
  */
-class ToolWindowsPaneGradleTest extends LibraryTestBase {
-    private static final String projectName = "tool_windows_pane_java_gradle_project";
-    private ToolWindowsPane toolWindowsPane;
-
+class GradlePaneTest extends AbstractToolWindowsPaneTest {
     @BeforeAll
     public static void prepareProject() {
-        CreateCloseUtils.createNewProject(remoteRobot, projectName, CreateCloseUtils.NewProjectType.GRADLE);
-    }
-
-    @AfterAll
-    public static void closeCurrentProject() {
-        CreateCloseUtils.closeProject(remoteRobot);
-    }
-
-    @BeforeEach
-    public void createToolWindowsPaneFixture() {
+        CreateCloseUtils.createNewProject(remoteRobot, gradleProjectName, CreateCloseUtils.NewProjectType.GRADLE);
         toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
     }
 
+    @BeforeEach
+    public void preparePanes() {
+        if (isPaneOpened(GradleBuildToolPane.class)) {
+            closePane(ButtonLabels.gradleStripeButtonLabel, GradleBuildToolPane.class);
+        }
+    }
+
     @Test
-    public void gradleBuildTest() {
+    public void gradleBuildToolPaneOpenCloseTest() {
         toolWindowsPane.openGradleBuildToolPane();
-        GradleBuildToolPane gradleBuildToolPane = toolWindowsPane.find(GradleBuildToolPane.class, Duration.ofSeconds(10));
-        gradleBuildToolPane.buildProject();
+        assertTrue(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be opened but is closed.");
+        toolWindowsPane.closeGradleBuildToolPane();
+        assertFalse(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be closed but is opened.");
     }
 }

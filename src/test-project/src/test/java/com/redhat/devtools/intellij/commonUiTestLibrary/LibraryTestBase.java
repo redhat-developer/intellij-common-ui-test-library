@@ -12,8 +12,10 @@ package com.redhat.devtools.intellij.commonUiTestLibrary;
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
+import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
@@ -22,6 +24,7 @@ import java.time.Duration;
  *
  * @author zcervink@redhat.com
  */
+@ExtendWith(ScreenshotAfterTestFailExtension.class)
 public class LibraryTestBase {
     protected static RemoteRobot remoteRobot;
     private static boolean intelliJHasStarted = false;
