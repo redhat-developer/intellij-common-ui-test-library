@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 
 /**
  * New Project dialog maven project second page fixture
@@ -38,18 +39,22 @@ public class MavenGradleNewProjectFinalPage extends AbstractNewProjectFinalPage 
      * Open the 'Artifact Coordinates' options
      */
     public void openArtifactCoordinates() {
-        if (!isArtifactCoordinatesOpened()) {
-            jLabel(ButtonLabels.artifactCoordinates).click();
-        }
+        step("Open the 'Artifact Coordinates' options", () -> {
+            if (!isArtifactCoordinatesOpened()) {
+                jLabel(ButtonLabels.artifactCoordinates).click();
+            }
+        });
     }
 
     /**
      * Close the 'Artifact Coordinates' options
      */
     public void closeArtifactCoordinates() {
-        if (isArtifactCoordinatesOpened()) {
-            jLabel(ButtonLabels.artifactCoordinates).click();
-        }
+        step("Close the 'Artifact Coordinates' options", () -> {
+            if (isArtifactCoordinatesOpened()) {
+                jLabel(ButtonLabels.artifactCoordinates).click();
+            }
+        });
     }
 
     /**

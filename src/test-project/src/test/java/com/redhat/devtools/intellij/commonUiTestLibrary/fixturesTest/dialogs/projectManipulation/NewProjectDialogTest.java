@@ -27,12 +27,10 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.ideStatusBar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.textTranformation.TextUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 import java.util.List;
@@ -82,21 +80,22 @@ public class NewProjectDialogTest extends LibraryTestBase {
                 // tests ending with opened Flat Welcome Frame does not need any assistance
             }
         }
+
     }
 
     @Test
     public void setProjectNamePlainJavaProjectTest() {
-        testProjectNameInputField(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
+        testProjectNameAndLocationInputField(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
     }
 
     @Test
     public void setProjectNameMavenProjectTest() {
-        testProjectNameInputField(CreateCloseUtils.NewProjectType.MAVEN);
+        testProjectNameAndLocationInputField(CreateCloseUtils.NewProjectType.MAVEN);
     }
 
     @Test
     public void setProjectNameGradleProjectTest() {
-        testProjectNameInputField(CreateCloseUtils.NewProjectType.GRADLE);
+        testProjectNameAndLocationInputField(CreateCloseUtils.NewProjectType.GRADLE);
     }
 
     @Test
@@ -316,9 +315,10 @@ public class NewProjectDialogTest extends LibraryTestBase {
         }
     }
 
-    private void testProjectNameInputField(CreateCloseUtils.NewProjectType newProjectType) {
+    private void testProjectNameAndLocationInputField(CreateCloseUtils.NewProjectType newProjectType) {
         navigateToSetProjectNamePage(newProjectType);
         AbstractNewProjectFinalPage finalPage = CreateCloseUtils.getFinalPage(newProjectDialogWizard, newProjectType);
+
         String currentProjectName = finalPage.getProjectName();
         String newProjectName = currentProjectName + "1";
         finalPage.setProjectName(newProjectName);

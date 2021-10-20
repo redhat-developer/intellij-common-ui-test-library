@@ -32,7 +32,7 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 
 /**
- * Search everywhere popup fixture
+ * Search Everywhere popup fixture
  *
  * @author zcervink@redhat.com
  */

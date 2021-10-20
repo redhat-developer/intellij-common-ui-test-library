@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 
 /**
  * New Project dialog java project third page fixture
@@ -32,31 +33,32 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 @DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
 @FixtureName(name = "New Project Dialog")
 public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
-    private RemoteRobot remoteRobot;
-
     public JavaNewProjectFinalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        this.remoteRobot = remoteRobot;
     }
 
     /**
      * Open the 'More settings' options
      */
     public void openMoreSettings() {
-        boolean isAlreadyOpened = isMoreSettingOpened();
-        if (!isAlreadyOpened) {
-            jLabel(ButtonLabels.moreSettings).click();
-        }
+        step("Open the 'More settings' options", () -> {
+            boolean isAlreadyOpened = isMoreSettingOpened();
+            if (!isAlreadyOpened) {
+                jLabel(ButtonLabels.moreSettings).click();
+            }
+        });
     }
 
     /**
      * Close the 'More settings' options
      */
     public void closeMoreSettings() {
-        boolean isAlreadyOpened = isMoreSettingOpened();
-        if (isAlreadyOpened) {
-            jLabel(ButtonLabels.moreSettings).click();
-        }
+        step("Close the 'More settings' options", () -> {
+            boolean isAlreadyOpened = isMoreSettingOpened();
+            if (isAlreadyOpened) {
+                jLabel(ButtonLabels.moreSettings).click();
+            }
+        });
     }
 
     /**

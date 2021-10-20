@@ -15,11 +15,9 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.t
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.toolWindowsPane.buildToolPane.MavenBuildToolPane;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
 
@@ -50,7 +48,7 @@ class BuildViewTest extends LibraryTestBase {
     }
 
     @Test
-    public void WaitForSuccessfulBuildTest() {
+    public void waitForSuccessfulBuildTest() {
         BuildView buildView = toolWindowsPane.find(BuildView.class, Duration.ofSeconds(10));
         buildView.waitUntilBuildHasFinished();
         assertTrue(buildView.isBuildSuccessful(), "The build should be successful but is not.");

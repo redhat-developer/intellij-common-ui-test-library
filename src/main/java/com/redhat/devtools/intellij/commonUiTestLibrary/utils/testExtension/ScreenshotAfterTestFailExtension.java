@@ -22,6 +22,8 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.time.Duration;
 
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
+
 /**
  * ScreenshotAfterTestFailExtension takes screenshot immediately after test has failed
  * and perform a clean up to ensure no dialog or windows is opened<br>
@@ -39,7 +41,7 @@ public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallb
     }
 
     /**
-     * Take screenshot right after a test fail and perform a clean up to ensure no dialog or windows is opened
+     * Take screenshot right after a test has failed and perform a clean up to ensure no dialog or window is opened
      *
      * @param extensionContext test run data
      */
@@ -47,8 +49,12 @@ public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallb
     public void afterTestExecution(ExtensionContext extensionContext) {
         boolean testFailed = extensionContext.getExecutionException().isPresent();
         if (testFailed) {
-            ScreenshotUtils.takeScreenshot(remoteRobot);
-            cleanAfterTestFail();
+            step("Take a screenshot after a test has failed", () -> {
+                ScreenshotUtils.takeScreenshot(remoteRobot);
+            });
+            step("Return to the 'Welcome Frame' dialog", () -> {
+                cleanAfterTestFail();
+            });
         }
     }
 

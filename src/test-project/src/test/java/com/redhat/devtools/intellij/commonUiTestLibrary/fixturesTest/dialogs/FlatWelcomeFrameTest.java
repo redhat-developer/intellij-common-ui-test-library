@@ -17,11 +17,9 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWel
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.project.CreateCloseUtils;
-import com.redhat.devtools.intellij.commonUiTestLibrary.utils.testExtension.ScreenshotAfterTestFailExtension;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -57,12 +55,12 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
         prepareWorkspace();
         flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         int projectsOnDisk = getNumberOfProjectsOnDisk();
-        int projectLinks = getNumberOfProjectLinksInFlatWelcomeFrame();
+        int projectLinks = getNumberOfProjectLinks();
         assertTrue(projectsOnDisk == 1, "Number of projects in the IntelliJ's project folder should be 1 but is " + projectsOnDisk + ".");
         assertTrue(projectLinks == 1, "Number of projects' links in the IntelliJ's 'Welcome Frame Dialog' should be 1 but is " + projectLinks + ".");
         flatWelcomeFrame.clearWorkspace();
         int projectCount2 = getNumberOfProjectsOnDisk();
-        int projectLinks2 = getNumberOfProjectLinksInFlatWelcomeFrame();
+        int projectLinks2 = getNumberOfProjectLinks();
         assertTrue(projectCount2 == 0, "Number of projects in the IntelliJ's project folder should be 0 but is " + projectCount2 + ".");
         assertTrue(projectLinks2 == 0, "Number of projects' links in the IntelliJ's 'Welcome Frame Dialog' should be 0 but is " + projectLinks2 + ".");
     }
@@ -86,7 +84,7 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
         return files.length;
     }
 
-    private int getNumberOfProjectLinksInFlatWelcomeFrame() {
+    private int getNumberOfProjectLinks() {
         try {
             FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
             JListFixture recentProjectsList = flatWelcomeFrame.find(JListFixture.class, byXpath("//div[@accessiblename='Recent Projects']"), Duration.ofSeconds(10));

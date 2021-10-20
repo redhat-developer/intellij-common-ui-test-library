@@ -11,6 +11,8 @@
 package com.redhat.devtools.intellij.commonUiTestLibrary;
 
 import com.intellij.remoterobot.RemoteRobot;
+import com.intellij.remoterobot.stepsProcessing.StepLogger;
+import com.intellij.remoterobot.stepsProcessing.StepWorker;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.dialogs.FlatWelcomeFrame;
 
@@ -27,6 +29,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 
+import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 
 /**
@@ -48,23 +51,27 @@ public class UITestRunner {
      * @return instance of the RemoteRobot
      */
     public static RemoteRobot runIde(IdeaVersion ideaVersion, int port) {
-        UITestRunner.ideaVersion = ideaVersion;
-        makeSureAllTermsAndConditionsAreAccepted();
+        StepWorker.registerProcessor(new StepLogger());
 
-        String osName = System.getProperty("os.name").toLowerCase();
-        String fileExtension = osName.contains("windows") ? ".bat" : "";
-        ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion.toString(), "-Drobot-server.port=" + port);
+        return step("Start IntelliJ Idea ('" + ideaVersion.toString() + "') listening on port " + port, () -> {
+            UITestRunner.ideaVersion = ideaVersion;
+            makeSureAllTermsAndConditionsAreAccepted();
 
-        try {
-            ideProcess = pb.start();
-            waitUntilIntelliJStarts(port);
-            remoteRobot = getRemoteRobotConnection(port);
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
+            String osName = System.getProperty("os.name").toLowerCase();
+            String fileExtension = osName.contains("windows") ? ".bat" : "";
+            ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion.toString(), "-Drobot-server.port=" + port);
 
-        remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).clearWorkspace();
-        return remoteRobot;
+            try {
+                ideProcess = pb.start();
+                waitUntilIntelliJStarts(port);
+                remoteRobot = getRemoteRobotConnection(port);
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).clearWorkspace();
+            return remoteRobot;
+        });
     }
 
     /**
@@ -81,12 +88,14 @@ public class UITestRunner {
      * Close the IntelliJ Idea IDE from the 'Welcome to IntelliJ IDEA' dialog
      */
     public static void closeIde() {
-        if (remoteRobot.isWin()) {
-            remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).runJs("const horizontal_offset = component.getWidth() - 24;\n" +
-                    "robot.click(component, new Point(horizontal_offset, 14), MouseButton.LEFT_BUTTON, 2);");
-        } else {
-            ideProcess.destroy();
-        }
+        step("Close IntelliJ Idea", () -> {
+            if (remoteRobot.isWin()) {
+                remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).runJs("const horizontal_offset = component.getWidth() - 24;\n" +
+                        "robot.click(component, new Point(horizontal_offset, 14), MouseButton.LEFT_BUTTON, 2);");
+            } else {
+                ideProcess.destroy();
+            }
+        });
     }
 
     /**
@@ -115,16 +124,22 @@ public class UITestRunner {
      * @throws InterruptedException may be thrown in Thread.sleep()
      */
     public static RemoteRobot getRemoteRobotConnection(int port) throws InterruptedException {
-        RemoteRobot remoteRobot = new RemoteRobot("http://127.0.0.1:" + port);
-        for (int i = 0; i < 60; i++) {
-            try {
-                remoteRobot.find(FlatWelcomeFrame.class);
-            } catch (WaitForConditionTimeoutException e) {
-                Thread.sleep(1000);
+        return step("Create an instance of the RemoteRobot listening on port " + port, () -> {
+            RemoteRobot remoteRobot = new RemoteRobot("http://127.0.0.1:" + port);
+            for (int i = 0; i < 60; i++) {
+                try {
+                    remoteRobot.find(FlatWelcomeFrame.class);
+                } catch (WaitForConditionTimeoutException e) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e2) {
+                        e2.printStackTrace();
+                    }
+                }
             }
-        }
 
-        return remoteRobot;
+            return remoteRobot;
+        });
     }
 
     /**
@@ -155,51 +170,63 @@ public class UITestRunner {
         String osName = System.getProperty("os.name").toLowerCase();
 
         if (osName.contains("linux")) {
-            String prefsXmlSourceLocation = "prefs.xml";
-            String prefsXmlDir = System.getProperty("user.home") + "/.java/.userPrefs/jetbrains/_!(!!cg\"p!(}!}@\"j!(k!|w\"w!'8!b!\"p!':!e@==";
-            createDirectoryHierarchy(prefsXmlDir);
-            copyFileFromJarResourceDir(prefsXmlSourceLocation, prefsXmlDir + "/prefs.xml");
+            step("Copy the 'prefs.xml' file to the appropriate location", () -> {
+                String prefsXmlSourceLocation = "prefs.xml";
+                String prefsXmlDir = System.getProperty("user.home") + "/.java/.userPrefs/jetbrains/_!(!!cg\"p!(}!}@\"j!(k!|w\"w!'8!b!\"p!':!e@==";
+                createDirectoryHierarchy(prefsXmlDir);
+                copyFileFromJarResourceDir(prefsXmlSourceLocation, prefsXmlDir + "/prefs.xml");
+            });
 
-            String acceptedSourceLocation = "accepted";
-            String acceptedDir = System.getProperty("user.home") + "/.local/share/JetBrains/consentOptions";
-            createDirectoryHierarchy(acceptedDir);
-            copyFileFromJarResourceDir(acceptedSourceLocation, acceptedDir + "/accepted");
+            step("Copy the 'accepted' file to the appropriate location", () -> {
+                String acceptedSourceLocation = "accepted";
+                String acceptedDir = System.getProperty("user.home") + "/.local/share/JetBrains/consentOptions";
+                createDirectoryHierarchy(acceptedDir);
+                copyFileFromJarResourceDir(acceptedSourceLocation, acceptedDir + "/accepted");
+            });
         } else if (osName.contains("os x")) {
-            String plistSourceLocation = "com.apple.java.util.prefs.plist";
-            String plistDir = System.getProperty("user.home") + "/Library/Preferences";
-            copyFileFromJarResourceDir(plistSourceLocation, plistDir + "/com.apple.java.util.prefs.plist");
+            step("Copy the 'com.apple.java.util.prefs.plist' file to the appropriate location", () -> {
+                String plistSourceLocation = "com.apple.java.util.prefs.plist";
+                String plistDir = System.getProperty("user.home") + "/Library/Preferences";
+                copyFileFromJarResourceDir(plistSourceLocation, plistDir + "/com.apple.java.util.prefs.plist");
+            });
 
-            String acceptedSourceLocation = "accepted";
-            String acceptedDir = System.getProperty("user.home") + "/Library/Application Support/JetBrains/consentOptions";
-            createDirectoryHierarchy(acceptedDir);
-            copyFileFromJarResourceDir(acceptedSourceLocation, acceptedDir + "/accepted");
+            step("Copy the 'accepted' file to the appropriate location", () -> {
+                String acceptedSourceLocation = "accepted";
+                String acceptedDir = System.getProperty("user.home") + "/Library/Application Support/JetBrains/consentOptions";
+                createDirectoryHierarchy(acceptedDir);
+                copyFileFromJarResourceDir(acceptedSourceLocation, acceptedDir + "/accepted");
 
-            // run the 'killall cfprefsd' cmd to force OS X to reload preferences files
-            ProcessBuilder pb = new ProcessBuilder("killall", "cfprefsd");
-            try {
-                Process p = pb.start();
-                p.waitFor();
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
-            }
+                // run the 'killall cfprefsd' cmd to force OS X to reload preferences files
+                ProcessBuilder pb = new ProcessBuilder("killall", "cfprefsd");
+                try {
+                    Process p = pb.start();
+                    p.waitFor();
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
         } else if (osName.contains("windows")) {
-            String acceptedSourceLocation = "accepted";
-            String acceptedDir = System.getProperty("user.home") + "\\AppData\\Roaming\\JetBrains\\consentOptions";
-            createDirectoryHierarchy(acceptedDir);
-            copyFileFromJarResourceDir(acceptedSourceLocation, acceptedDir + "\\accepted");
+            step("Copy the 'accepted' file to the appropriate location", () -> {
+                String acceptedSourceLocation = "accepted";
+                String acceptedDir = System.getProperty("user.home") + "\\AppData\\Roaming\\JetBrains\\consentOptions";
+                createDirectoryHierarchy(acceptedDir);
+                copyFileFromJarResourceDir(acceptedSourceLocation, acceptedDir + "\\accepted");
+            });
 
-            String registryPath = "HKCU:\\Software\\JavaSoft\\Prefs\\jetbrains\\privacy_policy";
-            ProcessBuilder pb1 = new ProcessBuilder("powershell.exe", "New-Item", "-Path", registryPath, "-Force");
-            ProcessBuilder pb2 = new ProcessBuilder("powershell.exe", "New-ItemProperty", "-Path", registryPath, "-Name", "accepted_version", "-Value", "'2.1'");
+            step("Create appropriate registry entries", () -> {
+                String registryPath = "HKCU:\\Software\\JavaSoft\\Prefs\\jetbrains\\privacy_policy";
+                ProcessBuilder pb1 = new ProcessBuilder("powershell.exe", "New-Item", "-Path", registryPath, "-Force");
+                ProcessBuilder pb2 = new ProcessBuilder("powershell.exe", "New-ItemProperty", "-Path", registryPath, "-Name", "accepted_version", "-Value", "'2.1'");
 
-            try {
-                Process p1 = pb1.start();
-                p1.waitFor();
-                Process p2 = pb2.start();
-                p2.waitFor();
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
-            }
+                try {
+                    Process p1 = pb1.start();
+                    p1.waitFor();
+                    Process p2 = pb2.start();
+                    p2.waitFor();
+                } catch (IOException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 

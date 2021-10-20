@@ -29,7 +29,7 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 
 /**
- * Tool windows pane fixture
+ * Tool Windows Pane fixture
  *
  * @author zcervink@redhat.com
  */

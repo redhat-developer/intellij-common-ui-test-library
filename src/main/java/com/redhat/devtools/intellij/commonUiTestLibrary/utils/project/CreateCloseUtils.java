@@ -30,6 +30,13 @@ import java.time.Duration;
  * @author zcervink@redhat.com
  */
 public class CreateCloseUtils {
+    /**
+     * Create new project with given project name according to given project type
+     *
+     * @param remoteRobot    reference to the RemoteRobot instance
+     * @param projectName    name of new project
+     * @param newProjectType type of new project
+     */
     public static void createNewProject(RemoteRobot remoteRobot, String projectName, NewProjectType newProjectType) {
         openNewProjectDialogFromWelcomeDialog(remoteRobot);
         NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
@@ -53,16 +60,33 @@ public class CreateCloseUtils {
         ideStatusBar.waitUntilAllBgTasksFinish();
     }
 
+    /**
+     * Open 'New Project' dialog from 'Welcome to IntelliJ IDEA' dialog
+     *
+     * @param remoteRobot reference to the RemoteRobot instance
+     */
     public static void openNewProjectDialogFromWelcomeDialog(RemoteRobot remoteRobot) {
         FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.createNewProject();
     }
 
+    /**
+     * Close currently opened project
+     *
+     * @param remoteRobot reference to the RemoteRobot instance
+     */
     public static void closeProject(RemoteRobot remoteRobot) {
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
         mainIdeWindow.closeProject();
     }
 
+    /**
+     * Get appropriate final page instance
+     *
+     * @param newProjectDialogWizard instance of the 'New Project' dialog fixture
+     * @param newProjectType         type of new project
+     * @return final page instance
+     */
     public static AbstractNewProjectFinalPage getFinalPage(NewProjectDialogWizard newProjectDialogWizard, NewProjectType newProjectType) {
         switch (newProjectType) {
             case PLAIN_JAVA:
@@ -75,6 +99,9 @@ public class CreateCloseUtils {
         }
     }
 
+    /**
+     * Enumeration for new project type
+     */
     public enum NewProjectType {
         PLAIN_JAVA("Java"),
         MAVEN("Maven"),

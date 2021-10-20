@@ -21,7 +21,6 @@ import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 
-
 /**
  * Top menu fixture
  *
