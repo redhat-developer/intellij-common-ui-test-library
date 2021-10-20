@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -50,10 +49,8 @@ class BuildViewTest extends LibraryTestBase {
 
     @Test
     public void waitForSuccessfulBuildTest() {
-        step("@Test - wait for successful build", () -> {
-            BuildView buildView = toolWindowsPane.find(BuildView.class, Duration.ofSeconds(10));
-            buildView.waitUntilBuildHasFinished();
-            assertTrue(buildView.isBuildSuccessful(), "The build should be successful but is not.");
-        });
+        BuildView buildView = toolWindowsPane.find(BuildView.class, Duration.ofSeconds(10));
+        buildView.waitUntilBuildHasFinished();
+        assertTrue(buildView.isBuildSuccessful(), "The build should be successful but is not.");
     }
 }

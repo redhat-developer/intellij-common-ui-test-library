@@ -21,8 +21,6 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
-
 /**
  * Static utilities for taking screenshots
  *
@@ -41,21 +39,19 @@ public class ScreenshotUtils {
      * @return the screenshot as a File object
      */
     public static File takeScreenshot(RemoteRobot remoteRobot) {
-        return step("Take screenshot of the entire screen and save it on disk", () -> {
-            try {
-                BufferedImage screenshotBufferedImage = remoteRobot.getScreenshot();
-                boolean doesScreenshotDirExists = Files.exists(Paths.get(screenshotLocation));
-                if (!doesScreenshotDirExists) {
-                    Files.createDirectory(Paths.get(screenshotLocation));
-                }
-                File screenshotFile = new File(screenshotPathname);
-                ImageIO.write(screenshotBufferedImage, filetype, screenshotFile);
-                return screenshotFile;
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            BufferedImage screenshotBufferedImage = remoteRobot.getScreenshot();
+            boolean doesScreenshotDirExists = Files.exists(Paths.get(screenshotLocation));
+            if (!doesScreenshotDirExists) {
+                Files.createDirectory(Paths.get(screenshotLocation));
             }
-            return null;
-        });
+            File screenshotFile = new File(screenshotPathname);
+            ImageIO.write(screenshotBufferedImage, filetype, screenshotFile);
+            return screenshotFile;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static String getTimeNow(String timeFormat) {

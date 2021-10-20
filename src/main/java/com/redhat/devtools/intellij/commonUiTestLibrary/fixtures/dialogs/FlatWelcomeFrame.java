@@ -34,7 +34,6 @@ import java.time.Duration;
 import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 
 /**
  * Welcome to IntelliJ IDEA dialog fixture
@@ -48,18 +47,14 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
 
     public FlatWelcomeFrame(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        step("Create fixture - Welcome to IntelliJ IDEA dialog", () -> {
-            this.intelliJVersion = UITestRunner.getIdeaVersion();
-        });
+        this.intelliJVersion = UITestRunner.getIdeaVersion();
     }
 
     /**
      * Click on the 'New Project' link
      */
     public void createNewProject() {
-        step("Click on the 'New Project' link", () -> {
-            clickOnLink("New Project");
-        });
+        clickOnLink("New Project");
     }
 
     /**
@@ -70,15 +65,11 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
     public void clickOnLink(String label) {
         // Code for IntelliJ IDEA 2020.3 or newer
         if (intelliJVersion.toInt() >= 20203) {
-            step("Click on the '" + label + "' link (implementation for IntelliJ IDEA 2020.3 or newer)", () -> {
-                welcomeFrameLink(label).click();
-            });
+            welcomeFrameLink(label).click();
         }
         // Code for IntelliJ IDEA 2020.2 or earlier
         else {
-            step("Click on the '" + label + "' link (implementation for IntelliJ IDEA 2020.2 or earlier)", () -> {
-                actionLink(label).click();
-            });
+            actionLink(label).click();
         }
     }
 
@@ -86,51 +77,43 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      * Clear the workspace by deleting the content of the IdeaProjects folder and clearing all the projects' links in the 'Welcome to IntelliJ IDEA' dialog
      */
     public void clearWorkspace() {
-        step("Clear workspace", () -> {
-            step("Delete all the projects' links from the 'Welcome to IntelliJ IDEA' dialog", () -> {
-                List<JListFixture> jListFixtures = jLists(byXpath("//div[@accessiblename='Recent Projects']"));
-                while (!jListFixtures.isEmpty() && jListFixtures.get(0).findAllText().size() != 1) {
-                    JListFixture recentProjectsList = jListFixtures.get(0);
-                    recentProjectsList.runJs("const horizontal_offset = component.getWidth()-22;\n" +
-                            "robot.click(component, new Point(horizontal_offset, 22), MouseButton.LEFT_BUTTON, 1);");
-                    // Code for IntelliJ Idea 2020.3 or newer
-                    if (intelliJVersion.toInt() >= 20203) {
-                        JPopupMenuFixture contextMenu = jPopupMenus(JPopupMenuFixture.Companion.byType()).get(0);
-                        contextMenu.select("Remove from Recent Projects");
-                    }
-                }
-            });
+        List<JListFixture> jListFixtures = jLists(byXpath("//div[@accessiblename='Recent Projects']"));
+        while (!jListFixtures.isEmpty() && jListFixtures.get(0).findAllText().size() != 1) {
+            JListFixture recentProjectsList = jListFixtures.get(0);
+            recentProjectsList.runJs("const horizontal_offset = component.getWidth()-22;\n" +
+                    "robot.click(component, new Point(horizontal_offset, 22), MouseButton.LEFT_BUTTON, 1);");
+            // Code for IntelliJ Idea 2020.3 or newer
+            if (intelliJVersion.toInt() >= 20203) {
+                JPopupMenuFixture contextMenu = jPopupMenus(JPopupMenuFixture.Companion.byType()).get(0);
+                contextMenu.select("Remove from Recent Projects");
+            }
+        }
 
-            step("Delete all the files and folders in the IdeaProjects folder", () -> {
-                try {
-                    String pathToDirToMakeEmpty = System.getProperty("user.home") + File.separator + "IdeaProjects";
-                    boolean doesProjectDirExists = Files.exists(Paths.get(pathToDirToMakeEmpty));
-                    if (doesProjectDirExists) {
-                        FileUtils.cleanDirectory(new File(pathToDirToMakeEmpty));
-                    } else {
-                        Files.createDirectory(Paths.get(pathToDirToMakeEmpty));
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        });
+        try {
+            String pathToDirToMakeEmpty = System.getProperty("user.home") + File.separator + "IdeaProjects";
+            boolean doesProjectDirExists = Files.exists(Paths.get(pathToDirToMakeEmpty));
+            if (doesProjectDirExists) {
+                FileUtils.cleanDirectory(new File(pathToDirToMakeEmpty));
+            } else {
+                Files.createDirectory(Paths.get(pathToDirToMakeEmpty));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * Clear all exceptions
      */
     public void clearExceptions() {
-        step("Clear all exceptions", () -> {
-            try {
-                ideErrorsIcon().click();
-            } catch (WaitForConditionTimeoutException e) {
-                e.printStackTrace();
-                return;
-            }
+        try {
+            ideErrorsIcon().click();
+        } catch (WaitForConditionTimeoutException e) {
+            e.printStackTrace();
+            return;
+        }
 
-            find(IdeFatalErrorsDialog.class, Duration.ofSeconds(10)).clearAll();
-        });
+        find(IdeFatalErrorsDialog.class, Duration.ofSeconds(10)).clearAll();
     }
 
     // Works for IntelliJ Idea 2020.3+

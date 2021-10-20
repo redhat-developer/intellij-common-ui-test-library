@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.time.Duration;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -31,24 +30,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ScreenshotUtilsTest extends LibraryTestBase {
     @Test
     public void takeScreenshotTest() {
-        step("@Test - take screenshot", () -> {
-            remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
 
-            int numberOfScreenshotBefore = getNumberOfSavedScreenshot();
-            File screenshotFile = ScreenshotUtils.takeScreenshot(remoteRobot);
-            int numberOfScreenshotAfter = getNumberOfSavedScreenshot();
-            assertTrue(numberOfScreenshotAfter == numberOfScreenshotBefore + 1, "Screenshot should be already saved but is not.");
-            if (screenshotFile != null) {
-                screenshotFile.delete();
-            }
-        });
+        int numberOfScreenshotBefore = getNumberOfSavedScreenshot();
+        File screenshotFile = ScreenshotUtils.takeScreenshot(remoteRobot);
+        int numberOfScreenshotAfter = getNumberOfSavedScreenshot();
+        assertTrue(numberOfScreenshotAfter == numberOfScreenshotBefore + 1, "Screenshot should be already saved but is not.");
+        if (screenshotFile != null) {
+            screenshotFile.delete();
+        }
     }
 
     private int getNumberOfSavedScreenshot() {
-        return step("Get number of saved screenshots", () -> {
-            String pathToIdeaProjectsFolder = System.getProperty("user.dir") + File.separator + "build" + File.separator + "screenshots";
-            File[] files = new File(pathToIdeaProjectsFolder).listFiles((FileFilter) FileFilterUtils.fileFileFilter());
-            return files != null ? files.length : 0;
-        });
+        String pathToIdeaProjectsFolder = System.getProperty("user.dir") + File.separator + "build" + File.separator + "screenshots";
+        File[] files = new File(pathToIdeaProjectsFolder).listFiles((FileFilter) FileFilterUtils.fileFileFilter());
+        return files != null ? files.length : 0;
     }
 }

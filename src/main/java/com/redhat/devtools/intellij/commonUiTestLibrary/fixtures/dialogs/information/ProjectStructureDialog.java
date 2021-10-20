@@ -18,8 +18,6 @@ import com.intellij.remoterobot.fixtures.FixtureName;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
-
 /**
  * Project Structure dialog fixture
  *
@@ -30,16 +28,12 @@ import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 public class ProjectStructureDialog extends CommonContainerFixture {
     public ProjectStructureDialog(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        step("Create fixture - Project Structure dialog", () -> {
-        });
     }
 
     /**
      * Cancel the 'Project Structure'
      */
     public void cancel() {
-        step("Click on the '" + ButtonLabels.cancelLabel + "' button", () -> {
-            button(ButtonLabels.cancelLabel).click();
-        });
+        button(ButtonLabels.cancelLabel).click();
     }
 }

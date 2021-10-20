@@ -21,8 +21,6 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.exceptions.UITestExcepti
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
-
 /**
  * New Project dialog wizard fixture
  *
@@ -33,8 +31,6 @@ import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 public class NewProjectDialogWizard extends CommonContainerFixture {
     public NewProjectDialogWizard(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        step("Create fixture - New Project dialog wizard", () -> {
-        });
     }
 
     /**
@@ -66,19 +62,17 @@ public class NewProjectDialogWizard extends CommonContainerFixture {
     }
 
     private void clickOnButton(String label) {
-        step("Click on the '" + label + "' button", () -> {
-            JButtonFixture button;
-            try {
-                button = button(label);
-            } catch (WaitForConditionTimeoutException e) {
-                throw new UITestException("The '" + label + "' button has not been found.");
-            }
+        JButtonFixture button;
+        try {
+            button = button(label);
+        } catch (WaitForConditionTimeoutException e) {
+            throw new UITestException("The '" + label + "' button has not been found.");
+        }
 
-            if (button.isEnabled()) {
-                button.click();
-            } else {
-                throw new UITestException("The '" + label + "' button is not enabled.");
-            }
-        });
+        if (button.isEnabled()) {
+            button.click();
+        } else {
+            throw new UITestException("The '" + label + "' button is not enabled.");
+        }
     }
 }

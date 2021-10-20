@@ -18,8 +18,6 @@ import com.intellij.remoterobot.fixtures.FixtureName;
 import com.redhat.devtools.intellij.commonUiTestLibrary.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
-
 /**
  * IDE Fatal Errors dialog fixture
  *
@@ -30,16 +28,12 @@ import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 public class IdeFatalErrorsDialog extends CommonContainerFixture {
     public IdeFatalErrorsDialog(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        step("Create fixture - IDE Fatal Errors dialog", () -> {
-        });
     }
 
     /**
      * Click on the 'Clear all' button
      */
     public void clearAll() {
-        step("Click on the '" + ButtonLabels.clearAllLabel + "' button", () -> {
-            button(ButtonLabels.clearAllLabel).click();
-        });
+        button(ButtonLabels.clearAllLabel).click();
     }
 }

@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -36,35 +35,27 @@ public class ProjectStructureAndTipDialogs extends LibraryTestBase {
 
     @BeforeAll
     public static void prepareProject() {
-        step("Create new Java project", () -> {
-            CreateCloseUtils.createNewProject(remoteRobot, projectName, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
-        });
+        CreateCloseUtils.createNewProject(remoteRobot, projectName, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
     }
 
     @AfterAll
     public static void closeProject() {
-        step("Close currently opened project", () -> {
-            CreateCloseUtils.closeProject(remoteRobot);
-        });
+        CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @Test
     public void projectStructureDialogTest() {
-        step("@Test - close the 'Project Structure' dialog", () -> {
-            dialogTest(() -> {
-                ProjectStructureDialog projectStructureDialog = remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(10));
-                projectStructureDialog.cancel();
-            }, ProjectStructureDialog.class, "Project Structure");
-        });
+        dialogTest(() -> {
+            ProjectStructureDialog projectStructureDialog = remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(10));
+            projectStructureDialog.cancel();
+        }, ProjectStructureDialog.class, "Project Structure");
     }
 
     @Test
     public void tipDialogTest() {
-        step("@Test - close the 'Tip of the Day' dialog", () -> {
-            dialogTest(() -> {
-                TipDialog.closeTipDialogIfItAppears(remoteRobot);
-            }, TipDialog.class, "Tip of the Day");
-        });
+        dialogTest(() -> {
+            TipDialog.closeTipDialogIfItAppears(remoteRobot);
+        }, TipDialog.class, "Tip of the Day");
     }
 
     private void dialogTest(Runnable selectedImpl, Class dialogClass, String dialogTitle) {
@@ -77,24 +68,20 @@ public class ProjectStructureAndTipDialogs extends LibraryTestBase {
     }
 
     private void makeSureDialogIsVisible(Class dialogClass, String dialogTitle) {
-        step("Open the Tip Dialog popup if it is not opened already", () -> {
-            try {
-                remoteRobot.find(dialogClass, Duration.ofSeconds(10));
-            } catch (WaitForConditionTimeoutException e) {
-                MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
-                mainIdeWindow.invokeCmdUsingSearchEverywherePopup(dialogTitle);
-            }
-        });
+        try {
+            remoteRobot.find(dialogClass, Duration.ofSeconds(10));
+        } catch (WaitForConditionTimeoutException e) {
+            MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
+            mainIdeWindow.invokeCmdUsingSearchEverywherePopup(dialogTitle);
+        }
     }
 
     private boolean isDialogVisible(Class dialogClass) {
-        return step("Test whether the Tip dialog is opened and visible", () -> {
-            try {
-                remoteRobot.find(dialogClass, Duration.ofSeconds(10));
-            } catch (WaitForConditionTimeoutException e) {
-                return false;
-            }
-            return true;
-        });
+        try {
+            remoteRobot.find(dialogClass, Duration.ofSeconds(10));
+        } catch (WaitForConditionTimeoutException e) {
+            return false;
+        }
+        return true;
     }
 }

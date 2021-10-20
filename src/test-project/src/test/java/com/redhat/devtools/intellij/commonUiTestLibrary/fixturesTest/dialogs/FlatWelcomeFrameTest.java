@@ -26,7 +26,6 @@ import java.io.FileFilter;
 import java.time.Duration;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -45,67 +44,55 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
 
     @Test
     public void createNewProjectLinkTest() {
-        step("@Test - click the new project link", () -> {
-            flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-            flatWelcomeFrame.createNewProject();
-            NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
-            newProjectDialogWizard.cancel();
-        });
+        flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame.createNewProject();
+        NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
+        newProjectDialogWizard.cancel();
     }
 
     @Test
     public void clearWorkspaceTest() {
-        step("@Test - clear workspace", () -> {
-            prepareWorkspace();
-            flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-            int projectsOnDisk = getNumberOfProjectsOnDisk();
-            int projectLinks = getNumberOfProjectLinks();
-            assertTrue(projectsOnDisk == 1, "Number of projects in the IntelliJ's project folder should be 1 but is " + projectsOnDisk + ".");
-            assertTrue(projectLinks == 1, "Number of projects' links in the IntelliJ's 'Welcome Frame Dialog' should be 1 but is " + projectLinks + ".");
-            flatWelcomeFrame.clearWorkspace();
-            int projectCount2 = getNumberOfProjectsOnDisk();
-            int projectLinks2 = getNumberOfProjectLinks();
-            assertTrue(projectCount2 == 0, "Number of projects in the IntelliJ's project folder should be 0 but is " + projectCount2 + ".");
-            assertTrue(projectLinks2 == 0, "Number of projects' links in the IntelliJ's 'Welcome Frame Dialog' should be 0 but is " + projectLinks2 + ".");
-        });
+        prepareWorkspace();
+        flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        int projectsOnDisk = getNumberOfProjectsOnDisk();
+        int projectLinks = getNumberOfProjectLinks();
+        assertTrue(projectsOnDisk == 1, "Number of projects in the IntelliJ's project folder should be 1 but is " + projectsOnDisk + ".");
+        assertTrue(projectLinks == 1, "Number of projects' links in the IntelliJ's 'Welcome Frame Dialog' should be 1 but is " + projectLinks + ".");
+        flatWelcomeFrame.clearWorkspace();
+        int projectCount2 = getNumberOfProjectsOnDisk();
+        int projectLinks2 = getNumberOfProjectLinks();
+        assertTrue(projectCount2 == 0, "Number of projects in the IntelliJ's project folder should be 0 but is " + projectCount2 + ".");
+        assertTrue(projectLinks2 == 0, "Number of projects' links in the IntelliJ's 'Welcome Frame Dialog' should be 0 but is " + projectLinks2 + ".");
     }
 
     @Test
     public void clearExceptionsTest() {
-        step("@Test - clear exceptions", () -> {
-            prepareWorkspace();
-            flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-            flatWelcomeFrame.clearExceptions();
-        });
+        prepareWorkspace();
+        flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame.clearExceptions();
     }
 
     private void prepareWorkspace() {
-        step("Prepare the workspace", () -> {
-            CreateCloseUtils.createNewProject(remoteRobot, projectName, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
-            MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
-            mainIdeWindow.closeProject();
-        });
+        CreateCloseUtils.createNewProject(remoteRobot, projectName, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
+        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
+        mainIdeWindow.closeProject();
     }
 
     private int getNumberOfProjectsOnDisk() {
-        return step("Get number of projects on disk", () -> {
-            String pathToIdeaProjectsFolder = System.getProperty("user.home") + File.separator + "IdeaProjects";
-            File[] files = new File(pathToIdeaProjectsFolder).listFiles((FileFilter) FileFilterUtils.directoryFileFilter());
-            return files.length;
-        });
+        String pathToIdeaProjectsFolder = System.getProperty("user.home") + File.separator + "IdeaProjects";
+        File[] files = new File(pathToIdeaProjectsFolder).listFiles((FileFilter) FileFilterUtils.directoryFileFilter());
+        return files.length;
     }
 
     private int getNumberOfProjectLinks() {
-        return step("Get number of project links", () -> {
-            try {
-                FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-                JListFixture recentProjectsList = flatWelcomeFrame.find(JListFixture.class, byXpath("//div[@accessiblename='Recent Projects']"), Duration.ofSeconds(10));
-                int numberOfProjectsLinks = recentProjectsList.findAllText().size() / 2;    // 2 items per 1 project link (project path and project name)
-                return numberOfProjectsLinks;
-            } catch (WaitForConditionTimeoutException e) {
-                // the list with accessible name 'Recent Projects' is not available -> 0 links in the 'Welcome to IntelliJ IDEA' dialog
-                return 0;
-            }
-        });
+        try {
+            FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+            JListFixture recentProjectsList = flatWelcomeFrame.find(JListFixture.class, byXpath("//div[@accessiblename='Recent Projects']"), Duration.ofSeconds(10));
+            int numberOfProjectsLinks = recentProjectsList.findAllText().size() / 2;    // 2 items per 1 project link (project path and project name)
+            return numberOfProjectsLinks;
+        } catch (WaitForConditionTimeoutException e) {
+            // the list with accessible name 'Recent Projects' is not available -> 0 links in the 'Welcome to IntelliJ IDEA' dialog
+            return 0;
+        }
     }
 }

@@ -52,7 +52,7 @@ public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallb
             step("Take a screenshot after a test has failed", () -> {
                 ScreenshotUtils.takeScreenshot(remoteRobot);
             });
-            step("Perform a clean up to ensure no dialog or window is opened", () -> {
+            step("Return to the 'Welcome Frame' dialog", () -> {
                 cleanAfterTestFail();
             });
         }

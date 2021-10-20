@@ -15,8 +15,6 @@ import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
-
 /**
  * Static utilities that assist and simplify data conversion and transformation
  *
@@ -30,15 +28,13 @@ public class TextUtils {
      * @return String containing a concatenation of all the labels in the 'data' List
      */
     public static String listOfRemoteTextToString(List<RemoteText> data) {
-        return step("Transform a List of RemoteText labels to one String", () -> {
-            List<String> listOfStrings = data
-                    .stream()
-                    .map(RemoteText::getText)
-                    .collect(Collectors.toList());
+        List<String> listOfStrings = data
+                .stream()
+                .map(RemoteText::getText)
+                .collect(Collectors.toList());
 
-            String concatString = String.join("", listOfStrings);
+        String concatString = String.join("", listOfStrings);
 
-            return concatString;
-        });
+        return concatString;
     }
 }

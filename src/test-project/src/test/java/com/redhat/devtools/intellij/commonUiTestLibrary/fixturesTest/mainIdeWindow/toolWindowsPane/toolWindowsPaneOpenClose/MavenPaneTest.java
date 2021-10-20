@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -45,11 +44,9 @@ class MavenPaneTest extends AbstractToolWindowsPaneTest {
 
     @Test
     public void mavenBuildToolPaneOpenCloseTest() {
-        step("@Test - open and close the maven build tool pane", () -> {
-            toolWindowsPane.openMavenBuildToolPane();
-            assertTrue(isPaneOpened(MavenBuildToolPane.class), "The 'Maven Build Tool Pane' should be opened but is closed.");
-            toolWindowsPane.closeMavenBuildToolPane();
-            assertFalse(isPaneOpened(MavenBuildToolPane.class), "The 'Maven Build Tool Pane' should be closed but is opened.");
-        });
+        toolWindowsPane.openMavenBuildToolPane();
+        assertTrue(isPaneOpened(MavenBuildToolPane.class), "The 'Maven Build Tool Pane' should be opened but is closed.");
+        toolWindowsPane.closeMavenBuildToolPane();
+        assertFalse(isPaneOpened(MavenBuildToolPane.class), "The 'Maven Build Tool Pane' should be closed but is opened.");
     }
 }

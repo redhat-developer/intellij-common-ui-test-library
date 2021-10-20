@@ -20,7 +20,6 @@ import java.time.Duration;
 import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 
 /**
  * Top menu fixture
@@ -46,9 +45,7 @@ public class MenuBar {
             return;
         }
 
-        step("Navigate to the first item in given path ('" + path[0] + "') and click", () -> {
-            mainMenuItem(path[0]).click();
-        });
+        mainMenuItem(path[0]).click();
 
         if (path.length == 1) {
             return;
@@ -56,36 +53,30 @@ public class MenuBar {
 
         for (int i = 1; i < path.length - 1; i++) {
             final int pathIndex = i;
-            step("Navigate to the '" + path[pathIndex] + "' item", () -> {
-                List<JPopupMenuFixture> allContextMenus = remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType());
-                JPopupMenuFixture lastContextMenu = allContextMenus.get(allContextMenus.size() - 1);
-                lastContextMenu.findText((path[pathIndex])).moveMouse();
-            });
-        }
-
-        step("Navigate to last item in given path ('" + (path[path.length - 1]) + "') and click", () -> {
             List<JPopupMenuFixture> allContextMenus = remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType());
             JPopupMenuFixture lastContextMenu = allContextMenus.get(allContextMenus.size() - 1);
-            lastContextMenu.findText((path[path.length - 1])).click();
-        });
+            lastContextMenu.findText((path[pathIndex])).moveMouse();
+        }
+
+        List<JPopupMenuFixture> allContextMenus = remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType());
+        JPopupMenuFixture lastContextMenu = allContextMenus.get(allContextMenus.size() - 1);
+        lastContextMenu.findText((path[path.length - 1])).click();
     }
 
     private JButtonFixture mainMenuItem(String label) {
-        return step("Create main menu item fixture", () -> {
-            if (remoteRobot.isMac()) {
-                return null;
-            }
+        if (remoteRobot.isMac()) {
+            return null;
+        }
 
-            CommonContainerFixture cf;
-            if (remoteRobot.isLinux()) {
-                cf = remoteRobot.find(CommonContainerFixture.class, byXpath("//div[@class='LinuxIdeMenuBar']"), Duration.ofSeconds(10));
-            } else if (remoteRobot.isWin() && ideaVersion.toInt() >= 20203) {
-                cf = remoteRobot.find(CommonContainerFixture.class, byXpath("//div[@class='MenuFrameHeader']"), Duration.ofSeconds(10));
-            } else {
-                cf = remoteRobot.find(CommonContainerFixture.class, byXpath("//div[@class='CustomHeaderMenuBar']"), Duration.ofSeconds(10));
-            }
+        CommonContainerFixture cf;
+        if (remoteRobot.isLinux()) {
+            cf = remoteRobot.find(CommonContainerFixture.class, byXpath("//div[@class='LinuxIdeMenuBar']"), Duration.ofSeconds(10));
+        } else if (remoteRobot.isWin() && ideaVersion.toInt() >= 20203) {
+            cf = remoteRobot.find(CommonContainerFixture.class, byXpath("//div[@class='MenuFrameHeader']"), Duration.ofSeconds(10));
+        } else {
+            cf = remoteRobot.find(CommonContainerFixture.class, byXpath("//div[@class='CustomHeaderMenuBar']"), Duration.ofSeconds(10));
+        }
 
-            return cf.button(byXpath("//div[@text='" + label + "']"), Duration.ofSeconds(10));
-        });
+        return cf.button(byXpath("//div[@text='" + label + "']"), Duration.ofSeconds(10));
     }
 }

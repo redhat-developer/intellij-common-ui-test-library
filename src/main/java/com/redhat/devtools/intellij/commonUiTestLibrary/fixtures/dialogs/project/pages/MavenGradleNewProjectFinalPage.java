@@ -33,8 +33,6 @@ import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 public class MavenGradleNewProjectFinalPage extends AbstractNewProjectFinalPage {
     public MavenGradleNewProjectFinalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        step("Create fixture - New Project dialog maven project second page", () -> {
-        });
     }
 
     /**
@@ -65,9 +63,7 @@ public class MavenGradleNewProjectFinalPage extends AbstractNewProjectFinalPage 
      * @return group ID currently inserted in the input field
      */
     public String getGroupId() {
-        return step("Get the group ID currently inserted in the 'GroupId' input field", () -> {
-            return textField("GroupId:", true).getText();
-        });
+        return textField("GroupId:", true).getText();
     }
 
     /**
@@ -76,9 +72,7 @@ public class MavenGradleNewProjectFinalPage extends AbstractNewProjectFinalPage 
      * @param groupId group ID that will be set into the input field
      */
     public void setGroupId(String groupId) {
-        step("Insert the group ID into the 'GroupId' input field", () -> {
-            textField("GroupId:", true).setText(groupId);
-        });
+        textField("GroupId:", true).setText(groupId);
     }
 
     /**
@@ -87,9 +81,7 @@ public class MavenGradleNewProjectFinalPage extends AbstractNewProjectFinalPage 
      * @return artifact ID currently inserted in the input field
      */
     public String getArtifactId() {
-        return step("Get the artifact ID currently inserted in the 'ArtifactId' input field", () -> {
-            return textField("ArtifactId:", true).getText();
-        });
+        return textField("ArtifactId:", true).getText();
     }
 
     /**
@@ -98,9 +90,7 @@ public class MavenGradleNewProjectFinalPage extends AbstractNewProjectFinalPage 
      * @param artifactId artifact ID that will be set into the input field
      */
     public void setArtifactId(String artifactId) {
-        step("Insert the artifact ID into the 'ArtifactId' input field", () -> {
-            textField("ArtifactId:", true).setText(artifactId);
-        });
+        textField("ArtifactId:", true).setText(artifactId);
     }
 
     /**
@@ -109,9 +99,7 @@ public class MavenGradleNewProjectFinalPage extends AbstractNewProjectFinalPage 
      * @return version currently inserted in the input field
      */
     public String getVersion() {
-        return step("Get the version currently inserted in the 'Version' input field", () -> {
-            return textField("Version:", true).getText();
-        });
+        return textField("Version:", true).getText();
     }
 
     /**
@@ -120,15 +108,11 @@ public class MavenGradleNewProjectFinalPage extends AbstractNewProjectFinalPage 
      * @param version version that will be set into the input field
      */
     public void setVersion(String version) {
-        step("Insert the version into the 'Version' input field", () -> {
-            textField("Version:", true).setText(version);
-        });
+        textField("Version:", true).setText(version);
     }
 
     private boolean isArtifactCoordinatesOpened() {
-        return step("Test whether the 'Artifact Coordinates' is opened", () -> {
-            List<ContainerFixture> cf = findAll(ContainerFixture.class, byXpath("//div[@class='DialogPanel']/*"));
-            return cf.size() > 5;
-        });
+        List<ContainerFixture> cf = findAll(ContainerFixture.class, byXpath("//div[@class='DialogPanel']/*"));
+        return cf.size() > 5;
     }
 }

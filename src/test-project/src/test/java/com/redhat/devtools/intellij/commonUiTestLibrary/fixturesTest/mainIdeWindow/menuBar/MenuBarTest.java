@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -47,22 +46,18 @@ class MenuBarTest extends LibraryTestBase {
     @Test
     public void openTipDialogUsingMenuBarTest() {
         if (remoteRobot.isWin() || remoteRobot.isLinux()) {
-            step("@Test - open the 'Tip Dialog' using top menu", () -> {
-                new MenuBar(remoteRobot).navigateTo("Help", "Tip of the Day");
-                assertTrue(isTipDialogVisible(remoteRobot), "The 'Tip of the Day' dialog should be visible but is not");
-                remoteRobot.find(TipDialog.class, Duration.ofSeconds(10)).button(ButtonLabels.closeLabel).click();
-            });
+            new MenuBar(remoteRobot).navigateTo("Help", "Tip of the Day");
+            assertTrue(isTipDialogVisible(remoteRobot), "The 'Tip of the Day' dialog should be visible but is not");
+            remoteRobot.find(TipDialog.class, Duration.ofSeconds(10)).button(ButtonLabels.closeLabel).click();
         }
     }
 
     private boolean isTipDialogVisible(RemoteRobot remoteRobot) {
-        return step("Test whether the 'Tip Dialog' is visible", () -> {
-            try {
-                remoteRobot.find(TipDialog.class, Duration.ofSeconds(10));
-            } catch (WaitForConditionTimeoutException e) {
-                return false;
-            }
-            return true;
-        });
+        try {
+            remoteRobot.find(TipDialog.class, Duration.ofSeconds(10));
+        } catch (WaitForConditionTimeoutException e) {
+            return false;
+        }
+        return true;
     }
 }

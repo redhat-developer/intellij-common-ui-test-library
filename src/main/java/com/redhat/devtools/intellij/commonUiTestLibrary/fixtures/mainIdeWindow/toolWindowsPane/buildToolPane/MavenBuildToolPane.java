@@ -25,7 +25,6 @@ import java.time.Duration;
 import java.util.Locale;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 
 /**
@@ -40,27 +39,21 @@ public class MavenBuildToolPane extends CommonContainerFixture {
 
     public MavenBuildToolPane(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        step("Create fixture - Maven Build Tool Pane", () -> {
-            this.remoteRobot = remoteRobot;
-        });
+        this.remoteRobot = remoteRobot;
     }
 
     /**
      * Reload all Maven projects
      */
     public void reloadAllMavenProjects() {
-        step("Reload all Maven projects", () -> {
-            actionButton(byXpath("//div[@myicon='refresh.svg']"), Duration.ofSeconds(2)).click();
-        });
+        actionButton(byXpath("//div[@myicon='refresh.svg']"), Duration.ofSeconds(2)).click();
     }
 
     /**
      * Collapse all
      */
     public void collapseAll() {
-        step("Collapse all", () -> {
-            actionButton(byXpath("//div[contains(@myvisibleactions, 'For')]//div[@myicon='collapseall.svg']"), Duration.ofSeconds(2)).click();
-        });
+        actionButton(byXpath("//div[contains(@myvisibleactions, 'For')]//div[@myicon='collapseall.svg']"), Duration.ofSeconds(2)).click();
     }
 
     /**
@@ -69,12 +62,10 @@ public class MavenBuildToolPane extends CommonContainerFixture {
      * @param lifecycle name of the lifecycle you want to invoke (clean, validate, compile, test, package, verify, install, site, deploy)
      */
     public void buildProject(String lifecycle) {
-        step("Invoke the '" + lifecycle + "' lifecycle", () -> {
-            waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The Maven target tree did not appear in 30 seconds.", () -> isMavenTreeVisible());
-            mavenTargetTree().expandAll();
-            mavenTargetTree().findAllText(lifecycle).get(0).doubleClick();
-            remoteRobot.find(ToolWindowsPane.class).find(BuildView.class).waitUntilBuildHasFinished();
-        });
+        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The Maven target tree did not appear in 30 seconds.", () -> isMavenTreeVisible());
+        mavenTargetTree().expandAll();
+        mavenTargetTree().findAllText(lifecycle).get(0).doubleClick();
+        remoteRobot.find(ToolWindowsPane.class).find(BuildView.class).waitUntilBuildHasFinished();
     }
 
     /**
@@ -83,15 +74,11 @@ public class MavenBuildToolPane extends CommonContainerFixture {
      * @return Maven Tab tree fixture
      */
     public JTreeFixture mavenTargetTree() {
-        return step("Get the Maven Tab tree fixture", () -> {
-            return find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
-        });
+        return find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
     }
 
     private boolean isMavenTreeVisible() {
-        return step("Test whether the maven tree is visible", () -> {
-            String treeContent = TextUtils.listOfRemoteTextToString(mavenTargetTree().findAllText());
-            return !treeContent.toLowerCase(Locale.ROOT).contains("nothing") && !treeContent.equals("");
-        });
+        String treeContent = TextUtils.listOfRemoteTextToString(mavenTargetTree().findAllText());
+        return !treeContent.toLowerCase(Locale.ROOT).contains("nothing") && !treeContent.equals("");
     }
 }

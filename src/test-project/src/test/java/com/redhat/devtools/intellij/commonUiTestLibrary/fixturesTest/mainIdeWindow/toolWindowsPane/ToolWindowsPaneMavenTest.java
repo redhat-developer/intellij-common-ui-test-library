@@ -21,8 +21,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
-
 /**
  * ToolWindowsPane Maven test
  *
@@ -49,10 +47,8 @@ class ToolWindowsPaneMavenTest extends LibraryTestBase {
 
     @Test
     public void mavenBuildTest() {
-        step("@Test - build maven project", () -> {
-            toolWindowsPane.openMavenBuildToolPane();
-            MavenBuildToolPane mavenBuildToolPane = toolWindowsPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10));
-            mavenBuildToolPane.buildProject("install");
-        });
+        toolWindowsPane.openMavenBuildToolPane();
+        MavenBuildToolPane mavenBuildToolPane = toolWindowsPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10));
+        mavenBuildToolPane.buildProject("install");
     }
 }

@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -45,11 +44,9 @@ class GradlePaneTest extends AbstractToolWindowsPaneTest {
 
     @Test
     public void gradleBuildToolPaneOpenCloseTest() {
-        step("@Test - open and close the gradle build tool pane", () -> {
-            toolWindowsPane.openGradleBuildToolPane();
-            assertTrue(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be opened but is closed.");
-            toolWindowsPane.closeGradleBuildToolPane();
-            assertFalse(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be closed but is opened.");
-        });
+        toolWindowsPane.openGradleBuildToolPane();
+        assertTrue(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be opened but is closed.");
+        toolWindowsPane.closeGradleBuildToolPane();
+        assertFalse(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be closed but is opened.");
     }
 }

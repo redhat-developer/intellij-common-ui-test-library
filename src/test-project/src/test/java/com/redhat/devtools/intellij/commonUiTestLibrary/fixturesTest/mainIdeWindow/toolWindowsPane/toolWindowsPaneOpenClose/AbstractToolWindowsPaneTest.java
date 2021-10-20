@@ -18,7 +18,6 @@ import org.junit.jupiter.api.AfterAll;
 
 import java.time.Duration;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 
 /**
@@ -37,40 +36,32 @@ abstract class AbstractToolWindowsPaneTest extends LibraryTestBase {
     }
 
     protected void closePane(String label, Class fixtureClass) {
-        step("Close the '" + label + "' pane", () -> {
-            if (isPaneOpened(fixtureClass)) {
-                clickOnStripeButton(label, true);
-            }
-        });
+        if (isPaneOpened(fixtureClass)) {
+            clickOnStripeButton(label, true);
+        }
     }
 
     protected boolean isPaneOpened(Class fixtureClass) {
-        return step("Test whether the pane is opened", () -> {
-            ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-            try {
-                toolWindowsPane.find(fixtureClass, Duration.ofSeconds(5));
-                return true;
-            } catch (WaitForConditionTimeoutException e) {
-                return false;
-            }
-        });
+        ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        try {
+            toolWindowsPane.find(fixtureClass, Duration.ofSeconds(5));
+            return true;
+        } catch (WaitForConditionTimeoutException e) {
+            return false;
+        }
     }
 
     protected void clickOnStripeButton(String label, boolean isPaneOpened) {
-        step("Click on the '" + label + "' stripe button", () -> {
-            waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The '" + label + "' stripe button is not available.", () -> isStripeButtonAvailable(label, isPaneOpened));
-            toolWindowsPane.stripeButton(label, isPaneOpened).click();
-        });
+        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The '" + label + "' stripe button is not available.", () -> isStripeButtonAvailable(label, isPaneOpened));
+        toolWindowsPane.stripeButton(label, isPaneOpened).click();
     }
 
     protected boolean isStripeButtonAvailable(String label, boolean isPaneOpened) {
-        return step("Test whether the '" + label + "' stripe button is available", () -> {
-            try {
-                toolWindowsPane.stripeButton(label, isPaneOpened);
-            } catch (WaitForConditionTimeoutException e) {
-                return false;
-            }
-            return true;
-        });
+        try {
+            toolWindowsPane.stripeButton(label, isPaneOpened);
+        } catch (WaitForConditionTimeoutException e) {
+            return false;
+        }
+        return true;
     }
 }

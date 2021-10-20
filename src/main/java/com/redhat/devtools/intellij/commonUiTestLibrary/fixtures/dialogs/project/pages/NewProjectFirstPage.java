@@ -42,9 +42,7 @@ public class NewProjectFirstPage extends CommonContainerFixture {
 
     public NewProjectFirstPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        step("Create fixture - New Project dialog first page", () -> {
-            this.remoteRobot = remoteRobot;
-        });
+        this.remoteRobot = remoteRobot;
     }
 
     /**
@@ -53,9 +51,7 @@ public class NewProjectFirstPage extends CommonContainerFixture {
      * @param projectType name of the project type to which will be changed the current settings
      */
     public void selectNewProjectType(String projectType) {
-        step("Set the project type to specific type", () -> {
-            jLists(JListFixture.Companion.byType()).get(0).findText(projectType).click();
-        });
+        jLists(JListFixture.Companion.byType()).get(0).findText(projectType).click();
     }
 
     /**

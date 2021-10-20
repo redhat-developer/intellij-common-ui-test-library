@@ -24,8 +24,6 @@ import com.redhat.devtools.intellij.commonUiTestLibrary.fixtures.mainIdeWindow.i
 
 import java.time.Duration;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
-
 /**
  * Project creation utilities
  *
@@ -40,28 +38,26 @@ public class CreateCloseUtils {
      * @param newProjectType type of new project
      */
     public static void createNewProject(RemoteRobot remoteRobot, String projectName, NewProjectType newProjectType) {
-        step("Create new project (" + newProjectType.toString() + ")", () -> {
-            openNewProjectDialogFromWelcomeDialog(remoteRobot);
-            NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
-            NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
-            newProjectFirstPage.selectNewProjectType(newProjectType.toString());
-            newProjectFirstPage.setProjectSdkIfAvailable("11");
+        openNewProjectDialogFromWelcomeDialog(remoteRobot);
+        NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
+        NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
+        newProjectFirstPage.selectNewProjectType(newProjectType.toString());
+        newProjectFirstPage.setProjectSdkIfAvailable("11");
+        newProjectDialogWizard.next();
+        // Plain java project has more pages in the 'New project' dialog
+        if (newProjectType.equals(NewProjectType.PLAIN_JAVA)) {
             newProjectDialogWizard.next();
-            // Plain java project has more pages in the 'New project' dialog
-            if (newProjectType.equals(NewProjectType.PLAIN_JAVA)) {
-                newProjectDialogWizard.next();
-            }
+        }
 
-            AbstractNewProjectFinalPage finalPage = getFinalPage(newProjectDialogWizard, newProjectType);
-            finalPage.setProjectName(projectName);
-            newProjectDialogWizard.finish();
-            IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
-            ideStatusBar.waitUntilProjectImportIsComplete();
-            TipDialog.closeTipDialogIfItAppears(remoteRobot);
-            MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
-            mainIdeWindow.maximizeIdeWindow();
-            ideStatusBar.waitUntilAllBgTasksFinish();
-        });
+        AbstractNewProjectFinalPage finalPage = getFinalPage(newProjectDialogWizard, newProjectType);
+        finalPage.setProjectName(projectName);
+        newProjectDialogWizard.finish();
+        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
+        ideStatusBar.waitUntilProjectImportIsComplete();
+        TipDialog.closeTipDialogIfItAppears(remoteRobot);
+        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
+        mainIdeWindow.maximizeIdeWindow();
+        ideStatusBar.waitUntilAllBgTasksFinish();
     }
 
     /**
@@ -70,10 +66,8 @@ public class CreateCloseUtils {
      * @param remoteRobot reference to the RemoteRobot instance
      */
     public static void openNewProjectDialogFromWelcomeDialog(RemoteRobot remoteRobot) {
-        step("Open 'New Project' dialog from 'Welcome to IntelliJ IDEA' dialog", () -> {
-            FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-            flatWelcomeFrame.createNewProject();
-        });
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame.createNewProject();
     }
 
     /**
@@ -82,10 +76,8 @@ public class CreateCloseUtils {
      * @param remoteRobot reference to the RemoteRobot instance
      */
     public static void closeProject(RemoteRobot remoteRobot) {
-        step("Close currently opened project", () -> {
-            MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
-            mainIdeWindow.closeProject();
-        });
+        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
+        mainIdeWindow.closeProject();
     }
 
     /**
@@ -96,17 +88,15 @@ public class CreateCloseUtils {
      * @return final page instance
      */
     public static AbstractNewProjectFinalPage getFinalPage(NewProjectDialogWizard newProjectDialogWizard, NewProjectType newProjectType) {
-        return step("Get appropriate final page instance", () -> {
-            switch (newProjectType) {
-                case PLAIN_JAVA:
-                    return newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
-                case MAVEN:
-                case GRADLE:
-                    return newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
-                default:
-                    throw new UITestException("Unsupported project type.");
-            }
-        });
+        switch (newProjectType) {
+            case PLAIN_JAVA:
+                return newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
+            case MAVEN:
+            case GRADLE:
+                return newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
+            default:
+                throw new UITestException("Unsupported project type.");
+        }
     }
 
     /**

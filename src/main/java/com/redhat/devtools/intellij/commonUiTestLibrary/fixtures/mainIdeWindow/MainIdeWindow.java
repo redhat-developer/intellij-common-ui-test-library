@@ -25,8 +25,6 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.event.KeyEvent;
 import java.time.Duration;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
-
 /**
  * Main IDE window fixture
  *
@@ -39,41 +37,35 @@ public class MainIdeWindow extends CommonContainerFixture {
 
     public MainIdeWindow(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        step("Create fixture - Main IDE window", () -> {
-            this.remoteRobot = remoteRobot;
-        });
+        this.remoteRobot = remoteRobot;
     }
 
     /**
      * Maximize the main IDE window
      */
     public void maximizeIdeWindow() {
-        step("Maximize the main IDE window", () -> {
-            runJs("const width = component.getWidth();\n" +
-                    "const height = component.getHeight();\n" +
-                    "const horizontal_offset = width/2;\n" +
-                    "robot.click(component, new Point(horizontal_offset, 10), MouseButton.LEFT_BUTTON, 2);\n" +
-                    "const width_after = component.getWidth();\n" +
-                    "const height_after = component.getHeight();\n" +
-                    "const horizontal_offset_after = width/2;\n" +
-                    "if (width > width_after || height > height_after) { robot.click(component, new Point(horizontal_offset_after, 10), MouseButton.LEFT_BUTTON, 2); }");
-        });
+        runJs("const width = component.getWidth();\n" +
+                "const height = component.getHeight();\n" +
+                "const horizontal_offset = width/2;\n" +
+                "robot.click(component, new Point(horizontal_offset, 10), MouseButton.LEFT_BUTTON, 2);\n" +
+                "const width_after = component.getWidth();\n" +
+                "const height_after = component.getHeight();\n" +
+                "const horizontal_offset_after = width/2;\n" +
+                "if (width > width_after || height > height_after) { robot.click(component, new Point(horizontal_offset_after, 10), MouseButton.LEFT_BUTTON, 2); }");
     }
 
     /**
      * Close the currently opened project
      */
     public void closeProject() {
-        step("Close the currently opened project", () -> {
-            if (remoteRobot.isMac()) {
-                runJs("robot.click(component, new Point(15, 10), MouseButton.LEFT_BUTTON, 1);");
-            } else {
-                new MenuBar(remoteRobot).navigateTo("File", "Close Project");
-            }
+        if (remoteRobot.isMac()) {
+            runJs("robot.click(component, new Point(15, 10), MouseButton.LEFT_BUTTON, 1);");
+        } else {
+            new MenuBar(remoteRobot).navigateTo("File", "Close Project");
+        }
 
-            remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).runJs("const horizontal_offset = component.getWidth()/2;\n" +
-                    "robot.click(component, new Point(horizontal_offset, 10), MouseButton.LEFT_BUTTON, 1);");
-        });
+        remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).runJs("const horizontal_offset = component.getWidth()/2;\n" +
+                "robot.click(component, new Point(horizontal_offset, 10), MouseButton.LEFT_BUTTON, 1);");
     }
 
     /**
@@ -82,29 +74,25 @@ public class MainIdeWindow extends CommonContainerFixture {
      * @param cmdToInvoke String representation of command which will be executed using the Search Everywhere popup
      */
     public void invokeCmdUsingSearchEverywherePopup(String cmdToInvoke) {
-        step("Invoke a command using the Search Everywhere popup", () -> {
-            SearchEverywherePopup searchEverywherePopup = openSearchEverywherePopup("All");
-            searchEverywherePopup.invokeCmd(cmdToInvoke);
-        });
+        SearchEverywherePopup searchEverywherePopup = openSearchEverywherePopup("All");
+        searchEverywherePopup.invokeCmd(cmdToInvoke);
     }
 
     private SearchEverywherePopup openSearchEverywherePopup(String tab) {
-        return step("Open Search Everywhere popup and open the '" + tab + "' tab", () -> {
-            try {
-                SearchEverywherePopup searchEverywherePopup = find(SearchEverywherePopup.class, Duration.ofSeconds(10));
-                searchEverywherePopup.activateTab(tab);
-                return searchEverywherePopup;
-            } catch (WaitForConditionTimeoutException e) {
-                Keyboard keyboard = new Keyboard(remoteRobot);
-                if (remoteRobot.isMac()) {
-                    keyboard.hotKey(KeyEvent.VK_META, KeyEvent.VK_O);
-                } else {
-                    keyboard.hotKey(KeyEvent.VK_CONTROL, KeyEvent.VK_N);
-                }
-                SearchEverywherePopup searchEverywherePopup = find(SearchEverywherePopup.class, Duration.ofSeconds(10));
-                searchEverywherePopup.activateTab(tab);
-                return searchEverywherePopup;
+        try {
+            SearchEverywherePopup searchEverywherePopup = find(SearchEverywherePopup.class, Duration.ofSeconds(10));
+            searchEverywherePopup.activateTab(tab);
+            return searchEverywherePopup;
+        } catch (WaitForConditionTimeoutException e) {
+            Keyboard keyboard = new Keyboard(remoteRobot);
+            if (remoteRobot.isMac()) {
+                keyboard.hotKey(KeyEvent.VK_META, KeyEvent.VK_O);
+            } else {
+                keyboard.hotKey(KeyEvent.VK_CONTROL, KeyEvent.VK_N);
             }
-        });
+            SearchEverywherePopup searchEverywherePopup = find(SearchEverywherePopup.class, Duration.ofSeconds(10));
+            searchEverywherePopup.activateTab(tab);
+            return searchEverywherePopup;
+        }
     }
 }

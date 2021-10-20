@@ -21,8 +21,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
-
 /**
  * ToolWindowsPane Gradle test
  *
@@ -49,10 +47,8 @@ class ToolWindowsPaneGradleTest extends LibraryTestBase {
 
     @Test
     public void gradleBuildTest() {
-        step("@Test - build gradle project", () -> {
-            toolWindowsPane.openGradleBuildToolPane();
-            GradleBuildToolPane gradleBuildToolPane = toolWindowsPane.find(GradleBuildToolPane.class, Duration.ofSeconds(10));
-            gradleBuildToolPane.buildProject();
-        });
+        toolWindowsPane.openGradleBuildToolPane();
+        GradleBuildToolPane gradleBuildToolPane = toolWindowsPane.find(GradleBuildToolPane.class, Duration.ofSeconds(10));
+        gradleBuildToolPane.buildProject();
     }
 }

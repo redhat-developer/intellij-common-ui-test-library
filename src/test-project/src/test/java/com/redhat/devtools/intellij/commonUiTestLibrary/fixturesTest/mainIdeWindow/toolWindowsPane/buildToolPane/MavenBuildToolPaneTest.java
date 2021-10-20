@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -49,28 +48,22 @@ class MavenBuildToolPaneTest extends LibraryTestBase {
 
     @Test
     public void buildProjectTest() {
-        step("@Test - build the maven project", () -> {
-            mavenBuildToolPane.buildProject("install");
-            boolean isBuildSuccessful = toolWindowsPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
-            assertTrue(isBuildSuccessful, "The build should be successful but is not.");
-        });
+        mavenBuildToolPane.buildProject("install");
+        boolean isBuildSuccessful = toolWindowsPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
+        assertTrue(isBuildSuccessful, "The build should be successful but is not.");
     }
 
     @Test
     public void reloadAllMavenProjectsTest() {
-        step("@Test - click the 'Reload All Maven Projects' button", () -> {
-            mavenBuildToolPane.reloadAllMavenProjects();
-        });
+        mavenBuildToolPane.reloadAllMavenProjects();
     }
 
     @Test
     public void collapseAllTest() {
-        step("@Test - click the 'Collapse All' button", () -> {
-            mavenBuildToolPane.mavenTargetTree().expandAll();
-            int itemsCountBeforeCollapsing = mavenBuildToolPane.mavenTargetTree().collectRows().size();
-            mavenBuildToolPane.collapseAll();
-            int itemsCountAfterCollapsing = mavenBuildToolPane.mavenTargetTree().collectRows().size();
-            assertTrue(itemsCountAfterCollapsing < itemsCountBeforeCollapsing, "The 'Collapse All' operation was unsuccessful.");
-        });
+        mavenBuildToolPane.mavenTargetTree().expandAll();
+        int itemsCountBeforeCollapsing = mavenBuildToolPane.mavenTargetTree().collectRows().size();
+        mavenBuildToolPane.collapseAll();
+        int itemsCountAfterCollapsing = mavenBuildToolPane.mavenTargetTree().collectRows().size();
+        assertTrue(itemsCountAfterCollapsing < itemsCountBeforeCollapsing, "The 'Collapse All' operation was unsuccessful.");
     }
 }

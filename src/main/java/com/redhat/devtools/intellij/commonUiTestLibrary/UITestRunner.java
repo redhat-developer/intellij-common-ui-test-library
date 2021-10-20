@@ -53,7 +53,7 @@ public class UITestRunner {
     public static RemoteRobot runIde(IdeaVersion ideaVersion, int port) {
         StepWorker.registerProcessor(new StepLogger());
 
-        return step("Start the given version of IntelliJ Idea listening on the given port", () -> {
+        return step("Start IntelliJ Idea ('" + ideaVersion.toString() + "') listening on port " + port, () -> {
             UITestRunner.ideaVersion = ideaVersion;
             makeSureAllTermsAndConditionsAreAccepted();
 
@@ -88,7 +88,7 @@ public class UITestRunner {
      * Close the IntelliJ Idea IDE from the 'Welcome to IntelliJ IDEA' dialog
      */
     public static void closeIde() {
-        step("Close the IntelliJ Idea IDE from the 'Welcome to IntelliJ IDEA' dialog", () -> {
+        step("Close IntelliJ Idea", () -> {
             if (remoteRobot.isWin()) {
                 remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).runJs("const horizontal_offset = component.getWidth() - 24;\n" +
                         "robot.click(component, new Point(horizontal_offset, 14), MouseButton.LEFT_BUTTON, 2);");
@@ -124,7 +124,7 @@ public class UITestRunner {
      * @throws InterruptedException may be thrown in Thread.sleep()
      */
     public static RemoteRobot getRemoteRobotConnection(int port) throws InterruptedException {
-        return step("Create an instance of the RemoteRobot listening on the given porte", () -> {
+        return step("Create an instance of the RemoteRobot listening on port " + port, () -> {
             RemoteRobot remoteRobot = new RemoteRobot("http://127.0.0.1:" + port);
             for (int i = 0; i < 60; i++) {
                 try {
@@ -239,42 +239,36 @@ public class UITestRunner {
     }
 
     private static boolean isHostOnIpAndPortAccessible(String ip, int port) {
-        return step("Test whether the host on ip " + ip + " and port " + port + " is accessible", () -> {
-            SocketAddress sockaddr = new InetSocketAddress(ip, port);
-            Socket socket = new Socket();
+        SocketAddress sockaddr = new InetSocketAddress(ip, port);
+        Socket socket = new Socket();
 
-            try {
-                socket.connect(sockaddr, 10000);
-            } catch (IOException IOException) {
-                return false;
-            }
-            return true;
-        });
+        try {
+            socket.connect(sockaddr, 10000);
+        } catch (IOException IOException) {
+            return false;
+        }
+        return true;
     }
 
     private static void createDirectoryHierarchy(String location) {
-        step("Create the '" + location + "' directory hierarchy", () -> {
-            Path path = Paths.get(location);
-            try {
-                Files.createDirectories(path);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        Path path = Paths.get(location);
+        try {
+            Files.createDirectories(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void copyFileFromJarResourceDir(String sourceFileLocation, String destFileLocation) {
-        step("Copy a resource file from this library (source: '" + sourceFileLocation + "') to  '" + destFileLocation + "'", () -> {
-            InputStream resourceStream = UITestRunner.class.getClassLoader().getResourceAsStream(sourceFileLocation);
-            try {
-                byte[] buffer = new byte[resourceStream.available()];
-                resourceStream.read(buffer);
-                File targetFile = new File(destFileLocation);
-                OutputStream outStream = new FileOutputStream(targetFile);
-                outStream.write(buffer);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        InputStream resourceStream = UITestRunner.class.getClassLoader().getResourceAsStream(sourceFileLocation);
+        try {
+            byte[] buffer = new byte[resourceStream.available()];
+            resourceStream.read(buffer);
+            File targetFile = new File(destFileLocation);
+            OutputStream outStream = new FileOutputStream(targetFile);
+            outStream.write(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -24,7 +24,6 @@ import java.time.Duration;
 import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 
 /**
@@ -39,9 +38,7 @@ public class IdeStatusBar extends CommonContainerFixture {
 
     public IdeStatusBar(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        step("Create fixture - Bottom status bar", () -> {
-            this.remoteRobot = remoteRobot;
-        });
+        this.remoteRobot = remoteRobot;
     }
 
     /**
@@ -50,56 +47,46 @@ public class IdeStatusBar extends CommonContainerFixture {
      * @return fixture for the InlineProgressPanel
      */
     public ComponentFixture inlineProgressPanel() {
-        return step("Create InlineProgressPanel fixture", () -> {
-            return find(ComponentFixture.class, byXpath("//div[@class='InlineProgressPanel']"));
-        });
+        return find(ComponentFixture.class, byXpath("//div[@class='InlineProgressPanel']"));
     }
 
     /**
      * Wait until the project has finished the import
      */
     public void waitUntilProjectImportIsComplete() {
-        step("Wait until the project has finished the import", () -> {
-            waitFor(Duration.ofSeconds(300), Duration.ofSeconds(5), "The project import did not finish in 5 minutes.", () -> didProjectImportFinish());
-        });
+        waitFor(Duration.ofSeconds(300), Duration.ofSeconds(5), "The project import did not finish in 5 minutes.", () -> didProjectImportFinish());
     }
 
     /**
      * Wait until all the background tasks finish
      */
     public void waitUntilAllBgTasksFinish() {
-        step("Wait until all the background tasks finish", () -> {
-            waitFor(Duration.ofSeconds(300), Duration.ofSeconds(10), "The background tasks did not finish in 5 minutes.", () -> didAllBgTasksFinish());
-        });
+        waitFor(Duration.ofSeconds(300), Duration.ofSeconds(10), "The background tasks did not finish in 5 minutes.", () -> didAllBgTasksFinish());
     }
 
     private boolean didProjectImportFinish() {
-        return step("Test whether the project import finish", () -> {
-            try {
-                find(ComponentFixture.class, byXpath("//div[@class='EngravedLabel']"), Duration.ofSeconds(10));
-            } catch (WaitForConditionTimeoutException e) {
-                return true;
-            }
-            return false;
-        });
+        try {
+            find(ComponentFixture.class, byXpath("//div[@class='EngravedLabel']"), Duration.ofSeconds(10));
+        } catch (WaitForConditionTimeoutException e) {
+            return true;
+        }
+        return false;
     }
 
     private boolean didAllBgTasksFinish() {
-        return step("Test whether all the background tasks finish", () -> {
-            for (int i = 0; i < 5; i++) {
-                IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class);
-                List<RemoteText> inlineProgressPanelContent = ideStatusBar.inlineProgressPanel().findAllText();
-                if (!inlineProgressPanelContent.isEmpty()) {
-                    return false;
-                }
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+        for (int i = 0; i < 5; i++) {
+            IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class);
+            List<RemoteText> inlineProgressPanelContent = ideStatusBar.inlineProgressPanel().findAllText();
+            if (!inlineProgressPanelContent.isEmpty()) {
+                return false;
             }
-            return true;
-        });
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
     }
 }

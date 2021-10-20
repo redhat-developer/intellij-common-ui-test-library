@@ -21,8 +21,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
-
 /**
  * Tip of the Day dialog fixture
  *
@@ -33,8 +31,6 @@ import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 public class TipDialog extends CommonContainerFixture {
     public TipDialog(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        step("Create fixture - Tip of the Day dialog", () -> {
-        });
     }
 
     /**
@@ -43,15 +39,11 @@ public class TipDialog extends CommonContainerFixture {
      * @param remoteRobot reference to the RemoteRobot instance
      */
     public static void closeTipDialogIfItAppears(RemoteRobot remoteRobot) {
-        step("Close the 'Tip of the Day' dialog if it appears", () -> {
-            try {
-                TipDialog tipDialog = remoteRobot.find(TipDialog.class, Duration.ofSeconds(20));
-                step("Click on the '" + ButtonLabels.closeLabel + "' button", () -> {
-                    tipDialog.button(ButtonLabels.closeLabel).click();
-                });
-            } catch (WaitForConditionTimeoutException e) {
-                e.printStackTrace();
-            }
-        });
+        try {
+            TipDialog tipDialog = remoteRobot.find(TipDialog.class, Duration.ofSeconds(20));
+            tipDialog.button(ButtonLabels.closeLabel).click();
+        } catch (WaitForConditionTimeoutException e) {
+            e.printStackTrace();
+        }
     }
 }

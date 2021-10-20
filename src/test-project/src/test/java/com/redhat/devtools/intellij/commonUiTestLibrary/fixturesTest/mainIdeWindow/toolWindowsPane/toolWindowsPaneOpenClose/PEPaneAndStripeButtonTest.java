@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static org.assertj.core.api.Fail.fail;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -47,22 +46,18 @@ class PEPaneAndStripeButtonTest extends AbstractToolWindowsPaneTest {
 
     @Test
     public void projectExplorerPaneOpenCloseTest() {
-        step("@Test - open and close the Project Explorer", () -> {
-            toolWindowsPane.openProjectExplorer();
-            assertTrue(isPaneOpened(ProjectExplorer.class), "The 'Project Explorer' should be opened but is closed.");
-            toolWindowsPane.closeProjectExplorer();
-            assertFalse(isPaneOpened(ProjectExplorer.class), "The 'Project Explorer' should be closed but is opened.");
-        });
+        toolWindowsPane.openProjectExplorer();
+        assertTrue(isPaneOpened(ProjectExplorer.class), "The 'Project Explorer' should be opened but is closed.");
+        toolWindowsPane.closeProjectExplorer();
+        assertFalse(isPaneOpened(ProjectExplorer.class), "The 'Project Explorer' should be closed but is opened.");
     }
 
     @Test
     public void stripeButtonTest() {
-        step("@Test - create stripe button fixture", () -> {
-            try {
-                toolWindowsPane.stripeButton(ButtonLabels.mavenStripeButtonLabel, false);
-            } catch (WaitForConditionTimeoutException e) {
-                fail(e.getMessage());
-            }
-        });
+        try {
+            toolWindowsPane.stripeButton(ButtonLabels.mavenStripeButtonLabel, false);
+        } catch (WaitForConditionTimeoutException e) {
+            fail(e.getMessage());
+        }
     }
 }

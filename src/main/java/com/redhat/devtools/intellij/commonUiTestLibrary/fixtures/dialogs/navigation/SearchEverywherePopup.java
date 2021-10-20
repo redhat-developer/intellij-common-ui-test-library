@@ -29,7 +29,6 @@ import java.time.Duration;
 import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 
 /**
@@ -44,9 +43,7 @@ public class SearchEverywherePopup extends CommonContainerFixture {
 
     public SearchEverywherePopup(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        step("Create fixture - Search Everywhere popup", () -> {
-            this.remoteRobot = remoteRobot;
-        });
+        this.remoteRobot = remoteRobot;
     }
 
     /**
@@ -55,13 +52,11 @@ public class SearchEverywherePopup extends CommonContainerFixture {
      * @param tabName name of the tab in the Search Everywhere popup
      */
     public void activateTab(String tabName) {
-        step("Activate the '" + tabName + "' tab in the Search Everywhere popup", () -> {
-            try {
-                button(byXpath("//div[@text='" + tabName + "']"), Duration.ofSeconds(2)).click();
-            } catch (WaitForConditionTimeoutException e) {
-                throw new UITestException("The '" + tabName + "' tab cannot be found.");
-            }
-        });
+        try {
+            button(byXpath("//div[@text='" + tabName + "']"), Duration.ofSeconds(2)).click();
+        } catch (WaitForConditionTimeoutException e) {
+            throw new UITestException("The '" + tabName + "' tab cannot be found.");
+        }
     }
 
     /**
@@ -70,26 +65,20 @@ public class SearchEverywherePopup extends CommonContainerFixture {
      * @param cmdToEnter command that will be invoked using the search field
      */
     public void invokeCmd(String cmdToEnter) {
-        step("Invoke the '" + cmdToEnter + "' command using the search field in the Search Everywhere popup", () -> {
-            JTextFieldFixture searchField = textField(JTextFieldFixture.Companion.byType(), Duration.ofSeconds(10));
-            searchField.click();
-            searchField.setText(cmdToEnter);
-            waitFor(Duration.ofSeconds(30), Duration.ofSeconds(1), "The search in the Search Everywhere popup did not finish in 30 seconds.", () -> didSearchFinish(cmdToEnter));
-            new Keyboard(remoteRobot).hotKey(KeyEvent.VK_ENTER);
-        });
+        JTextFieldFixture searchField = textField(JTextFieldFixture.Companion.byType(), Duration.ofSeconds(10));
+        searchField.click();
+        searchField.setText(cmdToEnter);
+        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(1), "The search in the Search Everywhere popup did not finish in 30 seconds.", () -> didSearchFinish(cmdToEnter));
+        new Keyboard(remoteRobot).hotKey(KeyEvent.VK_ENTER);
     }
 
     private boolean didSearchFinish(String cmdToInvoke) {
-        return step("Test whether the search in the Search Everywhere popup finish", () -> {
-            String searchResultsString = TextUtils.listOfRemoteTextToString(getSearchResults());
-            return searchResultsString.toLowerCase().contains(cmdToInvoke.toLowerCase());
-        });
+        String searchResultsString = TextUtils.listOfRemoteTextToString(getSearchResults());
+        return searchResultsString.toLowerCase().contains(cmdToInvoke.toLowerCase());
     }
 
     private List<RemoteText> getSearchResults() {
-        return step("Get search results from the Search Everywhere popup", () -> {
-            JListFixture searchResultsList = jLists(JListFixture.Companion.byType()).get(0);
-            return searchResultsList.findAllText();
-        });
+        JListFixture searchResultsList = jLists(JListFixture.Companion.byType()).get(0);
+        return searchResultsList.findAllText();
     }
 }
