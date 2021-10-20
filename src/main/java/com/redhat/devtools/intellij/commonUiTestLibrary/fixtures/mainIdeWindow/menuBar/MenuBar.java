@@ -52,10 +52,9 @@ public class MenuBar {
         }
 
         for (int i = 1; i < path.length - 1; i++) {
-            final int pathIndex = i;
             List<JPopupMenuFixture> allContextMenus = remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType());
             JPopupMenuFixture lastContextMenu = allContextMenus.get(allContextMenus.size() - 1);
-            lastContextMenu.findText((path[pathIndex])).moveMouse();
+            lastContextMenu.findText((path[i])).moveMouse();
         }
 
         List<JPopupMenuFixture> allContextMenus = remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType());
