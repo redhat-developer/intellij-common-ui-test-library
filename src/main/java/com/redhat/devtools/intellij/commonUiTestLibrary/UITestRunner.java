@@ -38,7 +38,9 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  * @author zcervink@redhat.com
  */
 public class UITestRunner {
-    private static final int defaultPort = 8580;
+    private static final int DEFAULT_PORT = 8580;
+    private static final String ACCEPTED_SOURCE_LOCATION = "accepted";
+    private static final String COPY_ACCEPTED_FILE_STEP_DESCRIPTION = "Copy the 'accepted' file to the appropriate location";
     private static RemoteRobot remoteRobot = null;
     private static Process ideProcess;
     private static IdeaVersion ideaVersion;
@@ -65,7 +67,7 @@ public class UITestRunner {
                 ideProcess = pb.start();
                 waitUntilIntelliJStarts(port);
                 remoteRobot = getRemoteRobotConnection(port);
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -81,7 +83,7 @@ public class UITestRunner {
      * @return instance of the RemoteRobot
      */
     public static RemoteRobot runIde(IdeaVersion ideaVersion) {
-        return runIde(ideaVersion, defaultPort);
+        return runIde(ideaVersion, DEFAULT_PORT);
     }
 
     /**
@@ -121,9 +123,8 @@ public class UITestRunner {
      *
      * @param port port number
      * @return instance of the RemoteRobot
-     * @throws InterruptedException may be thrown in Thread.sleep()
      */
-    public static RemoteRobot getRemoteRobotConnection(int port) throws InterruptedException {
+    public static RemoteRobot getRemoteRobotConnection(int port) {
         return step("Create an instance of the RemoteRobot listening on port " + port, () -> {
             RemoteRobot remoteRobot = new RemoteRobot("http://127.0.0.1:" + port);
             for (int i = 0; i < 60; i++) {
@@ -149,7 +150,7 @@ public class UITestRunner {
         V_2020_2("IC-2020.2"),
         V_2020_3("IC-2020.3");
 
-        final private String ideaVersionStringRepresentation;
+        private final String ideaVersionStringRepresentation;
 
         IdeaVersion(String ideaVersionStringRepresentation) {
             this.ideaVersionStringRepresentation = ideaVersionStringRepresentation;
@@ -177,11 +178,10 @@ public class UITestRunner {
                 copyFileFromJarResourceDir(prefsXmlSourceLocation, prefsXmlDir + "/prefs.xml");
             });
 
-            step("Copy the 'accepted' file to the appropriate location", () -> {
-                String acceptedSourceLocation = "accepted";
+            step(COPY_ACCEPTED_FILE_STEP_DESCRIPTION, () -> {
                 String acceptedDir = System.getProperty("user.home") + "/.local/share/JetBrains/consentOptions";
                 createDirectoryHierarchy(acceptedDir);
-                copyFileFromJarResourceDir(acceptedSourceLocation, acceptedDir + "/accepted");
+                copyFileFromJarResourceDir(ACCEPTED_SOURCE_LOCATION, acceptedDir + "/accepted");
             });
         } else if (osName.contains("os x")) {
             step("Copy the 'com.apple.java.util.prefs.plist' file to the appropriate location", () -> {
@@ -190,11 +190,10 @@ public class UITestRunner {
                 copyFileFromJarResourceDir(plistSourceLocation, plistDir + "/com.apple.java.util.prefs.plist");
             });
 
-            step("Copy the 'accepted' file to the appropriate location", () -> {
-                String acceptedSourceLocation = "accepted";
+            step(COPY_ACCEPTED_FILE_STEP_DESCRIPTION, () -> {
                 String acceptedDir = System.getProperty("user.home") + "/Library/Application Support/JetBrains/consentOptions";
                 createDirectoryHierarchy(acceptedDir);
-                copyFileFromJarResourceDir(acceptedSourceLocation, acceptedDir + "/accepted");
+                copyFileFromJarResourceDir(ACCEPTED_SOURCE_LOCATION, acceptedDir + "/accepted");
 
                 // run the 'killall cfprefsd' cmd to force OS X to reload preferences files
                 ProcessBuilder pb = new ProcessBuilder("killall", "cfprefsd");
@@ -206,11 +205,10 @@ public class UITestRunner {
                 }
             });
         } else if (osName.contains("windows")) {
-            step("Copy the 'accepted' file to the appropriate location", () -> {
-                String acceptedSourceLocation = "accepted";
+            step(COPY_ACCEPTED_FILE_STEP_DESCRIPTION, () -> {
                 String acceptedDir = System.getProperty("user.home") + "\\AppData\\Roaming\\JetBrains\\consentOptions";
                 createDirectoryHierarchy(acceptedDir);
-                copyFileFromJarResourceDir(acceptedSourceLocation, acceptedDir + "\\accepted");
+                copyFileFromJarResourceDir(ACCEPTED_SOURCE_LOCATION, acceptedDir + "\\accepted");
             });
 
             step("Create appropriate registry entries", () -> {
@@ -244,7 +242,7 @@ public class UITestRunner {
 
         try {
             socket.connect(sockaddr, 10000);
-        } catch (IOException IOException) {
+        } catch (IOException e) {
             return false;
         }
         return true;
