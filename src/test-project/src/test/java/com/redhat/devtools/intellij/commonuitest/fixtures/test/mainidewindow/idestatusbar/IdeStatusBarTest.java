@@ -56,7 +56,7 @@ class IdeStatusBarTest extends LibraryTestBase {
 
     @Test
     public void progressBarTest() {
-        IdeStatusBar ideStatusBar = waitFor(Duration.ofSeconds(60), Duration.ofSeconds(1), "The progress bar in status bar did not appear in 60 seconds.", IdeStatusBarTest::isProgressbarWithLabelVisible);
+        IdeStatusBar ideStatusBar = waitFor(Duration.ofSeconds(60), Duration.ofSeconds(1), "Wait for the appearance of progress bar in the IDE status bar.", "The progress bar in status bar did not appear in 60 seconds.", IdeStatusBarTest::isProgressbarWithLabelVisible);
         ideStatusBar.waitUntilProjectImportIsComplete();
         TipDialog.closeTipDialogIfItAppears(remoteRobot);
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));

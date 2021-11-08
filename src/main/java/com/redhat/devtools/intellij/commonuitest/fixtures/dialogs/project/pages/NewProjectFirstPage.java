@@ -68,7 +68,7 @@ public class NewProjectFirstPage extends CommonContainerFixture {
             }
             projectJdkComboBox.click();
 
-            CommonContainerFixture parentFixture = waitFor(Duration.ofSeconds(20), Duration.ofSeconds(2), "The project JDK list did not load all items in 20 seconds.", this::didProjectSdkListLoadAllItems);
+            CommonContainerFixture parentFixture = waitFor(Duration.ofSeconds(20), Duration.ofSeconds(2), "Wait for the 'Project SDK' list to finish loading all items.", "The project JDK list did not load all items in 20 seconds.", this::didProjectSdkListLoadAllItems);
             JPopupMenuFixture projectSdkList = parentFixture.jPopupMenus(byXpath("//div[@class='HeavyWeightWindow']")).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
             List<RemoteText> sdkItems = projectSdkList.findAllText();
             for (RemoteText sdkItem : sdkItems) {
