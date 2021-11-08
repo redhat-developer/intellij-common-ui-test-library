@@ -45,6 +45,8 @@ public class UITestRunner {
     private static final String ACCEPTED_SOURCE_LOCATION = "accepted";
     private static final String COPY_ACCEPTED_FILE_STEP_DESCRIPTION = "Copy the 'accepted' file to the appropriate location";
     private static final Logger LOGGER = Logger.getLogger(UITestRunner.class.getName());
+    private static final String OS_NAME = System.getProperty("os.name").toLowerCase();
+    private static final String USER_HOME = System.getProperty("user.home");
     private static RemoteRobot remoteRobot = null;
     private static Process ideProcess;
     private static IdeaVersion ideaVersion;
@@ -63,8 +65,7 @@ public class UITestRunner {
             UITestRunner.ideaVersion = ideaVersion;
             makeSureAllTermsAndConditionsAreAccepted();
 
-            String osName = System.getProperty("os.name").toLowerCase();
-            String fileExtension = osName.contains("windows") ? ".bat" : "";
+            String fileExtension = OS_NAME.contains("windows") ? ".bat" : "";
             ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion.toString(), "-Drobot-server.port=" + port);
 
             try {
@@ -173,31 +174,28 @@ public class UITestRunner {
     }
 
     private static void makeSureAllTermsAndConditionsAreAccepted() {
-        String osName = System.getProperty("os.name").toLowerCase();
-        String userHome = "user.home";
-
-        if (osName.contains("linux")) {
+        if (OS_NAME.contains("linux")) {
             step("Copy the 'prefs.xml' file to the appropriate location", () -> {
                 String prefsXmlSourceLocation = "prefs.xml";
-                String prefsXmlDir = System.getProperty(userHome) + "/.java/.userPrefs/jetbrains/_!(!!cg\"p!(}!}@\"j!(k!|w\"w!'8!b!\"p!':!e@==";
+                String prefsXmlDir = USER_HOME + "/.java/.userPrefs/jetbrains/_!(!!cg\"p!(}!}@\"j!(k!|w\"w!'8!b!\"p!':!e@==";
                 createDirectoryHierarchy(prefsXmlDir);
                 copyFileFromJarResourceDir(prefsXmlSourceLocation, prefsXmlDir + "/prefs.xml");
             });
 
             step(COPY_ACCEPTED_FILE_STEP_DESCRIPTION, () -> {
-                String acceptedDir = System.getProperty(userHome) + "/.local/share/JetBrains/consentOptions";
+                String acceptedDir = USER_HOME + "/.local/share/JetBrains/consentOptions";
                 createDirectoryHierarchy(acceptedDir);
                 copyFileFromJarResourceDir(ACCEPTED_SOURCE_LOCATION, acceptedDir + "/accepted");
             });
-        } else if (osName.contains("os x")) {
+        } else if (OS_NAME.contains("os x")) {
             step("Copy the 'com.apple.java.util.prefs.plist' file to the appropriate location", () -> {
                 String plistSourceLocation = "com.apple.java.util.prefs.plist";
-                String plistDir = System.getProperty(userHome) + "/Library/Preferences";
+                String plistDir = USER_HOME + "/Library/Preferences";
                 copyFileFromJarResourceDir(plistSourceLocation, plistDir + "/com.apple.java.util.prefs.plist");
             });
 
             step(COPY_ACCEPTED_FILE_STEP_DESCRIPTION, () -> {
-                String acceptedDir = System.getProperty(userHome) + "/Library/Application Support/JetBrains/consentOptions";
+                String acceptedDir = USER_HOME + "/Library/Application Support/JetBrains/consentOptions";
                 createDirectoryHierarchy(acceptedDir);
                 copyFileFromJarResourceDir(ACCEPTED_SOURCE_LOCATION, acceptedDir + "/accepted");
 
@@ -211,9 +209,9 @@ public class UITestRunner {
                     Thread.currentThread().interrupt();
                 }
             });
-        } else if (osName.contains("windows")) {
+        } else if (OS_NAME.contains("windows")) {
             step(COPY_ACCEPTED_FILE_STEP_DESCRIPTION, () -> {
-                String acceptedDir = System.getProperty("user.home") + "\\AppData\\Roaming\\JetBrains\\consentOptions";
+                String acceptedDir = USER_HOME + "\\AppData\\Roaming\\JetBrains\\consentOptions";
                 createDirectoryHierarchy(acceptedDir);
                 copyFileFromJarResourceDir(ACCEPTED_SOURCE_LOCATION, acceptedDir + "\\accepted");
             });
