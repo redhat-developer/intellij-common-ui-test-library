@@ -20,7 +20,7 @@ dependencies {
 }
 
 intellij {
-    version = '2020.3'
+    version = ideaVersion //for a full list of IntelliJ IDEA releases please see https://www.jetbrains.com/intellij-repository/releases
 }
 
 patchPluginXml {

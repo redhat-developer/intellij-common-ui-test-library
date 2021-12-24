@@ -34,7 +34,7 @@ public class LibraryTestBase {
     @BeforeAll
     protected static void startIntelliJ() {
         if (!intelliJHasStarted) {
-            remoteRobot = UITestRunner.runIde(UITestRunner.IdeaVersion.V_2020_3, 8580);
+            remoteRobot = UITestRunner.runIde(UITestRunner.IdeaVersion.COMMUNITY_V_2020_3, 8580);
             intelliJHasStarted = true;
             Runtime.getRuntime().addShutdownHook(new CloseIntelliJBeforeQuit());
         }
