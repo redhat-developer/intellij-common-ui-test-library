@@ -32,7 +32,7 @@ repositories {
 Add the following dependency:
 ```
 dependencies {
-    compile 'com.redhat.devtools.intellij:intellij-common-ui-test-library:0.0.4'
+    compile 'com.redhat.devtools.intellij:intellij-common-ui-test-library:0.0.5-SNAPSHOT'
 }
 ```
 
@@ -73,7 +73,7 @@ private static RemoteRobot robot;
 
 @BeforeAll
 public static void runIdeForUiTests() {
-    robot = UITestRunner.runIde(UITestRunner.IdeaVersion.V_2020_3, 8580);
+    robot = UITestRunner.runIde(UITestRunner.IdeaVersion.COMMUNITY_V_2020_3, 8580);
 }
 ```
 

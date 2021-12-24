@@ -153,8 +153,11 @@ public class UITestRunner {
      * Enumeration for supported versions of the IntelliJ Idea
      */
     public enum IdeaVersion {
-        V_2020_2("IC-2020.2"),
-        V_2020_3("IC-2020.3");
+        COMMUNITY_V_2020_2("IC-2020.2"),
+        COMMUNITY_V_2020_3("IC-2020.3"),
+        ULTIMATE_V_2020_2("IU-2020.2"),
+        ULTIMATE_V_2020_3("IU-2020.3");
+
 
         private final String ideaVersionStringRepresentation;
 
