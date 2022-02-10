@@ -32,7 +32,7 @@ repositories {
 Add the following dependency:
 ```
 dependencies {
-    compile 'com.redhat.devtools.intellij:intellij-common-ui-test-library:0.0.6'
+    compile 'com.redhat.devtools.intellij:intellij-common-ui-test-library:0.0.7-SNAPSHOT'
 }
 ```
 
