@@ -31,9 +31,7 @@ import java.util.logging.Logger;
  */
 public class ScreenshotUtils {
     static final String SCREENSHOT_LOCATION = "." + File.separator + "build" + File.separator + "screenshots" + File.separator;
-    static final String SCREENSHOT_FILENAME = getTimeNow("yyyy_MM_dd_HH_mm_ss");
     static final String FILETYPE = "png";
-    static final String SCREENSHOT_PATHNAME = SCREENSHOT_LOCATION + SCREENSHOT_FILENAME + "." + FILETYPE;
     private static final Logger LOGGER = Logger.getLogger(ScreenshotUtils.class.getName());
 
     private ScreenshotUtils() {
@@ -53,7 +51,9 @@ public class ScreenshotUtils {
             if (!doesScreenshotDirExists) {
                 Files.createDirectory(Paths.get(SCREENSHOT_LOCATION));
             }
-            File screenshotFile = new File(SCREENSHOT_PATHNAME);
+            String screenshotFilename = getTimeNow("yyyy_MM_dd_HH_mm_ss");
+            String screenshotPathname = SCREENSHOT_LOCATION + screenshotFilename + "." + FILETYPE;
+            File screenshotFile = new File(screenshotPathname);
             ImageIO.write(screenshotBufferedImage, FILETYPE, screenshotFile);
             return screenshotFile;
         } catch (IOException e) {
