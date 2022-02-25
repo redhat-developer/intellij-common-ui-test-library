@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.0.7 (Feb 25, 2022)
+ - Update the `Remote-Robot` version to 0.11.13
+ - Fix `multiple screenshots overwriting each other` issue
+
 ## 0.0.6 (Feb 5, 2022)
  - Update kotlin-stdlib and kotlin-reflect to version 1.6.0
  - Add the CHANGELOG.md file
