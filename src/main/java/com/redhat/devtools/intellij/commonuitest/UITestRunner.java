@@ -95,14 +95,7 @@ public class UITestRunner {
      * Close the IntelliJ Idea IDE from the 'Welcome to IntelliJ IDEA' dialog
      */
     public static void closeIde() {
-        step("Close IntelliJ Idea", () -> {
-            if (remoteRobot.isWin()) {
-                remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).runJs("const horizontal_offset = component.getWidth() - 24;\n" +
-                        "robot.click(component, new Point(horizontal_offset, 14), MouseButton.LEFT_BUTTON, 2);");
-            } else {
-                ideProcess.destroy();
-            }
-        });
+        ideProcess.destroy();
     }
 
     /**
