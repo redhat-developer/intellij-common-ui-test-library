@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.0.8 (Mar 7, 2022)
+ - Fix `java.net.ConnectException when closing IntelliJ IDEA` issue
+
 ## 0.0.7 (Feb 25, 2022)
  - Update the `Remote-Robot` version to 0.11.13
  - Fix `multiple screenshots overwriting each other` issue
