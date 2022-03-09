@@ -31,6 +31,7 @@ public class ButtonLabels {
     public static final String PROJECT_STRIPE_BUTTON_LABEL = "Project";
     public static final String MAVEN_STRIPE_BUTTON_LABEL = "Maven";
     public static final String GRADLE_STRIPE_BUTTON_LABEL = "Gradle";
+    public static final String GOT_IT_LABEL = "Got It";
     public static final String MORE_SETTINGS = "More Settings";
     public static final String ARTIFACT_COORDINATES = "Artifact Coordinates";
 }

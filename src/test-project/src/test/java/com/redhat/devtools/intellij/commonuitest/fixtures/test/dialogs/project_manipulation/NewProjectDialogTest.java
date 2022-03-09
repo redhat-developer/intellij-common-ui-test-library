@@ -12,12 +12,12 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.project_
 
 import com.intellij.remoterobot.fixtures.ComboBoxFixture;
 import com.intellij.remoterobot.fixtures.ContainerFixture;
+import com.intellij.remoterobot.fixtures.JLabelFixture;
 import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
-import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.TipDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.AbstractNewProjectFinalPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.JavaNewProjectFinalPage;
@@ -27,7 +27,6 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
-import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +35,7 @@ import java.time.Duration;
 import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
+import static com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils.listOfRemoteTextToString;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -58,8 +58,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @BeforeEach
     public void openNewProjectDialog() {
-        CreateCloseUtils.openNewProjectDialogFromWelcomeDialog(remoteRobot);
-        newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
+        newProjectDialogWizard = CreateCloseUtils.openNewProjectDialogFromWelcomeDialog(remoteRobot);
         newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
     }
 
@@ -69,7 +68,6 @@ public class NewProjectDialogTest extends LibraryTestBase {
             // tests ending with opened Main Ide Window needs to close the project and clear workspace
             IdeStatusBar ideStatusBar = mainIdeWindow.find(IdeStatusBar.class, Duration.ofSeconds(10));
             ideStatusBar.waitUntilProjectImportIsComplete();
-            TipDialog.closeTipDialogIfItAppears(remoteRobot);
             mainIdeWindow.maximizeIdeWindow();
             ideStatusBar.waitUntilAllBgTasksFinish();
             mainIdeWindow.closeProject();
@@ -240,7 +238,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         assertThrows(UITestException.class, () ->
                 newProjectDialogWizard.previous(), "The 'UITestException' should be thrown because the 'Previous' button is not enabled on the first page of the 'New Project'.");
         newProjectDialogWizard.next();
-        boolean isCommandLineAppTextPresent = TextUtils.listOfRemoteTextToString(newProjectFirstPage.findAllText()).contains("Command Line App");
+        boolean isCommandLineAppTextPresent = listOfRemoteTextToString(newProjectFirstPage.findAllText()).contains("Command Line App");
         assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present on the second page of the 'New Project' wizard for java project.");
         newProjectDialogWizard.previous();
         try {
@@ -255,7 +253,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
         newProjectFirstPage.setProjectSdkIfAvailable("11");
         newProjectDialogWizard.next();
-        boolean isCommandLineAppTextPresent = TextUtils.listOfRemoteTextToString(newProjectFirstPage.findAllText()).contains("Command Line App");
+        boolean isCommandLineAppTextPresent = listOfRemoteTextToString(newProjectFirstPage.findAllText()).contains("Command Line App");
         assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present on the second page of the 'New Project' wizard for java project.");
         newProjectDialogWizard.next();
         assertThrows(UITestException.class, () ->
@@ -288,22 +286,27 @@ public class NewProjectDialogTest extends LibraryTestBase {
         newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.MAVEN.toString());
         newProjectFirstPage.setProjectSdkIfAvailable("8");
         ComboBoxFixture projectJdkComboBox = newProjectFirstPage.find(ComboBoxFixture.class, byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
-        String currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
+        String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
         assertTrue(currentlySelectedProjectSdk.contains("8"), "Selected project SDK should be Java 8 but is '" + currentlySelectedProjectSdk + "'");
         newProjectFirstPage.setProjectSdkIfAvailable("11");
-        currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
+        currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
         assertTrue(currentlySelectedProjectSdk.contains("11"), "Selected project SDK should be Java 11 but is '" + currentlySelectedProjectSdk + "'");
     }
 
     @Test
     public void selectNewProjectTypeTest() {
         newProjectFirstPage.selectNewProjectType("Empty Project");
-        boolean isEmptyProjectLabelVisible = !newProjectFirstPage.findAll(JListFixture.class, byXpath("//div[@visible_text='Empty Project']")).isEmpty();
-        assertTrue(isEmptyProjectLabelVisible, "The 'Empty Project' label should be visible but is not.");
+        boolean isEmptyProjectPageDisplayed;
+        if (ideaVersion < 20213) {
+            isEmptyProjectPageDisplayed = !newProjectFirstPage.findAll(JListFixture.class, byXpath("//div[@visible_text='Empty Project']")).isEmpty();
+        } else {
+            isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("Simple project with one module");
+        }
+        assertTrue(isEmptyProjectPageDisplayed, "The 'Empty Project' page should be displayed but is not.");
 
-        newProjectFirstPage.selectNewProjectType("Java FX");
-        boolean isJavaFXApplicationLabelVisible = !newProjectFirstPage.findAll(JListFixture.class, byXpath("//div[@visible_text='JavaFX Application']")).isEmpty();
-        assertTrue(isJavaFXApplicationLabelVisible, "The 'Java FX' label should be visible but is not.");
+        newProjectFirstPage.selectNewProjectType("Java");
+        boolean isProjectSDKLabelVisible = !newProjectFirstPage.findAll(JLabelFixture.class, byXpath("//div[@text='Project SDK:']")).isEmpty();
+        assertTrue(isProjectSDKLabelVisible, "The 'Project SDK:' label should be visible but is not.");
     }
 
     private void navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType newProjectType) {

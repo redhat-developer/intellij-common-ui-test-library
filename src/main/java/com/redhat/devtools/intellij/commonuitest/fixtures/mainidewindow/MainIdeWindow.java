@@ -19,7 +19,6 @@ import com.intellij.remoterobot.utils.Keyboard;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.navigation.SearchEverywherePopup;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar.MenuBar;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.KeyEvent;
@@ -58,12 +57,7 @@ public class MainIdeWindow extends CommonContainerFixture {
      * Close the currently opened project
      */
     public void closeProject() {
-        if (remoteRobot.isMac()) {
-            runJs("robot.click(component, new Point(15, 10), MouseButton.LEFT_BUTTON, 1);");
-        } else {
-            new MenuBar(remoteRobot).navigateTo("File", "Close Project");
-        }
-
+        invokeCmdUsingSearchEverywherePopup("Close Project");
         remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).runJs("const horizontal_offset = component.getWidth()/2;\n" +
                 "robot.click(component, new Point(horizontal_offset, 10), MouseButton.LEFT_BUTTON, 1);");
     }
