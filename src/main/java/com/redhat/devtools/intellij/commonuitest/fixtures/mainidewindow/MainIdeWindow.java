@@ -19,11 +19,14 @@ import com.intellij.remoterobot.utils.Keyboard;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.navigation.SearchEverywherePopup;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar.MenuBar;
 import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.KeyEvent;
-import java.time.Duration;
+import java.time.Duration;;
+
+import com.redhat.devtools.intellij.commonuitest.utils.internalerror.IdeInternalErrorUtils;
 
 /**
  * Main IDE window fixture
@@ -44,21 +47,37 @@ public class MainIdeWindow extends CommonContainerFixture {
      * Maximize the main IDE window
      */
     public void maximizeIdeWindow() {
-        runJs("const width = component.getWidth();\n" +
-                "const height = component.getHeight();\n" +
-                "const horizontal_offset = width/2;\n" +
-                "robot.click(component, new Point(horizontal_offset, 10), MouseButton.LEFT_BUTTON, 2);\n" +
-                "const width_after = component.getWidth();\n" +
-                "const height_after = component.getHeight();\n" +
-                "const horizontal_offset_after = width/2;\n" +
-                "if (width > width_after || height > height_after) { robot.click(component, new Point(horizontal_offset_after, 10), MouseButton.LEFT_BUTTON, 2); }");
+        if (remoteRobot.isWin()) {
+            runJs("const width = component.getWidth();\n" +
+                    "const height = component.getHeight();\n" +
+                    "const horizontal_offset = width-72;\n" +
+                    "robot.click(component, new Point(horizontal_offset, 14), MouseButton.LEFT_BUTTON, 1);\n" +
+                    "const width_after = component.getWidth();\n" +
+                    "const height_after = component.getHeight();\n" +
+                    "const horizontal_offset_after = width_after-72;\n" +
+                    "if (width > width_after || height > height_after) { robot.click(component, new Point(horizontal_offset_after, 14), MouseButton.LEFT_BUTTON, 1); }");
+        } else {
+            runJs("const width = component.getWidth();\n" +
+                    "const height = component.getHeight();\n" +
+                    "const horizontal_offset = width/2;\n" +
+                    "robot.click(component, new Point(horizontal_offset, 10), MouseButton.LEFT_BUTTON, 2);\n" +
+                    "const width_after = component.getWidth();\n" +
+                    "const height_after = component.getHeight();\n" +
+                    "const horizontal_offset_after = width_after/2;\n" +
+                    "if (width > width_after || height > height_after) { robot.click(component, new Point(horizontal_offset_after, 10), MouseButton.LEFT_BUTTON, 2); }");
+        }
     }
 
     /**
      * Close the currently opened project
      */
     public void closeProject() {
-        invokeCmdUsingSearchEverywherePopup("Close Project");
+        if (remoteRobot.isWin()) {
+            new MenuBar(remoteRobot).navigateTo("File", "Close Project");
+        } else {
+            invokeCmdUsingSearchEverywherePopup("Close Project");
+        }
+        IdeInternalErrorUtils.clearWindowsErrorsIfTheyAppear(remoteRobot);
         remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).runJs("const horizontal_offset = component.getWidth()/2;\n" +
                 "robot.click(component, new Point(horizontal_offset, 10), MouseButton.LEFT_BUTTON, 1);");
     }

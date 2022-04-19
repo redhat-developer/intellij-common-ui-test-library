@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.openclose;
 
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.MavenBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constans.ButtonLabels;
@@ -28,11 +30,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com
  */
-class MavenPaneTest extends AbstractToolWindowsPaneTest {
+class MavenPaneTest extends AbstractToolWinPane {
     @BeforeAll
     public static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, MAVEN_PROJECT_NAME, CreateCloseUtils.NewProjectType.MAVEN);
-        toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
+        } else {
+            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        }
     }
 
     @BeforeEach
@@ -44,9 +50,9 @@ class MavenPaneTest extends AbstractToolWindowsPaneTest {
 
     @Test
     public void mavenBuildToolPaneOpenCloseTest() {
-        toolWindowsPane.openMavenBuildToolPane();
+        toolWinPane.openMavenBuildToolPane();
         assertTrue(isPaneOpened(MavenBuildToolPane.class), "The 'Maven Build Tool Pane' should be opened but is closed.");
-        toolWindowsPane.closeMavenBuildToolPane();
+        toolWinPane.closeMavenBuildToolPane();
         assertFalse(isPaneOpened(MavenBuildToolPane.class), "The 'Maven Build Tool Pane' should be closed but is opened.");
     }
 }

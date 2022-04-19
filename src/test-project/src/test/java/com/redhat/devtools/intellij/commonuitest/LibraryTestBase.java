@@ -11,8 +11,12 @@
 package com.redhat.devtools.intellij.commonuitest;
 
 import com.intellij.remoterobot.RemoteRobot;
+import com.intellij.remoterobot.fixtures.CommonContainerFixture;
+import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.testextension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.AfterAll;
@@ -20,7 +24,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 
 /**
  * Base class for all JUnit tests in the IntelliJ common UI test library
@@ -29,11 +36,11 @@ import java.util.logging.Logger;
  */
 @ExtendWith(ScreenshotAfterTestFailExtension.class)
 public class LibraryTestBase {
-    protected static RemoteRobot remoteRobot;
-    private static boolean intelliJHasStarted = false;
-    private static UITestRunner.IdeaVersion ideaVersion = UITestRunner.IdeaVersion.ULTIMATE_V_2021_1;
-    protected static int ideaVersionInt = ideaVersion.toInt();
     protected static final Logger LOGGER = Logger.getLogger(LibraryTestBase.class.getName());
+    private static final UITestRunner.IdeaVersion ideaVersion = UITestRunner.IdeaVersion.COMMUNITY_V_2022_1;
+    protected static RemoteRobot remoteRobot;
+    protected static int ideaVersionInt = ideaVersion.toInt();
+    private static boolean intelliJHasStarted = false;
 
     @BeforeAll
     protected static void startIntelliJ() {

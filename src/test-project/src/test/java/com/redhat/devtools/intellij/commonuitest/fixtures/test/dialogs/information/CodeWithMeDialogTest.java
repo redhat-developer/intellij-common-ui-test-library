@@ -35,20 +35,29 @@ import static com.redhat.devtools.intellij.commonuitest.utils.project.CreateClos
  */
 class CodeWithMeDialogTest extends LibraryTestBase {
     private static final String PROJECT_NAME = "code_with_me_java_project";
-    private static final UITestRunner.IdeaVersion IDEA_VERSION = UITestRunner.getIdeaVersion();
-    private static final boolean IDEA_VERSION_WITH_CWM_DIALOG_OPENED = IDEA_VERSION.toInt() >= 20212;
-    
+    private static final boolean IDEA_VERSION_WITH_CWM_DIALOG_OPENED = ideaVersionInt >= 20212;
+
     @BeforeAll
     public static void prepareProject() {
         if (IDEA_VERSION_WITH_CWM_DIALOG_OPENED) {
             NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
             NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
-            newProjectFirstPage.selectNewProjectType("Java");
-            newProjectFirstPage.setProjectSdkIfAvailable("11");
-            newProjectDialogWizard.next();
-            newProjectDialogWizard.next();
-            AbstractNewProjectFinalPage finalPage = getFinalPage(newProjectDialogWizard, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
-            finalPage.setProjectName(PROJECT_NAME);
+
+            if (UITestRunner.getIdeaVersionInt() >= 20221) {
+                newProjectFirstPage.selectNewProjectType("New Project");
+                newProjectFirstPage.setProjectName(PROJECT_NAME);
+                newProjectFirstPage.setLanguage("Java");
+                newProjectFirstPage.setBuildSystem("IntelliJ");
+                newProjectFirstPage.setProjectSdkIfAvailable("11");
+            } else {
+                newProjectFirstPage.selectNewProjectType("Java");
+                newProjectFirstPage.setProjectSdkIfAvailable("11");
+                newProjectDialogWizard.next();
+                newProjectDialogWizard.next();
+                AbstractNewProjectFinalPage finalPage = getFinalPage(newProjectDialogWizard, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
+                finalPage.setProjectName(PROJECT_NAME);
+            }
+
             newProjectDialogWizard.finish();
             IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
             ideStatusBar.waitUntilProjectImportIsComplete();

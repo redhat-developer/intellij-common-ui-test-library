@@ -14,8 +14,11 @@ import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.utils.Keyboard;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ProjectExplorer;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
@@ -38,16 +41,21 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author zcervink@redhat.com
  */
 class ProjectExplorerTest extends LibraryTestBase {
-    private static final String PROJECT_NAME = "project_explorer_java_project";
+    private static final String PROJECT_NAME = "pe_java_project";
     private static ProjectExplorer projectExplorer;
     private final Keyboard keyboard = new Keyboard(remoteRobot);
 
     @BeforeAll
     public static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
-        ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        toolWindowsPane.openProjectExplorer();
-        projectExplorer = toolWindowsPane.find(ProjectExplorer.class, Duration.ofSeconds(10));
+        AbstractToolWinPane toolWinPane;
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
+        } else {
+            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        }
+        toolWinPane.openProjectExplorer();
+        projectExplorer = toolWinPane.find(ProjectExplorer.class, Duration.ofSeconds(10));
     }
 
     @AfterAll
@@ -98,10 +106,10 @@ class ProjectExplorerTest extends LibraryTestBase {
 
     @Test
     public void selectOpenedFileTest() {
-        projectExplorer.openFile(PROJECT_NAME, ".idea", "modules.xml");
+        projectExplorer.openFile(PROJECT_NAME, PROJECT_NAME + ".iml");
         projectExplorer.projectViewTree().clickPath(new String[]{PROJECT_NAME}, true);
         projectExplorer.selectOpenedFile();
-        assertTrue(projectExplorer.projectViewTree().isPathSelected(PROJECT_NAME, ".idea", "modules.xml"), "The file 'modules.xml' should be selected but is not.");
+        assertTrue(projectExplorer.projectViewTree().isPathSelected(PROJECT_NAME, PROJECT_NAME + ".iml"), "The file 'modules.xml' should be selected but is not.");
     }
 
     @Test

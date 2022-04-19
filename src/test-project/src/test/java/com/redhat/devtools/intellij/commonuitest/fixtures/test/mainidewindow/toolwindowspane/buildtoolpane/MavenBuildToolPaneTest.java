@@ -11,7 +11,10 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.buildtoolpane;
 
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.MavenBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
@@ -30,15 +33,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class MavenBuildToolPaneTest extends LibraryTestBase {
     private static final String PROJECT_NAME = "maven_build_tool_pane_java_project";
-    private static ToolWindowsPane toolWindowsPane;
+    private static AbstractToolWinPane toolWinPane;
     private static MavenBuildToolPane mavenBuildToolPane;
 
     @BeforeAll
     public static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.MAVEN);
-        toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        toolWindowsPane.openMavenBuildToolPane();
-        mavenBuildToolPane = toolWindowsPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10));
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
+        } else {
+            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        }
+        toolWinPane.openMavenBuildToolPane();
+        mavenBuildToolPane = toolWinPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10));
     }
 
     @AfterAll
@@ -49,7 +56,7 @@ class MavenBuildToolPaneTest extends LibraryTestBase {
     @Test
     public void buildProjectTest() {
         mavenBuildToolPane.buildProject("install");
-        boolean isBuildSuccessful = toolWindowsPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
+        boolean isBuildSuccessful = toolWinPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
         assertTrue(isBuildSuccessful, "The build should be successful but is not.");
     }
 

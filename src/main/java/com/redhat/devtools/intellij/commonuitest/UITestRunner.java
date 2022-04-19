@@ -50,6 +50,7 @@ public class UITestRunner {
     private static RemoteRobot remoteRobot = null;
     private static Process ideProcess;
     private static IdeaVersion ideaVersion;
+    private static int ideaVersionInt;
 
     /**
      * Start the given version of IntelliJ Idea listening on the given port
@@ -63,14 +64,15 @@ public class UITestRunner {
 
         return step("Start IntelliJ Idea ('" + ideaVersion.toString() + "') listening on port " + port, () -> {
             UITestRunner.ideaVersion = ideaVersion;
-            acceptAllTermsAndConditions();
+            UITestRunner.ideaVersionInt = ideaVersion.toInt();
 
+            acceptAllTermsAndConditions();
             if (ideaVersion.isUltimate()) {
                 activateEvaluateForFree();
             }
 
             String fileExtension = OS_NAME.contains("windows") ? ".bat" : "";
-            ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion.toString(), "-Drobot-server.port=" + port);
+            ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port);
 
             try {
                 ideProcess = pb.start();
@@ -103,12 +105,21 @@ public class UITestRunner {
     }
 
     /**
-     * Return the integer representation of the currently running IntelliJ Idea version
+     * Return the IdeaVersion representation of the currently running IntelliJ Idea version
      *
      * @return version of the currently running IntelliJ Idea
      */
     public static IdeaVersion getIdeaVersion() {
         return ideaVersion;
+    }
+
+    /**
+     * Return the integer representation of the currently running IntelliJ Idea version
+     *
+     * @return version of the currently running IntelliJ Idea
+     */
+    public static int getIdeaVersionInt() {
+        return ideaVersionInt;
     }
 
     /**
@@ -146,53 +157,30 @@ public class UITestRunner {
         });
     }
 
-    /**
-     * Enumeration for supported versions of the IntelliJ Idea
-     */
-    public enum IdeaVersion {
-        COMMUNITY_V_2020_2("IC-2020.2"),
-        COMMUNITY_V_2020_3("IC-2020.3"),
-        COMMUNITY_V_2021_1("IC-2021.1"),
-        COMMUNITY_V_2021_2("IC-2021.2"),
-        COMMUNITY_V_2021_3("IC-2021.3"),
-        ULTIMATE_V_2020_2("IU-2020.2"),
-        ULTIMATE_V_2020_3("IU-2020.3"),
-        ULTIMATE_V_2021_1("IU-2021.1"),
-        ULTIMATE_V_2021_2("IU-2021.2");
-
-        private final String ideaVersionStringRepresentation;
-
-        IdeaVersion(String ideaVersionStringRepresentation) {
-            this.ideaVersionStringRepresentation = ideaVersionStringRepresentation;
-        }
-
-        @Override
-        public String toString() {
-            return ideaVersionStringRepresentation;
-        }
-
-        public int toInt() {
-            String ideaVersion = this.ideaVersionStringRepresentation.substring(3).replace(".", "");
-            return Integer.parseInt(ideaVersion);
-        }
-
-        public boolean isUltimate() {
-            return this.ideaVersionStringRepresentation.charAt(1) == 'U';
-        }
-    }
-
     private static void acceptAllTermsAndConditions() {
+        String osxPlistSourceLocation;
+        if (ideaVersion.isUltimate()) {
+            osxPlistSourceLocation = "plist/ultimate_all/com.apple.java.util.prefs.plist";
+        } else if (ideaVersion.toInt() <= 20213) {
+            osxPlistSourceLocation = "plist/2021_3_and_older/com.apple.java.util.prefs.plist";
+        } else {
+            osxPlistSourceLocation = "plist/2022_1/com.apple.java.util.prefs.plist";
+        }
+
+        String linuxPrefsXmlSourceLocation;
+        if (ideaVersion.isUltimate()) {
+            linuxPrefsXmlSourceLocation = "prefs_xml/ultimate_all/prefs.xml";
+        } else if (ideaVersion.toInt() <= 20213) {
+            linuxPrefsXmlSourceLocation = "prefs_xml/2021_3_and_older/prefs.xml";
+        } else {
+            linuxPrefsXmlSourceLocation = "prefs_xml/2022_1/prefs.xml";
+        }
+
         if (OS_NAME.contains("linux")) {
             step("Copy the 'prefs.xml' file to the appropriate location", () -> {
-                String prefsXmlSourceLocation;
-                if (!ideaVersion.isUltimate()) {
-                    prefsXmlSourceLocation = "prefs.xml";
-                } else {
-                    prefsXmlSourceLocation = "prefs_xml/ultimate_all/prefs.xml";
-                }
                 String prefsXmlDir = USER_HOME + "/.java/.userPrefs/jetbrains/_!(!!cg\"p!(}!}@\"j!(k!|w\"w!'8!b!\"p!':!e@==";
                 createDirectoryHierarchy(prefsXmlDir);
-                copyFileFromJarResourceDir(prefsXmlSourceLocation, prefsXmlDir + "/prefs.xml");
+                copyFileFromJarResourceDir(linuxPrefsXmlSourceLocation, prefsXmlDir + "/prefs.xml");
             });
 
             step(COPY_ACCEPTED_FILE_STEP_DESCRIPTION, () -> {
@@ -202,14 +190,8 @@ public class UITestRunner {
             });
         } else if (OS_NAME.contains("os x")) {
             step("Copy the 'com.apple.java.util.prefs.plist' file to the appropriate location", () -> {
-                String plistSourceLocation;
-                if (!ideaVersion.isUltimate()) {
-                    plistSourceLocation = "com.apple.java.util.prefs.plist";
-                } else {
-                    plistSourceLocation = "plist/ultimate_all/com.apple.java.util.prefs.plist";
-                }
                 String plistDir = USER_HOME + "/Library/Preferences";
-                copyFileFromJarResourceDir(plistSourceLocation, plistDir + "/com.apple.java.util.prefs.plist");
+                copyFileFromJarResourceDir(osxPlistSourceLocation, plistDir + "/com.apple.java.util.prefs.plist");
             });
 
             step(COPY_ACCEPTED_FILE_STEP_DESCRIPTION, () -> {
@@ -319,6 +301,42 @@ public class UITestRunner {
             outStream.write(buffer);
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Enumeration for supported versions of the IntelliJ Idea
+     */
+    public enum IdeaVersion {
+        COMMUNITY_V_2020_2("IC-2020.2"),
+        COMMUNITY_V_2020_3("IC-2020.3"),
+        COMMUNITY_V_2021_1("IC-2021.1"),
+        COMMUNITY_V_2021_2("IC-2021.2"),
+        COMMUNITY_V_2021_3("IC-2021.3"),
+        COMMUNITY_V_2022_1("IC-2022.1"),
+        ULTIMATE_V_2020_2("IU-2020.2"),
+        ULTIMATE_V_2020_3("IU-2020.3"),
+        ULTIMATE_V_2021_1("IU-2021.1"),
+        ULTIMATE_V_2021_2("IU-2021.2");
+
+        private final String ideaVersionStringRepresentation;
+
+        IdeaVersion(String ideaVersionStringRepresentation) {
+            this.ideaVersionStringRepresentation = ideaVersionStringRepresentation;
+        }
+
+        @Override
+        public String toString() {
+            return ideaVersionStringRepresentation;
+        }
+
+        public int toInt() {
+            String ideaVersion = this.ideaVersionStringRepresentation.substring(3).replace(".", "");
+            return Integer.parseInt(ideaVersion);
+        }
+
+        public boolean isUltimate() {
+            return this.ideaVersionStringRepresentation.charAt(1) == 'U';
         }
     }
 }

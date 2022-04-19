@@ -11,7 +11,10 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.buildtoolpane;
 
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.GradleBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
@@ -30,15 +33,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class GradleBuildToolPaneTest extends LibraryTestBase {
     private static final String PROJECT_NAME = "gradle_build_tool_pane_java_project";
-    private static ToolWindowsPane toolWindowsPane;
+    private static AbstractToolWinPane toolWinPane;
     private static GradleBuildToolPane gradleBuildToolPane;
 
     @BeforeAll
     public static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.GRADLE);
-        toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        toolWindowsPane.openGradleBuildToolPane();
-        gradleBuildToolPane = toolWindowsPane.find(GradleBuildToolPane.class, Duration.ofSeconds(10));
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
+        } else {
+            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        }
+        toolWinPane.openGradleBuildToolPane();
+        gradleBuildToolPane = toolWinPane.find(GradleBuildToolPane.class, Duration.ofSeconds(10));
     }
 
     @AfterAll
@@ -49,7 +56,7 @@ class GradleBuildToolPaneTest extends LibraryTestBase {
     @Test
     public void buildProjectTest() {
         gradleBuildToolPane.buildProject();
-        boolean isBuildSuccessful = toolWindowsPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
+        boolean isBuildSuccessful = toolWinPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
         assertTrue(isBuildSuccessful, "The build should be successful but is not.");
     }
 

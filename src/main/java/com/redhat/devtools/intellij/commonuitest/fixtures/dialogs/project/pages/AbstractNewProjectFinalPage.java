@@ -13,11 +13,19 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
+import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JTextFieldFixture;
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
+import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
+import static com.intellij.remoterobot.search.locators.Locators.byXpath;
+import static com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils.listOfRemoteTextToString;
 
 /**
  * New Project dialog abstract terminal page fixture
@@ -37,7 +45,11 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      * @return currently set new project name
      */
     public String getProjectName() {
-        return textFields(JTextFieldFixture.Companion.byType()).get(0).getText();
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            return textFields(byXpath("//div[@class='JBTextField']")).get(0).getText();
+        } else {
+            return textFields(JTextFieldFixture.Companion.byType()).get(0).getText();
+        }
     }
 
     /**
@@ -46,7 +58,11 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      * @param projectName name of the new project
      */
     public void setProjectName(String projectName) {
-        textFields(JTextFieldFixture.Companion.byType()).get(0).setText(projectName);
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            textFields(byXpath("//div[@class='JBTextField']")).get(0).setText(projectName);
+        } else {
+            textFields(JTextFieldFixture.Companion.byType()).get(0).setText(projectName);
+        }
     }
 
     /**
@@ -55,7 +71,11 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      * @return currently set new project location
      */
     public String getProjectLocation() {
-        return textFields(JTextFieldFixture.Companion.byType()).get(1).getText();
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            return find(JTextFieldFixture.class, byXpath("//div[@class='ExtendableTextField']")).getText();
+        } else {
+            return textFields(JTextFieldFixture.Companion.byType()).get(1).getText();
+        }
     }
 
     /**
@@ -64,7 +84,39 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      * @param projectLocation project location of the new project
      */
     public void setProjectLocation(String projectLocation) {
-        textFields(JTextFieldFixture.Companion.byType()).get(1).setText(projectLocation);
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            find(JTextFieldFixture.class, byXpath("//div[@class='ExtendableTextField']")).setText(projectLocation);
+        } else {
+            textFields(JTextFieldFixture.Companion.byType()).get(1).setText(projectLocation);
+        }
+    }
+
+    /**
+     * Open the 'Advanced Settings' section
+     */
+    public void openAdvanceSettings() {
+        if (!isAdvancedSettingsOpened()) {
+            find(ComponentFixture.class, byXpath("//div[@class='CollapsibleTitledSeparator']")).click();
+        }
+    }
+
+    /**
+     * Close the 'Advanced Settings' section
+     */
+    public void closeAdvanceSettings() {
+        if (isAdvancedSettingsOpened()) {
+            find(ComponentFixture.class, byXpath("//div[@class='CollapsibleTitledSeparator']")).click();
+        }
+    }
+
+    private boolean isAdvancedSettingsOpened() {
+        List<ComponentFixture> ss = findAll(ComponentFixture.class, byXpath("//div[@class='CollapsibleTitledSeparator']/../*"));
+        for (int i = 0; i < ss.size(); i++) {
+            if (listOfRemoteTextToString(ss.get(i).findAllText()).contains("Advanced Settings")) {
+                return i != ss.size() - 1;
+            }
+        }
+        throw new UITestException("Wizard does not contain 'Advanced Settings' section.");
     }
 
     /**
@@ -74,7 +126,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
         IDEA_DIRECTORY_BASED(".idea"),
         IPR_FILE_BASED(".ipr");
 
-        private String textRepresentation;
+        private final String textRepresentation;
 
         ProjectFormatType(String textRepresentation) {
             this.textRepresentation = textRepresentation;

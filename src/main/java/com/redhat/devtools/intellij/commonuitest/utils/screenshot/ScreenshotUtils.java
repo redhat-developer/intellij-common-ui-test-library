@@ -42,9 +42,10 @@ public class ScreenshotUtils {
      * Take screenshot of the entire screen and save it on disk
      *
      * @param remoteRobot reference to the RemoteRobot instance
+     * @param comment         message to add at the end of the screenshot's filename
      * @return the screenshot as a File object
      */
-    public static File takeScreenshot(RemoteRobot remoteRobot) {
+    public static File takeScreenshot(RemoteRobot remoteRobot, String comment) {
         try {
             BufferedImage screenshotBufferedImage = remoteRobot.getScreenshot();
             boolean doesScreenshotDirExists = Files.exists(Paths.get(SCREENSHOT_LOCATION));
@@ -52,7 +53,8 @@ public class ScreenshotUtils {
                 Files.createDirectory(Paths.get(SCREENSHOT_LOCATION));
             }
             String screenshotFilename = getTimeNow("yyyy_MM_dd_HH_mm_ss");
-            String screenshotPathname = SCREENSHOT_LOCATION + screenshotFilename + "." + FILETYPE;
+            String screenshotComment = comment == null || comment == "" ? "" :  "_" + comment;
+            String screenshotPathname = SCREENSHOT_LOCATION + screenshotFilename + screenshotComment + "." + FILETYPE;
             File screenshotFile = new File(screenshotPathname);
             ImageIO.write(screenshotBufferedImage, FILETYPE, screenshotFile);
             return screenshotFile;
@@ -60,6 +62,16 @@ public class ScreenshotUtils {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
+    }
+
+    /**
+     * Take screenshot of the entire screen and save it on disk
+     *
+     * @param remoteRobot reference to the RemoteRobot instance
+     * @return the screenshot as a File object
+     */
+    public static File takeScreenshot(RemoteRobot remoteRobot) {
+        return takeScreenshot(remoteRobot, "");
     }
 
     private static String getTimeNow(String timeFormat) {

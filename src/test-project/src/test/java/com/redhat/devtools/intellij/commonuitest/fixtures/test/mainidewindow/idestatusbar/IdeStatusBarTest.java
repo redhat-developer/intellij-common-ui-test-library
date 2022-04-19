@@ -12,6 +12,7 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.id
 
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.MavenGradleNewProjectFinalPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.NewProjectFirstPage;
@@ -36,14 +37,29 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 class IdeStatusBarTest extends LibraryTestBase {
     private static final String PROJECT_NAME = "ide_status_bar_java_project";
 
+    private static kotlin.Pair<Boolean, IdeStatusBar> isProgressbarWithLabelVisible() {
+        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
+        List<RemoteText> inlineProgressPanelContent = ideStatusBar.inlineProgressPanel().findAllText();
+        String inlineProgressPanelText = TextUtils.listOfRemoteTextToString(inlineProgressPanelContent);
+        return new kotlin.Pair<>(!inlineProgressPanelText.equals(""), ideStatusBar);
+    }
+
     @BeforeEach
     public void prepareProject() {
         NewProjectDialogWizard newProjectDialogWizard = CreateCloseUtils.openNewProjectDialogFromWelcomeDialog(remoteRobot);
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
-        newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.MAVEN.toString());
-        newProjectDialogWizard.next();
-        MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
-        mavenGradleFinalPage.setProjectName(PROJECT_NAME);
+
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            newProjectFirstPage.setProjectName(PROJECT_NAME);
+            newProjectFirstPage.selectNewProjectType("New Project");
+            newProjectFirstPage.setBuildSystem("Maven");
+        } else {
+            newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.MAVEN.toString());
+            newProjectDialogWizard.next();
+            MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
+            mavenGradleFinalPage.setProjectName(PROJECT_NAME);
+        }
+
         newProjectDialogWizard.finish();
     }
 
@@ -59,12 +75,5 @@ class IdeStatusBarTest extends LibraryTestBase {
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
         mainIdeWindow.maximizeIdeWindow();
         ideStatusBar.waitUntilAllBgTasksFinish();
-    }
-
-    private static kotlin.Pair<Boolean, IdeStatusBar> isProgressbarWithLabelVisible() {
-        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
-        List<RemoteText> inlineProgressPanelContent = ideStatusBar.inlineProgressPanel().findAllText();
-        String inlineProgressPanelText = TextUtils.listOfRemoteTextToString(inlineProgressPanelContent);
-        return new kotlin.Pair<>(!inlineProgressPanelText.equals(""), ideStatusBar);
     }
 }

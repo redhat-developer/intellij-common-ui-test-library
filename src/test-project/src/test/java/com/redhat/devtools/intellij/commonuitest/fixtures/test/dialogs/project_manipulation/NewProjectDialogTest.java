@@ -11,11 +11,13 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.project_manipulation;
 
 import com.intellij.remoterobot.fixtures.ComboBoxFixture;
+import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.JLabelFixture;
 import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
@@ -92,16 +94,25 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void setProjectNameMavenProjectTest() {
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            return;
+        }
         testProjectNameAndLocationInputField(CreateCloseUtils.NewProjectType.MAVEN);
     }
 
     @Test
     public void setProjectNameGradleProjectTest() {
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            return;
+        }
         testProjectNameAndLocationInputField(CreateCloseUtils.NewProjectType.GRADLE);
     }
 
     @Test
     public void openMoreSettingsTest() {
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            return;
+        }
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         javaFinalPage.closeMoreSettings();
@@ -114,6 +125,9 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void closeMoreSettingsTest() {
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            return;
+        }
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         javaFinalPage.openMoreSettings();
@@ -125,10 +139,40 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
+    public void openAdvancedSettingsTest() {
+        if (UITestRunner.getIdeaVersionInt() < 20221) {
+            return;
+        }
+        newProjectFirstPage.closeAdvanceSettings();
+        assertFalse(isAdvancedSettingsOpened(), "The 'Advanced Settings' section should be closed but is not");
+        newProjectFirstPage.openAdvanceSettings();
+        assertTrue(isAdvancedSettingsOpened(), "The 'Advanced Settings' section should be opened but is not");
+        newProjectFirstPage.openAdvanceSettings();
+        assertTrue(isAdvancedSettingsOpened(), "The 'Advanced Settings' section should be opened but is not");
+    }
+
+    @Test
+    public void closeAdvancedSettingsTest() {
+        if (UITestRunner.getIdeaVersionInt() < 20221) {
+            return;
+        }
+        newProjectFirstPage.openAdvanceSettings();
+        assertTrue(isAdvancedSettingsOpened(), "The 'Advanced Settings' section should be opened but is not");
+        newProjectFirstPage.closeAdvanceSettings();
+        assertFalse(isAdvancedSettingsOpened(), "The 'Advanced Settings' section should be closed but is not");
+        newProjectFirstPage.closeAdvanceSettings();
+        assertFalse(isAdvancedSettingsOpened(), "The 'Advanced Settings' section should be closed but is not");
+    }
+
+    @Test
     public void getSetModuleNameTest() {
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
-        javaFinalPage.openMoreSettings();
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            javaFinalPage.openAdvanceSettings();
+        } else {
+            javaFinalPage.openMoreSettings();
+        }
 
         String currentModuleName = javaFinalPage.getModuleName();
         String newModuleName = currentModuleName + "1";
@@ -141,7 +185,11 @@ public class NewProjectDialogTest extends LibraryTestBase {
     public void getSetContentRootTest() {
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
-        javaFinalPage.openMoreSettings();
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            javaFinalPage.openAdvanceSettings();
+        } else {
+            javaFinalPage.openMoreSettings();
+        }
 
         String currentContentRoot = javaFinalPage.getContentRoot();
         String newContentRoot = currentContentRoot + "1";
@@ -154,7 +202,11 @@ public class NewProjectDialogTest extends LibraryTestBase {
     public void getSetModuleFileLocationTest() {
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
-        javaFinalPage.openMoreSettings();
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            javaFinalPage.openAdvanceSettings();
+        } else {
+            javaFinalPage.openMoreSettings();
+        }
 
         String currentModuleFileLocation = javaFinalPage.getModuleFileLocation();
         String newModuleFileLocation = currentModuleFileLocation + "1";
@@ -163,9 +215,11 @@ public class NewProjectDialogTest extends LibraryTestBase {
         assertTrue(currentModuleFileLocation.equals(newModuleFileLocation), "Currently set module file location should be '" + newModuleFileLocation + BUT_IS + currentModuleFileLocation + "'.");
     }
 
-
     @Test
     public void getSetProjectFormat() {
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            return;
+        }
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         javaFinalPage.openMoreSettings();
@@ -220,6 +274,9 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void toggleFromTemplateTest() {
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            return;
+        }
         newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
         newProjectDialogWizard.next();
         JavaNewProjectSecondPage javaNewProjectSecondPage = newProjectDialogWizard.find(JavaNewProjectSecondPage.class, Duration.ofSeconds(10));
@@ -234,6 +291,9 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void previousButtonTest() {
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            return;
+        }
         newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
         newProjectFirstPage.setProjectSdkIfAvailable("11");
         assertThrows(UITestException.class, () ->
@@ -243,7 +303,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present on the second page of the 'New Project' wizard for java project.");
         newProjectDialogWizard.previous();
         try {
-            newProjectFirstPage.comboBox(byXpath(XPathDefinitions.PROJECT_SDK_COMBOBOX), Duration.ofSeconds(10));
+            newProjectFirstPage.comboBox(byXpath(XPathDefinitions.JDK_COMBOBOX), Duration.ofSeconds(10));
         } catch (WaitForConditionTimeoutException e) {
             fail("The 'Project SDK' should be available " + BUT_IS + " not.");
         }
@@ -251,6 +311,9 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void nextButtonTest() {
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            return;
+        }
         newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
         newProjectFirstPage.setProjectSdkIfAvailable("11");
         newProjectDialogWizard.next();
@@ -263,12 +326,15 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void finishButtonTest() {
-        newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
-        newProjectFirstPage.setProjectSdkIfAvailable("11");
-        assertThrows(UITestException.class, () ->
-                newProjectDialogWizard.finish(), "The 'UITestException' should be thrown because the 'Finish' button is not available on the first page of the 'New Project' wizard for java project.");
-        newProjectDialogWizard.next();
-        newProjectDialogWizard.next();
+        if (UITestRunner.getIdeaVersionInt() < 20221) {
+            newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
+            newProjectFirstPage.setProjectSdkIfAvailable("11");
+            assertThrows(UITestException.class, () ->
+                    newProjectDialogWizard.finish(), "The 'UITestException' should be thrown because the 'Finish' button is not available on the first page of the 'New Project' wizard for java project.");
+            newProjectDialogWizard.next();
+            newProjectDialogWizard.next();
+        }
+
         assertThrows(UITestException.class, () ->
                 newProjectDialogWizard.next(), "The 'UITestException' should be thrown because the 'Next' button is not available on the last page of the 'New Project' wizard.");
         newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10)).setProjectName(PLAIN_JAVA_PROJECT_NAME);
@@ -284,9 +350,8 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void setProjectSdkIfAvailableTest() {
-        newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.MAVEN.toString());
         newProjectFirstPage.setProjectSdkIfAvailable("8");
-        ComboBoxFixture projectJdkComboBox = newProjectFirstPage.find(ComboBoxFixture.class, byXpath(XPathDefinitions.PROJECT_SDK_COMBOBOX), Duration.ofSeconds(10));
+        ComboBoxFixture projectJdkComboBox = newProjectFirstPage.find(ComboBoxFixture.class, byXpath(XPathDefinitions.JDK_COMBOBOX), Duration.ofSeconds(10));
         String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
         assertTrue(currentlySelectedProjectSdk.contains("8"), "Selected project SDK should be Java 8 but is '" + currentlySelectedProjectSdk + "'");
         newProjectFirstPage.setProjectSdkIfAvailable("11");
@@ -300,17 +365,33 @@ public class NewProjectDialogTest extends LibraryTestBase {
         boolean isEmptyProjectPageDisplayed;
         if (ideaVersionInt < 20213) {
             isEmptyProjectPageDisplayed = !newProjectFirstPage.findAll(JListFixture.class, byXpath(XPathDefinitions.EMPTY_PROJECT)).isEmpty();
-        } else {
+        } else if (ideaVersionInt < 20221) {
             isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("Simple project with one module");
+        } else {
+            isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("A basic project that allows working with separate files and compiling Java and Kotlin classes.");
         }
         assertTrue(isEmptyProjectPageDisplayed, "The 'Empty Project' page should be displayed but is not.");
 
-        newProjectFirstPage.selectNewProjectType("Java");
-        boolean isProjectSDKLabelVisible = !newProjectFirstPage.findAll(JLabelFixture.class, byXpath(XPathDefinitions.PROJECT_SDK)).isEmpty();
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            newProjectFirstPage.selectNewProjectType("New Project");
+        } else {
+            newProjectFirstPage.selectNewProjectType("Java");
+        }
+
+        boolean isProjectSDKLabelVisible;
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            isProjectSDKLabelVisible = !newProjectFirstPage.findAll(JLabelFixture.class, byXpath("//div[@text.key='label.project.wizard.new.project.jdk']")).isEmpty();
+        } else {
+            isProjectSDKLabelVisible = !newProjectFirstPage.findAll(JLabelFixture.class, byXpath("//div[@text='Project SDK:']")).isEmpty();
+        }
         assertTrue(isProjectSDKLabelVisible, "The 'Project SDK:' label should be visible but is not.");
     }
 
     private void navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType newProjectType) {
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            newProjectFirstPage.setBuildSystem(newProjectType.toString() == "Java" ? "IntelliJ" : newProjectType.toString());
+            return;
+        }
         newProjectFirstPage.selectNewProjectType(newProjectType.toString());
         newProjectDialogWizard.next();
         if (newProjectType == CreateCloseUtils.NewProjectType.PLAIN_JAVA) {
@@ -336,6 +417,9 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     private void testOpenArtifactCoordinatesMavenGradle(CreateCloseUtils.NewProjectType newProjectType) {
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            return;
+        }
         navigateToSetProjectNamePage(newProjectType);
         MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
         mavenGradleFinalPage.closeArtifactCoordinates();
@@ -346,9 +430,18 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     private void testArtifactCoordinatesAttributes(CreateCloseUtils.NewProjectType newProjectType, ArtifactCoordinatesAttributes attribute) {
+        if (UITestRunner.getIdeaVersionInt() >= 20221 && attribute == ArtifactCoordinatesAttributes.VERSION) {
+            return;
+        }
+
         navigateToSetProjectNamePage(newProjectType);
         MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
-        mavenGradleFinalPage.openArtifactCoordinates();
+
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            mavenGradleFinalPage.openAdvanceSettings();
+        } else {
+            mavenGradleFinalPage.openArtifactCoordinates();
+        }
 
         String currentValue = "";
         String newValue = "";
@@ -384,12 +477,22 @@ public class NewProjectDialogTest extends LibraryTestBase {
         return cf.size() > 5;
     }
 
+    private boolean isAdvancedSettingsOpened() {
+        List<ComponentFixture> ss = newProjectFirstPage.findAll(ComponentFixture.class, byXpath("//div[@class='CollapsibleTitledSeparator']/../*"));
+        for (int i = 0; i < ss.size(); i++) {
+            if (listOfRemoteTextToString(ss.get(i).findAllText()).contains("Advanced Settings")) {
+                return i != ss.size() - 1;
+            }
+        }
+        throw new UITestException("Wizard does not contain 'Advanced Settings' section.");
+    }
+
     private enum ArtifactCoordinatesAttributes {
         GROUP_ID("group ID"),
         ARTIFACT_ID("artifact ID"),
         VERSION("version");
 
-        private String textReperentation;
+        private final String textReperentation;
 
         ArtifactCoordinatesAttributes(String textRepresentation) {
             this.textReperentation = textRepresentation;

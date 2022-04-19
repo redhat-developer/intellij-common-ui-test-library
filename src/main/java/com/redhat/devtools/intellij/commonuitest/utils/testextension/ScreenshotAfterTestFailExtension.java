@@ -34,7 +34,7 @@ import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
  * @author zcervink@redhat.com
  */
 public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallback {
-    private RemoteRobot remoteRobot;
+    private final RemoteRobot remoteRobot;
 
     public ScreenshotAfterTestFailExtension() {
         this.remoteRobot = UITestRunner.getRemoteRobot();

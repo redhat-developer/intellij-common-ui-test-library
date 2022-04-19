@@ -26,12 +26,14 @@ public class ButtonLabels {
     public static final String NEXT_LABEL = "Next";
     public static final String PREVIOUS_LABEL = "Previous";
     public static final String FINISH_LABEL = "Finish";
+    public static final String CREATE_LABEL = "Create";
     public static final String PROJECT_STRIPE_BUTTON_LABEL = "Project";
     public static final String MAVEN_STRIPE_BUTTON_LABEL = "Maven";
     public static final String GRADLE_STRIPE_BUTTON_LABEL = "Gradle";
     public static final String GOT_IT_LABEL = "Got It";
     public static final String MORE_SETTINGS = "More Settings";
     public static final String ARTIFACT_COORDINATES = "Artifact Coordinates";
+
     private ButtonLabels() {
         throw new UITestException("Utility class with static methods.");
     }

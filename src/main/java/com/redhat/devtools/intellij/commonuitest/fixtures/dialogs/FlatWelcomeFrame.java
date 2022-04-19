@@ -31,6 +31,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.Ti
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.SettingsDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.pages.NotificationsPage;
 import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
+import com.redhat.devtools.intellij.commonuitest.utils.internalerror.IdeInternalErrorUtils;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,6 +45,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
+import static com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils.takeScreenshot;
 
 /**
  * Welcome to IntelliJ IDEA dialog fixture
@@ -175,11 +177,13 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
         } else if (ideaVersion <= 20212) {
             JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(XPathDefinitions.JBLIST));
             jListFixture.findText("Learn IntelliJ IDEA").click();
-            remoteRobot.find(JLabelFixture.class, byXpath(XPathDefinitions.TIP_DIALOGA_2)).click();
+            remoteRobot.find(JLabelFixture.class, byXpath(XPathDefinitions.TIP_DIALOG_2)).click();
         } else {
+            IdeInternalErrorUtils.clearWindowsErrorsIfTheyAppear(remoteRobot);
             JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
             jTreeFixture.findText("Learn IntelliJ IDEA").click();
-            remoteRobot.find(JLabelFixture.class, byXpath(XPathDefinitions.TIP_DIALOGA_2)).click();
+            FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class);
+            flatWelcomeFrame.findText("Tip of the Day").click();
         }
 
         return remoteRobot.find(TipDialog.class, Duration.ofSeconds(10));

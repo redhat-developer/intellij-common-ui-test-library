@@ -28,8 +28,8 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
  * @author zcervink@redhat.com
  */
 public class MenuBar {
-    private RemoteRobot remoteRobot;
-    private UITestRunner.IdeaVersion ideaVersion;
+    private final RemoteRobot remoteRobot;
+    private final UITestRunner.IdeaVersion ideaVersion;
 
     public MenuBar(RemoteRobot remoteRobot) {
         this.remoteRobot = remoteRobot;

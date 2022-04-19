@@ -38,7 +38,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 @FixtureName(name = "Ide Status Bar")
 public class IdeStatusBar extends CommonContainerFixture {
     private static final Logger LOGGER = Logger.getLogger(IdeStatusBar.class.getName());
-    private RemoteRobot remoteRobot;
+    private final RemoteRobot remoteRobot;
 
     public IdeStatusBar(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
@@ -65,7 +65,7 @@ public class IdeStatusBar extends CommonContainerFixture {
      * Wait until all the background tasks finish
      */
     public void waitUntilAllBgTasksFinish() {
-        waitFor(Duration.ofSeconds(300), Duration.ofSeconds(10), "The background tasks did not finish in 5 minutes.", this::didAllBgTasksFinish);
+        waitFor(Duration.ofSeconds(600), Duration.ofSeconds(10), "The background tasks did not finish in 10 minutes.", this::didAllBgTasksFinish);
     }
 
     private boolean didProjectImportFinish() {
