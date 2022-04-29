@@ -63,7 +63,11 @@ public class UITestRunner {
 
         return step("Start IntelliJ Idea ('" + ideaVersion.toString() + "') listening on port " + port, () -> {
             UITestRunner.ideaVersion = ideaVersion;
-            makeSureAllTermsAndConditionsAreAccepted();
+            acceptAllTermsAndConditions();
+
+            if (ideaVersion.isUltimate()) {
+                activateEvaluateForFree();
+            }
 
             String fileExtension = OS_NAME.contains("windows") ? ".bat" : "";
             ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion.toString(), "-Drobot-server.port=" + port);
@@ -154,8 +158,7 @@ public class UITestRunner {
         ULTIMATE_V_2020_2("IU-2020.2"),
         ULTIMATE_V_2020_3("IU-2020.3"),
         ULTIMATE_V_2021_1("IU-2021.1"),
-        ULTIMATE_V_2021_2("IU-2021.2"),
-        ULTIMATE_V_2021_3("IU-2021.3");
+        ULTIMATE_V_2021_2("IU-2021.2");
 
         private final String ideaVersionStringRepresentation;
 
@@ -172,12 +175,21 @@ public class UITestRunner {
             String ideaVersion = this.ideaVersionStringRepresentation.substring(3).replace(".", "");
             return Integer.parseInt(ideaVersion);
         }
+
+        public boolean isUltimate() {
+            return this.ideaVersionStringRepresentation.charAt(1) == 'U';
+        }
     }
 
-    private static void makeSureAllTermsAndConditionsAreAccepted() {
+    private static void acceptAllTermsAndConditions() {
         if (OS_NAME.contains("linux")) {
             step("Copy the 'prefs.xml' file to the appropriate location", () -> {
-                String prefsXmlSourceLocation = "prefs.xml";
+                String prefsXmlSourceLocation;
+                if (!ideaVersion.isUltimate()) {
+                    prefsXmlSourceLocation = "prefs.xml";
+                } else {
+                    prefsXmlSourceLocation = "prefs_xml/ultimate_all/prefs.xml";
+                }
                 String prefsXmlDir = USER_HOME + "/.java/.userPrefs/jetbrains/_!(!!cg\"p!(}!}@\"j!(k!|w\"w!'8!b!\"p!':!e@==";
                 createDirectoryHierarchy(prefsXmlDir);
                 copyFileFromJarResourceDir(prefsXmlSourceLocation, prefsXmlDir + "/prefs.xml");
@@ -190,7 +202,12 @@ public class UITestRunner {
             });
         } else if (OS_NAME.contains("os x")) {
             step("Copy the 'com.apple.java.util.prefs.plist' file to the appropriate location", () -> {
-                String plistSourceLocation = "com.apple.java.util.prefs.plist";
+                String plistSourceLocation;
+                if (!ideaVersion.isUltimate()) {
+                    plistSourceLocation = "com.apple.java.util.prefs.plist";
+                } else {
+                    plistSourceLocation = "plist/ultimate_all/com.apple.java.util.prefs.plist";
+                }
                 String plistDir = USER_HOME + "/Library/Preferences";
                 copyFileFromJarResourceDir(plistSourceLocation, plistDir + "/com.apple.java.util.prefs.plist");
             });
@@ -224,6 +241,7 @@ public class UITestRunner {
                 ProcessBuilder pb1 = new ProcessBuilder(powershellLocation, "New-Item", powershellPathParameter, registryPath, "-Force");
                 ProcessBuilder pb2 = new ProcessBuilder(powershellLocation, "New-ItemProperty", powershellPathParameter, registryPath, "-Name", "accepted_version", "-Value", "'2.1'");
                 ProcessBuilder pb3 = new ProcessBuilder(powershellLocation, "New-ItemProperty", powershellPathParameter, registryPath, "-Name", "euacommunity_accepted_version", "-Value", "'1.0'");
+                ProcessBuilder pb4 = new ProcessBuilder(powershellLocation, "New-ItemProperty", powershellPathParameter, registryPath, "-Name", "eua_accepted_version", "-Value", "'1.2'");
 
                 try {
                     Process p1 = pb1.start();
@@ -232,11 +250,25 @@ public class UITestRunner {
                     p2.waitFor();
                     Process p3 = pb3.start();
                     p3.waitFor();
+                    Process p4 = pb4.start();
+                    p4.waitFor();
                 } catch (IOException | InterruptedException e) {
                     LOGGER.log(Level.SEVERE, e.getMessage(), e);
                     Thread.currentThread().interrupt();
                 }
             });
+        }
+    }
+
+    private static void activateEvaluateForFree() {
+        String targetEvaluationKeysDir = System.getProperty("user.dir") + "/build/idea-sandbox/config-uiTest/eval/";
+        createDirectoryHierarchy(targetEvaluationKeysDir);
+
+        for (String ideaVersionSubstring : new String[]{"202", "203", "211", "212"}) {
+            String keyFilename = "idea" + ideaVersionSubstring + ".evaluation.key";
+            String sourcePathToKey = "evaluate_for_free_keys/" + keyFilename;
+            String targetPathToKey = targetEvaluationKeysDir + keyFilename;
+            copyFileFromJarResourceDir(sourcePathToKey, targetPathToKey);
         }
     }
 
