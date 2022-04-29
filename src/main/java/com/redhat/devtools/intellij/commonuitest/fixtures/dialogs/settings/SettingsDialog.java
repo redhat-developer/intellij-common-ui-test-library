@@ -17,6 +17,7 @@ import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.fixtures.JTreeFixture;
+import com.redhat.devtools.intellij.commonuitest.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -40,15 +41,8 @@ public class SettingsDialog extends CommonContainerFixture {
         if (path.length == 0) {
             return;
         }
-
-        try {
-            settingsTree().expand(path);
-            settingsTree().clickPath(path, true);
-        } catch (Exception e) {
-            if (!(e instanceof JTreeFixture.PathNotFoundException)) {
-                throw e;
-            }
-        }
+        settingsTree().expand(path);
+        settingsTree().clickPath(path, true);
     }
 
     /**
@@ -64,7 +58,15 @@ public class SettingsDialog extends CommonContainerFixture {
      * Finish the 'Settings' dialog by clicking on the 'OK' button
      */
     public void ok() {
-        JButtonFixture button = button("OK");
+        JButtonFixture button = button(ButtonLabels.OK_LABEL);
+        button.click();
+    }
+
+    /**
+     * Apply performed changes by clicking on the 'Apply' button
+     */
+    public void apply() {
+        JButtonFixture button = button(ButtonLabels.APPLY_LABEL);
         button.click();
     }
 
@@ -72,7 +74,7 @@ public class SettingsDialog extends CommonContainerFixture {
      * Cancel the 'Settings' dialog by clicking on the 'Cancel' button
      */
     public void cancel() {
-        JButtonFixture button = button("Cancel");
+        JButtonFixture button = button(ButtonLabels.CANCEL_LABEL);
         button.click();
     }
 }

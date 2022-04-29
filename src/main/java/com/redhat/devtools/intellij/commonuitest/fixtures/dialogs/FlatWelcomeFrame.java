@@ -81,7 +81,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      */
     public void clickOnLink(String label) {
         // Code for IntelliJ IDEA 2020.3 or newer
-        if (intelliJVersion.toInt() >= 20203) {
+        if (ideaVersion >= 20203) {
             welcomeFrameLink(label).click();
         }
         // Code for IntelliJ IDEA 2020.2 or earlier
@@ -101,7 +101,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             recentProjectsList.runJs("const horizontal_offset = component.getWidth()-22;\n" +
                     "robot.click(component, new Point(horizontal_offset, 22), MouseButton.LEFT_BUTTON, 1);");
             // Code for IntelliJ Idea 2020.3 or newer
-            if (intelliJVersion.toInt() >= 20203) {
+            if (ideaVersion >= 20203) {
                 List<JPopupMenuFixture> jPopupMenuFixtures = jPopupMenus(JPopupMenuFixture.Companion.byType());
                 if (!jPopupMenuFixtures.isEmpty()) {
                     JPopupMenuFixture contextMenu = jPopupMenuFixtures.get(0);
@@ -145,11 +145,11 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      * Open the 'Preferences' dialog
      */
     public void openSettingsDialog() {
-        if (intelliJVersion.toInt() <= 20202) {
+        if (ideaVersion <= 20202) {
             clickOnLink("Configure");
             HeavyWeightWindowFixture heavyWeightWindowFixture = find(HeavyWeightWindowFixture.class, Duration.ofSeconds(5));
             heavyWeightWindowFixture.findText("Preferences").click();
-        } else if (intelliJVersion.toInt() <= 20212) {
+        } else if (ideaVersion <= 20212) {
             JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(JBLIST_XPATH));
             jListFixture.clickItem("Customize", false);
             remoteRobot.find(ContainerFixture.class, byXpath("//div[@class='DialogPanel']")).findText("All settings" + '\u2026').click();

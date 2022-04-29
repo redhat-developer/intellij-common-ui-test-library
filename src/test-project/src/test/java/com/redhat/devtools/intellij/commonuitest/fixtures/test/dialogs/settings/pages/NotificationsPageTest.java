@@ -60,6 +60,22 @@ class NotificationsPageTest extends LibraryTestBase {
     }
 
     @Test
+    public void displayBalloonNotificationsTest() {
+        notificationsPage.displayBalloonNotificationsCheckBox().setValue(true);
+        notificationsPage.disableBalloonNotifications();
+        boolean balloonNotificationsEnabled = notificationsPage.displayBalloonNotificationsCheckBox().isSelected();
+        assertTrue(!balloonNotificationsEnabled, "The 'Balloon Notifications' checkbox should be unchecked.");
+    }
+
+    @Test
+    public void displaySystemNotificationsTest() {
+        notificationsPage.displaySystemNotificationsCheckBox().setValue(true);
+        notificationsPage.disableSystemNotifications();
+        boolean systemNotificationsEnabled = notificationsPage.displaySystemNotificationsCheckBox().isSelected();
+        assertTrue(!systemNotificationsEnabled, "The 'System Notifications' checkbox should be unchecked.");
+    }
+
+    @Test
     public void displayBalloonNotificationsCheckBoxTest() {
         notificationsPage.displayBalloonNotificationsCheckBox().setValue(true);
         boolean balloonNotificationsEnabled = notificationsPage.displayBalloonNotificationsCheckBox().isSelected();

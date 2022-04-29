@@ -25,6 +25,8 @@ public class ButtonLabels {
     public static final String CLEAR_ALL_LABEL = "Clear all";
     public static final String CLOSE_LABEL = "Close";
     public static final String CANCEL_LABEL = "Cancel";
+    public static final String OK_LABEL = "OK";
+    public static final String APPLY_LABEL = "Apply";
     public static final String NEXT_LABEL = "Next";
     public static final String PREVIOUS_LABEL = "Previous";
     public static final String FINISH_LABEL = "Finish";

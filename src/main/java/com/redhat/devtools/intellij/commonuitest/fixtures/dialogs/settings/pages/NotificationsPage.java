@@ -31,15 +31,29 @@ public class NotificationsPage extends CommonContainerFixture {
     }
 
     /**
-     * Set the project type to specific type
+     * Disable both balloon and system notifications
      */
     public void disableNotifications() {
+        disableBalloonNotifications();
+        disableSystemNotifications();
+    }
+
+    /**
+     * Disable balloon notifications
+     */
+    public void disableBalloonNotifications() {
         displayBalloonNotificationsCheckBox().setValue(false);
+    }
+
+    /**
+     * Disable system notifications
+     */
+    public void disableSystemNotifications() {
         displaySystemNotificationsCheckBox().setValue(false);
     }
 
     /**
-     * Get the 'Create project from template' checkbox fixture
+     * Get the 'Display balloon notifications' checkbox fixture
      *
      * @return checkbox fixture
      */
@@ -48,7 +62,7 @@ public class NotificationsPage extends CommonContainerFixture {
     }
 
     /**
-     * Get the 'Create project from template' checkbox fixture
+     * Get the 'Enable system notifications' checkbox fixture
      *
      * @return checkbox fixture
      */
