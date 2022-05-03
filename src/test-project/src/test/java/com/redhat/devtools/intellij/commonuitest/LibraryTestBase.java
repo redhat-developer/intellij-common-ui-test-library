@@ -31,17 +31,17 @@ import java.util.logging.Logger;
 public class LibraryTestBase {
     protected static RemoteRobot remoteRobot;
     private static boolean intelliJHasStarted = false;
-    protected static int ideaVersion;
+    private static UITestRunner.IdeaVersion ideaVersion = UITestRunner.IdeaVersion.COMMUNITY_V_2021_1;
+    protected static int ideaVersionInt = ideaVersion.toInt();
     protected static final Logger LOGGER = Logger.getLogger(LibraryTestBase.class.getName());
 
     @BeforeAll
     protected static void startIntelliJ() {
         if (!intelliJHasStarted) {
-            remoteRobot = UITestRunner.runIde(UITestRunner.IdeaVersion.COMMUNITY_V_2021_1, 8580);
+            remoteRobot = UITestRunner.runIde(ideaVersion, 8580);
             intelliJHasStarted = true;
             Runtime.getRuntime().addShutdownHook(new CloseIntelliJBeforeQuit());
 
-            ideaVersion = UITestRunner.getIdeaVersion().toInt();
             FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
             flatWelcomeFrame.disableNotifications();
             flatWelcomeFrame.preventTipDialogFromOpening();

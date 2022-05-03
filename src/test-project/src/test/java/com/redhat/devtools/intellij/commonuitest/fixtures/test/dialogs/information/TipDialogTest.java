@@ -39,10 +39,10 @@ public class TipDialogTest extends LibraryTestBase {
 
     @AfterAll
     public static void cleanUp() {
-        if (ideaVersion >= 20213) {
+        if (ideaVersionInt >= 20213) {
             JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(TREE_XPATH));
             jTreeFixture.findText("Projects").click();
-        } else if (ideaVersion >= 20203) {
+        } else if (ideaVersionInt >= 20203) {
             JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(JBLIST_XPATH));
             jListFixture.clickItem("Projects", false);
         }

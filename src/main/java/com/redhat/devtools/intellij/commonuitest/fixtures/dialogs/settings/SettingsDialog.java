@@ -17,6 +17,7 @@ import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.fixtures.JTreeFixture;
+import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,7 +40,7 @@ public class SettingsDialog extends CommonContainerFixture {
      */
     public void navigateTo(String... path) {
         if (path.length == 0) {
-            return;
+            throw new UITestException("Path is empty.");
         }
         settingsTree().expand(path);
         settingsTree().clickPath(path, true);

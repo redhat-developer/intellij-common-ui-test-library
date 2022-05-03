@@ -32,24 +32,30 @@ public class NotificationsPage extends CommonContainerFixture {
 
     /**
      * Disable both balloon and system notifications
+     *
+     * @param value boolean value to toggle the checkboxes to
      */
-    public void disableNotifications() {
-        disableBalloonNotifications();
-        disableSystemNotifications();
+    public void toggleNotifications(boolean value) {
+        toggleBalloonNotifications(value);
+        toggleSystemNotifications(value);
     }
 
     /**
-     * Disable balloon notifications
+     * Toggle balloon notifications
+     *
+     * @param value boolean value to toggle the checkbox to
      */
-    public void disableBalloonNotifications() {
-        displayBalloonNotificationsCheckBox().setValue(false);
+    public void toggleBalloonNotifications(boolean value) {
+        displayBalloonNotificationsCheckBox().setValue(value);
     }
 
     /**
-     * Disable system notifications
+     * Toggle system notifications
+     *
+     * @param value boolean value to toggle the checkbox to
      */
-    public void disableSystemNotifications() {
-        displaySystemNotificationsCheckBox().setValue(false);
+    public void toggleSystemNotifications(boolean value) {
+        displaySystemNotificationsCheckBox().setValue(value);
     }
 
     /**

@@ -297,7 +297,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
     public void selectNewProjectTypeTest() {
         newProjectFirstPage.selectNewProjectType("Empty Project");
         boolean isEmptyProjectPageDisplayed;
-        if (ideaVersion < 20213) {
+        if (ideaVersionInt < 20213) {
             isEmptyProjectPageDisplayed = !newProjectFirstPage.findAll(JListFixture.class, byXpath("//div[@visible_text='Empty Project']")).isEmpty();
         } else {
             isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("Simple project with one module");

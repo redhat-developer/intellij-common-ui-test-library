@@ -195,7 +195,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
         SettingsDialog settingsDialog = remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5));
         settingsDialog.navigateTo("Appearance & Behavior", "Notifications");
         NotificationsPage notificationsPage = remoteRobot.find(NotificationsPage.class, Duration.ofSeconds(5));
-        notificationsPage.disableNotifications();
+        notificationsPage.toggleNotifications(false);
         settingsDialog.ok();
 
         if (ideaVersion >= 20213) {
