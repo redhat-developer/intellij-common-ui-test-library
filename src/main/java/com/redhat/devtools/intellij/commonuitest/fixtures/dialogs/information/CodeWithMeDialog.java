@@ -16,7 +16,8 @@ import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
-import com.redhat.devtools.intellij.commonuitest.utils.labels.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -28,7 +29,7 @@ import java.util.logging.Logger;
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "CodeWithMe type", xpath = "//div[@class='Wrapper'][.//div[@class='JBLabel']]//div[@class='JPanel']")
+@DefaultXpath(by = "CodeWithMe type", xpath = XPathDefinitions.CODE_WITH_ME_JPANEL)
 @FixtureName(name = "Code With Me Dialog")
 public class CodeWithMeDialog extends CommonContainerFixture {
     private static final Logger LOGGER = Logger.getLogger(CodeWithMeDialog.class.getName());

@@ -15,6 +15,7 @@ import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -84,7 +85,7 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
     private int getNumberOfProjectLinks() {
         try {
             flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-            JListFixture recentProjectsList = flatWelcomeFrame.find(JListFixture.class, byXpath("//div[@accessiblename='Recent Projects']"), Duration.ofSeconds(10));
+            JListFixture recentProjectsList = flatWelcomeFrame.find(JListFixture.class, byXpath(XPathDefinitions.RECENT_PROJECTS), Duration.ofSeconds(10));
             return recentProjectsList.findAllText().size() / 2;    // 2 items per 1 project link (project path and project name)
         } catch (WaitForConditionTimeoutException e) {
             // the list with accessible name 'Recent Projects' is not available -> 0 links in the 'Welcome to IntelliJ IDEA' dialog

@@ -16,6 +16,7 @@ import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.TipDialog;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,17 +34,15 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author zcervink@redhat.com
  */
 public class TipDialogTest extends LibraryTestBase {
-    private static final String JBLIST_XPATH = "//div[@class='JBList']";
-    private static final String TREE_XPATH = "//div[@class='Tree']";
     private TipDialog tipDialog;
 
     @AfterAll
     public static void cleanUp() {
         if (ideaVersionInt >= 20213) {
-            JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(TREE_XPATH));
+            JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
             jTreeFixture.findText("Projects").click();
         } else if (ideaVersionInt >= 20203) {
-            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(JBLIST_XPATH));
+            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(XPathDefinitions.JBLIST));
             jListFixture.clickItem("Projects", false);
         }
     }

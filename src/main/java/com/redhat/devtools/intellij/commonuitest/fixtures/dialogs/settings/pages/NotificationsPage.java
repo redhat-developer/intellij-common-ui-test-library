@@ -16,6 +16,7 @@ import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JCheckboxFixture;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -23,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
+@DefaultXpath(by = "MyDialog type", xpath = XPathDefinitions.DIALOG_ROOT_PANE)
 @FixtureName(name = "Notifications Page")
 public class NotificationsPage extends CommonContainerFixture {
     public NotificationsPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {

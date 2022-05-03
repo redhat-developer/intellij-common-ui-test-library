@@ -17,6 +17,7 @@ import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.SettingsDialog;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -122,7 +123,7 @@ class SettingsDialogTest extends LibraryTestBase {
     }
 
     private boolean isSettingsPageLoaded(String label) {
-        ComponentFixture cf = remoteRobot.find(ComponentFixture.class, byXpath("//div[@class='Breadcrumbs']"));
+        ComponentFixture cf = remoteRobot.find(ComponentFixture.class, byXpath(XPathDefinitions.BREAD_CRUMBS));
         return cf.hasText(label);
     }
 }

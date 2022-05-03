@@ -19,6 +19,7 @@ import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -30,10 +31,10 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "ToolWindowsPane type", xpath = "//div[@accessiblename='Project Tool Window']")
+@DefaultXpath(by = "ToolWindowsPane type", xpath = XPathDefinitions.PROJECT_TOOL_WINDOW)
 @FixtureName(name = "Tool Windows Pane")
 public class ProjectExplorer extends CommonContainerFixture {
-    private static final String HEAVY_WEIGHT_WINDOW_X_PATH = "//div[@class='HeavyWeightWindow']";
+    private static final String HEAVY_WEIGHT_WINDOW_X_PATH = XPathDefinitions.HEAVY_WEIGHT_WINDOW;
     private RemoteRobot remoteRobot;
 
     public ProjectExplorer(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
@@ -92,7 +93,7 @@ public class ProjectExplorer extends CommonContainerFixture {
      * @return Views popup fixture
      */
     public JPopupMenuFixture openViewsPopup() {
-        actionButton(byXpath("//div[@class='ContentComboLabel']"), Duration.ofSeconds(2)).click();
+        actionButton(byXpath(XPathDefinitions.CONTENT_COMBO_LABEL), Duration.ofSeconds(2)).click();
         try {
             return remoteRobot.find(JPopupMenuFixture.class, byXpath(HEAVY_WEIGHT_WINDOW_X_PATH), Duration.ofSeconds(10));
         } catch (WaitForConditionTimeoutException e) {
@@ -104,21 +105,21 @@ public class ProjectExplorer extends CommonContainerFixture {
      * Locate and select opened file
      */
     public void selectOpenedFile() {
-        actionButton(byXpath("//div[@myicon='locate.svg']"), Duration.ofSeconds(2)).click();
+        actionButton(byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG), Duration.ofSeconds(2)).click();
     }
 
     /**
      * Expand all
      */
     public void expandAll() {
-        actionButton(byXpath("//div[contains(@myvisibleactions, 'View),')]//div[@myicon='expandall.svg']"), Duration.ofSeconds(2)).click();
+        actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL), Duration.ofSeconds(2)).click();
     }
 
     /**
      * Collapse all
      */
     public void collapseAll() {
-        actionButton(byXpath("//div[contains(@myvisibleactions, 'View),')]//div[@myicon='collapseall.svg']"), Duration.ofSeconds(2)).click();
+        actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL), Duration.ofSeconds(2)).click();
     }
 
     /**
@@ -127,7 +128,7 @@ public class ProjectExplorer extends CommonContainerFixture {
      * @return settings popup fixture
      */
     public JPopupMenuFixture openSettingsPopup() {
-        actionButton(byXpath("//div[contains(@myvisibleactions, 'View),')]//div[@myicon='gearPlain.svg']"), Duration.ofSeconds(2)).click();
+        actionButton(byXpath(XPathDefinitions.MY_ICON_GEAR_PLAIN), Duration.ofSeconds(2)).click();
         try {
             return remoteRobot.find(JPopupMenuFixture.class, byXpath(HEAVY_WEIGHT_WINDOW_X_PATH), Duration.ofSeconds(10));
         } catch (WaitForConditionTimeoutException e) {
@@ -139,7 +140,7 @@ public class ProjectExplorer extends CommonContainerFixture {
      * Hide Project Explorer
      */
     public void hide() {
-        actionButton(byXpath("//div[contains(@myvisibleactions, 'View),')]//div[@tooltiptext='Hide']"), Duration.ofSeconds(2)).click();
+        actionButton(byXpath(XPathDefinitions.TOOLTIP_TEXT_HIDE), Duration.ofSeconds(2)).click();
     }
 
     /**

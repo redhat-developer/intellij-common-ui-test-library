@@ -17,7 +17,8 @@ import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
-import com.redhat.devtools.intellij.commonuitest.utils.labels.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -30,7 +31,7 @@ import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
+@DefaultXpath(by = "MyDialog type", xpath = XPathDefinitions.DIALOG_ROOT_PANE)
 @FixtureName(name = "New Project Dialog")
 public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
     public JavaNewProjectFinalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
@@ -122,7 +123,7 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      * @throws UITestException when there is set another value than defined by the 'ProjectFormatType' enumeration in the combo box
      */
     public ProjectFormatType getProjectFormat() {
-        ComboBoxFixture projectFormatComboBox = comboBox(byXpath("//div[@class='JComboBox']"), Duration.ofSeconds(10));
+        ComboBoxFixture projectFormatComboBox = comboBox(byXpath(XPathDefinitions.JCOMBOBOX), Duration.ofSeconds(10));
 
         if (projectFormatComboBox.selectedText().contains(ProjectFormatType.IDEA_DIRECTORY_BASED.toString())) {
             return ProjectFormatType.IDEA_DIRECTORY_BASED;
@@ -139,11 +140,11 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      * @param projectFormatType project format that will be set into the combo box
      */
     public void setProjectFormat(ProjectFormatType projectFormatType) {
-        ComboBoxFixture projectFormatComboBox = comboBox(byXpath("//div[@class='JComboBox']"), Duration.ofSeconds(10));
+        ComboBoxFixture projectFormatComboBox = comboBox(byXpath(XPathDefinitions.JCOMBOBOX), Duration.ofSeconds(10));
         projectFormatComboBox.selectItemContains(projectFormatType.toString());
     }
 
     private boolean isMoreSettingOpened() {
-        return findAll(ContainerFixture.class, byXpath("//div[@class='TitledSeparator']/../../*")).size() == 2;
+        return findAll(ContainerFixture.class, byXpath(XPathDefinitions.MORE_SETTINGS_TITLED_SEPARATOR)).size() == 2;
     }
 }

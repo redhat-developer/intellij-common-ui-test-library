@@ -26,6 +26,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.NewProjectFirstPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -242,7 +243,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present on the second page of the 'New Project' wizard for java project.");
         newProjectDialogWizard.previous();
         try {
-            newProjectFirstPage.comboBox(byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
+            newProjectFirstPage.comboBox(byXpath(XPathDefinitions.PROJECT_SDK_COMBOBOX), Duration.ofSeconds(10));
         } catch (WaitForConditionTimeoutException e) {
             fail("The 'Project SDK' should be available " + BUT_IS + " not.");
         }
@@ -285,7 +286,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
     public void setProjectSdkIfAvailableTest() {
         newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.MAVEN.toString());
         newProjectFirstPage.setProjectSdkIfAvailable("8");
-        ComboBoxFixture projectJdkComboBox = newProjectFirstPage.find(ComboBoxFixture.class, byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
+        ComboBoxFixture projectJdkComboBox = newProjectFirstPage.find(ComboBoxFixture.class, byXpath(XPathDefinitions.PROJECT_SDK_COMBOBOX), Duration.ofSeconds(10));
         String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
         assertTrue(currentlySelectedProjectSdk.contains("8"), "Selected project SDK should be Java 8 but is '" + currentlySelectedProjectSdk + "'");
         newProjectFirstPage.setProjectSdkIfAvailable("11");
@@ -298,14 +299,14 @@ public class NewProjectDialogTest extends LibraryTestBase {
         newProjectFirstPage.selectNewProjectType("Empty Project");
         boolean isEmptyProjectPageDisplayed;
         if (ideaVersionInt < 20213) {
-            isEmptyProjectPageDisplayed = !newProjectFirstPage.findAll(JListFixture.class, byXpath("//div[@visible_text='Empty Project']")).isEmpty();
+            isEmptyProjectPageDisplayed = !newProjectFirstPage.findAll(JListFixture.class, byXpath(XPathDefinitions.EMPTY_PROJECT)).isEmpty();
         } else {
             isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("Simple project with one module");
         }
         assertTrue(isEmptyProjectPageDisplayed, "The 'Empty Project' page should be displayed but is not.");
 
         newProjectFirstPage.selectNewProjectType("Java");
-        boolean isProjectSDKLabelVisible = !newProjectFirstPage.findAll(JLabelFixture.class, byXpath("//div[@text='Project SDK:']")).isEmpty();
+        boolean isProjectSDKLabelVisible = !newProjectFirstPage.findAll(JLabelFixture.class, byXpath(XPathDefinitions.PROJECT_SDK)).isEmpty();
         assertTrue(isProjectSDKLabelVisible, "The 'Project SDK:' label should be visible but is not.");
     }
 
@@ -375,11 +376,11 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     private boolean isMoreSettingsOpened(JavaNewProjectFinalPage javaFinalPage) {
-        return javaFinalPage.findAll(ContainerFixture.class, byXpath("//div[@class='TitledSeparator']/../../*")).size() == 2;
+        return javaFinalPage.findAll(ContainerFixture.class, byXpath(XPathDefinitions.MORE_SETTINGS_TITLED_SEPARATOR)).size() == 2;
     }
 
     private boolean isArtifactCoordinatesOpened(MavenGradleNewProjectFinalPage mavenGradleFinalPage) {
-        List<ContainerFixture> cf = mavenGradleFinalPage.findAll(ContainerFixture.class, byXpath("//div[@class='DialogPanel']/*"));
+        List<ContainerFixture> cf = mavenGradleFinalPage.findAll(ContainerFixture.class, byXpath(XPathDefinitions.ARTIFACTS_COORDINATES_DIALOG_PANEL));
         return cf.size() > 5;
     }
 

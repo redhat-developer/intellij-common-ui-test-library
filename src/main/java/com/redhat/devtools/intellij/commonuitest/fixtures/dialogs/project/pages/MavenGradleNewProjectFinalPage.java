@@ -15,7 +15,8 @@ import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
-import com.redhat.devtools.intellij.commonuitest.utils.labels.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -28,7 +29,7 @@ import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
+@DefaultXpath(by = "MyDialog type", xpath = XPathDefinitions.DIALOG_ROOT_PANE)
 @FixtureName(name = "New Project Dialog")
 public class MavenGradleNewProjectFinalPage extends AbstractNewProjectFinalPage {
     public MavenGradleNewProjectFinalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
@@ -112,7 +113,7 @@ public class MavenGradleNewProjectFinalPage extends AbstractNewProjectFinalPage 
     }
 
     private boolean isArtifactCoordinatesOpened() {
-        List<ContainerFixture> cf = findAll(ContainerFixture.class, byXpath("//div[@class='DialogPanel']/*"));
+        List<ContainerFixture> cf = findAll(ContainerFixture.class, byXpath(XPathDefinitions.ARTIFACTS_COORDINATES_DIALOG_PANEL));
         return cf.size() > 5;
     }
 }

@@ -18,6 +18,7 @@ import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -33,7 +34,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "IdeStatusBarImpl type", xpath = "//div[@class='IdeStatusBarImpl']")
+@DefaultXpath(by = "IdeStatusBarImpl type", xpath = XPathDefinitions.IDE_STATUS_BAR)
 @FixtureName(name = "Ide Status Bar")
 public class IdeStatusBar extends CommonContainerFixture {
     private static final Logger LOGGER = Logger.getLogger(IdeStatusBar.class.getName());
@@ -50,7 +51,7 @@ public class IdeStatusBar extends CommonContainerFixture {
      * @return fixture for the InlineProgressPanel
      */
     public ComponentFixture inlineProgressPanel() {
-        return find(ComponentFixture.class, byXpath("//div[@class='InlineProgressPanel']"));
+        return find(ComponentFixture.class, byXpath(XPathDefinitions.INLINE_PROGRESS_PANEL));
     }
 
     /**
@@ -69,7 +70,7 @@ public class IdeStatusBar extends CommonContainerFixture {
 
     private boolean didProjectImportFinish() {
         try {
-            find(ComponentFixture.class, byXpath("//div[@class='EngravedLabel']"), Duration.ofSeconds(10));
+            find(ComponentFixture.class, byXpath(XPathDefinitions.ENGRAVED_LABEL), Duration.ofSeconds(10));
         } catch (WaitForConditionTimeoutException e) {
             return true;
         }

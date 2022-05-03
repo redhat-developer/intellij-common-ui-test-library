@@ -17,6 +17,7 @@ import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ProjectExplorer;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.junit.jupiter.api.AfterAll;
@@ -68,7 +69,7 @@ class ProjectExplorerTest extends LibraryTestBase {
     @Test
     public void openFileTest() {
         projectExplorer.openFile(PROJECT_NAME, PROJECT_NAME + ".iml");
-        List<ContainerFixture> cfs = remoteRobot.findAll(ContainerFixture.class, byXpath("//div[@class='SingleHeightLabel']"));
+        List<ContainerFixture> cfs = remoteRobot.findAll(ContainerFixture.class, byXpath(XPathDefinitions.SINGLE_HEIGHT_LABEL));
         ContainerFixture cf = cfs.get(cfs.size() - 1);
         String allText = TextUtils.listOfRemoteTextToString(cf.findAllText());
         boolean isFileOpened = allText.contains(PROJECT_NAME + ".iml");

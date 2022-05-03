@@ -19,6 +19,7 @@ import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +35,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "MyDialog type", xpath = "//div[@class='DialogRootPane']")
+@DefaultXpath(by = "MyDialog type", xpath = XPathDefinitions.DIALOG_ROOT_PANE)
 @FixtureName(name = "New Project Dialog")
 public class NewProjectFirstPage extends CommonContainerFixture {
     private RemoteRobot remoteRobot;
@@ -61,7 +62,7 @@ public class NewProjectFirstPage extends CommonContainerFixture {
      */
     public void setProjectSdkIfAvailable(String targetSdkName) {
         step("Select the '" + targetSdkName + "' as new project SDK", () -> {
-            ComboBoxFixture projectJdkComboBox = comboBox(byXpath("//div[@accessiblename='Project SDK:' and @class='JPanel']/div[@class='JdkComboBox']"), Duration.ofSeconds(10));
+            ComboBoxFixture projectJdkComboBox = comboBox(byXpath(XPathDefinitions.PROJECT_SDK_COMBOBOX), Duration.ofSeconds(10));
             String currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
             if (currentlySelectedProjectSdk.contains(targetSdkName)) {
                 return;
@@ -69,7 +70,7 @@ public class NewProjectFirstPage extends CommonContainerFixture {
             projectJdkComboBox.click();
 
             CommonContainerFixture parentFixture = waitFor(Duration.ofSeconds(20), Duration.ofSeconds(2), "Wait for the 'Project SDK' list to finish loading all items.", "The project JDK list did not load all items in 20 seconds.", this::didProjectSdkListLoadAllItems);
-            JPopupMenuFixture projectSdkList = parentFixture.jPopupMenus(byXpath("//div[@class='HeavyWeightWindow']")).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
+            JPopupMenuFixture projectSdkList = parentFixture.jPopupMenus(byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW)).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
             List<RemoteText> sdkItems = projectSdkList.findAllText();
             for (RemoteText sdkItem : sdkItems) {
                 if (sdkItem.getText().contains(targetSdkName)) {
@@ -86,8 +87,8 @@ public class NewProjectFirstPage extends CommonContainerFixture {
 
     private kotlin.Pair<Boolean, CommonContainerFixture> didProjectSdkListLoadAllItems() {
         return step("Test whether the 'Project SDK' list has loaded all items", () -> {
-            CommonContainerFixture parentFixture = remoteRobot.find(CommonContainerFixture.class, byXpath("//div[@class='MyDialog']"));
-            JPopupMenuFixture projectSdkList = parentFixture.jPopupMenus(byXpath("//div[@class='HeavyWeightWindow']")).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
+            CommonContainerFixture parentFixture = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.MY_DIALOG));
+            JPopupMenuFixture projectSdkList = parentFixture.jPopupMenus(byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW)).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
             List<RemoteText> sdkItems = projectSdkList.findAllText();
             int currentSdkItemsCount = sdkItems.size();
 
