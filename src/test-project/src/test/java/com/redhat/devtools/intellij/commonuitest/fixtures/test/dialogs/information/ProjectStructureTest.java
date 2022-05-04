@@ -8,13 +8,12 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.navigation;
+package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.information;
 
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.ProjectStructureDialog;
-import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.TipDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
@@ -31,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com, olkornii@redhat.com
  */
-public class ProjectStructureAndTipDialogs extends LibraryTestBase {
+public class ProjectStructureTest extends LibraryTestBase {
     private static final String PROJECT_NAME = "tip_dialog_java_project";
 
     @BeforeAll
@@ -50,13 +49,6 @@ public class ProjectStructureAndTipDialogs extends LibraryTestBase {
             ProjectStructureDialog projectStructureDialog = remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(10));
             projectStructureDialog.cancel();
         }, ProjectStructureDialog.class, "Project Structure");
-    }
-
-    @Test
-    public void tipDialogTest() {
-        dialogTest(() ->
-            TipDialog.closeTipDialogIfItAppears(remoteRobot),
-            TipDialog.class, "Tip of the Day");
     }
 
     private void dialogTest(Runnable selectedImpl, Class<? extends CommonContainerFixture> dialogClass, String dialogTitle) {

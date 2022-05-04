@@ -20,6 +20,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
+import java.util.logging.Logger;
 
 /**
  * Base class for all JUnit tests in the IntelliJ common UI test library
@@ -30,13 +31,20 @@ import java.time.Duration;
 public class LibraryTestBase {
     protected static RemoteRobot remoteRobot;
     private static boolean intelliJHasStarted = false;
+    private static UITestRunner.IdeaVersion ideaVersion = UITestRunner.IdeaVersion.COMMUNITY_V_2021_1;
+    protected static int ideaVersionInt = ideaVersion.toInt();
+    protected static final Logger LOGGER = Logger.getLogger(LibraryTestBase.class.getName());
 
     @BeforeAll
     protected static void startIntelliJ() {
         if (!intelliJHasStarted) {
-            remoteRobot = UITestRunner.runIde(UITestRunner.IdeaVersion.COMMUNITY_V_2020_3, 8580);
+            remoteRobot = UITestRunner.runIde(ideaVersion, 8580);
             intelliJHasStarted = true;
             Runtime.getRuntime().addShutdownHook(new CloseIntelliJBeforeQuit());
+
+            FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+            flatWelcomeFrame.disableNotifications();
+            flatWelcomeFrame.preventTipDialogFromOpening();
         }
     }
 
@@ -47,16 +55,16 @@ public class LibraryTestBase {
         flatWelcomeFrame.clearWorkspace();
     }
 
+    protected void prepareWorkspace(String projectName) {
+        CreateCloseUtils.createNewProject(remoteRobot, projectName, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
+        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
+        mainIdeWindow.closeProject();
+    }
+
     private static class CloseIntelliJBeforeQuit extends Thread {
         @Override
         public void run() {
             UITestRunner.closeIde();
         }
-    }
-
-    protected void prepareWorkspace(String projectName) {
-        CreateCloseUtils.createNewProject(remoteRobot, projectName, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
-        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
-        mainIdeWindow.closeProject();
     }
 }

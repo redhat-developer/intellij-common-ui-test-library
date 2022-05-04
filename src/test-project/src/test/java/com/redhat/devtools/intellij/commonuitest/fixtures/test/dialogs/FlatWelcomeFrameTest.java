@@ -24,6 +24,7 @@ import java.io.FileFilter;
 import java.time.Duration;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
+import static com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils.takeScreenshot;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -38,6 +39,7 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
     @AfterEach
     public void cleanUp() {
         flatWelcomeFrame.clearWorkspace();
+        flatWelcomeFrame.clearExceptions();
     }
 
     @Test
@@ -52,11 +54,14 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
     public void clearWorkspaceTest() {
         prepareWorkspace(PROJECT_NAME);
         flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame.clearExceptions();
         int projectsOnDisk = getNumberOfProjectsOnDisk();
         int projectLinks = getNumberOfProjectLinks();
         assertTrue(projectsOnDisk == 1, "Number of projects in the IntelliJ's project folder should be 1 but is " + projectsOnDisk + ".");
         assertTrue(projectLinks == 1, "Number of projects' links in the IntelliJ's 'Welcome Frame Dialog' should be 1 but is " + projectLinks + ".");
+        takeScreenshot(remoteRobot);
         flatWelcomeFrame.clearWorkspace();
+        takeScreenshot(remoteRobot);
         int projectCount2 = getNumberOfProjectsOnDisk();
         int projectLinks2 = getNumberOfProjectLinks();
         assertTrue(projectCount2 == 0, "Number of projects in the IntelliJ's project folder should be 0 but is " + projectCount2 + ".");

@@ -15,13 +15,9 @@ import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
-import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
+import com.intellij.remoterobot.fixtures.JCheckboxFixture;
 import com.redhat.devtools.intellij.commonuitest.utils.labels.ButtonLabels;
 import org.jetbrains.annotations.NotNull;
-
-import java.time.Duration;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Tip of the Day dialog fixture
@@ -31,23 +27,23 @@ import java.util.logging.Logger;
 @DefaultXpath(by = "MyDialog type", xpath = "//div[@accessiblename='Tip of the Day' and @class='MyDialog']")
 @FixtureName(name = "Tip Of The Day Dialog")
 public class TipDialog extends CommonContainerFixture {
-    private static final Logger LOGGER = Logger.getLogger(TipDialog.class.getName());
-
     public TipDialog(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
     }
 
     /**
-     * Close the 'Tip of the Day' dialog if it appears
+     * Get the 'Don't show tips' checkbox fixture
      *
-     * @param remoteRobot reference to the RemoteRobot instance
+     * @return checkbox fixture
      */
-    public static void closeTipDialogIfItAppears(RemoteRobot remoteRobot) {
-        try {
-            TipDialog tipDialog = remoteRobot.find(TipDialog.class, Duration.ofSeconds(20));
-            tipDialog.button(ButtonLabels.CLOSE_LABEL).click();
-        } catch (WaitForConditionTimeoutException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        }
+    public JCheckboxFixture dontShowTipsCheckBox() {
+        return checkBox("Don't show tips", true);
+    }
+
+    /**
+     * Close the 'Tip of the Day' dialog by clicking on the 'Close' button
+     */
+    public void close() {
+        button(ButtonLabels.CLOSE_LABEL).click();
     }
 }

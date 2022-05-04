@@ -148,9 +148,14 @@ public class UITestRunner {
     public enum IdeaVersion {
         COMMUNITY_V_2020_2("IC-2020.2"),
         COMMUNITY_V_2020_3("IC-2020.3"),
+        COMMUNITY_V_2021_1("IC-2021.1"),
+        COMMUNITY_V_2021_2("IC-2021.2"),
+        COMMUNITY_V_2021_3("IC-2021.3"),
         ULTIMATE_V_2020_2("IU-2020.2"),
-        ULTIMATE_V_2020_3("IU-2020.3");
-
+        ULTIMATE_V_2020_3("IU-2020.3"),
+        ULTIMATE_V_2021_1("IU-2021.1"),
+        ULTIMATE_V_2021_2("IU-2021.2"),
+        ULTIMATE_V_2021_3("IU-2021.3");
 
         private final String ideaVersionStringRepresentation;
 
@@ -215,14 +220,18 @@ public class UITestRunner {
             step("Create appropriate registry entries", () -> {
                 String registryPath = "HKCU:" + "\\Software\\JavaSoft\\Prefs\\jetbrains\\privacy_policy";
                 String powershellLocation = "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\powershell.exe";
-                ProcessBuilder pb1 = new ProcessBuilder(powershellLocation, "New-Item", "-Path", registryPath, "-Force");
-                ProcessBuilder pb2 = new ProcessBuilder(powershellLocation, "New-ItemProperty", "-Path", registryPath, "-Name", "accepted_version", "-Value", "'2.1'");
+                String powershellPathParameter = "-Path";
+                ProcessBuilder pb1 = new ProcessBuilder(powershellLocation, "New-Item", powershellPathParameter, registryPath, "-Force");
+                ProcessBuilder pb2 = new ProcessBuilder(powershellLocation, "New-ItemProperty", powershellPathParameter, registryPath, "-Name", "accepted_version", "-Value", "'2.1'");
+                ProcessBuilder pb3 = new ProcessBuilder(powershellLocation, "New-ItemProperty", powershellPathParameter, registryPath, "-Name", "euacommunity_accepted_version", "-Value", "'1.0'");
 
                 try {
                     Process p1 = pb1.start();
                     p1.waitFor();
                     Process p2 = pb2.start();
                     p2.waitFor();
+                    Process p3 = pb3.start();
+                    p3.waitFor();
                 } catch (IOException | InterruptedException e) {
                     LOGGER.log(Level.SEVERE, e.getMessage(), e);
                     Thread.currentThread().interrupt();

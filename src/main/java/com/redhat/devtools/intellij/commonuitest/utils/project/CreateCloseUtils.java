@@ -13,7 +13,7 @@ package com.redhat.devtools.intellij.commonuitest.utils.project;
 import com.intellij.remoterobot.RemoteRobot;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
-import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.TipDialog;
+import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.CodeWithMeDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.AbstractNewProjectFinalPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.JavaNewProjectFinalPage;
@@ -38,8 +38,7 @@ public class CreateCloseUtils {
      * @param newProjectType type of new project
      */
     public static void createNewProject(RemoteRobot remoteRobot, String projectName, NewProjectType newProjectType) {
-        openNewProjectDialogFromWelcomeDialog(remoteRobot);
-        NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
+        NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
         newProjectFirstPage.selectNewProjectType(newProjectType.toString());
         newProjectFirstPage.setProjectSdkIfAvailable("11");
@@ -54,20 +53,22 @@ public class CreateCloseUtils {
         newProjectDialogWizard.finish();
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilProjectImportIsComplete();
-        TipDialog.closeTipDialogIfItAppears(remoteRobot);
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
         mainIdeWindow.maximizeIdeWindow();
         ideStatusBar.waitUntilAllBgTasksFinish();
+        CodeWithMeDialog.closeCodeWithMePopupIfItAppears(remoteRobot);
     }
 
     /**
      * Open 'New Project' dialog from 'Welcome to IntelliJ IDEA' dialog
      *
      * @param remoteRobot reference to the RemoteRobot instance
+     * @return NewProjectDialogWizard fixture
      */
-    public static void openNewProjectDialogFromWelcomeDialog(RemoteRobot remoteRobot) {
+    public static NewProjectDialogWizard openNewProjectDialogFromWelcomeDialog(RemoteRobot remoteRobot) {
         FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.createNewProject();
+        return remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
     }
 
     /**

@@ -25,12 +25,15 @@ public class ButtonLabels {
     public static final String CLEAR_ALL_LABEL = "Clear all";
     public static final String CLOSE_LABEL = "Close";
     public static final String CANCEL_LABEL = "Cancel";
+    public static final String OK_LABEL = "OK";
+    public static final String APPLY_LABEL = "Apply";
     public static final String NEXT_LABEL = "Next";
     public static final String PREVIOUS_LABEL = "Previous";
     public static final String FINISH_LABEL = "Finish";
     public static final String PROJECT_STRIPE_BUTTON_LABEL = "Project";
     public static final String MAVEN_STRIPE_BUTTON_LABEL = "Maven";
     public static final String GRADLE_STRIPE_BUTTON_LABEL = "Gradle";
+    public static final String GOT_IT_LABEL = "Got It";
     public static final String MORE_SETTINGS = "More Settings";
     public static final String ARTIFACT_COORDINATES = "Artifact Coordinates";
 }
