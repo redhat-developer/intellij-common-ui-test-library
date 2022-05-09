@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.0.9 (May 10, 2022)
+ - Add support for IntelliJ IDEA Ultimate (2020.2, 2020.3, 2021.1, 2021.2)
+ - Add support for the following IntelliJ IDEA versions: 
+   - IntelliJ IDEA 2021.1 (Community Edition)
+   - IntelliJ IDEA 2021.2 (Community Edition)
+   - IntelliJ IDEA 2021.3 (Community Edition)
+
 ## 0.0.8 (Mar 7, 2022)
  - Fix `java.net.ConnectException when closing IntelliJ IDEA` issue
 
