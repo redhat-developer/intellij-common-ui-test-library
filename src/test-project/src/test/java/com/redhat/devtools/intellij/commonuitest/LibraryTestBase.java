@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 public class LibraryTestBase {
     protected static RemoteRobot remoteRobot;
     private static boolean intelliJHasStarted = false;
-    private static UITestRunner.IdeaVersion ideaVersion = UITestRunner.IdeaVersion.COMMUNITY_V_2021_1;
+    private static UITestRunner.IdeaVersion ideaVersion = UITestRunner.IdeaVersion.ULTIMATE_V_2021_1;
     protected static int ideaVersionInt = ideaVersion.toInt();
     protected static final Logger LOGGER = Logger.getLogger(LibraryTestBase.class.getName());
 
