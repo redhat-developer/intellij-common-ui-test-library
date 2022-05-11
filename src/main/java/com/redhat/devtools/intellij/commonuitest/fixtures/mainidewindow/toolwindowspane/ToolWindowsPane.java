@@ -20,7 +20,8 @@ import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.GradleBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.MavenBuildToolPane;
-import com.redhat.devtools.intellij.commonuitest.utils.labels.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -33,7 +34,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "ToolWindowsPane type", xpath = "//div[@class='ToolWindowsPane']")
+@DefaultXpath(by = "ToolWindowsPane type", xpath = XPathDefinitions.TOOL_WINDOWS_PANE)
 @FixtureName(name = "Tool Windows Pane")
 public class ToolWindowsPane extends CommonContainerFixture {
     private RemoteRobot remoteRobot;
@@ -101,12 +102,12 @@ public class ToolWindowsPane extends CommonContainerFixture {
     public JButtonFixture stripeButton(String label, boolean isPaneOpened) {
         if (isPaneOpened) {
             if (label.equals(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL) || label.equals(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL)) {
-                return button(byXpath("//div[@disabledicon='toolWindow" + label + ".svg']"), Duration.ofSeconds(2));
+                return button(byXpath(XPathDefinitions.toolWindowSvg(label)), Duration.ofSeconds(2));
             } else if (label.equals(ButtonLabels.PROJECT_STRIPE_BUTTON_LABEL)) {
-                return button(byXpath("//div[@tooltiptext='Project']"), Duration.ofSeconds(2));
+                return button(byXpath(XPathDefinitions.TOOLTIP_TEXT_PROJECT), Duration.ofSeconds(2));
             }
         }
-        return button(byXpath("//div[@text='" + label + "']"), Duration.ofSeconds(2));
+        return button(byXpath(XPathDefinitions.label(label)), Duration.ofSeconds(2));
     }
 
     private <T extends Fixture> T togglePane(String label, Class<T> fixtureClass, boolean openPane) {

@@ -18,7 +18,8 @@ import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
-import com.redhat.devtools.intellij.commonuitest.utils.labels.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -26,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "MyDialog type", xpath = "//div[@class='MyDialog']")
+@DefaultXpath(by = "MyDialog type", xpath = XPathDefinitions.MY_DIALOG)
 @FixtureName(name = "Settings Dialog")
 public class SettingsDialog extends CommonContainerFixture {
     public SettingsDialog(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {

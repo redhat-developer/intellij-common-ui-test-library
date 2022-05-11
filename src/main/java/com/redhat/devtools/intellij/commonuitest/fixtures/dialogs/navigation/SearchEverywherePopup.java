@@ -21,6 +21,7 @@ import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.Keyboard;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,7 +37,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "SearchEverywhereUI type", xpath = "//div[@accessiblename='Search everywhere' and @class='SearchEverywhereUI']")
+@DefaultXpath(by = "SearchEverywhereUI type", xpath = XPathDefinitions.SEARCH_EVERYWHERE_POPUP)
 @FixtureName(name = "Search Everywhere Popup")
 public class SearchEverywherePopup extends CommonContainerFixture {
     private RemoteRobot remoteRobot;
@@ -53,7 +54,7 @@ public class SearchEverywherePopup extends CommonContainerFixture {
      */
     public void activateTab(String tabName) {
         try {
-            button(byXpath("//div[@text='" + tabName + "']"), Duration.ofSeconds(2)).click();
+            button(byXpath(XPathDefinitions.label(tabName)), Duration.ofSeconds(2)).click();
         } catch (WaitForConditionTimeoutException e) {
             throw new UITestException("The '" + tabName + "' tab cannot be found.");
         }

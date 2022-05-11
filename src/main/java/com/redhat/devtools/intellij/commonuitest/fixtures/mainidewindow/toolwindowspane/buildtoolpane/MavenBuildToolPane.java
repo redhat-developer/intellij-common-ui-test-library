@@ -19,6 +19,7 @@ import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +34,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "ToolWindowsPane type", xpath = "//div[@accessiblename='Maven Tool Window']")
+@DefaultXpath(by = "ToolWindowsPane type", xpath = XPathDefinitions.MAVEN_TOOL_WINDOW)
 @FixtureName(name = "Tool Windows Pane")
 public class MavenBuildToolPane extends CommonContainerFixture {
     private RemoteRobot remoteRobot;
@@ -47,14 +48,14 @@ public class MavenBuildToolPane extends CommonContainerFixture {
      * Reload all Maven projects
      */
     public void reloadAllMavenProjects() {
-        actionButton(byXpath("//div[@myicon='refresh.svg']"), Duration.ofSeconds(2)).click();
+        actionButton(byXpath(XPathDefinitions.MY_ICON_REFRESH), Duration.ofSeconds(2)).click();
     }
 
     /**
      * Collapse all
      */
     public void collapseAll() {
-        actionButton(byXpath("//div[contains(@myvisibleactions, 'For')]//div[@myicon='collapseall.svg']"), Duration.ofSeconds(2)).click();
+        actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_FOR), Duration.ofSeconds(2)).click();
     }
 
     /**

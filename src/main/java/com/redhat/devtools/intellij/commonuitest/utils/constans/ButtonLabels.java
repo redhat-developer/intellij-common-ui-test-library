@@ -8,7 +8,7 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package com.redhat.devtools.intellij.commonuitest.utils.labels;
+package com.redhat.devtools.intellij.commonuitest.utils.constans;
 
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 
@@ -18,10 +18,6 @@ import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
  * @author zcervink@redhat.com
  */
 public class ButtonLabels {
-    private ButtonLabels() {
-        throw new UITestException("Utility class with static methods.");
-    }
-
     public static final String CLEAR_ALL_LABEL = "Clear all";
     public static final String CLOSE_LABEL = "Close";
     public static final String CANCEL_LABEL = "Cancel";
@@ -36,4 +32,7 @@ public class ButtonLabels {
     public static final String GOT_IT_LABEL = "Got It";
     public static final String MORE_SETTINGS = "More Settings";
     public static final String ARTIFACT_COORDINATES = "Artifact Coordinates";
+    private ButtonLabels() {
+        throw new UITestException("Utility class with static methods.");
+    }
 }

@@ -13,7 +13,7 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.to
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ProjectExplorer;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
-import com.redhat.devtools.intellij.commonuitest.utils.labels.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.ButtonLabels;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

@@ -19,6 +19,7 @@ import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +34,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "ToolWindowsPane type", xpath = "//div[@accessiblename='Gradle Tool Window']")
+@DefaultXpath(by = "ToolWindowsPane type", xpath = XPathDefinitions.GRADLE_TOOL_WINDOW)
 @FixtureName(name = "Tool Windows Pane")
 public class GradleBuildToolPane extends CommonContainerFixture {
     private RemoteRobot remoteRobot;
@@ -47,7 +48,7 @@ public class GradleBuildToolPane extends CommonContainerFixture {
      * Reload all Gradle projects
      */
     public void reloadAllGradleProjects() {
-        actionButton(byXpath("//div[@myicon='refresh.svg']"), Duration.ofSeconds(2)).click();
+        actionButton(byXpath(XPathDefinitions.MY_ICON_REFRESH), Duration.ofSeconds(2)).click();
         remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10)).waitUntilAllBgTasksFinish();
     }
 
@@ -55,14 +56,14 @@ public class GradleBuildToolPane extends CommonContainerFixture {
      * Expand all
      */
     public void expandAll() {
-        actionButton(byXpath("//div[contains(@myvisibleactions, 'IDE')]//div[@myicon='expandall.svg']"), Duration.ofSeconds(2)).click();
+        actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL_IDE), Duration.ofSeconds(2)).click();
     }
 
     /**
      * Collapse all
      */
     public void collapseAll() {
-        actionButton(byXpath("//div[contains(@myvisibleactions, 'IDE')]//div[@myicon='collapseall.svg']"), Duration.ofSeconds(2)).click();
+        actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_IDE), Duration.ofSeconds(2)).click();
     }
 
     /**

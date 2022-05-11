@@ -19,6 +19,7 @@ import com.intellij.remoterobot.utils.Keyboard;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.navigation.SearchEverywherePopup;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.KeyEvent;
@@ -29,10 +30,10 @@ import java.time.Duration;
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "IdeFrameImpl type", xpath = "//div[@class='IdeFrameImpl']")
+@DefaultXpath(by = "IdeFrameImpl type", xpath = XPathDefinitions.MAIN_IDE_WINDOW)
 @FixtureName(name = "Main IDE Window")
 public class MainIdeWindow extends CommonContainerFixture {
-    private RemoteRobot remoteRobot;
+    private final RemoteRobot remoteRobot;
 
     public MainIdeWindow(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);

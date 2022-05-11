@@ -17,6 +17,7 @@ import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.intellij.remoterobot.fixtures.TextEditorFixture;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +31,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "ToolWindowsPane type", xpath = "//div[@class='BuildView']")
+@DefaultXpath(by = "ToolWindowsPane type", xpath = XPathDefinitions.BUILD_VIEW)
 @FixtureName(name = "Tool Windows Pane")
 public class BuildView extends CommonContainerFixture {
     private String lastBuildStatusTreeText;
@@ -62,7 +63,7 @@ public class BuildView extends CommonContainerFixture {
      * @return Build Status tree fixture
      */
     public JTreeFixture buildStatusTree() {
-        return find(JTreeFixture.class, byXpath("//div[@class='Tree']"));
+        return find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
     }
 
     /**
@@ -71,7 +72,7 @@ public class BuildView extends CommonContainerFixture {
      * @return build console fixture
      */
     public TextEditorFixture buildConsole() {
-        return textEditor(byXpath("//div[@accessiblename='Editor']"), Duration.ofSeconds(2));
+        return textEditor(byXpath(XPathDefinitions.BUILD_VIEW_EDITOR), Duration.ofSeconds(2));
     }
 
     private boolean didBuildStatusTreeTextStopChanging() {

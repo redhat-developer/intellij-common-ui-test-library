@@ -15,7 +15,8 @@ import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
-import com.redhat.devtools.intellij.commonuitest.utils.labels.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -23,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author olkornii@redhat.com
  */
-@DefaultXpath(by = "MyDialog type", xpath = "//div[@accessiblename='Project Structure' and @class='MyDialog']")
+@DefaultXpath(by = "MyDialog type", xpath = XPathDefinitions.PROJECT_STRUCTURE_DIALOG)
 @FixtureName(name = "Project Structure Dialog")
 public class ProjectStructureDialog extends CommonContainerFixture {
     public ProjectStructureDialog(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {

@@ -30,6 +30,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.errors.IdeFata
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.TipDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.SettingsDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.pages.NotificationsPage;
+import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,12 +50,10 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "FlatWelcomeFrame type", xpath = "//div[@class='FlatWelcomeFrame']")
+@DefaultXpath(by = "FlatWelcomeFrame type", xpath = XPathDefinitions.FLAT_WELCOME_FRAME)
 @FixtureName(name = "Welcome To IntelliJ IDEA Dialog")
 public class FlatWelcomeFrame extends CommonContainerFixture {
     private static final Logger LOGGER = Logger.getLogger(FlatWelcomeFrame.class.getName());
-    private static final String JBLIST_XPATH = "//div[@class='JBList']";
-    private static final String TREE_XPATH = "//div[@class='Tree']";
     private static final String PROJECTS_BUTTON = "Projects";
     private final RemoteRobot remoteRobot;
     private final UITestRunner.IdeaVersion intelliJVersion;
@@ -94,8 +93,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      * Clear the workspace by deleting the content of the IdeaProjects folder and clearing all the projects' links in the 'Welcome to IntelliJ IDEA' dialog
      */
     public void clearWorkspace() {
-        List<JListFixture> jListFixtures = jLists(byXpath("//div[@accessiblename='Recent Projects']"));
-
+        List<JListFixture> jListFixtures = jLists(byXpath(XPathDefinitions.RECENT_PROJECTS));
         for (int i = 0; i < projectsCount(); i++) {
             JListFixture recentProjectsList = jListFixtures.get(0);
             recentProjectsList.runJs("const horizontal_offset = component.getWidth()-22;\n" +
@@ -150,13 +148,13 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             HeavyWeightWindowFixture heavyWeightWindowFixture = find(HeavyWeightWindowFixture.class, Duration.ofSeconds(5));
             heavyWeightWindowFixture.findText("Preferences").click();
         } else if (ideaVersion <= 20212) {
-            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(JBLIST_XPATH));
+            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(XPathDefinitions.JBLIST));
             jListFixture.clickItem("Customize", false);
-            remoteRobot.find(ContainerFixture.class, byXpath("//div[@class='DialogPanel']")).findText("All settings" + '\u2026').click();
+            remoteRobot.find(ContainerFixture.class, byXpath(XPathDefinitions.DIALOG_PANEL)).findText("All settings" + '\u2026').click();
         } else {
-            JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(TREE_XPATH));
+            JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
             jTreeFixture.findText("Customize").click();
-            remoteRobot.find(ContainerFixture.class, byXpath("//div[@class='DialogPanel']")).findText("All settings" + '\u2026').click();
+            remoteRobot.find(ContainerFixture.class, byXpath(XPathDefinitions.DIALOG_PANEL)).findText("All settings" + '\u2026').click();
         }
     }
 
@@ -175,13 +173,13 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             HeavyWeightWindowFixture heavyWeightWindowFixture = find(HeavyWeightWindowFixture.class, Duration.ofSeconds(5));
             heavyWeightWindowFixture.findText("Tip of the Day").click();
         } else if (ideaVersion <= 20212) {
-            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(JBLIST_XPATH));
+            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(XPathDefinitions.JBLIST));
             jListFixture.findText("Learn IntelliJ IDEA").click();
-            remoteRobot.find(JLabelFixture.class, byXpath("//div[@text='Tip of the Day']")).click();
+            remoteRobot.find(JLabelFixture.class, byXpath(XPathDefinitions.TIP_DIALOGA_2)).click();
         } else {
-            JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(TREE_XPATH));
+            JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
             jTreeFixture.findText("Learn IntelliJ IDEA").click();
-            remoteRobot.find(JLabelFixture.class, byXpath("//div[@text='Tip of the Day']")).click();
+            remoteRobot.find(JLabelFixture.class, byXpath(XPathDefinitions.TIP_DIALOGA_2)).click();
         }
 
         return remoteRobot.find(TipDialog.class, Duration.ofSeconds(10));
@@ -199,10 +197,10 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
         settingsDialog.ok();
 
         if (ideaVersion >= 20213) {
-            JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(TREE_XPATH));
+            JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
             jTreeFixture.findText(PROJECTS_BUTTON).click();
         } else if (ideaVersion >= 20203) {
-            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(JBLIST_XPATH));
+            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(XPathDefinitions.JBLIST));
             jListFixture.clickItem(PROJECTS_BUTTON, false);
         }
     }
@@ -216,18 +214,18 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
         tipDialog.close();
 
         if (ideaVersion >= 20213) {
-            JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(TREE_XPATH));
+            JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
             jTreeFixture.findText(PROJECTS_BUTTON).click();
         } else if (ideaVersion >= 20203) {
-            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(JBLIST_XPATH));
+            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(XPathDefinitions.JBLIST));
             jListFixture.clickItem(PROJECTS_BUTTON, false);
         }
     }
 
     private int projectsCount() {
         try {
-            ContainerFixture projectWrapper = find(ContainerFixture.class, byXpath("//div[@class='NewRecentProjectPanel']"));
-            JListFixture projectList = projectWrapper.find(JListFixture.class, byXpath("//div[@class='MyList']"));
+            ContainerFixture projectWrapper = find(ContainerFixture.class, byXpath(XPathDefinitions.NEW_RECENT_PROJECT_PANEL));
+            JListFixture projectList = projectWrapper.find(JListFixture.class, byXpath(XPathDefinitions.MY_LIST));
             return projectList.collectItems().size();
         } catch (WaitForConditionTimeoutException e) {
             return 0;
@@ -236,13 +234,13 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
 
     // Works for IntelliJ Idea 2020.3+
     private JButtonFixture welcomeFrameLink(String label) {
-        if (UtilsKt.hasAnyComponent(this, byXpath("//div[@class='NewRecentProjectPanel']"))) {
-            return button(byXpath("//div[@class='JBOptionButton' and @text='" + label + "']"), Duration.ofSeconds(2));
+        if (UtilsKt.hasAnyComponent(this, byXpath(XPathDefinitions.NEW_RECENT_PROJECT_PANEL))) {
+            return button(byXpath(XPathDefinitions.JBOptionButton(label)), Duration.ofSeconds(2));
         }
-        return button(byXpath("//div[@class='NonOpaquePanel'][./div[@text='" + label + "']]"), Duration.ofSeconds(2));
+        return button(byXpath(XPathDefinitions.NonOpaquePanel(label)), Duration.ofSeconds(2));
     }
 
     private ComponentFixture ideErrorsIcon() {
-        return find(ComponentFixture.class, byXpath("//div[@class='IdeErrorsIcon']"), Duration.ofSeconds(10));
+        return find(ComponentFixture.class, byXpath(XPathDefinitions.IDE_ERROR_ICON), Duration.ofSeconds(10));
     }
 }
