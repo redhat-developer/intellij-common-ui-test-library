@@ -68,3 +68,10 @@ If you encounter a problem and know it is caused by the IntelliJ IDEA UI test li
 ## License
 
 This project is distributed under the Eclipse Public License - v 2.0 license. For more information see the [LICENSE](./LICENSE) file in the root of this repository.
+
+### Certificate of Origin
+
+By contributing to this project you agree to the Developer Certificate of
+Origin (DCO). This document was created by the Linux Kernel community and is a
+simple statement that you, as a contributor, have the legal right to make the
+contribution. See the [DCO](DCO) file for details.
