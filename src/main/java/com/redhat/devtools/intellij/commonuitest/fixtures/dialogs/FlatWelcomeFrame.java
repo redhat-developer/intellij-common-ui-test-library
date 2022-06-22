@@ -31,6 +31,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.Ti
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.SettingsDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.pages.NotificationsPage;
 import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
+import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJ;
 import com.redhat.devtools.intellij.commonuitest.utils.internalerror.IdeInternalErrorUtils;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +59,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
     private static final Logger LOGGER = Logger.getLogger(FlatWelcomeFrame.class.getName());
     private static final String PROJECTS_BUTTON = "Projects";
     private final RemoteRobot remoteRobot;
-    private final UITestRunner.IdeaVersion intelliJVersion;
+    private final IntelliJ.Version intelliJVersion;
     private final int ideaVersion;
 
     public FlatWelcomeFrame(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
@@ -199,14 +200,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
         NotificationsPage notificationsPage = remoteRobot.find(NotificationsPage.class, Duration.ofSeconds(5));
         notificationsPage.toggleNotifications(false);
         settingsDialog.ok();
-
-        if (ideaVersion >= 20213) {
-            JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
-            jTreeFixture.findText(PROJECTS_BUTTON).click();
-        } else if (ideaVersion >= 20203) {
-            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(XPathDefinitions.JBLIST));
-            jListFixture.clickItem(PROJECTS_BUTTON, false);
-        }
+        switchToProjectsPage();
     }
 
     /**
@@ -216,7 +210,13 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
         TipDialog tipDialog = openTipDialog();
         tipDialog.dontShowTipsCheckBox().setValue(true);
         tipDialog.close();
+        switchToProjectsPage();
+    }
 
+    /**
+     * Switch to the 'Projects' page of flat welcome frame
+     */
+    public void switchToProjectsPage() {
         if (ideaVersion >= 20213) {
             JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
             jTreeFixture.findText(PROJECTS_BUTTON).click();

@@ -33,6 +33,7 @@ import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 import java.time.Duration;
 import java.util.List;
@@ -93,26 +94,20 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
+    @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
     public void setProjectNameMavenProjectTest() {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            return;
-        }
         testProjectNameAndLocationInputField(CreateCloseUtils.NewProjectType.MAVEN);
     }
 
     @Test
+    @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
     public void setProjectNameGradleProjectTest() {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            return;
-        }
         testProjectNameAndLocationInputField(CreateCloseUtils.NewProjectType.GRADLE);
     }
 
     @Test
+    @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
     public void openMoreSettingsTest() {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            return;
-        }
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         javaFinalPage.closeMoreSettings();
@@ -124,10 +119,8 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
+    @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
     public void closeMoreSettingsTest() {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            return;
-        }
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         javaFinalPage.openMoreSettings();
@@ -139,10 +132,8 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
+    @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
     public void openAdvancedSettingsTest() {
-        if (UITestRunner.getIdeaVersionInt() < 20221) {
-            return;
-        }
         newProjectFirstPage.closeAdvanceSettings();
         assertFalse(isAdvancedSettingsOpened(), "The 'Advanced Settings' section should be closed but is not");
         newProjectFirstPage.openAdvanceSettings();
@@ -152,10 +143,8 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
+    @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
     public void closeAdvancedSettingsTest() {
-        if (UITestRunner.getIdeaVersionInt() < 20221) {
-            return;
-        }
         newProjectFirstPage.openAdvanceSettings();
         assertTrue(isAdvancedSettingsOpened(), "The 'Advanced Settings' section should be opened but is not");
         newProjectFirstPage.closeAdvanceSettings();
@@ -216,10 +205,8 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
+    @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
     public void getSetProjectFormat() {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            return;
-        }
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         javaFinalPage.openMoreSettings();
@@ -273,10 +260,8 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
+    @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
     public void toggleFromTemplateTest() {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            return;
-        }
         newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
         newProjectDialogWizard.next();
         JavaNewProjectSecondPage javaNewProjectSecondPage = newProjectDialogWizard.find(JavaNewProjectSecondPage.class, Duration.ofSeconds(10));
@@ -290,10 +275,8 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
+    @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
     public void previousButtonTest() {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            return;
-        }
         newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
         newProjectFirstPage.setProjectSdkIfAvailable("11");
         assertThrows(UITestException.class, () ->
@@ -310,10 +293,8 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
+    @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
     public void nextButtonTest() {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            return;
-        }
         newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
         newProjectFirstPage.setProjectSdkIfAvailable("11");
         newProjectDialogWizard.next();

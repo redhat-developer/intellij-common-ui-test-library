@@ -144,9 +144,9 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
     private boolean isStripeButtonAvailable(String label, boolean isPaneOpened) {
         try {
             if (UITestRunner.getIdeaVersionInt() >= 20221) {
-                remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10)).stripeButton(label, isPaneOpened);
+                remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(2)).stripeButton(label, isPaneOpened);
             } else {
-                remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10)).stripeButton(label, isPaneOpened);
+                remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(2)).stripeButton(label, isPaneOpened);
             }
         } catch (WaitForConditionTimeoutException e) {
             return false;

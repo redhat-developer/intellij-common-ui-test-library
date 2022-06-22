@@ -16,6 +16,7 @@ import com.intellij.remoterobot.stepsProcessing.StepWorker;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
+import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJ;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,8 +50,7 @@ public class UITestRunner {
     private static final String USER_HOME = System.getProperty("user.home");
     private static RemoteRobot remoteRobot = null;
     private static Process ideProcess;
-    private static IdeaVersion ideaVersion;
-    private static int ideaVersionInt;
+    private static IntelliJ.Version ideaVersion;
 
     /**
      * Start the given version of IntelliJ Idea listening on the given port
@@ -59,12 +59,12 @@ public class UITestRunner {
      * @param port        port number on which will the IntelliJ Idea be listening
      * @return instance of the RemoteRobot
      */
-    public static RemoteRobot runIde(IdeaVersion ideaVersion, int port) {
+    public static RemoteRobot runIde(IntelliJ.Version ideaVersion, int port) {
         StepWorker.registerProcessor(new StepLogger());
 
         return step("Start IntelliJ Idea ('" + ideaVersion.toString() + "') listening on port " + port, () -> {
+            System.setProperty("uitestlib.idea.version", Integer.toString(ideaVersion.toInt()));
             UITestRunner.ideaVersion = ideaVersion;
-            UITestRunner.ideaVersionInt = ideaVersion.toInt();
 
             acceptAllTermsAndConditions();
             if (ideaVersion.isUltimate()) {
@@ -93,7 +93,7 @@ public class UITestRunner {
      * @param ideaVersion version of the IntelliJ Idea to start
      * @return instance of the RemoteRobot
      */
-    public static RemoteRobot runIde(IdeaVersion ideaVersion) {
+    public static RemoteRobot runIde(IntelliJ.Version ideaVersion) {
         return runIde(ideaVersion, DEFAULT_PORT);
     }
 
@@ -109,7 +109,7 @@ public class UITestRunner {
      *
      * @return version of the currently running IntelliJ Idea
      */
-    public static IdeaVersion getIdeaVersion() {
+    public static IntelliJ.Version getIdeaVersion() {
         return ideaVersion;
     }
 
@@ -119,7 +119,7 @@ public class UITestRunner {
      * @return version of the currently running IntelliJ Idea
      */
     public static int getIdeaVersionInt() {
-        return ideaVersionInt;
+        return getIdeaVersion().toInt();
     }
 
     /**
@@ -301,42 +301,6 @@ public class UITestRunner {
             outStream.write(buffer);
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Enumeration for supported versions of the IntelliJ Idea
-     */
-    public enum IdeaVersion {
-        COMMUNITY_V_2020_2("IC-2020.2"),
-        COMMUNITY_V_2020_3("IC-2020.3"),
-        COMMUNITY_V_2021_1("IC-2021.1"),
-        COMMUNITY_V_2021_2("IC-2021.2"),
-        COMMUNITY_V_2021_3("IC-2021.3"),
-        COMMUNITY_V_2022_1("IC-2022.1"),
-        ULTIMATE_V_2020_2("IU-2020.2"),
-        ULTIMATE_V_2020_3("IU-2020.3"),
-        ULTIMATE_V_2021_1("IU-2021.1"),
-        ULTIMATE_V_2021_2("IU-2021.2");
-
-        private final String ideaVersionStringRepresentation;
-
-        IdeaVersion(String ideaVersionStringRepresentation) {
-            this.ideaVersionStringRepresentation = ideaVersionStringRepresentation;
-        }
-
-        @Override
-        public String toString() {
-            return ideaVersionStringRepresentation;
-        }
-
-        public int toInt() {
-            String ideaVersion = this.ideaVersionStringRepresentation.substring(3).replace(".", "");
-            return Integer.parseInt(ideaVersion);
-        }
-
-        public boolean isUltimate() {
-            return this.ideaVersionStringRepresentation.charAt(1) == 'U';
         }
     }
 }

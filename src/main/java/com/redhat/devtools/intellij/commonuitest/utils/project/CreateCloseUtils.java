@@ -90,6 +90,7 @@ public class CreateCloseUtils {
      */
     public static NewProjectDialogWizard openNewProjectDialogFromWelcomeDialog(RemoteRobot remoteRobot) {
         FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame.switchToProjectsPage();
         flatWelcomeFrame.createNewProject();
         return remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
     }
