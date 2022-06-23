@@ -31,8 +31,8 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.Ti
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.SettingsDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.pages.NotificationsPage;
 import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
-import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJ;
 import com.redhat.devtools.intellij.commonuitest.utils.internalerror.IdeInternalErrorUtils;
+import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,7 +59,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
     private static final Logger LOGGER = Logger.getLogger(FlatWelcomeFrame.class.getName());
     private static final String PROJECTS_BUTTON = "Projects";
     private final RemoteRobot remoteRobot;
-    private final IntelliJ.Version intelliJVersion;
+    private final IntelliJVersion intelliJVersion;
     private final int ideaVersion;
 
     public FlatWelcomeFrame(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {

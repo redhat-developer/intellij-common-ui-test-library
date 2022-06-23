@@ -13,8 +13,8 @@ package com.redhat.devtools.intellij.commonuitest;
 import com.intellij.remoterobot.RemoteRobot;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
-import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJ;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
+import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
 import com.redhat.devtools.intellij.commonuitest.utils.testextension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -33,7 +33,7 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 @ExtendWith(ScreenshotAfterTestFailExtension.class)
 public class LibraryTestBase {
     protected static final Logger LOGGER = Logger.getLogger(LibraryTestBase.class.getName());
-    private static final IntelliJ.Version ideaVersion = IntelliJ.Version.COMMUNITY_V_2022_1;
+    private static final IntelliJVersion ideaVersion = IntelliJVersion.COMMUNITY_V_2022_1;
     protected static RemoteRobot remoteRobot;
     protected static int ideaVersionInt = ideaVersion.toInt();
     private static boolean intelliJHasStarted = false;

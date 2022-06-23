@@ -16,7 +16,7 @@ import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
-import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJ;
+import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
 
 import java.time.Duration;
 import java.util.List;
@@ -30,7 +30,7 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
  */
 public class MenuBar {
     private final RemoteRobot remoteRobot;
-    private final IntelliJ.Version ideaVersion;
+    private final IntelliJVersion ideaVersion;
 
     public MenuBar(RemoteRobot remoteRobot) {
         this.remoteRobot = remoteRobot;

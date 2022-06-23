@@ -16,7 +16,7 @@ import com.intellij.remoterobot.stepsProcessing.StepWorker;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
-import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJ;
+import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -50,7 +50,7 @@ public class UITestRunner {
     private static final String USER_HOME = System.getProperty("user.home");
     private static RemoteRobot remoteRobot = null;
     private static Process ideProcess;
-    private static IntelliJ.Version ideaVersion;
+    private static IntelliJVersion ideaVersion;
 
     /**
      * Start the given version of IntelliJ Idea listening on the given port
@@ -59,7 +59,7 @@ public class UITestRunner {
      * @param port        port number on which will the IntelliJ Idea be listening
      * @return instance of the RemoteRobot
      */
-    public static RemoteRobot runIde(IntelliJ.Version ideaVersion, int port) {
+    public static RemoteRobot runIde(IntelliJVersion ideaVersion, int port) {
         StepWorker.registerProcessor(new StepLogger());
 
         return step("Start IntelliJ Idea ('" + ideaVersion.toString() + "') listening on port " + port, () -> {
@@ -93,7 +93,7 @@ public class UITestRunner {
      * @param ideaVersion version of the IntelliJ Idea to start
      * @return instance of the RemoteRobot
      */
-    public static RemoteRobot runIde(IntelliJ.Version ideaVersion) {
+    public static RemoteRobot runIde(IntelliJVersion ideaVersion) {
         return runIde(ideaVersion, DEFAULT_PORT);
     }
 
@@ -109,7 +109,7 @@ public class UITestRunner {
      *
      * @return version of the currently running IntelliJ Idea
      */
-    public static IntelliJ.Version getIdeaVersion() {
+    public static IntelliJVersion getIdeaVersion() {
         return ideaVersion;
     }
 
