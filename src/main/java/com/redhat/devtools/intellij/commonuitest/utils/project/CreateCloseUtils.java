@@ -78,7 +78,7 @@ public class CreateCloseUtils {
         ideStatusBar.waitUntilProjectImportIsComplete();
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
         mainIdeWindow.maximizeIdeWindow();
-        ideStatusBar.waitUntilAllBgTasksFinish(400);
+        ideStatusBar.waitUntilAllBgTasksFinish(500);
         CodeWithMeDialog.closeCodeWithMePopupIfItAppears(remoteRobot);
     }
 
