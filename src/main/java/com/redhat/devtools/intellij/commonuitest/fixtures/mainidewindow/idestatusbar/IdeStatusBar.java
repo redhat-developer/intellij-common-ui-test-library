@@ -65,7 +65,14 @@ public class IdeStatusBar extends CommonContainerFixture {
      * Wait until all the background tasks finish
      */
     public void waitUntilAllBgTasksFinish() {
-        waitFor(Duration.ofSeconds(300), Duration.ofSeconds(10), "The background tasks did not finish in 10 minutes.", this::didAllBgTasksFinish);
+        waitUntilAllBgTasksFinish(300);
+    }
+
+    /**
+     * Wait until all the background tasks finish
+     */
+    public void waitUntilAllBgTasksFinish(int timeout) {
+        waitFor(Duration.ofSeconds(timeout), Duration.ofSeconds(10), "The background tasks did not finish in " + timeout + " seconds.", this::didAllBgTasksFinish);
     }
 
     private boolean didProjectImportFinish() {
