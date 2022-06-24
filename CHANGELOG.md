@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.1.0 (Jun 24, 2022)
+ - Add DCO documentation
+ - Add support for IntelliJ IDEA 2022.1
+
 ## 0.0.9 (May 10, 2022)
  - Add support for IntelliJ IDEA Ultimate (2020.2, 2020.3, 2021.1, 2021.2)
  - Add support for the following IntelliJ IDEA versions: 
