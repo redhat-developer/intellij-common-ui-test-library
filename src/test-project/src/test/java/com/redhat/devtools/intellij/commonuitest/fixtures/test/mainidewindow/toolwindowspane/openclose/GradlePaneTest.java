@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.openclose;
 
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.GradleBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constans.ButtonLabels;
@@ -28,11 +30,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com
  */
-class GradlePaneTest extends AbstractToolWindowsPaneTest {
+class GradlePaneTest extends AbstractToolWinPane {
     @BeforeAll
     public static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, GRADLE_PROJECT_NAME, CreateCloseUtils.NewProjectType.GRADLE);
-        toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
+        } else {
+            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        }
     }
 
     @BeforeEach
@@ -44,9 +50,9 @@ class GradlePaneTest extends AbstractToolWindowsPaneTest {
 
     @Test
     public void gradleBuildToolPaneOpenCloseTest() {
-        toolWindowsPane.openGradleBuildToolPane();
+        toolWinPane.openGradleBuildToolPane();
         assertTrue(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be opened but is closed.");
-        toolWindowsPane.closeGradleBuildToolPane();
+        toolWinPane.closeGradleBuildToolPane();
         assertFalse(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be closed but is opened.");
     }
 }

@@ -11,6 +11,9 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane;
 
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.MavenBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
@@ -28,7 +31,7 @@ import java.time.Duration;
  */
 class ToolWindowsPaneMavenTest extends LibraryTestBase {
     private static final String PROJECT_NAME = "tool_windows_pane_java_maven_project";
-    private ToolWindowsPane toolWindowsPane;
+    private AbstractToolWinPane toolWinPane;
 
     @BeforeAll
     public static void prepareProject() {
@@ -42,13 +45,17 @@ class ToolWindowsPaneMavenTest extends LibraryTestBase {
 
     @BeforeEach
     public void createToolWindowsPaneFixture() {
-        toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
+        } else {
+            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        }
     }
 
     @Test
     public void mavenBuildTest() {
-        toolWindowsPane.openMavenBuildToolPane();
-        MavenBuildToolPane mavenBuildToolPane = toolWindowsPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10));
+        toolWinPane.openMavenBuildToolPane();
+        MavenBuildToolPane mavenBuildToolPane = toolWinPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10));
         mavenBuildToolPane.buildProject("install");
     }
 }

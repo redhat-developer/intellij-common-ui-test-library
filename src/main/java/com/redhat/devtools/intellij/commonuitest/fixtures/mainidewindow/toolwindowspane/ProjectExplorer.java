@@ -34,8 +34,7 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 @DefaultXpath(by = "ToolWindowsPane type", xpath = XPathDefinitions.PROJECT_TOOL_WINDOW)
 @FixtureName(name = "Tool Windows Pane")
 public class ProjectExplorer extends CommonContainerFixture {
-    private static final String HEAVY_WEIGHT_WINDOW_X_PATH = XPathDefinitions.HEAVY_WEIGHT_WINDOW;
-    private RemoteRobot remoteRobot;
+    private final RemoteRobot remoteRobot;
 
     public ProjectExplorer(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
@@ -81,7 +80,7 @@ public class ProjectExplorer extends CommonContainerFixture {
         projectViewTree().expand(path);
         projectViewTree().rightClickPath(path, true);
         try {
-            return remoteRobot.find(JPopupMenuFixture.class, byXpath(HEAVY_WEIGHT_WINDOW_X_PATH), Duration.ofSeconds(10));
+            return remoteRobot.find(JPopupMenuFixture.class, byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW), Duration.ofSeconds(10));
         } catch (WaitForConditionTimeoutException e) {
             throw new UITestException("The context menu for a file in Project Explorer has not been found.");
         }
@@ -95,7 +94,7 @@ public class ProjectExplorer extends CommonContainerFixture {
     public JPopupMenuFixture openViewsPopup() {
         actionButton(byXpath(XPathDefinitions.CONTENT_COMBO_LABEL), Duration.ofSeconds(2)).click();
         try {
-            return remoteRobot.find(JPopupMenuFixture.class, byXpath(HEAVY_WEIGHT_WINDOW_X_PATH), Duration.ofSeconds(10));
+            return remoteRobot.find(JPopupMenuFixture.class, byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW), Duration.ofSeconds(10));
         } catch (WaitForConditionTimeoutException e) {
             throw new UITestException(e.getMessage());
         }
@@ -130,7 +129,7 @@ public class ProjectExplorer extends CommonContainerFixture {
     public JPopupMenuFixture openSettingsPopup() {
         actionButton(byXpath(XPathDefinitions.MY_ICON_GEAR_PLAIN), Duration.ofSeconds(2)).click();
         try {
-            return remoteRobot.find(JPopupMenuFixture.class, byXpath(HEAVY_WEIGHT_WINDOW_X_PATH), Duration.ofSeconds(10));
+            return remoteRobot.find(JPopupMenuFixture.class, byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW), Duration.ofSeconds(10));
         } catch (WaitForConditionTimeoutException e) {
             throw new UITestException(e.getMessage());
         }

@@ -11,6 +11,7 @@
 package com.redhat.devtools.intellij.commonuitest.utils.project;
 
 import com.intellij.remoterobot.RemoteRobot;
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.CodeWithMeDialog;
@@ -40,22 +41,44 @@ public class CreateCloseUtils {
     public static void createNewProject(RemoteRobot remoteRobot, String projectName, NewProjectType newProjectType) {
         NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
-        newProjectFirstPage.selectNewProjectType(newProjectType.toString());
-        newProjectFirstPage.setProjectSdkIfAvailable("11");
-        newProjectDialogWizard.next();
-        // Plain java project has more pages in the 'New project' dialog
-        if (newProjectType.equals(NewProjectType.PLAIN_JAVA)) {
-            newProjectDialogWizard.next();
+
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            newProjectFirstPage.selectNewProjectType("New Project");
+            newProjectFirstPage.setLanguage("Java");
+            switch (newProjectType) {
+                case PLAIN_JAVA:
+                    newProjectFirstPage.setBuildSystem("IntelliJ");
+                    break;
+                case MAVEN:
+                case GRADLE:
+                    newProjectFirstPage.setBuildSystem(newProjectType.toString());
+                    break;
+            }
+        } else {
+            newProjectFirstPage.selectNewProjectType(newProjectType.toString());
         }
 
-        AbstractNewProjectFinalPage finalPage = getFinalPage(newProjectDialogWizard, newProjectType);
-        finalPage.setProjectName(projectName);
+        newProjectFirstPage.setProjectSdkIfAvailable("11");
+
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            newProjectFirstPage.setProjectName(projectName);
+        } else {
+            newProjectDialogWizard.next();
+            // Plain java project has more pages in the 'New project' dialog
+            if (newProjectType.equals(NewProjectType.PLAIN_JAVA)) {
+                newProjectDialogWizard.next();
+            }
+            AbstractNewProjectFinalPage finalPage = getFinalPage(newProjectDialogWizard, newProjectType);
+            finalPage.setProjectName(projectName);
+        }
+
         newProjectDialogWizard.finish();
+
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilProjectImportIsComplete();
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
         mainIdeWindow.maximizeIdeWindow();
-        ideStatusBar.waitUntilAllBgTasksFinish();
+        ideStatusBar.waitUntilAllBgTasksFinish(500);
         CodeWithMeDialog.closeCodeWithMePopupIfItAppears(remoteRobot);
     }
 
@@ -67,6 +90,7 @@ public class CreateCloseUtils {
      */
     public static NewProjectDialogWizard openNewProjectDialogFromWelcomeDialog(RemoteRobot remoteRobot) {
         FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame.switchToProjectsPage();
         flatWelcomeFrame.createNewProject();
         return remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
     }

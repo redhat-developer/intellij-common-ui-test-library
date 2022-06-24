@@ -16,6 +16,8 @@ import com.intellij.remoterobot.fixtures.ComboBoxFixture;
 import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
+import com.intellij.remoterobot.fixtures.JTextFieldFixture;
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.utils.constans.ButtonLabels;
 import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
@@ -68,7 +70,11 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      * @return name of the module currently inserted in the input field
      */
     public String getModuleName() {
-        return textField("Module name:", true).getText();
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            return find(JTextFieldFixture.class, byXpath("//div[@accessiblename='Module name:' and @accessiblename.key='label.project.wizard.new.project.module.name' and @class='JBTextField']")).getText();
+        } else {
+            return textField("Module name:", true).getText();
+        }
     }
 
     /**
@@ -77,7 +83,11 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      * @param moduleName name of the module that will be set into the input field
      */
     public void setModuleName(String moduleName) {
-        textField("Module name:", true).setText(moduleName);
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            find(JTextFieldFixture.class, byXpath("//div[@accessiblename='Module name:' and @accessiblename.key='label.project.wizard.new.project.module.name' and @class='JBTextField']")).setText(moduleName);
+        } else {
+            textField("Module name:", true).setText(moduleName);
+        }
     }
 
     /**
@@ -86,7 +96,11 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      * @return location of the content root currently inserted in the input field
      */
     public String getContentRoot() {
-        return textField("Content root:", true).getText();
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            return find(JTextFieldFixture.class, byXpath("//div[@accessiblename='Content root:' and @accessiblename.key='label.project.wizard.new.project.content.root' and @class='ExtendableTextField']")).getText();
+        } else {
+            return textField("Content root:", true).getText();
+        }
     }
 
     /**
@@ -95,7 +109,11 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      * @param contentRoot location of the content root that will be set into the input field
      */
     public void setContentRoot(String contentRoot) {
-        textField("Content root:", true).setText(contentRoot);
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            find(JTextFieldFixture.class, byXpath("//div[@accessiblename='Content root:' and @accessiblename.key='label.project.wizard.new.project.content.root' and @class='ExtendableTextField']")).setText(contentRoot);
+        } else {
+            textField("Content root:", true).setText(contentRoot);
+        }
     }
 
     /**
@@ -104,7 +122,11 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      * @return location of the module file currently inserted in the input field
      */
     public String getModuleFileLocation() {
-        return textField("Module file location:", true).getText();
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            return find(JTextFieldFixture.class, byXpath("//div[@accessiblename='Module file location:' and @accessiblename.key='label.project.wizard.new.project.module.file.location' and @class='ExtendableTextField']")).getText();
+        } else {
+            return textField("Module file location:", true).getText();
+        }
     }
 
     /**
@@ -113,7 +135,11 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      * @param moduleFileLocation location of the module file that will be set into the input field
      */
     public void setModuleFileLocation(String moduleFileLocation) {
-        textField("Module file location:", true).setText(moduleFileLocation);
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            find(JTextFieldFixture.class, byXpath("//div[@accessiblename='Module file location:' and @accessiblename.key='label.project.wizard.new.project.module.file.location' and @class='ExtendableTextField']")).setText(moduleFileLocation);
+        } else {
+            textField("Module file location:", true).setText(moduleFileLocation);
+        }
     }
 
     /**

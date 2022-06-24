@@ -11,6 +11,9 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane;
 
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.GradleBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
@@ -28,7 +31,7 @@ import java.time.Duration;
  */
 class ToolWindowsPaneGradleTest extends LibraryTestBase {
     private static final String PROJECT_NAME = "tool_windows_pane_java_gradle_project";
-    private ToolWindowsPane toolWindowsPane;
+    private AbstractToolWinPane toolWinPane;
 
     @BeforeAll
     public static void prepareProject() {
@@ -42,13 +45,17 @@ class ToolWindowsPaneGradleTest extends LibraryTestBase {
 
     @BeforeEach
     public void createToolWindowsPaneFixture() {
-        toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
+        } else {
+            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        }
     }
 
     @Test
     public void gradleBuildTest() {
-        toolWindowsPane.openGradleBuildToolPane();
-        GradleBuildToolPane gradleBuildToolPane = toolWindowsPane.find(GradleBuildToolPane.class, Duration.ofSeconds(10));
+        toolWinPane.openGradleBuildToolPane();
+        GradleBuildToolPane gradleBuildToolPane = toolWinPane.find(GradleBuildToolPane.class, Duration.ofSeconds(10));
         gradleBuildToolPane.buildProject();
     }
 }

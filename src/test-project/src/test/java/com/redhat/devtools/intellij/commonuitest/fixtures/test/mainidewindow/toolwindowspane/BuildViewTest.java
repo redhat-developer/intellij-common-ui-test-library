@@ -11,7 +11,10 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane;
 
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.MavenBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
@@ -30,14 +33,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class BuildViewTest extends LibraryTestBase {
     private static final String PROJECT_NAME = "build_view_java_project";
-    private static ToolWindowsPane toolWindowsPane;
+    private static AbstractToolWinPane toolWinPane;
 
     @BeforeAll
     public static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.MAVEN);
-        toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        toolWindowsPane.openMavenBuildToolPane();
-        toolWindowsPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10)).buildProject("install");
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
+        } else {
+            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        }
+        toolWinPane.openMavenBuildToolPane();
+        toolWinPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10)).buildProject("install");
     }
 
     @AfterAll
@@ -47,7 +54,7 @@ class BuildViewTest extends LibraryTestBase {
 
     @Test
     public void waitForSuccessfulBuildTest() {
-        BuildView buildView = toolWindowsPane.find(BuildView.class, Duration.ofSeconds(10));
+        BuildView buildView = toolWinPane.find(BuildView.class, Duration.ofSeconds(10));
         buildView.waitUntilBuildHasFinished();
         assertTrue(buildView.isBuildSuccessful(), "The build should be successful but is not.");
     }

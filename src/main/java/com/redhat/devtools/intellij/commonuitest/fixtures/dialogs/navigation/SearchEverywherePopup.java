@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.KeyEvent;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
@@ -40,7 +41,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 @DefaultXpath(by = "SearchEverywhereUI type", xpath = XPathDefinitions.SEARCH_EVERYWHERE_POPUP)
 @FixtureName(name = "Search Everywhere Popup")
 public class SearchEverywherePopup extends CommonContainerFixture {
-    private RemoteRobot remoteRobot;
+    private final RemoteRobot remoteRobot;
 
     public SearchEverywherePopup(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
@@ -79,7 +80,11 @@ public class SearchEverywherePopup extends CommonContainerFixture {
     }
 
     private List<RemoteText> getSearchResults() {
-        JListFixture searchResultsList = jLists(JListFixture.Companion.byType()).get(0);
+        List<JListFixture> searchResults = jLists(JListFixture.Companion.byType());
+        if (searchResults.isEmpty()) {
+            return new ArrayList<>();
+        };
+        JListFixture searchResultsList = searchResults.get(0);
         return searchResultsList.findAllText();
     }
 }

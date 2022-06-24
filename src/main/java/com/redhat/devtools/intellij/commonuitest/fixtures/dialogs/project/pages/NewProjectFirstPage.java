@@ -16,9 +16,14 @@ import com.intellij.remoterobot.fixtures.ComboBoxFixture;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
+import com.intellij.remoterobot.fixtures.HeavyWeightWindowFixture;
+import com.intellij.remoterobot.fixtures.JLabelFixture;
 import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
+import com.intellij.remoterobot.fixtures.JTextFieldFixture;
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
+import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
@@ -37,8 +42,8 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  */
 @DefaultXpath(by = "MyDialog type", xpath = XPathDefinitions.DIALOG_ROOT_PANE)
 @FixtureName(name = "New Project Dialog")
-public class NewProjectFirstPage extends CommonContainerFixture {
-    private RemoteRobot remoteRobot;
+public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
+    private final RemoteRobot remoteRobot;
     private int projectSdkItemsCount = -1;
 
     public NewProjectFirstPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
@@ -56,18 +61,57 @@ public class NewProjectFirstPage extends CommonContainerFixture {
     }
 
     /**
+     * Set the project name
+     *
+     * @param projectName project name
+     */
+    public void setProjectName(String projectName) {
+        find(JTextFieldFixture.class, byXpath("//div[@class='JBTextField']")).setText(projectName);
+    }
+
+    /**
+     * Set the project language
+     *
+     * @param language project language
+     */
+    public void setLanguage(String language) {
+        findAll(JLabelFixture.class, byXpath("//div[@class='SegmentedButtonComponent'][.//div[contains(@action.key, 'language.groovy')]]")).get(0).findText(language).click();
+    }
+
+    /**
+     * Set the build system
+     *
+     * @param buildSystem build system type
+     */
+    public void setBuildSystem(String buildSystem) {
+        find(JLabelFixture.class, byXpath("//div[@class='SegmentedButtonComponent'][.//div[@action.key='buildsystem.type.intellij']]")).findText(buildSystem).click();
+    }
+
+    /**
      * Set the project SDK to specific option
      *
      * @param targetSdkName name of the SDK to which will be changed the current settings
      */
     public void setProjectSdkIfAvailable(String targetSdkName) {
         step("Select the '" + targetSdkName + "' as new project SDK", () -> {
-            ComboBoxFixture projectJdkComboBox = comboBox(byXpath(XPathDefinitions.PROJECT_SDK_COMBOBOX), Duration.ofSeconds(10));
+            ComboBoxFixture projectJdkComboBox = comboBox(byXpath(XPathDefinitions.JDK_COMBOBOX), Duration.ofSeconds(10));
             String currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
             if (currentlySelectedProjectSdk.contains(targetSdkName)) {
                 return;
             }
-            projectJdkComboBox.click();
+
+            if (UITestRunner.getIdeaVersionInt() >= 20221) {
+                projectJdkComboBox.click();
+                boolean popupOpenedPermanently = false;
+                try {
+                    waitFor(Duration.ofSeconds(10), Duration.ofMillis(250), "HeavyWeightWindow still visible.", () -> noHeavyWeightWindowVisible());
+                } catch (WaitForConditionTimeoutException e) {
+                    popupOpenedPermanently = true;
+                }
+                if (!popupOpenedPermanently) {
+                    projectJdkComboBox.click();
+                }
+            }
 
             CommonContainerFixture parentFixture = waitFor(Duration.ofSeconds(20), Duration.ofSeconds(2), "Wait for the 'Project SDK' list to finish loading all items.", "The project JDK list did not load all items in 20 seconds.", this::didProjectSdkListLoadAllItems);
             JPopupMenuFixture projectSdkList = parentFixture.jPopupMenus(byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW)).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
@@ -98,5 +142,9 @@ public class NewProjectFirstPage extends CommonContainerFixture {
             }
             return new kotlin.Pair<>(true, parentFixture);
         });
+    }
+
+    private boolean noHeavyWeightWindowVisible() {
+        return remoteRobot.findAll(HeavyWeightWindowFixture.class).size() == 0;
     }
 }

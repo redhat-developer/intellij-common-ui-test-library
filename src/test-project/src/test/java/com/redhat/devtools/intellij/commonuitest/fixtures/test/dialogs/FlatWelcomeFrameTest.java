@@ -16,6 +16,7 @@ import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
+import com.redhat.devtools.intellij.commonuitest.utils.internalerror.IdeInternalErrorUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,6 @@ import java.io.FileFilter;
 import java.time.Duration;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils.takeScreenshot;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -60,9 +60,8 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
         int projectLinks = getNumberOfProjectLinks();
         assertTrue(projectsOnDisk == 1, "Number of projects in the IntelliJ's project folder should be 1 but is " + projectsOnDisk + ".");
         assertTrue(projectLinks == 1, "Number of projects' links in the IntelliJ's 'Welcome Frame Dialog' should be 1 but is " + projectLinks + ".");
-        takeScreenshot(remoteRobot);
+        IdeInternalErrorUtils.clearWindowsErrorsIfTheyAppear(remoteRobot);
         flatWelcomeFrame.clearWorkspace();
-        takeScreenshot(remoteRobot);
         int projectCount2 = getNumberOfProjectsOnDisk();
         int projectLinks2 = getNumberOfProjectLinks();
         assertTrue(projectCount2 == 0, "Number of projects in the IntelliJ's project folder should be 0 but is " + projectCount2 + ".");

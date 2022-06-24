@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com, olkornii@redhat.com
  */
-public class ProjectStructureTest extends LibraryTestBase {
+public class ProjectStructureDialogTest extends LibraryTestBase {
     private static final String PROJECT_NAME = "tip_dialog_java_project";
 
     @BeforeAll

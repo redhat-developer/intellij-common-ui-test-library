@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Red Hat, Inc.
+ * Copyright (c) 2022 Red Hat, Inc.
  * Distributed under license by Red Hat, Inc. All rights reserved.
  * This program is made available under the terms of the
  * Eclipse Public License v2.0 which accompanies this distribution,
@@ -12,15 +12,14 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwin
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
-import com.intellij.remoterobot.fixtures.DefaultXpath;
+import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.Fixture;
-import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.GradleBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.MavenBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constans.ButtonLabels;
-import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -29,16 +28,14 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 
 /**
- * Tool Windows Pane fixture
+ * Abstract Tool Window/Windows Pane fixture
  *
  * @author zcervink@redhat.com
  */
-@DefaultXpath(by = "ToolWindowsPane type", xpath = XPathDefinitions.TOOL_WINDOWS_PANE)
-@FixtureName(name = "Tool Windows Pane")
-public class ToolWindowsPane extends AbstractToolWinPane {
+public abstract class AbstractToolWinPane extends CommonContainerFixture {
     private final RemoteRobot remoteRobot;
 
-    public ToolWindowsPane(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
+    public AbstractToolWinPane(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
         this.remoteRobot = remoteRobot;
     }
@@ -101,12 +98,12 @@ public class ToolWindowsPane extends AbstractToolWinPane {
     public JButtonFixture stripeButton(String label, boolean isPaneOpened) {
         if (isPaneOpened) {
             if (label.equals(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL) || label.equals(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL)) {
-                return button(byXpath(XPathDefinitions.toolWindowSvg(label)), Duration.ofSeconds(2));
+                return button(byXpath("//div[@disabledicon='toolWindow" + label + ".svg']"), Duration.ofSeconds(2));
             } else if (label.equals(ButtonLabels.PROJECT_STRIPE_BUTTON_LABEL)) {
-                return button(byXpath(XPathDefinitions.TOOLTIP_TEXT_PROJECT), Duration.ofSeconds(2));
+                return button(byXpath("//div[@tooltiptext='Project']"), Duration.ofSeconds(2));
             }
         }
-        return button(byXpath(XPathDefinitions.label(label)), Duration.ofSeconds(2));
+        return button(byXpath("//div[@text='" + label + "']"), Duration.ofSeconds(2));
     }
 
     private <T extends Fixture> T togglePane(String label, Class<T> fixtureClass, boolean openPane) {
@@ -120,9 +117,15 @@ public class ToolWindowsPane extends AbstractToolWinPane {
     }
 
     private boolean isPaneOpened(Class<? extends Fixture> fixtureClass) {
-        ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        AbstractToolWinPane toolWinPane;
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
+        } else {
+            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        }
+
         try {
-            toolWindowsPane.find(fixtureClass, Duration.ofSeconds(10));
+            toolWinPane.find(fixtureClass, Duration.ofSeconds(10));
             return true;
         } catch (WaitForConditionTimeoutException e) {
             return false;
@@ -131,12 +134,20 @@ public class ToolWindowsPane extends AbstractToolWinPane {
 
     private void clickOnStripeButton(String label, boolean isPaneOpened) {
         waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The '" + label + "' stripe button is not available.", () -> isStripeButtonAvailable(label, isPaneOpened));
-        remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10)).stripeButton(label, isPaneOpened).click();
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10)).stripeButton(label, isPaneOpened).click();
+        } else {
+            remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10)).stripeButton(label, isPaneOpened).click();
+        }
     }
 
     private boolean isStripeButtonAvailable(String label, boolean isPaneOpened) {
         try {
-            remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10)).stripeButton(label, isPaneOpened);
+            if (UITestRunner.getIdeaVersionInt() >= 20221) {
+                remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(2)).stripeButton(label, isPaneOpened);
+            } else {
+                remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(2)).stripeButton(label, isPaneOpened);
+            }
         } catch (WaitForConditionTimeoutException e) {
             return false;
         }

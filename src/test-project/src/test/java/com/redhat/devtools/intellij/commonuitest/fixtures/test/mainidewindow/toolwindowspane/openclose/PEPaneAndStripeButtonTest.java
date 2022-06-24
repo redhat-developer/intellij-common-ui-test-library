@@ -11,7 +11,9 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.openclose;
 
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ProjectExplorer;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constans.ButtonLabels;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
@@ -30,11 +32,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com
  */
-class PEPaneAndStripeButtonTest extends AbstractToolWindowsPaneTest {
+class PEPaneAndStripeButtonTest extends AbstractToolWinPane {
     @BeforeAll
     public static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, MAVEN_PROJECT_NAME, CreateCloseUtils.NewProjectType.MAVEN);
-        toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
+        } else {
+            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        }
     }
 
     @BeforeEach
@@ -46,16 +52,16 @@ class PEPaneAndStripeButtonTest extends AbstractToolWindowsPaneTest {
 
     @Test
     public void projectExplorerPaneOpenCloseTest() {
-        toolWindowsPane.openProjectExplorer();
+        toolWinPane.openProjectExplorer();
         assertTrue(isPaneOpened(ProjectExplorer.class), "The 'Project Explorer' should be opened but is closed.");
-        toolWindowsPane.closeProjectExplorer();
+        toolWinPane.closeProjectExplorer();
         assertFalse(isPaneOpened(ProjectExplorer.class), "The 'Project Explorer' should be closed but is opened.");
     }
 
     @Test
     public void stripeButtonTest() {
         try {
-            toolWindowsPane.stripeButton(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL, false);
+            toolWinPane.stripeButton(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL, false);
         } catch (WaitForConditionTimeoutException e) {
             fail(e.getMessage());
         }
