@@ -48,16 +48,9 @@ public class ProjectExplorer extends CommonContainerFixture {
      * @return true if the given file exists on the given path in the project
      */
     public boolean isItemPresent(String... path) {
-        try {
-            projectViewTree().expand(path);
-            projectViewTree().clickPath(path, true);
-        } catch (Exception e) {
-            if (!(e instanceof JTreeFixture.PathNotFoundException)) {
-                throw e;
-            }
-            return false;
-        }
-        return true;
+        projectViewTree().expand(path);
+        path[0] = projectViewTree().getValueAtRow(0);
+        return projectViewTree().isPathExists(path, true);
     }
 
     /**
@@ -67,6 +60,7 @@ public class ProjectExplorer extends CommonContainerFixture {
      */
     public void openFile(String... path) {
         projectViewTree().expand(path);
+        path[0] = projectViewTree().getValueAtRow(0);
         projectViewTree().doubleClickPath(path, true);
     }
 

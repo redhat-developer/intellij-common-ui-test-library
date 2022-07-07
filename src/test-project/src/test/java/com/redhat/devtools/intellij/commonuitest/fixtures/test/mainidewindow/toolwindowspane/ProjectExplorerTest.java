@@ -107,9 +107,9 @@ class ProjectExplorerTest extends LibraryTestBase {
     @Test
     public void selectOpenedFileTest() {
         projectExplorer.openFile(PROJECT_NAME, PROJECT_NAME + ".iml");
-        projectExplorer.projectViewTree().clickPath(new String[]{PROJECT_NAME}, true);
+        projectExplorer.projectViewTree().clickRow(0);
         projectExplorer.selectOpenedFile();
-        assertTrue(projectExplorer.projectViewTree().isPathSelected(PROJECT_NAME, PROJECT_NAME + ".iml"), "The file 'modules.xml' should be selected but is not.");
+        assertTrue(projectExplorer.projectViewTree().isPathSelected(projectExplorer.projectViewTree().getValueAtRow(0), PROJECT_NAME + ".iml"), "The file 'modules.xml' should be selected but is not.");
     }
 
     @Test
