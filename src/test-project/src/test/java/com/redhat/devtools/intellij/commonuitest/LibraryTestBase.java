@@ -23,8 +23,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.time.Duration;
 import java.util.logging.Logger;
 
-import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-
 /**
  * Base class for all JUnit tests in the IntelliJ common UI test library
  *

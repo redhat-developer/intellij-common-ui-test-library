@@ -77,11 +77,11 @@ public class XPathDefinitions {
         return "//div[@text='" + label + "']";
     }
 
-    public static String JBOptionButton(String label) {
+    public static String jBOptionButton(String label) {
         return "//div[@class='JBOptionButton' and @text='" + label + "']";
     }
 
-    public static String NonOpaquePanel(String label) {
+    public static String nonOpaquePanel(String label) {
         return "//div[@class='NonOpaquePanel'][./div[@text='" + label + "']]";
     }
 

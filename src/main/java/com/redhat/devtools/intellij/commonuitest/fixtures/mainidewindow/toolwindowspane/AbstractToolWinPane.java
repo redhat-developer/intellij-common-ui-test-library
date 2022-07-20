@@ -35,7 +35,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 public abstract class AbstractToolWinPane extends CommonContainerFixture {
     private final RemoteRobot remoteRobot;
 
-    public AbstractToolWinPane(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
+    protected AbstractToolWinPane(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
         this.remoteRobot = remoteRobot;
     }
@@ -106,7 +106,7 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
         return button(byXpath("//div[@text='" + label + "']"), Duration.ofSeconds(2));
     }
 
-    private <T extends Fixture> T togglePane(String label, Class<T> fixtureClass, boolean openPane) {
+    protected <T extends Fixture> T togglePane(String label, Class<T> fixtureClass, boolean openPane) {
         if ((!isPaneOpened(fixtureClass) && openPane)) {
             clickOnStripeButton(label, false);
             return find(fixtureClass, Duration.ofSeconds(10));
