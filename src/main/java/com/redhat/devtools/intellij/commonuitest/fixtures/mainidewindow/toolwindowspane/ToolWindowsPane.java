@@ -13,10 +13,8 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwin
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
-import com.intellij.remoterobot.fixtures.Fixture;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JButtonFixture;
-import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.GradleBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.MavenBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
@@ -26,7 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 
 /**
  * Tool Windows Pane fixture
@@ -36,11 +33,8 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 @DefaultXpath(by = "ToolWindowsPane type", xpath = XPathDefinitions.TOOL_WINDOWS_PANE)
 @FixtureName(name = "Tool Windows Pane")
 public class ToolWindowsPane extends AbstractToolWinPane {
-    private final RemoteRobot remoteRobot;
-
     public ToolWindowsPane(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        this.remoteRobot = remoteRobot;
     }
 
     /**
@@ -48,6 +42,7 @@ public class ToolWindowsPane extends AbstractToolWinPane {
      *
      * @return the Project Explorer fixture
      */
+    @Override
     public ProjectExplorer openProjectExplorer() {
         return togglePane(ButtonLabels.PROJECT_STRIPE_BUTTON_LABEL, ProjectExplorer.class, true);
     }
@@ -55,6 +50,7 @@ public class ToolWindowsPane extends AbstractToolWinPane {
     /**
      * Close project explorer
      */
+    @Override
     public void closeProjectExplorer() {
         togglePane(ButtonLabels.PROJECT_STRIPE_BUTTON_LABEL, ProjectExplorer.class, false);
     }
@@ -64,6 +60,7 @@ public class ToolWindowsPane extends AbstractToolWinPane {
      *
      * @return the Maven Build Tool Pane fixture
      */
+    @Override
     public MavenBuildToolPane openMavenBuildToolPane() {
         return togglePane(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL, MavenBuildToolPane.class, true);
     }
@@ -71,6 +68,7 @@ public class ToolWindowsPane extends AbstractToolWinPane {
     /**
      * Close maven build tool pane
      */
+    @Override
     public void closeMavenBuildToolPane() {
         togglePane(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL, MavenBuildToolPane.class, false);
     }
@@ -80,6 +78,7 @@ public class ToolWindowsPane extends AbstractToolWinPane {
      *
      * @return the Gradle Build Tool Pane fixture
      */
+    @Override
     public GradleBuildToolPane openGradleBuildToolPane() {
         return togglePane(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL, GradleBuildToolPane.class, true);
     }
@@ -87,6 +86,7 @@ public class ToolWindowsPane extends AbstractToolWinPane {
     /**
      * Close gradle build tool pane
      */
+    @Override
     public void closeGradleBuildToolPane() {
         togglePane(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL, GradleBuildToolPane.class, false);
     }
@@ -98,6 +98,7 @@ public class ToolWindowsPane extends AbstractToolWinPane {
      * @param isPaneOpened true if the pane is already opened
      * @return fixture for the Stripe button
      */
+    @Override
     public JButtonFixture stripeButton(String label, boolean isPaneOpened) {
         if (isPaneOpened) {
             if (label.equals(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL) || label.equals(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL)) {
@@ -107,39 +108,5 @@ public class ToolWindowsPane extends AbstractToolWinPane {
             }
         }
         return button(byXpath(XPathDefinitions.label(label)), Duration.ofSeconds(2));
-    }
-
-    private <T extends Fixture> T togglePane(String label, Class<T> fixtureClass, boolean openPane) {
-        if ((!isPaneOpened(fixtureClass) && openPane)) {
-            clickOnStripeButton(label, false);
-            return find(fixtureClass, Duration.ofSeconds(10));
-        } else if (isPaneOpened(fixtureClass) && !openPane) {
-            clickOnStripeButton(label, true);
-        }
-        return null;
-    }
-
-    private boolean isPaneOpened(Class<? extends Fixture> fixtureClass) {
-        ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        try {
-            toolWindowsPane.find(fixtureClass, Duration.ofSeconds(10));
-            return true;
-        } catch (WaitForConditionTimeoutException e) {
-            return false;
-        }
-    }
-
-    private void clickOnStripeButton(String label, boolean isPaneOpened) {
-        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The '" + label + "' stripe button is not available.", () -> isStripeButtonAvailable(label, isPaneOpened));
-        remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10)).stripeButton(label, isPaneOpened).click();
-    }
-
-    private boolean isStripeButtonAvailable(String label, boolean isPaneOpened) {
-        try {
-            remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10)).stripeButton(label, isPaneOpened);
-        } catch (WaitForConditionTimeoutException e) {
-            return false;
-        }
-        return true;
     }
 }

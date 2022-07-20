@@ -30,6 +30,7 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
  */
 public class IdeInternalErrorUtils {
     protected static final Logger LOGGER = Logger.getLogger(IdeInternalErrorUtils.class.getName());
+    private IdeInternalErrorUtils() {}
 
     /**
      * Clear internal IDE errors on Windows

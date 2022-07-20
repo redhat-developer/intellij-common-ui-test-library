@@ -51,6 +51,11 @@ public class UITestRunner {
     private static RemoteRobot remoteRobot = null;
     private static Process ideProcess;
     private static IntelliJVersion ideaVersion;
+    private static final String NEW_ITEM_PROPERTY = "New-ItemProperty";
+    private static final String NAME_PARAM = "-Name";
+    private static final String VALUE_PARAM = "-Value";
+
+    private UITestRunner() {}
 
     /**
      * Start the given version of IntelliJ Idea listening on the given port
@@ -221,9 +226,9 @@ public class UITestRunner {
                 String powershellLocation = "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\powershell.exe";
                 String powershellPathParameter = "-Path";
                 ProcessBuilder pb1 = new ProcessBuilder(powershellLocation, "New-Item", powershellPathParameter, registryPath, "-Force");
-                ProcessBuilder pb2 = new ProcessBuilder(powershellLocation, "New-ItemProperty", powershellPathParameter, registryPath, "-Name", "accepted_version", "-Value", "'2.1'");
-                ProcessBuilder pb3 = new ProcessBuilder(powershellLocation, "New-ItemProperty", powershellPathParameter, registryPath, "-Name", "euacommunity_accepted_version", "-Value", "'1.0'");
-                ProcessBuilder pb4 = new ProcessBuilder(powershellLocation, "New-ItemProperty", powershellPathParameter, registryPath, "-Name", "eua_accepted_version", "-Value", "'1.2'");
+                ProcessBuilder pb2 = new ProcessBuilder(powershellLocation, NEW_ITEM_PROPERTY, powershellPathParameter, registryPath, NAME_PARAM, "accepted_version", VALUE_PARAM, "'2.1'");
+                ProcessBuilder pb3 = new ProcessBuilder(powershellLocation, NEW_ITEM_PROPERTY, powershellPathParameter, registryPath, NAME_PARAM, "euacommunity_accepted_version", VALUE_PARAM, "'1.0'");
+                ProcessBuilder pb4 = new ProcessBuilder(powershellLocation, NEW_ITEM_PROPERTY, powershellPathParameter, registryPath, NAME_PARAM, "eua_accepted_version", VALUE_PARAM, "'1.2'");
 
                 try {
                     Process p1 = pb1.start();

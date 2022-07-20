@@ -83,7 +83,7 @@ public class SearchEverywherePopup extends CommonContainerFixture {
         List<JListFixture> searchResults = jLists(JListFixture.Companion.byType());
         if (searchResults.isEmpty()) {
             return new ArrayList<>();
-        };
+        }
         JListFixture searchResultsList = searchResults.get(0);
         return searchResultsList.findAllText();
     }

@@ -54,6 +54,8 @@ public class NewProjectDialogTest extends LibraryTestBase {
     private static final String PLAIN_JAVA_PROJECT_NAME = "plain_java_project_name_test";
     private static final String MORE_SETTINGS_SHOULD_BE_VISIBLE = "The 'More Settings' should be visible.";
     private static final String MORE_SETTINGS_SHOULD_BE_HIDDEN = "The 'More Settings' should be hidden.";
+    private static final String ADVANCED_SETTINGS_SHOULD_BE_OPENED_MSG = "The 'Advanced Settings' section should be opened but is not";
+    private static final String ADVANCED_SETTINGS_SHOULD_BE_CLOSED_MSG = "The 'Advanced Settings' section should be closed but is not";
     private static final String BUT_IS = "but is";
 
     private NewProjectDialogWizard newProjectDialogWizard;
@@ -135,22 +137,22 @@ public class NewProjectDialogTest extends LibraryTestBase {
     @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
     public void openAdvancedSettingsTest() {
         newProjectFirstPage.closeAdvanceSettings();
-        assertFalse(isAdvancedSettingsOpened(), "The 'Advanced Settings' section should be closed but is not");
+        assertFalse(isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_CLOSED_MSG);
         newProjectFirstPage.openAdvanceSettings();
-        assertTrue(isAdvancedSettingsOpened(), "The 'Advanced Settings' section should be opened but is not");
+        assertTrue(isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_OPENED_MSG);
         newProjectFirstPage.openAdvanceSettings();
-        assertTrue(isAdvancedSettingsOpened(), "The 'Advanced Settings' section should be opened but is not");
+        assertTrue(isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_OPENED_MSG);
     }
 
     @Test
     @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
     public void closeAdvancedSettingsTest() {
         newProjectFirstPage.openAdvanceSettings();
-        assertTrue(isAdvancedSettingsOpened(), "The 'Advanced Settings' section should be opened but is not");
+        assertTrue(isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_OPENED_MSG);
         newProjectFirstPage.closeAdvanceSettings();
-        assertFalse(isAdvancedSettingsOpened(), "The 'Advanced Settings' section should be closed but is not");
+        assertFalse(isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_CLOSED_MSG);
         newProjectFirstPage.closeAdvanceSettings();
-        assertFalse(isAdvancedSettingsOpened(), "The 'Advanced Settings' section should be closed but is not");
+        assertFalse(isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_CLOSED_MSG);
     }
 
     @Test
@@ -370,7 +372,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     private void navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType newProjectType) {
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            newProjectFirstPage.setBuildSystem(newProjectType.toString() == "Java" ? "IntelliJ" : newProjectType.toString());
+            newProjectFirstPage.setBuildSystem(newProjectType.toString().equals("Java") ? "IntelliJ" : newProjectType.toString());
             return;
         }
         newProjectFirstPage.selectNewProjectType(newProjectType.toString());
