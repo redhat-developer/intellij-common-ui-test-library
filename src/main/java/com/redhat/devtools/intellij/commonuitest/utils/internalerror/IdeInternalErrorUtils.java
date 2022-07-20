@@ -14,8 +14,8 @@ package com.redhat.devtools.intellij.commonuitest.utils.internalerror;
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
-import com.redhat.devtools.intellij.commonuitest.utils.constans.ButtonLabels;
-import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 
 import java.time.Duration;
 import java.util.logging.Level;

@@ -8,7 +8,7 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package com.redhat.devtools.intellij.commonuitest.utils.constans;
+package com.redhat.devtools.intellij.commonuitest.utils.constants;
 
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 
