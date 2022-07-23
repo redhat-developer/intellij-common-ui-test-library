@@ -8,7 +8,7 @@
  * Contributors:
  * Red Hat, Inc. - initial API and implementation
  ******************************************************************************/
-package com.redhat.devtools.intellij.commonuitest.utils.constans;
+package com.redhat.devtools.intellij.commonuitest.utils.constants;
 
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 
@@ -77,11 +77,11 @@ public class XPathDefinitions {
         return "//div[@text='" + label + "']";
     }
 
-    public static String JBOptionButton(String label) {
+    public static String jBOptionButton(String label) {
         return "//div[@class='JBOptionButton' and @text='" + label + "']";
     }
 
-    public static String NonOpaquePanel(String label) {
+    public static String nonOpaquePanel(String label) {
         return "//div[@class='NonOpaquePanel'][./div[@text='" + label + "']]";
     }
 

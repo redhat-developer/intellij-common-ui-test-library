@@ -30,7 +30,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.errors.IdeFata
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.TipDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.SettingsDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.pages.NotificationsPage;
-import com.redhat.devtools.intellij.commonuitest.utils.constans.XPathDefinitions;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.internalerror.IdeInternalErrorUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
 import org.apache.commons.io.FileUtils;
@@ -239,9 +239,9 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
     // Works for IntelliJ Idea 2020.3+
     private JButtonFixture welcomeFrameLink(String label) {
         if (UtilsKt.hasAnyComponent(this, byXpath(XPathDefinitions.NEW_RECENT_PROJECT_PANEL))) {
-            return button(byXpath(XPathDefinitions.JBOptionButton(label)), Duration.ofSeconds(2));
+            return button(byXpath(XPathDefinitions.jBOptionButton(label)), Duration.ofSeconds(2));
         }
-        return button(byXpath(XPathDefinitions.NonOpaquePanel(label)), Duration.ofSeconds(2));
+        return button(byXpath(XPathDefinitions.nonOpaquePanel(label)), Duration.ofSeconds(2));
     }
 
     private ComponentFixture ideErrorsIcon() {
