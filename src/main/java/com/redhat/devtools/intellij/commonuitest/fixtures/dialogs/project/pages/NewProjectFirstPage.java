@@ -65,6 +65,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
      *
      * @param projectName project name
      */
+    @Override
     public void setProjectName(String projectName) {
         find(JTextFieldFixture.class, byXpath("//div[@class='JBTextField']")).setText(projectName);
     }
@@ -104,7 +105,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
                 projectJdkComboBox.click();
                 boolean popupOpenedPermanently = false;
                 try {
-                    waitFor(Duration.ofSeconds(10), Duration.ofMillis(250), "HeavyWeightWindow still visible.", () -> noHeavyWeightWindowVisible());
+                    waitFor(Duration.ofSeconds(10), Duration.ofMillis(250), "HeavyWeightWindow still visible.", this::noHeavyWeightWindowVisible);
                 } catch (WaitForConditionTimeoutException e) {
                     popupOpenedPermanently = true;
                 }
@@ -145,6 +146,6 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
     }
 
     private boolean noHeavyWeightWindowVisible() {
-        return remoteRobot.findAll(HeavyWeightWindowFixture.class).size() == 0;
+        return remoteRobot.findAll(HeavyWeightWindowFixture.class).isEmpty();
     }
 }

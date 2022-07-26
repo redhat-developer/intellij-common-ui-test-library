@@ -53,7 +53,7 @@ public class ScreenshotUtils {
                 Files.createDirectory(Paths.get(SCREENSHOT_LOCATION));
             }
             String screenshotFilename = getTimeNow("yyyy_MM_dd_HH_mm_ss");
-            String screenshotComment = comment == null || comment == "" ? "" :  "_" + comment;
+            String screenshotComment = comment == null || comment.equals("") ? "" :  "_" + comment;
             String screenshotPathname = SCREENSHOT_LOCATION + screenshotFilename + screenshotComment + "." + FILETYPE;
             File screenshotFile = new File(screenshotPathname);
             ImageIO.write(screenshotBufferedImage, FILETYPE, screenshotFile);

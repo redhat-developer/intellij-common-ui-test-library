@@ -46,7 +46,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils.takeScreenshot;
 
 /**
  * Welcome to IntelliJ IDEA dialog fixture
@@ -58,6 +57,7 @@ import static com.redhat.devtools.intellij.commonuitest.utils.screenshot.Screens
 public class FlatWelcomeFrame extends CommonContainerFixture {
     private static final Logger LOGGER = Logger.getLogger(FlatWelcomeFrame.class.getName());
     private static final String PROJECTS_BUTTON = "Projects";
+    private static final String TIP_OF_THE_DAY = "Tip of the Day";
     private final RemoteRobot remoteRobot;
     private final IntelliJVersion intelliJVersion;
     private final int ideaVersion;
@@ -170,11 +170,11 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
         if (ideaVersion <= 20202) {
             clickOnLink("Get Help");
             HeavyWeightWindowFixture heavyWeightWindowFixture = find(HeavyWeightWindowFixture.class, Duration.ofSeconds(5));
-            heavyWeightWindowFixture.findText("Tip of the Day").click();
+            heavyWeightWindowFixture.findText(TIP_OF_THE_DAY).click();
         } else if (ideaVersion <= 20203) {
             actionLink("Help").click();
             HeavyWeightWindowFixture heavyWeightWindowFixture = find(HeavyWeightWindowFixture.class, Duration.ofSeconds(5));
-            heavyWeightWindowFixture.findText("Tip of the Day").click();
+            heavyWeightWindowFixture.findText(TIP_OF_THE_DAY).click();
         } else if (ideaVersion <= 20212) {
             JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(XPathDefinitions.JBLIST));
             jListFixture.findText("Learn IntelliJ IDEA").click();
@@ -184,7 +184,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
             jTreeFixture.findText("Learn IntelliJ IDEA").click();
             FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class);
-            flatWelcomeFrame.findText("Tip of the Day").click();
+            flatWelcomeFrame.findText(TIP_OF_THE_DAY).click();
         }
 
         return remoteRobot.find(TipDialog.class, Duration.ofSeconds(10));

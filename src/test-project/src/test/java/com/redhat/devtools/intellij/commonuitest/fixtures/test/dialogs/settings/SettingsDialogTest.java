@@ -21,6 +21,7 @@ import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinition
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -38,18 +39,27 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 class SettingsDialogTest extends LibraryTestBase {
     private static FlatWelcomeFrame flatWelcomeFrame;
-    private static SettingsDialog settingsDialog;
+    private SettingsDialog settingsDialog = null;
+    private static final String APPEARANCE_AND_BEHAVIOR = "Appearance & Behavior";
+    private static final String NOTIFICATIONS = "Notifications";
 
     @BeforeAll
     public static void openSettingsDialog() {
         flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.openSettingsDialog();
-        settingsDialog = remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5));
+
     }
 
     @AfterAll
     public static void closeSettingsDialog() {
-        settingsDialog.cancel();
+        remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5)).cancel();
+    }
+
+    @BeforeEach
+    public void prepareSettingsDialogFixture() {
+        if (settingsDialog == null) {
+            settingsDialog = remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5));
+        }
     }
 
     @AfterEach
@@ -64,9 +74,9 @@ class SettingsDialogTest extends LibraryTestBase {
 
     @Test
     public void navigateToTest() {
-        settingsDialog.navigateTo("Appearance & Behavior", "Notifications");
+        settingsDialog.navigateTo(APPEARANCE_AND_BEHAVIOR, NOTIFICATIONS);
         try {
-            waitFor(Duration.ofSeconds(10), Duration.ofMillis(250), "The 'Notifications' settings page is not available.", () -> isSettingsPageLoaded("Notifications"));
+            waitFor(Duration.ofSeconds(10), Duration.ofMillis(250), "The 'Notifications' settings page is not available.", () -> isSettingsPageLoaded(NOTIFICATIONS));
         } catch (WaitForConditionTimeoutException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
             fail("The 'Settings' dialog should display the 'Notifications' page.");
@@ -84,7 +94,7 @@ class SettingsDialogTest extends LibraryTestBase {
     @Test
     public void settingsTreeTest() {
         JTreeFixture settingsTree = settingsDialog.settingsTree();
-        assertTrue(settingsTree.hasText("Appearance & Behavior"), "The Settings tree does not contain the 'Appearance & Behavior' item.");
+        assertTrue(settingsTree.hasText(APPEARANCE_AND_BEHAVIOR), "The Settings tree does not contain the 'Appearance & Behavior' item.");
     }
 
     @Test
@@ -102,7 +112,7 @@ class SettingsDialogTest extends LibraryTestBase {
     @Test
     public void applyTest() {
         settingsDialog = remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5));
-        settingsDialog.navigateTo("Appearance & Behavior", "Notifications");
+        settingsDialog.navigateTo(APPEARANCE_AND_BEHAVIOR, NOTIFICATIONS);
         JCheckboxFixture balloonNotificationsCheckbox = settingsDialog.checkBox("Display balloon notifications", true);
         balloonNotificationsCheckbox.setValue(!balloonNotificationsCheckbox.isSelected());
         settingsDialog.apply();
