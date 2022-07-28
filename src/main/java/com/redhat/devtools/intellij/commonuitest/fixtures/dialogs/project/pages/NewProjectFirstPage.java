@@ -67,7 +67,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
      */
     @Override
     public void setProjectName(String projectName) {
-        find(JTextFieldFixture.class, byXpath("//div[@class='JBTextField']")).setText(projectName);
+        find(JTextFieldFixture.class, byXpath(XPathDefinitions.JBTEXT_FIELD)).setText(projectName);
     }
 
     /**
@@ -76,7 +76,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
      * @param language project language
      */
     public void setLanguage(String language) {
-        findAll(JLabelFixture.class, byXpath("//div[@class='SegmentedButtonComponent'][.//div[contains(@action.key, 'language.groovy')]]")).get(0).findText(language).click();
+        findAll(JLabelFixture.class, byXpath(XPathDefinitions.SET_LANGUAGE)).get(0).findText(language).click();
     }
 
     /**
@@ -85,7 +85,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
      * @param buildSystem build system type
      */
     public void setBuildSystem(String buildSystem) {
-        find(JLabelFixture.class, byXpath("//div[@class='SegmentedButtonComponent'][.//div[@action.key='buildsystem.type.intellij']]")).findText(buildSystem).click();
+        find(JLabelFixture.class, byXpath(XPathDefinitions.SET_BUILD_SYSTEM)).findText(buildSystem).click();
     }
 
     /**

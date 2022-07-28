@@ -71,7 +71,7 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      */
     public String getModuleName() {
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            return find(JTextFieldFixture.class, byXpath("//div[@accessiblename='Module name:' and @accessiblename.key='label.project.wizard.new.project.module.name' and @class='JBTextField']")).getText();
+            return find(JTextFieldFixture.class, byXpath(XPathDefinitions.GET_SET_MODULE_NAME)).getText();
         } else {
             return textField("Module name:", true).getText();
         }
@@ -84,7 +84,7 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      */
     public void setModuleName(String moduleName) {
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            find(JTextFieldFixture.class, byXpath("//div[@accessiblename='Module name:' and @accessiblename.key='label.project.wizard.new.project.module.name' and @class='JBTextField']")).setText(moduleName);
+            find(JTextFieldFixture.class, byXpath(XPathDefinitions.GET_SET_MODULE_NAME)).setText(moduleName);
         } else {
             textField("Module name:", true).setText(moduleName);
         }
@@ -97,7 +97,7 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      */
     public String getContentRoot() {
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            return find(JTextFieldFixture.class, byXpath("//div[@accessiblename='Content root:' and @accessiblename.key='label.project.wizard.new.project.content.root' and @class='ExtendableTextField']")).getText();
+            return find(JTextFieldFixture.class, byXpath(XPathDefinitions.GET_SET_CONTENT_ROOT)).getText();
         } else {
             return textField("Content root:", true).getText();
         }
@@ -110,7 +110,7 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      */
     public void setContentRoot(String contentRoot) {
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            find(JTextFieldFixture.class, byXpath("//div[@accessiblename='Content root:' and @accessiblename.key='label.project.wizard.new.project.content.root' and @class='ExtendableTextField']")).setText(contentRoot);
+            find(JTextFieldFixture.class, byXpath(XPathDefinitions.GET_SET_CONTENT_ROOT)).setText(contentRoot);
         } else {
             textField("Content root:", true).setText(contentRoot);
         }
@@ -123,7 +123,7 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      */
     public String getModuleFileLocation() {
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            return find(JTextFieldFixture.class, byXpath("//div[@accessiblename='Module file location:' and @accessiblename.key='label.project.wizard.new.project.module.file.location' and @class='ExtendableTextField']")).getText();
+            return find(JTextFieldFixture.class, byXpath(XPathDefinitions.GET_SET_MODULE_FILE_LOCATION)).getText();
         } else {
             return textField("Module file location:", true).getText();
         }
@@ -136,7 +136,7 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
      */
     public void setModuleFileLocation(String moduleFileLocation) {
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            find(JTextFieldFixture.class, byXpath("//div[@accessiblename='Module file location:' and @accessiblename.key='label.project.wizard.new.project.module.file.location' and @class='ExtendableTextField']")).setText(moduleFileLocation);
+            find(JTextFieldFixture.class, byXpath(XPathDefinitions.GET_SET_MODULE_FILE_LOCATION)).setText(moduleFileLocation);
         } else {
             textField("Module file location:", true).setText(moduleFileLocation);
         }

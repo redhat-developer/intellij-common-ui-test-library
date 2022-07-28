@@ -96,19 +96,8 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      * Clear the workspace by deleting the content of the IdeaProjects folder and clearing all the projects' links in the 'Welcome to IntelliJ IDEA' dialog
      */
     public void clearWorkspace() {
-        List<JListFixture> jListFixtures = jLists(byXpath(XPathDefinitions.RECENT_PROJECTS));
         for (int i = 0; i < projectsCount(); i++) {
-            JListFixture recentProjectsList = jListFixtures.get(0);
-            recentProjectsList.runJs("const horizontal_offset = component.getWidth()-22;\n" +
-                    "robot.click(component, new Point(horizontal_offset, 22), MouseButton.LEFT_BUTTON, 1);");
-            // Code for IntelliJ Idea 2020.3 or newer
-            if (ideaVersion >= 20203) {
-                List<JPopupMenuFixture> jPopupMenuFixtures = jPopupMenus(JPopupMenuFixture.Companion.byType());
-                if (!jPopupMenuFixtures.isEmpty()) {
-                    JPopupMenuFixture contextMenu = jPopupMenuFixtures.get(0);
-                    contextMenu.select("Remove from Recent Projects");
-                }
-            }
+            removeTopProjectFromRecentProjects();
         }
 
         try {
@@ -227,18 +216,27 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
     }
 
     private int projectsCount() {
-        try {
-            ContainerFixture projectWrapper = find(ContainerFixture.class, byXpath(XPathDefinitions.NEW_RECENT_PROJECT_PANEL));
-            JListFixture projectList = projectWrapper.find(JListFixture.class, byXpath(XPathDefinitions.MY_LIST));
-            return projectList.collectItems().size();
-        } catch (WaitForConditionTimeoutException e) {
-            return 0;
+        if (ideaVersion >= 20222) {
+            try {
+                JTreeFixture projects = remoteRobot.findAll(JTreeFixture.class, byXpath(XPathDefinitions.RECENT_PROJECT_PANEL_NEW_2)).get(0);
+                return projects.findAllText().size() / 2;
+            } catch (IndexOutOfBoundsException e) {
+                return 0;
+            }
+        } else {
+            try {
+                ContainerFixture projectWrapper = find(ContainerFixture.class, byXpath(XPathDefinitions.RECENT_PROJECT_PANEL_NEW));
+                JListFixture projectList = projectWrapper.find(JListFixture.class, byXpath(XPathDefinitions.MY_LIST));
+                return projectList.collectItems().size();
+            } catch (WaitForConditionTimeoutException e) {
+                return 0;
+            }
         }
     }
 
     // Works for IntelliJ Idea 2020.3+
     private JButtonFixture welcomeFrameLink(String label) {
-        if (UtilsKt.hasAnyComponent(this, byXpath(XPathDefinitions.NEW_RECENT_PROJECT_PANEL))) {
+        if (UtilsKt.hasAnyComponent(this, byXpath(XPathDefinitions.RECENT_PROJECT_PANEL_NEW))) {
             return button(byXpath(XPathDefinitions.jBOptionButton(label)), Duration.ofSeconds(2));
         }
         return button(byXpath(XPathDefinitions.nonOpaquePanel(label)), Duration.ofSeconds(2));
@@ -246,5 +244,31 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
 
     private ComponentFixture ideErrorsIcon() {
         return find(ComponentFixture.class, byXpath(XPathDefinitions.IDE_ERROR_ICON), Duration.ofSeconds(10));
+    }
+
+    private void removeTopProjectFromRecentProjects() {
+        ComponentFixture recentProjects;
+        if (ideaVersion >= 20222) {
+            recentProjects = remoteRobot.findAll(JTreeFixture.class, byXpath(XPathDefinitions.RECENT_PROJECT_PANEL_NEW_2)).get(0);
+        } else {
+            recentProjects = jLists(byXpath(XPathDefinitions.RECENT_PROJECTS)).get(0);
+        }
+
+        recentProjects.runJs("const horizontal_offset = component.getWidth()-22;\n" +
+                "robot.click(component, new Point(horizontal_offset, 22), MouseButton.LEFT_BUTTON, 1);");
+
+        // Code for IntelliJ Idea 2020.3 or newer
+        if (ideaVersion >= 20203) {
+            List<JPopupMenuFixture> jPopupMenuFixtures = jPopupMenus(JPopupMenuFixture.Companion.byType());
+            if (!jPopupMenuFixtures.isEmpty()) {
+                JPopupMenuFixture contextMenu = jPopupMenuFixtures.get(0);
+                if (ideaVersion >= 20222) {
+                    contextMenu.select("Remove from Recent Projects" + '\u2026');
+                    button(byXpath(XPathDefinitions.REMOVE_PROJECT_BUTTON)).click();
+                } else {
+                    contextMenu.select("Remove from Recent Projects");
+                }
+            }
+        }
     }
 }
