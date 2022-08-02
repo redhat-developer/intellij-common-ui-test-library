@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.1.1 (Aug 2, 2022)
+ - Update the `Remote-Robot` to version 0.11.15
+ - Issues fixed:
+   - Typo in `utils.constan(t)s`
+   - Not working `Sonar analysis` in PRs
+   - The `TimeoutException` while working with the gradle tasks tree (JTreeFixture) on OS X
+
 ## 0.1.0 (Jun 24, 2022)
  - Add DCO documentation
  - Add support for IntelliJ IDEA 2022.1
