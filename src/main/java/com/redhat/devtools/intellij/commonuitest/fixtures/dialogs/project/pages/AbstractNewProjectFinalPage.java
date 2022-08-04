@@ -46,7 +46,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      */
     public String getProjectName() {
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            return textFields(byXpath("//div[@class='JBTextField']")).get(0).getText();
+            return textFields(byXpath(XPathDefinitions.JBTEXT_FIELD)).get(0).getText();
         } else {
             return textFields(JTextFieldFixture.Companion.byType()).get(0).getText();
         }
@@ -59,7 +59,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      */
     public void setProjectName(String projectName) {
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            textFields(byXpath("//div[@class='JBTextField']")).get(0).setText(projectName);
+            textFields(byXpath(XPathDefinitions.JBTEXT_FIELD)).get(0).setText(projectName);
         } else {
             textFields(JTextFieldFixture.Companion.byType()).get(0).setText(projectName);
         }
@@ -72,7 +72,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      */
     public String getProjectLocation() {
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            return find(JTextFieldFixture.class, byXpath("//div[@class='ExtendableTextField']")).getText();
+            return find(JTextFieldFixture.class, byXpath(XPathDefinitions.EXTENDABLE_TEXT_FIELD)).getText();
         } else {
             return textFields(JTextFieldFixture.Companion.byType()).get(1).getText();
         }
@@ -85,7 +85,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      */
     public void setProjectLocation(String projectLocation) {
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            find(JTextFieldFixture.class, byXpath("//div[@class='ExtendableTextField']")).setText(projectLocation);
+            find(JTextFieldFixture.class, byXpath(XPathDefinitions.EXTENDABLE_TEXT_FIELD )).setText(projectLocation);
         } else {
             textFields(JTextFieldFixture.Companion.byType()).get(1).setText(projectLocation);
         }
@@ -96,7 +96,11 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      */
     public void openAdvanceSettings() {
         if (!isAdvancedSettingsOpened()) {
-            find(ComponentFixture.class, byXpath("//div[@class='CollapsibleTitledSeparator']")).click();
+            if (UITestRunner.getIdeaVersionInt() >= 20222) {
+                find(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR_NEW)).click();
+            } else {
+                find(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR)).click();
+            }
         }
     }
 
@@ -105,15 +109,26 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      */
     public void closeAdvanceSettings() {
         if (isAdvancedSettingsOpened()) {
-            find(ComponentFixture.class, byXpath("//div[@class='CollapsibleTitledSeparator']")).click();
+            if (UITestRunner.getIdeaVersionInt() >= 20222) {
+                find(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR_NEW)).click();
+            } else {
+                find(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR)).click();
+            }
         }
     }
 
     private boolean isAdvancedSettingsOpened() {
-        List<ComponentFixture> ss = findAll(ComponentFixture.class, byXpath("//div[@class='CollapsibleTitledSeparator']/../*"));
-        for (int i = 0; i < ss.size(); i++) {
-            if (listOfRemoteTextToString(ss.get(i).findAllText()).contains("Advanced Settings")) {
-                return i != ss.size() - 1;
+        List<ComponentFixture> cf;
+
+        if (UITestRunner.getIdeaVersionInt() >= 20222) {
+            cf = findAll(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR_NEW_SIBLINGS));
+        } else {
+            cf = findAll(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR_SIBLINGS));
+        }
+
+        for (int i = 0; i < cf.size(); i++) {
+            if (listOfRemoteTextToString(cf.get(i).findAllText()).contains("Advanced Settings")) {
+                return i != cf.size() - 1;
             }
         }
         throw new UITestException("Wizard does not contain 'Advanced Settings' section.");

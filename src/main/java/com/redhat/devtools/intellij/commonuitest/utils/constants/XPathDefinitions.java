@@ -25,7 +25,8 @@ public class XPathDefinitions {
     public static final String MAVEN_TOOL_WINDOW = "//div[@accessiblename='Maven Tool Window']";
     public static final String GRADLE_TOOL_WINDOW = "//div[@accessiblename='Gradle Tool Window']";
     public static final String LINUX_MAIN_MENU = "//div[@class='LinuxIdeMenuBar']";
-    public static final String WINDOWS_MAIN_MENU_2020_3_AND_NEWER = "//div[@class='MenuFrameHeader']";
+    public static final String WINDOWS_MAIN_MENU_2022_2_AND_NEWER = "//div[@class='IdeMenuBar']";
+    public static final String WINDOWS_MAIN_MENU_2020_3_TO_2022_1 = "//div[@class='MenuFrameHeader']";
     public static final String WINDOWS_MAIN_MENU_2020_2_AND_OLDER = "//div[@class='CustomHeaderMenuBar']";
     public static final String IDE_STATUS_BAR = "//div[@class='IdeStatusBarImpl']";
     public static final String INLINE_PROGRESS_PANEL = "//div[@class='InlineProgressPanel']";
@@ -35,12 +36,12 @@ public class XPathDefinitions {
     public static final String DIALOG_ROOT_PANE = "//div[@class='DialogRootPane']";
     public static final String SEARCH_EVERYWHERE_POPUP = "//div[@accessiblename='Search everywhere' and @class='SearchEverywhereUI']";
     public static final String IDE_FATAL_ERRORS_DIALOG = "//div[@accessiblename='IDE Fatal Errors' and @class='MyDialog']";
-    public static final String IDE_INTERNAL_ERRORS_DIALOG = "//div[@class='DialogRootPane']";
     public static final String PROJECT_STRUCTURE_DIALOG = "//div[@accessiblename='Project Structure' and @class='MyDialog']";
     public static final String TIP_DIALOG = "//div[@accessiblename='Tip of the Day' and @class='MyDialog']";
     public static final String TIP_DIALOG_2 = "//div[@text='Tip of the Day']";
     public static final String RECENT_PROJECTS = "//div[@accessiblename='Recent Projects']";
-    public static final String NEW_RECENT_PROJECT_PANEL = "//div[@class='NewRecentProjectPanel']";
+    public static final String RECENT_PROJECT_PANEL_NEW = "//div[@class='NewRecentProjectPanel']";
+    public static final String RECENT_PROJECT_PANEL_NEW_2 = "//div[@class='JBViewport']/*";
     public static final String IDE_ERROR_ICON = "//div[@class='IdeErrorsIcon']";
     public static final String BUILD_VIEW_EDITOR = "//div[@accessiblename='Editor']";
     public static final String JCOMBOBOX = "//div[@class='JComboBox']";
@@ -68,6 +69,18 @@ public class XPathDefinitions {
     public static final String BREAD_CRUMBS = "//div[@class='Breadcrumbs']";
     public static final String EMPTY_PROJECT = "//div[@visible_text='Empty Project']";
     public static final String SINGLE_HEIGHT_LABEL = "//div[@class='SingleHeightLabel']";
+    public static final String COLLAPSIBLE_TITLED_SEPARATOR = "//div[@class='CollapsibleTitledSeparator']";
+    public static final String COLLAPSIBLE_TITLED_SEPARATOR_NEW = "//div[@class='CollapsibleTitledSeparatorImpl']";
+    public static final String COLLAPSIBLE_TITLED_SEPARATOR_SIBLINGS = COLLAPSIBLE_TITLED_SEPARATOR + "/../*";
+    public static final String COLLAPSIBLE_TITLED_SEPARATOR_NEW_SIBLINGS = COLLAPSIBLE_TITLED_SEPARATOR_NEW + "/../*";
+    public static final String EXTENDABLE_TEXT_FIELD = "//div[@class='ExtendableTextField']";
+    public static final String JBTEXT_FIELD = "//div[@class='JBTextField']";
+    public static final String REMOVE_PROJECT_BUTTON = "//div[contains(@text.key, 'button.remove')]";
+    public static final String SET_LANGUAGE = "//div[@class='SegmentedButtonComponent'][.//div[contains(@action.key, 'language.groovy')]]";
+    public static final String SET_BUILD_SYSTEM = "//div[@class='SegmentedButtonComponent'][.//div[@action.key='buildsystem.type.intellij']]";
+    public static final String GET_SET_MODULE_NAME = "//div[@accessiblename='Module name:' and @accessiblename.key='label.project.wizard.new.project.module.name' and @class='JBTextField']";
+    public static final String GET_SET_CONTENT_ROOT = "//div[@accessiblename='Content root:' and @accessiblename.key='label.project.wizard.new.project.content.root' and @class='ExtendableTextField']";
+    public static final String GET_SET_MODULE_FILE_LOCATION = "//div[@accessiblename='Module file location:' and @accessiblename.key='label.project.wizard.new.project.module.file.location' and @class='ExtendableTextField']";
 
     private XPathDefinitions() {
         throw new UITestException("Utility class with static methods.");

@@ -75,8 +75,10 @@ public class MenuBar {
         CommonContainerFixture cf;
         if (remoteRobot.isLinux()) {
             cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.LINUX_MAIN_MENU), Duration.ofSeconds(10));
+        } else if (remoteRobot.isWin() && ideaVersion.toInt() >= 20222) {
+            cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2022_2_AND_NEWER), Duration.ofSeconds(10));
         } else if (remoteRobot.isWin() && ideaVersion.toInt() >= 20203) {
-            cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2020_3_AND_NEWER), Duration.ofSeconds(10));
+            cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2020_3_TO_2022_1), Duration.ofSeconds(10));
         } else {
             cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2020_2_AND_OLDER), Duration.ofSeconds(10));
         }

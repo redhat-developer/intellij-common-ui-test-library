@@ -40,7 +40,7 @@ public class IdeInternalErrorUtils {
     public static void clearWindowsErrorsIfTheyAppear(RemoteRobot remoteRobot) {
         if (remoteRobot.isWin()) {
             try {
-                remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.IDE_INTERNAL_ERRORS_DIALOG), Duration.ofSeconds(10)).button(ButtonLabels.CLEAR_ALL_LABEL).click();
+                remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.DIALOG_ROOT_PANE), Duration.ofSeconds(10)).button(ButtonLabels.CLEAR_ALL_LABEL).click();
             } catch (WaitForConditionTimeoutException e) {
                 LOGGER.log(Level.INFO, e.getMessage(), e);
             }
