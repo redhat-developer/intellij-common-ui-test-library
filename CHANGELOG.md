@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.2.0 (Aug 4, 2022)
+ - Add support for IntelliJ CE 2022.2
+
 ## 0.1.1 (Aug 2, 2022)
  - Update the `Remote-Robot` to version 0.11.15
  - Issues fixed:
