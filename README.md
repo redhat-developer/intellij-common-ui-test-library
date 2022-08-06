@@ -73,7 +73,7 @@ private static RemoteRobot robot;
 
 @BeforeAll
 public static void runIdeForUiTests() {
-    robot = UITestRunner.runIde(UITestRunner.IdeaVersion.COMMUNITY_V_2020_3, 8580);
+    robot = UITestRunner.runIde(UITestRunner.IdeaVersion.COMMUNITY_V_2022_2, 8580);
 }
 ```
 
