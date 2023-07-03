@@ -103,3 +103,4 @@ sonarqube {
         property "sonar.sources", "src"
     }
 }
+
