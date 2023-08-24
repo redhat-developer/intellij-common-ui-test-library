@@ -16,6 +16,7 @@ import com.intellij.remoterobot.stepsProcessing.StepWorker;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
 
 import java.io.File;
@@ -87,10 +88,12 @@ public class UITestRunner {
                 LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
 
-            remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).clearWorkspace();
+            findWindowOnStart();
+
             return remoteRobot;
         });
     }
+
 
     /**
      * Start the given version of IntelliJ Idea listening on the default port
@@ -143,23 +146,55 @@ public class UITestRunner {
      * @return instance of the RemoteRobot
      */
     public static RemoteRobot getRemoteRobotConnection(int port) {
-        return step("Create an instance of the RemoteRobot listening on port " + port, () -> {
-            RemoteRobot remoteRobot = new RemoteRobot("http://127.0.0.1:" + port);
-            for (int i = 0; i < 60; i++) {
-                try {
-                    remoteRobot.find(FlatWelcomeFrame.class);
-                } catch (WaitForConditionTimeoutException e) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e2) {
-                        LOGGER.log(Level.SEVERE, e2.getMessage(), e2);
-                        Thread.currentThread().interrupt();
-                    }
-                }
-            }
+        return step("Create an instance of the RemoteRobot listening on port " + port, () ->
+                new RemoteRobot("http://127.0.0.1:" + port));
+    }
 
-            return remoteRobot;
+    /**
+     * Restarts the IntelliJ Idea instance listening on the given port
+     *
+     * @param ideaVersion the version of IntelliJ Idea to restart
+     * @param port        the port number to listen on
+     * @return an instance of the RemoteRobot connected to the restarted IntelliJ Idea instance
+     */
+    public static RemoteRobot restartIde(IntelliJVersion ideaVersion, int port) {
+        return step("Restart IntelliJ Idea ('" + ideaVersion.toString() + "') listening on port " + port, () -> {
+            closeIde();
+            try {
+                Thread.sleep(5000); // Wait for 5 seconds for the process to end properly
+            } catch (InterruptedException e) {
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                Thread.currentThread().interrupt();
+            }
+            return runIde(ideaVersion, port);
         });
+    }
+
+    private static void findWindowOnStart() {
+        boolean foundWindow = false;
+
+        // Check for FlatWelcomeFrame
+        try {
+            remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(60)).clearWorkspace();
+            foundWindow = true;
+        } catch (WaitForConditionTimeoutException e) {
+            LOGGER.log(Level.INFO, e.getMessage(), e);
+        }
+
+        // Check for MainIdeWindow if FlatWelcomeFrame was not found
+        if (!foundWindow) {
+            try {
+                remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(60));
+                foundWindow = true;
+            } catch (WaitForConditionTimeoutException e) {
+                LOGGER.log(Level.WARNING, e.getMessage(), e);
+            }
+        }
+
+        if (!foundWindow) {
+            LOGGER.log(Level.SEVERE, "Neither FlatWelcomeFrame nor MainIdeWindow found. Exiting application.");
+            throw new IllegalStateException("Neither FlatWelcomeFrame nor MainIdeWindow found.");
+        }
     }
 
     private static void acceptAllTermsAndConditions() {
