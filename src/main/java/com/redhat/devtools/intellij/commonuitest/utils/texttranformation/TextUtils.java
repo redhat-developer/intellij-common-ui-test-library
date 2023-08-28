@@ -38,6 +38,7 @@ public class TextUtils {
                 .map(RemoteText::getText)
                 .collect(Collectors.toList());
 
+
         return String.join("", listOfStrings);
     }
 }
