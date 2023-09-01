@@ -9,7 +9,7 @@ plugins {
 group 'com.redhat.devtools.intellij'
 version projectVersion
 
-def remoteRobotVersion = '0.11.18'
+def remoteRobotVersion = '0.11.20'
 
 repositories {
     mavenLocal()
