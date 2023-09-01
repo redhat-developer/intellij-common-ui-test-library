@@ -78,6 +78,7 @@ public class UITestRunner {
 
             String fileExtension = OS_NAME.contains("windows") ? ".bat" : "";
             ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port);
+            redirectProcessOutputs(pb);
 
             try {
                 ideProcess = pb.start();
@@ -307,5 +308,23 @@ public class UITestRunner {
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
+    }
+
+    /**
+     * Redirect stdout and stderr of running subprocess to files
+     *
+     * @param pb    Process builder of running subprocess
+     */
+    private static void redirectProcessOutputs(ProcessBuilder pb) {
+        String outDir = System.getProperty("user.home") + File.separator + "IntelliJ_debug";
+
+        if (!new File(outDir).mkdirs()) {
+            LOGGER.log(Level.SEVERE, "Cannot create user.home/debug directory");
+        }
+
+        File stdoutLog = new File(outDir + File.separator + "stdout.log");
+        File stderrLog = new File(outDir + File.separator + "stderr.log");
+        pb.redirectOutput(ProcessBuilder.Redirect.to(stdoutLog));
+        pb.redirectError(ProcessBuilder.Redirect.to(stderrLog));
     }
 }
