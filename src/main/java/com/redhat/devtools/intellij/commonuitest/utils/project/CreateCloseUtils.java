@@ -23,7 +23,9 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
 
+import java.io.File;
 import java.time.Duration;
+import java.util.Optional;
 
 /**
  * Project creation utilities
@@ -31,6 +33,10 @@ import java.time.Duration;
  * @author zcervink@redhat.com
  */
 public class CreateCloseUtils {
+    public static final String PROJECT_LOCATION = Optional.ofNullable(System.getProperty("testProjectLocation"))
+            .filter(s -> !s.isEmpty())
+            .orElseGet(() -> System.getProperty("user.home") + File.separator + "IdeaProjects" + File.separator + "intellij-ui-test-projects");
+
     /**
      * Create new project with given project name according to given project type
      *
@@ -62,6 +68,7 @@ public class CreateCloseUtils {
 
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
             newProjectFirstPage.setProjectName(projectName);
+            newProjectFirstPage.setProjectLocation(PROJECT_LOCATION);
         } else {
             newProjectDialogWizard.next();
             // Plain java project has more pages in the 'New project' dialog
