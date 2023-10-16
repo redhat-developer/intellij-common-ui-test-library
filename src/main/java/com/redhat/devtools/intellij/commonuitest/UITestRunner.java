@@ -17,6 +17,7 @@ import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
+import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
 
 import java.io.File;
@@ -89,7 +90,7 @@ public class UITestRunner {
             }
 
             findWindowOnStart();
-
+            remoteRobot.find(FlatWelcomeFrame.class).clearWorkspace();
             return remoteRobot;
         });
     }
@@ -172,24 +173,28 @@ public class UITestRunner {
 
     private static void findWindowOnStart() {
         boolean foundWindow = false;
-
-        // Check for FlatWelcomeFrame
-        try {
-            remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(60)).clearWorkspace();
-            foundWindow = true;
-        } catch (WaitForConditionTimeoutException e) {
-            LOGGER.log(Level.INFO, e.getMessage(), e);
-        }
-
-        // Check for MainIdeWindow if FlatWelcomeFrame was not found
-        if (!foundWindow) {
+        int tries = 0;
+        do {
             try {
-                remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(60));
+                remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(5));
                 foundWindow = true;
             } catch (WaitForConditionTimeoutException e) {
-                LOGGER.log(Level.WARNING, e.getMessage(), e);
+                LOGGER.log(Level.INFO, e.getMessage(), e);
+                try {
+                    // Check for MainIdeWindow and if found close project
+                    remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
+                    CreateCloseUtils.closeProject(getRemoteRobot());
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+                } catch (WaitForConditionTimeoutException e2) {
+                    LOGGER.log(Level.WARNING, e.getMessage(), e2);
+                }
             }
-        }
+            tries++;
+        } while(!foundWindow || tries < 6);
 
         if (!foundWindow) {
             LOGGER.log(Level.SEVERE, "Neither FlatWelcomeFrame nor MainIdeWindow found. Exiting application.");

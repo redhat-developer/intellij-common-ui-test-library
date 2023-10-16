@@ -109,3 +109,8 @@ String contentListStr = TextUtils.listOfRemoteTextToString(contentList);
 ### Use any tool provided by Remote-Robot framework
 Besides the fixtures and utilities provided by this library you can use any tool from the [Remote-Robot](https://github.com/JetBrains/intellij-ui-test-robot) framework itself. 
 
+### Restart feature
+The restart feature allows you to restart IntelliJ IDEA during your UI tests. This can be useful in scenarios where you need to test the behavior of your plugin or application after a restart.
+```
+UITestRunner.restartIde(ideaVersion, portNumber); // returns a remote robot reference
+```
