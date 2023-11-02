@@ -12,17 +12,7 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.dialogs;
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
-import com.intellij.remoterobot.fixtures.CommonContainerFixture;
-import com.intellij.remoterobot.fixtures.ComponentFixture;
-import com.intellij.remoterobot.fixtures.ContainerFixture;
-import com.intellij.remoterobot.fixtures.DefaultXpath;
-import com.intellij.remoterobot.fixtures.FixtureName;
-import com.intellij.remoterobot.fixtures.HeavyWeightWindowFixture;
-import com.intellij.remoterobot.fixtures.JButtonFixture;
-import com.intellij.remoterobot.fixtures.JLabelFixture;
-import com.intellij.remoterobot.fixtures.JListFixture;
-import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
-import com.intellij.remoterobot.fixtures.JTreeFixture;
+import com.intellij.remoterobot.fixtures.*;
 import com.intellij.remoterobot.utils.UtilsKt;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
@@ -30,9 +20,10 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.errors.IdeFata
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.TipDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.SettingsDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.pages.NotificationsPage;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
-import com.redhat.devtools.intellij.commonuitest.utils.internalerror.IdeInternalErrorUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
+import com.redhat.devtools.intellij.commonuitest.utils.steps.SharedSteps;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -96,10 +87,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      * Clear the workspace by deleting the content of the IdeaProjects folder and clearing all the projects' links in the 'Welcome to IntelliJ IDEA' dialog
      */
     public void clearWorkspace() {
-        for (int i = 0; i < projectsCount(); i++) {
-            removeTopProjectFromRecentProjects();
-        }
-
+        // Remove projects on disk
         try {
             String pathToDirToMakeEmpty = System.getProperty("user.home") + File.separator + "IdeaProjects";
             boolean doesProjectDirExists = Files.exists(Paths.get(pathToDirToMakeEmpty));
@@ -110,6 +98,10 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             }
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        }
+        // Remove projects from FlatWelcomeFrame's recent projects
+        for (int i = 0; i < projectsCount(); i++) {
+            removeTopProjectFromRecentProjects();
         }
     }
 
@@ -156,7 +148,16 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      * @return fixture for the 'Tip Of the Day' dialog
      */
     public TipDialog openTipDialog() {
-        if (ideaVersion <= 20202) {
+        if (ideaVersion >= 20211) {
+            FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(2));
+            if (ideaVersion >= 20223) {         //  COMMUNITY_V_2022_3 and higher version have different labels for Learn button
+                flatWelcomeFrame.findText(ButtonLabels.LEARN_LABEL).click();
+            } else {
+                flatWelcomeFrame.findText(ButtonLabels.LEARN_INTELLIJ_IDEA_LABEL).click();
+            }
+            SharedSteps.waitForComponentByXpath(remoteRobot, 2, 1, byXpath(XPathDefinitions.TIP_DIALOG_2));
+            flatWelcomeFrame.findText(TIP_OF_THE_DAY).click();
+        } else if (ideaVersion <= 20202) {
             clickOnLink("Get Help");
             HeavyWeightWindowFixture heavyWeightWindowFixture = find(HeavyWeightWindowFixture.class, Duration.ofSeconds(5));
             heavyWeightWindowFixture.findText(TIP_OF_THE_DAY).click();
@@ -164,16 +165,6 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             actionLink("Help").click();
             HeavyWeightWindowFixture heavyWeightWindowFixture = find(HeavyWeightWindowFixture.class, Duration.ofSeconds(5));
             heavyWeightWindowFixture.findText(TIP_OF_THE_DAY).click();
-        } else if (ideaVersion <= 20212) {
-            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(XPathDefinitions.JBLIST));
-            jListFixture.findText("Learn IntelliJ IDEA").click();
-            remoteRobot.find(JLabelFixture.class, byXpath(XPathDefinitions.TIP_DIALOG_2)).click();
-        } else {
-            IdeInternalErrorUtils.clearWindowsErrorsIfTheyAppear(remoteRobot);
-            JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
-            jTreeFixture.findText("Learn IntelliJ IDEA").click();
-            FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class);
-            flatWelcomeFrame.findText(TIP_OF_THE_DAY).click();
         }
 
         return remoteRobot.find(TipDialog.class, Duration.ofSeconds(10));
@@ -254,11 +245,16 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             recentProjects = jLists(byXpath(XPathDefinitions.RECENT_PROJECTS)).get(0);
         }
 
+        // Clicks on X on first recent project to remove it from the recent projects list (visible only when hovered over with cursor)
         recentProjects.runJs("const horizontal_offset = component.getWidth()-22;\n" +
                 "robot.click(component, new Point(horizontal_offset, 22), MouseButton.LEFT_BUTTON, 1);");
 
-        // Code for IntelliJ Idea 2020.3 or newer
-        if (ideaVersion >= 20203) {
+        if (ideaVersion >= 20231) {
+            ComponentFixture removeDialog = remoteRobot.find(ComponentFixture.class, byXpath(XPathDefinitions.MY_DIALOG), Duration.ofSeconds(2));
+            removeDialog.findText(ButtonLabels.REMOVE_FROM_LIST_LABEL)
+                    .click();
+        }
+        else if (ideaVersion >= 20203) {         // Code for IntelliJ Idea 2020.3 or newer
             List<JPopupMenuFixture> jPopupMenuFixtures = jPopupMenus(JPopupMenuFixture.Companion.byType());
             if (!jPopupMenuFixtures.isEmpty()) {
                 JPopupMenuFixture contextMenu = jPopupMenuFixtures.get(0);
