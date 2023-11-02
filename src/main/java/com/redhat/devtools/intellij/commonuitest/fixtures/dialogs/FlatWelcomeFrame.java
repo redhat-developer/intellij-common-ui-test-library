@@ -22,7 +22,6 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.Setti
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.pages.NotificationsPage;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
-import com.redhat.devtools.intellij.commonuitest.utils.internalerror.IdeInternalErrorUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
 import com.redhat.devtools.intellij.commonuitest.utils.steps.SharedSteps;
 import org.apache.commons.io.FileUtils;
@@ -149,7 +148,16 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      * @return fixture for the 'Tip Of the Day' dialog
      */
     public TipDialog openTipDialog() {
-        if (ideaVersion <= 20202) {                 // IJ 2020.2 and older
+        if (ideaVersion >= 20211) {
+            FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(2));
+            if (ideaVersion >= 20223) {         //  COMMUNITY_V_2022_3 and higher version have different labels for Learn button
+                flatWelcomeFrame.findText(ButtonLabels.LEARN_LABEL).click();
+            } else {
+                flatWelcomeFrame.findText(ButtonLabels.LEARN_INTELLIJ_IDEA_LABEL).click();
+            }
+            SharedSteps.waitForComponentByXpath(remoteRobot, 2, 1, byXpath(XPathDefinitions.TIP_DIALOG_2));
+            flatWelcomeFrame.findText(TIP_OF_THE_DAY).click();
+        } else if (ideaVersion <= 20202) {
             clickOnLink("Get Help");
             HeavyWeightWindowFixture heavyWeightWindowFixture = find(HeavyWeightWindowFixture.class, Duration.ofSeconds(5));
             heavyWeightWindowFixture.findText(TIP_OF_THE_DAY).click();
@@ -157,20 +165,6 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             actionLink("Help").click();
             HeavyWeightWindowFixture heavyWeightWindowFixture = find(HeavyWeightWindowFixture.class, Duration.ofSeconds(5));
             heavyWeightWindowFixture.findText(TIP_OF_THE_DAY).click();
-        } else if (ideaVersion <= 20212) {          // IJ 2021.1 - IJ 2021.2
-            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(XPathDefinitions.JBLIST));
-            jListFixture.findText(ButtonLabels.LEARN_LABEL).click();
-            remoteRobot.find(JLabelFixture.class, byXpath(XPathDefinitions.TIP_DIALOG_2)).click();
-        } else {                                    // IJ 2021.3 and newer
-            IdeInternalErrorUtils.clearWindowsErrorsIfTheyAppear(remoteRobot);
-            FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(2));
-            if (ideaVersion >= 20223) {                 // learn label for IJ 2022.3 and newer
-                flatWelcomeFrame.findText(ButtonLabels.LEARN_LABEL).click();
-            } else {                                    // learn label for IJ 2022.2 and older
-                flatWelcomeFrame.findText(ButtonLabels.LEARN_INTELLIJ_IDEA_LABEL).click();
-            }
-            SharedSteps.waitForComponentByXpath(remoteRobot, 2, 1, byXpath(XPathDefinitions.TIP_DIALOG_2));
-            flatWelcomeFrame.findText(TIP_OF_THE_DAY).click();
         }
 
         return remoteRobot.find(TipDialog.class, Duration.ofSeconds(10));
