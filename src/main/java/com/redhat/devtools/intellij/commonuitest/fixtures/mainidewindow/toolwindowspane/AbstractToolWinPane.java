@@ -99,7 +99,11 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
     public JButtonFixture stripeButton(String label, boolean isPaneOpened) {
         if (isPaneOpened) {
             if (label.equals(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL) || label.equals(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL)) {
-                return button(byXpath(XPathDefinitions.toolWindowSvg(label)), Duration.ofSeconds(2));
+                if (UITestRunner.getIdeaVersionInt() >= 20232) {    // Code for IntelliJ version 2023.2 and newer
+                    return button(byXpath(XPathDefinitions.toolWindowButton(label)), Duration.ofSeconds(2));
+                } else {                                            // Code for IntelliJ versions 2023.1 and older
+                    return button(byXpath(XPathDefinitions.toolWindowSvg(label)), Duration.ofSeconds(2));
+                }
             } else if (label.equals(ButtonLabels.PROJECT_STRIPE_BUTTON_LABEL)) {
                 return button(byXpath(XPathDefinitions.TOOLTIP_TEXT_PROJECT), Duration.ofSeconds(2));
             }
