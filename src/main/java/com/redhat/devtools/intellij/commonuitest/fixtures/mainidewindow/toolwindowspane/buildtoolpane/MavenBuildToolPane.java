@@ -68,7 +68,8 @@ public class MavenBuildToolPane extends CommonContainerFixture {
     public void buildProject(String lifecycle) {
         waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The Maven target tree did not appear in 30 seconds.", this::isMavenTreeVisible);
         mavenTargetTree().expandAll();
-        mavenTargetTree().findAllText(lifecycle).get(0).doubleClick();
+        mavenTargetTree().findAllText(lifecycle).get(0).click(); // select lifecycle
+        mavenTargetTree().findAllText(lifecycle).get(0).doubleClick(); // activate lifecycle
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
             remoteRobot.find(ToolWindowPane.class).find(BuildView.class).waitUntilBuildHasFinished();
         } else {
