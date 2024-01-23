@@ -98,6 +98,10 @@ public class XPathDefinitions {
         return "//div[@class='NonOpaquePanel'][./div[@text='" + label + "']]";
     }
 
+    public static String editorTabLabel(String label) {
+        return "//div[@accessiblename='" + label + "' and @class='EditorTabLabel']";
+    }
+
     public static String toolWindowSvg(String label) {
         return "//div[@disabledicon='toolWindow" + label + ".svg']";
     }
