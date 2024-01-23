@@ -79,19 +79,19 @@ class ProjectExplorerTest extends LibraryTestBase {
     @Test
     public void openFileTest() {
         projectExplorer.openFile(PROJECT_NAME, PROJECT_NAME + ".iml");
-
-        if (ideaVersionInt <= 20223) {          // Code for IJ 2022.3 and older
+        if (ideaVersionInt >= 20231) {       // Code for IJ 2023.1+
+            String projectLabelXpath = "//div[@accessiblename='" + PROJECT_NAME + ".iml' and @class='EditorTabLabel']//div[@class='ActionPanel']";
+            try {       // Verify file is opened by finding its tab in the editor
+                remoteRobot.find(ComponentFixture.class, byXpath(projectLabelXpath));
+            } catch (Exception e) {
+                fail("The '" + PROJECT_NAME + ".iml' file should be opened but is not.");
+            }
+        } else {
             List<ContainerFixture> cfs = remoteRobot.findAll(ContainerFixture.class, byXpath(XPathDefinitions.SINGLE_HEIGHT_LABEL));
             ContainerFixture cf = cfs.get(cfs.size() - 1);
             String allText = TextUtils.listOfRemoteTextToString(cf.findAllText());
             boolean isFileOpened = allText.contains(PROJECT_NAME + ".iml");
             assertTrue(isFileOpened, "The '" + PROJECT_NAME + ".iml' file should be opened but is not.");
-        } else {                                // Code for IJ 2023.1 and newer
-            try {
-                SharedSteps.waitForComponentByXpath(remoteRobot, 20, 1, byXpath(XPathDefinitions.editorTabLabel(PROJECT_NAME + ".iml")));
-            } catch (Exception e) {
-                fail("The '" + PROJECT_NAME + ".iml' file should be opened but is not.");
-            }
         }
     }
 
