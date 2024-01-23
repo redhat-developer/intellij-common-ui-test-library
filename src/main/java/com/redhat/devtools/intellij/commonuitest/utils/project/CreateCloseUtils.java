@@ -58,7 +58,7 @@ public class CreateCloseUtils {
             newProjectFirstPage.selectNewProjectType(newProjectType.toString());
         }
 
-        newProjectFirstPage.setProjectSdkIfAvailable("11");
+        newProjectFirstPage.setProjectSdkIfAvailable("17");
 
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
             newProjectFirstPage.setProjectName(projectName);
