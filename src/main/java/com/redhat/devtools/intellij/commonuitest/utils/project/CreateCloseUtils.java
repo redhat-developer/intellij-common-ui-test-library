@@ -103,6 +103,7 @@ public class CreateCloseUtils {
     public static void closeProject(RemoteRobot remoteRobot) {
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
         mainIdeWindow.closeProject();
+        remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
     }
 
     /**
