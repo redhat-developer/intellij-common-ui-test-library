@@ -23,6 +23,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwind
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
+import com.redhat.devtools.intellij.commonuitest.utils.steps.SharedSteps;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -118,8 +119,10 @@ class ProjectExplorerTest extends LibraryTestBase {
     public void selectOpenedFileTest() {
         projectExplorer.openFile(PROJECT_NAME, PROJECT_NAME + ".iml");
         projectExplorer.projectViewTree().clickRow(0);
+        SharedSteps.waitForComponentByXpath(remoteRobot,3,1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
         projectExplorer.selectOpenedFile();
-        assertTrue(projectExplorer.projectViewTree().isPathSelected(projectExplorer.projectViewTree().getValueAtRow(0), PROJECT_NAME + ".iml"), "The file 'modules.xml' should be selected but is not.");
+        SharedSteps.waitForComponentByXpath(remoteRobot,3,1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
+        assertTrue(projectExplorer.projectViewTree().isPathSelected(projectExplorer.projectViewTree().getValueAtRow(0), PROJECT_NAME + ".iml"), "The file '" + PROJECT_NAME + ".xml' should be selected but is not.");
     }
 
     @Test
