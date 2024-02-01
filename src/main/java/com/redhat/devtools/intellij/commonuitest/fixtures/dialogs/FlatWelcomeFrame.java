@@ -168,15 +168,27 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(XPathDefinitions.JBLIST));
             jListFixture.findText("Learn IntelliJ IDEA").click();
             remoteRobot.find(JLabelFixture.class, byXpath(XPathDefinitions.TIP_DIALOG_2)).click();
+        } else if (ideaVersion <= 20222) {
+            openTipDialog2022("Learn IntelliJ IDEA");
         } else {
-            IdeInternalErrorUtils.clearWindowsErrorsIfTheyAppear(remoteRobot);
-            JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
-            jTreeFixture.findText("Learn IntelliJ IDEA").click();
-            FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class);
-            flatWelcomeFrame.findText(TIP_OF_THE_DAY).click();
+            openTipDialog2022("Learn");
         }
 
         return remoteRobot.find(TipDialog.class, Duration.ofSeconds(10));
+    }
+
+    /**
+     * Open tip dialog for Intellij 2022.x
+     *
+     * @param jTreeFixtureText
+     * The name of the jTreeFixture "Learn..." field depends on the version of Intellij
+     */
+    private void openTipDialog2022(String jTreeFixtureText) {
+        IdeInternalErrorUtils.clearWindowsErrorsIfTheyAppear(remoteRobot);
+        JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
+        jTreeFixture.findText(jTreeFixtureText).click();
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class);
+        flatWelcomeFrame.findText(TIP_OF_THE_DAY).click();
     }
 
     /**
