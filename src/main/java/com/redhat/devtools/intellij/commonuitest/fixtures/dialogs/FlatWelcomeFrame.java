@@ -68,6 +68,16 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
     }
 
     /**
+     * CLick on existing project from the Welcome Dialog
+     *
+     * @param projectName name of existing project
+     */
+    public void openProject(String projectName) {
+        JTreeFixture existingProjectFixture = find(JTreeFixture.class, byXpath("//div[@visible_text='~/IdeaProjects/" + projectName + " || " + projectName +"']"), Duration.ofSeconds(2));
+        existingProjectFixture.clickRow(0);
+    }
+
+    /**
      * Click on the link according to given label
      *
      * @param label label of the link to click on
