@@ -85,14 +85,4 @@ class MenuBarTest extends LibraryTestBase {
         }
         return true;
     }
-
-    private boolean isProjectOpen(RemoteRobot remoteRobot) {
-        try {
-            projectExplorer.isItemPresent(PROJECT_NAME);
-            remoteRobot.find(ComponentFixture.class, byXpath("div[@visible_text='project_view_tree_java_project']"), Duration.ofSeconds(10));
-        } catch (WaitForConditionTimeoutException e) {
-            return false;
-        }
-        return true;
-    }
 }
