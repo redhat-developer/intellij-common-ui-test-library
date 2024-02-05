@@ -11,10 +11,16 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.menubar;
 
 import com.intellij.remoterobot.RemoteRobot;
+import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.TipDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar.MenuBar;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ProjectExplorer;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import org.junit.jupiter.api.AfterAll;
@@ -23,6 +29,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
+import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -32,6 +39,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class MenuBarTest extends LibraryTestBase {
     private static final String PROJECT_NAME = "project_view_tree_java_project";
+
+    private static ProjectExplorer projectExplorer;
 
     @BeforeAll
     public static void prepareProject() {
@@ -52,9 +61,35 @@ class MenuBarTest extends LibraryTestBase {
         }
     }
 
+    @Test
+    public void closeAndReopenProjectTest() {
+        CreateCloseUtils.closeProject(remoteRobot);
+        CreateCloseUtils.openProjectFromWelcomeDialog(remoteRobot, PROJECT_NAME);
+
+        AbstractToolWinPane toolWinPane;
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
+        } else {
+            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+        }
+        toolWinPane.openProjectExplorer();
+        projectExplorer = toolWinPane.find(ProjectExplorer.class, Duration.ofSeconds(10));
+        assertTrue(projectExplorer.isItemPresent(PROJECT_NAME), "The project should be back open, but it is not");
+    }
+
     private boolean isTipDialogVisible(RemoteRobot remoteRobot) {
         try {
             remoteRobot.find(TipDialog.class, Duration.ofSeconds(10));
+        } catch (WaitForConditionTimeoutException e) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isProjectOpen(RemoteRobot remoteRobot) {
+        try {
+            projectExplorer.isItemPresent(PROJECT_NAME);
+            remoteRobot.find(ComponentFixture.class, byXpath("div[@visible_text='project_view_tree_java_project']"), Duration.ofSeconds(10));
         } catch (WaitForConditionTimeoutException e) {
             return false;
         }
