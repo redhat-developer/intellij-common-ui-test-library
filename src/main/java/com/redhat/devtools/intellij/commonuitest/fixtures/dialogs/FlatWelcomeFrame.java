@@ -73,7 +73,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      * @param projectName name of existing project
      */
     public void openProject(String projectName) {
-        JTreeFixture existingProjectFixture = find(JTreeFixture.class, byXpath("//div[@visible_text='~/IdeaProjects/" + projectName + " || " + projectName +"']"), Duration.ofSeconds(2));
+        JTreeFixture existingProjectFixture = find(JTreeFixture.class, byXpath("//div[contains(@visible_text, '" + projectName + "')]"), Duration.ofSeconds(2));
         existingProjectFixture.clickRow(0);
     }
 
