@@ -17,9 +17,9 @@ node('rhel7') {
     stage('Deploy') {
         withCredentials([usernamePassword(credentialsId: 'Nexus-IJ-Credentials', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
             if (isSnapshot) {
-                sh "./gradlew publish -PnexusUser=${USER} -PnexusPassword=${PASSWORD}"
+                sh './gradlew publish -PnexusUser=$USER -PnexusPassword=$PASSWORD'
             } else {
-                sh "./gradlew publish closeAndReleaseStagingRepository -PnexusUser=${USER} -PnexusPassword=${PASSWORD}"
+                sh './gradlew publish closeAndReleaseStagingRepository -PnexusUser=$USER -PnexusPassword=$PASSWORD'
             }
         }
     }
