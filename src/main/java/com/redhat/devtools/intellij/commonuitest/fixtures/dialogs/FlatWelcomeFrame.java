@@ -88,10 +88,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      * Clear the workspace by deleting the content of the IdeaProjects folder and clearing all the projects' links in the 'Welcome to IntelliJ IDEA' dialog
      */
     public void clearWorkspace() {
-        for (int i = 0; i < projectsCount(); i++) {
-            removeTopProjectFromRecentProjects();
-        }
-
+        // Remove projects on disk
         try {
             String pathToDirToMakeEmpty = System.getProperty("user.home") + File.separator + "IdeaProjects";
             boolean doesProjectDirExists = Files.exists(Paths.get(pathToDirToMakeEmpty));
@@ -102,6 +99,10 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             }
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        }
+        // Remove projects from FlatWelcomeFrame's recent projects
+        for (int i = 0; i < projectsCount(); i++) {
+            removeTopProjectFromRecentProjects();
         }
     }
 
@@ -174,6 +175,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
 
         return remoteRobot.find(TipDialog.class, Duration.ofSeconds(10));
     }
+
     /**
      * Open the 'Preferences' dialog
      */
@@ -249,11 +251,15 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             recentProjects = jLists(byXpath(XPathDefinitions.RECENT_PROJECTS)).get(0);
         }
 
+        // Clicks on X on first recent project to remove it from the recent projects list (visible only when hovered over with cursor)
         recentProjects.runJs("const horizontal_offset = component.getWidth()-22;\n" +
                 "robot.click(component, new Point(horizontal_offset, 22), MouseButton.LEFT_BUTTON, 1);");
 
-        // Code for IntelliJ Idea 2020.3 or newer
-        if (ideaVersion >= 20203) {
+        if (ideaVersion >= 20231) {
+            ComponentFixture removeDialog = remoteRobot.find(ComponentFixture.class, byXpath(XPathDefinitions.MY_DIALOG), Duration.ofSeconds(2));
+            removeDialog.findText(ButtonLabels.REMOVE_FROM_LIST_LABEL)
+                    .click();
+        } else if (ideaVersion >= 20203) {         // Code for IntelliJ Idea 2020.3 or newer
             List<JPopupMenuFixture> jPopupMenuFixtures = jPopupMenus(JPopupMenuFixture.Companion.byType());
             if (!jPopupMenuFixtures.isEmpty()) {
                 JPopupMenuFixture contextMenu = jPopupMenuFixtures.get(0);
