@@ -54,7 +54,7 @@ public class BuildView extends CommonContainerFixture {
      */
     public boolean isBuildSuccessful() {
         String runConsoleOutput = TextUtils.listOfRemoteTextToString(buildConsole().findAllText());
-        return runConsoleOutput.contains("BUILD SUCCESS");
+        return runConsoleOutput.contains("BUILD SUCCESS") || runConsoleOutput.contains("exit code 0");
     }
 
     /**

@@ -33,6 +33,9 @@ public class ButtonLabels {
     public static final String GOT_IT_LABEL = "Got It";
     public static final String MORE_SETTINGS = "More Settings";
     public static final String ARTIFACT_COORDINATES = "Artifact Coordinates";
+    public static final String LEARN_INTELLIJ_IDEA_LABEL = "Learn IntelliJ IDEA";
+    public static final String LEARN_LABEL = "Learn";
+    public static final String REMOVE_FROM_LIST_LABEL = "Remove From List";
 
     private ButtonLabels() {
         throw new UITestException("Utility class with static methods.");

@@ -18,6 +18,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFra
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.internalerror.IdeInternalErrorUtils;
+import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -77,9 +78,13 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
     }
 
     private int getNumberOfProjectsOnDisk() {
-        String pathToIdeaProjectsFolder = System.getProperty("user.home") + File.separator + "IdeaProjects";
+        String pathToIdeaProjectsFolder = CreateCloseUtils.PROJECT_LOCATION;
         File[] files = new File(pathToIdeaProjectsFolder).listFiles((FileFilter) FileFilterUtils.directoryFileFilter());
-        return files.length;
+        if (files != null) {
+            return files.length;
+        } else {
+            return 0;   // files is null (e.g., folder doesn't exist)
+        }
     }
 
     private int getNumberOfProjectLinks() {

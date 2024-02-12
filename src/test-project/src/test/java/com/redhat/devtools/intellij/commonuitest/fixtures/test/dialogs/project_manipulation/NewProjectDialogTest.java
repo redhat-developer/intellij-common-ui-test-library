@@ -333,25 +333,27 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void setProjectSdkIfAvailableTest() {
-        newProjectFirstPage.setProjectSdkIfAvailable("8");
+        newProjectFirstPage.setProjectSdkIfAvailable("11");
         ComboBoxFixture projectJdkComboBox = newProjectFirstPage.find(ComboBoxFixture.class, byXpath(XPathDefinitions.JDK_COMBOBOX), Duration.ofSeconds(10));
         String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
-        assertTrue(currentlySelectedProjectSdk.contains("8"), "Selected project SDK should be Java 8 but is '" + currentlySelectedProjectSdk + "'");
-        newProjectFirstPage.setProjectSdkIfAvailable("11");
-        currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
         assertTrue(currentlySelectedProjectSdk.contains("11"), "Selected project SDK should be Java 11 but is '" + currentlySelectedProjectSdk + "'");
+        newProjectFirstPage.setProjectSdkIfAvailable("17");
+        currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
+        assertTrue(currentlySelectedProjectSdk.contains("17"), "Selected project SDK should be Java 17 but is '" + currentlySelectedProjectSdk + "'");
     }
 
     @Test
     public void selectNewProjectTypeTest() {
         newProjectFirstPage.selectNewProjectType("Empty Project");
         boolean isEmptyProjectPageDisplayed;
-        if (ideaVersionInt < 20213) {
+        if (ideaVersionInt < 20213) {                   // IJ 2021.2 and older
             isEmptyProjectPageDisplayed = !newProjectFirstPage.findAll(JListFixture.class, byXpath(XPathDefinitions.EMPTY_PROJECT)).isEmpty();
-        } else if (ideaVersionInt < 20221) {
+        } else if (ideaVersionInt < 20221) {            // IJ 2021.3
             isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("Simple project with one module");
-        } else {
+        } else if (ideaVersionInt < 20231) {            // IJ 2022.1-2022.3
             isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("A basic project that allows working with separate files and compiling Java and Kotlin classes.");
+        } else {                                        // IJ 2023.1 and newer
+            isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("A basic project with free structure.");
         }
         assertTrue(isEmptyProjectPageDisplayed, "The 'Empty Project' page should be displayed but is not.");
 

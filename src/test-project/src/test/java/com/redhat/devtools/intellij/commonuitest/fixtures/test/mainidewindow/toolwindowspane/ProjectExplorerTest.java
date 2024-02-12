@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane;
 
+import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.utils.Keyboard;
@@ -22,6 +23,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwind
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
+import com.redhat.devtools.intellij.commonuitest.utils.steps.SharedSteps;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -77,11 +79,20 @@ class ProjectExplorerTest extends LibraryTestBase {
     @Test
     public void openFileTest() {
         projectExplorer.openFile(PROJECT_NAME, PROJECT_NAME + ".iml");
-        List<ContainerFixture> cfs = remoteRobot.findAll(ContainerFixture.class, byXpath(XPathDefinitions.SINGLE_HEIGHT_LABEL));
-        ContainerFixture cf = cfs.get(cfs.size() - 1);
-        String allText = TextUtils.listOfRemoteTextToString(cf.findAllText());
-        boolean isFileOpened = allText.contains(PROJECT_NAME + ".iml");
-        assertTrue(isFileOpened, "The '" + PROJECT_NAME + ".iml' file should be opened but is not.");
+
+        if (ideaVersionInt <= 20223) {          // Code for IJ 2022.3 and older
+            List<ContainerFixture> cfs = remoteRobot.findAll(ContainerFixture.class, byXpath(XPathDefinitions.SINGLE_HEIGHT_LABEL));
+            ContainerFixture cf = cfs.get(cfs.size() - 1);
+            String allText = TextUtils.listOfRemoteTextToString(cf.findAllText());
+            boolean isFileOpened = allText.contains(PROJECT_NAME + ".iml");
+            assertTrue(isFileOpened, "The '" + PROJECT_NAME + ".iml' file should be opened but is not.");
+        } else {                                // Code for IJ 2023.1 and newer
+            try {
+                SharedSteps.waitForComponentByXpath(remoteRobot, 20, 1, byXpath(XPathDefinitions.editorTabLabel(PROJECT_NAME + ".iml")));
+            } catch (Exception e) {
+                fail("The '" + PROJECT_NAME + ".iml' file should be opened but is not.");
+            }
+        }
     }
 
     @Test
@@ -108,8 +119,10 @@ class ProjectExplorerTest extends LibraryTestBase {
     public void selectOpenedFileTest() {
         projectExplorer.openFile(PROJECT_NAME, PROJECT_NAME + ".iml");
         projectExplorer.projectViewTree().clickRow(0);
+        SharedSteps.waitForComponentByXpath(remoteRobot,3,1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
         projectExplorer.selectOpenedFile();
-        assertTrue(projectExplorer.projectViewTree().isPathSelected(projectExplorer.projectViewTree().getValueAtRow(0), PROJECT_NAME + ".iml"), "The file 'modules.xml' should be selected but is not.");
+        SharedSteps.waitForComponentByXpath(remoteRobot,3,1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
+        assertTrue(projectExplorer.projectViewTree().isPathSelected(projectExplorer.projectViewTree().getValueAtRow(0), PROJECT_NAME + ".iml"), "The file '" + PROJECT_NAME + ".xml' should be selected but is not.");
     }
 
     @Test
