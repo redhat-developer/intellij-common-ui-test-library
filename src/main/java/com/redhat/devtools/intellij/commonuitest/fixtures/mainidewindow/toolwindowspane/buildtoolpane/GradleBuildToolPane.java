@@ -81,7 +81,8 @@ public class GradleBuildToolPane extends CommonContainerFixture {
             gradleTaskTree().expandAll();
         }
 
-        gradleTaskTree().findAllText("build").get(1).doubleClick();
+        gradleTaskTree().findAllText("build").get(1).click(); // select lifecycle
+        gradleTaskTree().findAllText("build").get(1).doubleClick(); // activate lifecycle
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
             remoteRobot.find(ToolWindowPane.class).find(BuildView.class).waitUntilBuildHasFinished();
         } else {
