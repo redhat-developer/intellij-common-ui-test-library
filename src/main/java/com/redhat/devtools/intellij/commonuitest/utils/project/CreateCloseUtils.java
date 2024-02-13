@@ -58,7 +58,7 @@ public class CreateCloseUtils {
             newProjectFirstPage.selectNewProjectType(newProjectType.toString());
         }
 
-        newProjectFirstPage.setProjectSdkIfAvailable("11");
+        newProjectFirstPage.setProjectSdkIfAvailable("17");
 
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
             newProjectFirstPage.setProjectName(projectName);
@@ -103,6 +103,7 @@ public class CreateCloseUtils {
     public static void closeProject(RemoteRobot remoteRobot) {
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
         mainIdeWindow.closeProject();
+        remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
     }
 
     /**
