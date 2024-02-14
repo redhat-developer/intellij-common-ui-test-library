@@ -65,6 +65,21 @@ runIdeForUiTests {
     systemProperty "robot-server.port", System.getProperty("robot-server.port")
 }
 ```
+### STEP #5: Test project location
+Developers can specify the location where the test project will be created by providing a system property called `testProjectLocation`. For example:
+```
+task integrationTest(type: Test) {
+    ...
+    systemProperties['testProjectLocation'] = '/home/user/IdeaProjects/intellij-ui-test-projects/'
+    ...
+}
+```
+Or add the location as a paramater for gradlew command which runs the test. For example:
+```
+systemProperties['testProjectLocation'] = project.hasProperty('testProjectLocation') ? project.property('testProjectLocation') : null
+    
+./gradlew integrationTest -PtestProjectLocation=${env.HOME}/IdeaProjects/intellij-ui-test-projects/
+```
 
 ## Start and quit IntelliJ IDEA
 Use the following code to start IntelliJ before running the first UI test. The runIde() method not only starts the IDE for UI tests, it also returns reference to the Remote-Robot instance which will be useful later to access UI elements such as buttons, inputs etc.
