@@ -77,7 +77,8 @@ public class UITestRunner {
             }
 
             String fileExtension = OS_NAME.contains("windows") ? ".bat" : "";
-            ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port);
+            String[] platformTypeVersion = ideaVersion.toString().split("-", 2);
+            ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port, "-PplatformType=" + platformTypeVersion[0], "-PplatformVersion=" + platformTypeVersion[1]);
             redirectProcessOutputs(pb);
 
             try {
