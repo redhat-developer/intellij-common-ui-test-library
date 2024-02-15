@@ -81,6 +81,15 @@ public class CreateCloseUtils {
 
         newProjectDialogWizard.finish();
 
+        waitAfterOpeningProject(remoteRobot);
+    }
+
+    /**
+     * Wait after opening project for a complete import, also maximizing window
+     *
+     * @param remoteRobot reference to the RemoteRobot instance
+     */
+    public static void waitAfterOpeningProject(RemoteRobot remoteRobot) {
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilProjectImportIsComplete();
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
@@ -111,6 +120,19 @@ public class CreateCloseUtils {
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
         mainIdeWindow.closeProject();
         remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+    }
+
+    /**
+     * Open existing project from the Welcome Dialog
+     *
+     * @param remoteRobot reference to the RemoteRobot instance
+     * @param projectName name of existing project
+     */
+    public static void openProjectFromWelcomeDialog(RemoteRobot remoteRobot, String projectName) {
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame.openProject(projectName);
+
+        waitAfterOpeningProject(remoteRobot);
     }
 
     /**

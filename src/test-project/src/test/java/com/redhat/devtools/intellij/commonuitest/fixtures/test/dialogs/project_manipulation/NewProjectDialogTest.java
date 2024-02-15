@@ -346,14 +346,16 @@ public class NewProjectDialogTest extends LibraryTestBase {
     public void selectNewProjectTypeTest() {
         newProjectFirstPage.selectNewProjectType("Empty Project");
         boolean isEmptyProjectPageDisplayed;
-        if (ideaVersionInt < 20213) {                   // IJ 2021.2 and older
-            isEmptyProjectPageDisplayed = !newProjectFirstPage.findAll(JListFixture.class, byXpath(XPathDefinitions.EMPTY_PROJECT)).isEmpty();
-        } else if (ideaVersionInt < 20221) {            // IJ 2021.3
-            isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("Simple project with one module");
-        } else if (ideaVersionInt < 20231) {            // IJ 2022.1-2022.3
-            isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("A basic project that allows working with separate files and compiling Java and Kotlin classes.");
-        } else {                                        // IJ 2023.1 and newer
+        if (ideaVersionInt >= 20231) {          // For IntelliJ IDEA version 2023.1 and newer
             isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("A basic project with free structure.");
+        } else if (ideaVersionInt >= 20221) {   // For IntelliJ IDEA version 2022.1 and newer
+            isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("A basic project that allows working with separate files and compiling Java and Kotlin classes.");
+        } else if (ideaVersionInt == 20213) {   // For IntelliJ IDEA version 2021.3
+            isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("Simple project with one module");
+        } else {                                // For IntelliJ IDEA version 2021.2 and older
+            isEmptyProjectPageDisplayed = !newProjectFirstPage.findAll(
+                    JListFixture.class, byXpath(XPathDefinitions.EMPTY_PROJECT)
+            ).isEmpty();
         }
         assertTrue(isEmptyProjectPageDisplayed, "The 'Empty Project' page should be displayed but is not.");
 
