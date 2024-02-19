@@ -79,7 +79,7 @@ public class UITestRunner {
             String fileExtension = OS_NAME.contains("windows") ? ".bat" : "";
             ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port);
 
-            boolean isDebugOn = Boolean.parseBoolean(System.getProperty("intellij_debug", "false"));
+            boolean isDebugOn = Boolean.parseBoolean(System.getProperty("intellij_debug", "false")); // For more info on intellij_debug please check README
             if (isDebugOn) {
                 redirectProcessOutputs(pb);
             }
