@@ -316,10 +316,10 @@ public class UITestRunner {
      * @param pb    Process builder of running subprocess
      */
     private static void redirectProcessOutputs(ProcessBuilder pb) {
-        String outDir = System.getProperty("user.home") + File.separator + "IntelliJ_debug";
+        String outDir = System.getProperty("user.dir") + File.separator + "intellij_debug";
 
         if (!new File(outDir).mkdirs()) {
-            LOGGER.log(Level.SEVERE, "Cannot create user.home/debug directory");
+            LOGGER.log(Level.SEVERE, "Cannot create user.dir/intellij_debug directory");
         }
 
         File stdoutLog = new File(outDir + File.separator + "stdout.log");
