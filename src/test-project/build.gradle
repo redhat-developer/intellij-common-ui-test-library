@@ -31,5 +31,6 @@ patchPluginXml {
 }
 
 test {
+    systemProperties['intellij_debug'] = 'true'
     useJUnitPlatform()
 }

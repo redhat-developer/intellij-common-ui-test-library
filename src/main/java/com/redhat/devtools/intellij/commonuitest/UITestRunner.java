@@ -78,7 +78,11 @@ public class UITestRunner {
 
             String fileExtension = OS_NAME.contains("windows") ? ".bat" : "";
             ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port);
-            redirectProcessOutputs(pb);
+
+            boolean isDebugOn = Boolean.parseBoolean(System.getProperty("intellij_debug", "false")); // For more info on intellij_debug please check README
+            if (isDebugOn) {
+                redirectProcessOutputs(pb);
+            }
 
             try {
                 ideProcess = pb.start();
@@ -316,10 +320,10 @@ public class UITestRunner {
      * @param pb    Process builder of running subprocess
      */
     private static void redirectProcessOutputs(ProcessBuilder pb) {
-        String outDir = System.getProperty("user.home") + File.separator + "IntelliJ_debug";
+        String outDir = System.getProperty("user.dir") + File.separator + "intellij_debug";
 
         if (!new File(outDir).mkdirs()) {
-            LOGGER.log(Level.SEVERE, "Cannot create user.home/debug directory");
+            LOGGER.log(Level.SEVERE, "Cannot create user.dir/intellij_debug directory");
         }
 
         File stdoutLog = new File(outDir + File.separator + "stdout.log");

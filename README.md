@@ -81,6 +81,16 @@ systemProperties['testProjectLocation'] = project.hasProperty('testProjectLocati
 ./gradlew integrationTest -PtestProjectLocation=${env.HOME}/IdeaProjects/intellij-ui-test-projects/
 ```
 
+### Remote-robot IntelliJ instance logs
+If developers want to view the remote-robot intellij instance logs, they can specify system property intellij_debug to save these logs to files, which will be stored inside $user.dir/intellij_debug folder.
+```
+task integrationTest(type: Test) {
+    ...
+    systemProperties['intellij_debug'] = 'true'
+    ...
+}
+```
+
 ## Start and quit IntelliJ IDEA
 Use the following code to start IntelliJ before running the first UI test. The runIde() method not only starts the IDE for UI tests, it also returns reference to the Remote-Robot instance which will be useful later to access UI elements such as buttons, inputs etc.
 ```
