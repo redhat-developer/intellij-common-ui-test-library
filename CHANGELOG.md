@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.3.0 (Feb 15, 2024)
+ - Add support for IntelliJ CE 2023.2
+ - Added custom test-project location
+ - Update the `Remote-Robot` to version 0.11.18
+ - Update Java to JDK 17
+ - Update Gradle to version 7.6
+ - Removed Redundancy in the ToolWindowsPane class
+ - Added method for reopening project
+ - Added possibility to redirect remote-robot logs to output files in user.dir/intelliJ_debug 
+
 ## 0.2.0 (Aug 4, 2022)
  - Add support for IntelliJ CE 2022.2
 
