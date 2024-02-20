@@ -89,7 +89,7 @@ nexusPublishing {
             stagingProfileId = '2161b7b8da0080'
             username = nexusUser
             password = nexusPassword
-            nexusUrl.set(uri('https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/'))
+            nexusUrl.set(uri('https://repository.jboss.org/nexus/service/local/staging/deploy/maven2'))
             snapshotRepositoryUrl.set(uri('https://repository.jboss.org/nexus/content/repositories/snapshots/'))
         }
     }
