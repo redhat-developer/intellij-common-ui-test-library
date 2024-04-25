@@ -81,6 +81,7 @@ public class XPathDefinitions {
     public static final String GET_SET_MODULE_NAME = "//div[@accessiblename='Module name:' and @accessiblename.key='label.project.wizard.new.project.module.name' and @class='JBTextField']";
     public static final String GET_SET_CONTENT_ROOT = "//div[@accessiblename='Content root:' and @accessiblename.key='label.project.wizard.new.project.content.root' and @class='ExtendableTextField']";
     public static final String GET_SET_MODULE_FILE_LOCATION = "//div[@accessiblename='Module file location:' and @accessiblename.key='label.project.wizard.new.project.module.file.location' and @class='ExtendableTextField']";
+    public static final String CREATE_NEW_PROJECT = "//div[@defaulticon='createNewProjectTab.svg']"; // works for 2024.1 and higher
 
     private XPathDefinitions() {
         throw new UITestException("Utility class with static methods.");

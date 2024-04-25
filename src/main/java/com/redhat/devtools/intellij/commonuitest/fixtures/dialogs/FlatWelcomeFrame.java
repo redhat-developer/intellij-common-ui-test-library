@@ -241,6 +241,9 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
         if (UtilsKt.hasAnyComponent(this, byXpath(XPathDefinitions.RECENT_PROJECT_PANEL_NEW))) {
             return button(byXpath(XPathDefinitions.jBOptionButton(label)), Duration.ofSeconds(2));
         }
+        if (ideaVersion >= 20241 && label.equals("New Project")) {
+            return button(byXpath(XPathDefinitions.CREATE_NEW_PROJECT), Duration.ofSeconds(2));
+        }
         return button(byXpath(XPathDefinitions.nonOpaquePanel(label)), Duration.ofSeconds(2));
     }
 
