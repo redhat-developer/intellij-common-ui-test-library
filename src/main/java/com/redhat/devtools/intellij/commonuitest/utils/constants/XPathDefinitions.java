@@ -25,7 +25,8 @@ public class XPathDefinitions {
     public static final String MAVEN_TOOL_WINDOW = "//div[@accessiblename='Maven Tool Window']";
     public static final String GRADLE_TOOL_WINDOW = "//div[@accessiblename='Gradle Tool Window']";
     public static final String LINUX_MAIN_MENU = "//div[@class='LinuxIdeMenuBar']";
-    public static final String WINDOWS_MAIN_MENU_2022_2_AND_NEWER = "//div[@class='IdeMenuBar']";
+    public static final String WINDOWS_MAIN_MENU_2024_1_AND_NEWER = "//div[@class='IdeJMenuBar']";
+    public static final String WINDOWS_MAIN_MENU_2022_2_TO_2023_2 = "//div[@class='IdeMenuBar']";
     public static final String WINDOWS_MAIN_MENU_2020_3_TO_2022_1 = "//div[@class='MenuFrameHeader']";
     public static final String WINDOWS_MAIN_MENU_2020_2_AND_OLDER = "//div[@class='CustomHeaderMenuBar']";
     public static final String IDE_STATUS_BAR = "//div[@class='IdeStatusBarImpl']";
