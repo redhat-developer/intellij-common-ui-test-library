@@ -49,6 +49,7 @@ public class XPathDefinitions {
     public static final String ARTIFACTS_COORDINATES_DIALOG_PANEL = "//div[@class='DialogPanel']/*";
     public static final String HEAVY_WEIGHT_WINDOW = "//div[@class='HeavyWeightWindow']";
     public static final String JDK_COMBOBOX = "//div[@class='JdkComboBox']";
+    public static final String JDK_COMBOBOX_PROJECT_WIZARD = "//div[@class='ProjectWizardJdkComboBox']"; // works for IntelliJ Idea 2024.1 and higher
     public static final String MY_DIALOG = "//div[@class='MyDialog']";
     public static final String TREE = "//div[@class='Tree']";
     public static final String TOOLTIP_TEXT_PROJECT = "//div[@tooltiptext='Project']";
@@ -78,10 +79,11 @@ public class XPathDefinitions {
     public static final String REMOVE_PROJECT_BUTTON = "//div[contains(@text.key, 'button.remove')]";
     public static final String SET_LANGUAGE = "//div[@class='SegmentedButtonComponent'][.//div[contains(@action.key, 'language.groovy')]]";
     public static final String SET_BUILD_SYSTEM = "//div[@class='SegmentedButtonComponent'][.//div[@action.key='buildsystem.type.intellij']]";
+    public static final String SET_BUILD_SYSTEM_2024_1_AND_NEWER = "//div[@accessiblename='Build system:' and @class='SegmentedButtonComponent']";  // works for IntelliJ Idea 2024.1 and higher
     public static final String GET_SET_MODULE_NAME = "//div[@accessiblename='Module name:' and @accessiblename.key='label.project.wizard.new.project.module.name' and @class='JBTextField']";
     public static final String GET_SET_CONTENT_ROOT = "//div[@accessiblename='Content root:' and @accessiblename.key='label.project.wizard.new.project.content.root' and @class='ExtendableTextField']";
     public static final String GET_SET_MODULE_FILE_LOCATION = "//div[@accessiblename='Module file location:' and @accessiblename.key='label.project.wizard.new.project.module.file.location' and @class='ExtendableTextField']";
-    public static final String CREATE_NEW_PROJECT = "//div[@defaulticon='createNewProjectTab.svg']"; // works for 2024.1 and higher
+    public static final String CREATE_NEW_PROJECT = "//div[@defaulticon='createNewProjectTab.svg']"; // works for IntelliJ Idea 2024.1 and higher
 
     private XPathDefinitions() {
         throw new UITestException("Utility class with static methods.");

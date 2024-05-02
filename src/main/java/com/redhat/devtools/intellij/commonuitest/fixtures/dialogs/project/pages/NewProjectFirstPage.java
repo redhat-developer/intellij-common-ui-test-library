@@ -45,10 +45,12 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
     private final RemoteRobot remoteRobot;
     private int projectSdkItemsCount = -1;
+    private final int ideaVersion;
 
     public NewProjectFirstPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
         this.remoteRobot = remoteRobot;
+        this.ideaVersion = UITestRunner.getIdeaVersion().toInt();
     }
 
     /**
@@ -76,7 +78,12 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
      * @param language project language
      */
     public void setLanguage(String language) {
-        findAll(JLabelFixture.class, byXpath(XPathDefinitions.SET_LANGUAGE)).get(0).findText(language).click();
+        if (ideaVersion >= 20241) {
+            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(XPathDefinitions.JBLIST));
+            jListFixture.clickItem(language, false);
+        } else {
+            findAll(JLabelFixture.class, byXpath(XPathDefinitions.SET_LANGUAGE)).get(0).findText(language).click();
+        }
     }
 
     /**
@@ -85,7 +92,23 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
      * @param buildSystem build system type
      */
     public void setBuildSystem(String buildSystem) {
-        find(JLabelFixture.class, byXpath(XPathDefinitions.SET_BUILD_SYSTEM)).findText(buildSystem).click();
+        if (ideaVersion >= 20241) {
+            find(JLabelFixture.class, byXpath(XPathDefinitions.SET_BUILD_SYSTEM_2024_1_AND_NEWER)).findText(buildSystem).click();
+        } else {
+            find(JLabelFixture.class, byXpath(XPathDefinitions.SET_BUILD_SYSTEM)).findText(buildSystem).click();
+        }
+    }
+
+    /**
+     * Get the project SDK JdkComboBox
+     *
+     * @return JdkComboBox fixture
+     */
+    public ComboBoxFixture getProjectJdkComboBox() {
+        if (ideaVersion >= 20241) {
+            return comboBox(byXpath(XPathDefinitions.JDK_COMBOBOX_PROJECT_WIZARD), Duration.ofSeconds(10));
+        }
+        return comboBox(byXpath(XPathDefinitions.JDK_COMBOBOX), Duration.ofSeconds(10));
     }
 
     /**
@@ -95,7 +118,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
      */
     public void setProjectSdkIfAvailable(String targetSdkName) {
         step("Select the '" + targetSdkName + "' as new project SDK", () -> {
-            ComboBoxFixture projectJdkComboBox = comboBox(byXpath(XPathDefinitions.JDK_COMBOBOX), Duration.ofSeconds(10));
+            ComboBoxFixture projectJdkComboBox = getProjectJdkComboBox();
             String currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
             if (currentlySelectedProjectSdk.contains(targetSdkName)) {
                 return;
