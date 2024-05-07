@@ -1,6 +1,10 @@
 # Change Log
 
-## 0.3.0 (Feb 15, 2024)
+## 0.4.0 (May 7, 2024)
+- Add support for IntelliJ 2024.1
+- Update the `Remote-Robot` to version 0.11.22
+
+- ## 0.3.0 (Feb 15, 2024)
  - Add support for IntelliJ CE 2023.2
  - Added custom test-project location
  - Update the `Remote-Robot` to version 0.11.18
