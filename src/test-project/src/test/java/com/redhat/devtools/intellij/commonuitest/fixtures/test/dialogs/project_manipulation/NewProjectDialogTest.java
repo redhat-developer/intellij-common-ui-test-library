@@ -334,7 +334,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
     @Test
     public void setProjectSdkIfAvailableTest() {
         newProjectFirstPage.setProjectSdkIfAvailable("11");
-        ComboBoxFixture projectJdkComboBox = newProjectFirstPage.find(ComboBoxFixture.class, byXpath(XPathDefinitions.JDK_COMBOBOX), Duration.ofSeconds(10));
+        ComboBoxFixture projectJdkComboBox = newProjectFirstPage.getProjectJdkComboBox();
         String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
         assertTrue(currentlySelectedProjectSdk.contains("11"), "Selected project SDK should be Java 11 but is '" + currentlySelectedProjectSdk + "'");
         newProjectFirstPage.setProjectSdkIfAvailable("17");
