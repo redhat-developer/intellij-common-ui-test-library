@@ -91,7 +91,7 @@ jobs:
         run: |
           cd src/test-project
           chmod +x gradlew
-          ./gradlew clean test --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.buildtoolpane.ProjectExplorerTest
+          ./gradlew clean test --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.ProjectExplorerTest
       - uses: actions/upload-artifact@v2
         with:
           name: ${{ runner.os }}-test-reports
