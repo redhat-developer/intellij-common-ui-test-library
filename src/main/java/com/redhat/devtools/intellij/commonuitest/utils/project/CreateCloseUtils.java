@@ -85,7 +85,7 @@ public class CreateCloseUtils {
 
         // Refresh IDE window (sometimes the IDE window is not properly loaded)
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
-        mainIdeWindow.click();
+        mainIdeWindow.doubleClick();
     }
 
     /**
