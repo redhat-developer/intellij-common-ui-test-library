@@ -58,7 +58,7 @@ jobs:
       run: |
         cd src/test-project
         chmod +x gradlew
-        ./gradlew clean test --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.buildtoolspane.* com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.openclose.* com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.buildtoolspane.BuildVIewTest com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.buildtoolspane.ToolWindowsPaneGradleTest com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.buildtoolspane.ToolWIndowsPaneMavenTest
+        ./gradlew clean test --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.buildtoolspane.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.openclose.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.buildtoolspane.BuildVIewTest --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.buildtoolspane.ToolWindowsPaneGradleTest --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.buildtoolspane.ToolWIndowsPaneMavenTest
     - uses: actions/upload-artifact@v2
       with:
         name: ${{ runner.os }}-test-reports
