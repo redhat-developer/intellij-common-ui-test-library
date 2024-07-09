@@ -77,7 +77,9 @@ public class UITestRunner {
             }
 
             String fileExtension = OS_NAME.contains("windows") ? ".bat" : "";
-            ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port);
+            String[] platformTypeVersion = generatePlatformTypeVersion();
+
+            ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port, "-PplatformType=" + platformTypeVersion[0], "-PplatformVersion=" + platformTypeVersion[1]);
 
             boolean isDebugOn = Boolean.parseBoolean(System.getProperty("intellij_debug", "false")); // For more info on intellij_debug please check README
             if (isDebugOn) {
@@ -330,5 +332,18 @@ public class UITestRunner {
         File stderrLog = new File(outDir + File.separator + "stderr.log");
         pb.redirectOutput(ProcessBuilder.Redirect.to(stdoutLog));
         pb.redirectError(ProcessBuilder.Redirect.to(stderrLog));
+    }
+
+    /**
+     * Generate platformType and platformVersion based on ideaVersion
+     *
+     * @return platformTypeVersion string array
+     */
+    private static String[] generatePlatformTypeVersion() {
+        String[] platformTypeVersion = ideaVersion.toString().split("-", 2);
+        if (2 > platformTypeVersion.length){
+            throw new UITestException("ideaVersion is not recognized.");
+        }
+        return platformTypeVersion;
     }
 }
