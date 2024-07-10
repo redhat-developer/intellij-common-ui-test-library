@@ -11,6 +11,7 @@
 package com.redhat.devtools.intellij.commonuitest.utils.project;
 
 import com.intellij.remoterobot.RemoteRobot;
+import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
@@ -22,10 +23,13 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.NewProjectFirstPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 
 import java.io.File;
 import java.time.Duration;
 import java.util.Optional;
+
+import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 
 /**
  * Project creation utilities
@@ -67,6 +71,8 @@ public class CreateCloseUtils {
         newProjectFirstPage.setProjectSdkIfAvailable("17");
 
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
+
             newProjectFirstPage.setProjectName(projectName);
             newProjectFirstPage.setProjectLocation(PROJECT_LOCATION);
         } else {
