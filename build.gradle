@@ -19,8 +19,8 @@ repositories {
 }
 
 dependencies {
-    compile 'org.jetbrains.kotlin:kotlin-stdlib:1.6.0'
-    compile 'org.jetbrains.kotlin:kotlin-reflect:1.6.0'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.0'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.6.0'
     api 'commons-io:commons-io:2.4'
     api 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     api 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
