@@ -35,6 +35,8 @@ jobs:
       uses: actions/setup-java@v4
       with:
         java-version: 17
+        distribution: 'temurin'
+        cache: 'gradle'
     - name: Run integration tests
       run: |
         export DISPLAY=:99.0
@@ -70,6 +72,8 @@ jobs:
       uses: actions/setup-java@v4
       with:
         java-version: 17
+        distribution: 'temurin'
+        cache: 'gradle'
     - name: Run integration tests
       run: |
         cd src/test-project
@@ -103,6 +107,8 @@ jobs:
       uses: actions/setup-java@v4
       with:
         java-version: 17
+        distribution: 'temurin'
+        cache: 'gradle'
     - name: Run integration tests
       run: |
         cd src\test-project

@@ -17,6 +17,8 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 17
+          distribution: 'temurin'
+          cache: 'gradle'
       - name: Download artifacts
         uses: actions/github-script@v3.1.0
         with:
