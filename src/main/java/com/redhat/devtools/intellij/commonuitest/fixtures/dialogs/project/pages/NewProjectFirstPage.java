@@ -72,6 +72,10 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
         find(JTextFieldFixture.class, byXpath(XPathDefinitions.JBTEXT_FIELD)).setText(projectName);
     }
 
+    public JTextFieldFixture getProjectNameTextField() {
+        return find(JTextFieldFixture.class, byXpath(XPathDefinitions.JBTEXT_FIELD), Duration.ofSeconds(10));
+    }
+
     /**
      * Set the project language
      *
