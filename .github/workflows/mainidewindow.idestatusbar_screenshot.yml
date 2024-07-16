@@ -21,7 +21,7 @@ jobs:
           echo ${{ github.event.number }} > ./prInfo/PR
           echo ${{ github.base_ref }} > ./prInfo/base_ref
           echo ${{ github.head_ref }} > ./prInfo/head_ref
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: prInfo
           path: prInfo/
@@ -44,19 +44,19 @@ jobs:
         cd src/test-project
         chmod +x gradlew
         ./gradlew clean test --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.idestatusbar.*
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: ${{ runner.os }}-test-reports
         path: src/test-project/build/reports/tests/test
       if: always()
     - name: Archiving screenshots
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with: 
         name: ${{ runner.os }}-screenshots
         path: src/test-project/build/screenshots/*
       if: always()
     - name: Archiving StepLogger logs
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with: 
         name: ${{ runner.os }}-steplogger-logs
         path: src/test-project/build/test-results/*
@@ -79,19 +79,19 @@ jobs:
         cd src/test-project
         chmod +x gradlew
         ./gradlew clean test --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.mainidewindow.idestatusbar.*
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: ${{ runner.os }}-test-reports
         path: src/test-project/build/reports/tests/test
       if: always()
     - name: Archiving screenshots
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with: 
         name: ${{ runner.os }}-screenshots
         path: src/test-project/build/screenshots/*
       if: always()
     - name: Archiving StepLogger logs
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with: 
         name: ${{ runner.os }}-steplogger-logs
         path: src/test-project/build/test-results/*
@@ -115,19 +115,19 @@ jobs:
         chmod +x gradlew.bat
         .\gradlew.bat clean test --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.mainidewindow.idestatusbar.*
       shell: powershell
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v4
       with:
         name: ${{ runner.os }}-test-reports
         path: src\test-project\build\reports\tests\test
       if: always()
     - name: Archiving screenshots
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with: 
         name: ${{ runner.os }}-screenshots
         path: src\test-project\build\screenshots\*
       if: always()
     - name: Archiving StepLogger logs
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with: 
         name: ${{ runner.os }}-steplogger-logs
         path: src\test-project\build\test-results\*
