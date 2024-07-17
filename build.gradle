@@ -25,7 +25,7 @@ dependencies {
     api 'org.junit.jupiter:junit-jupiter-api:5.10.3'
     api 'org.junit.jupiter:junit-jupiter-engine:5.10.3'
     api "com.intellij.remoterobot:remote-robot:0.11.23"
-    api "com.intellij.remoterobot:remote-fixtures:0.11.22"
+    api "com.intellij.remoterobot:remote-fixtures:0.11.23"
 }
 
 java {
