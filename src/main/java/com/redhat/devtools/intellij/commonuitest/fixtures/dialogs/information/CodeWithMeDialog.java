@@ -48,7 +48,7 @@ public class CodeWithMeDialog extends CommonContainerFixture {
         try {
             codeWithMeDialog = remoteRobot.find(CodeWithMeDialog.class, Duration.ofSeconds(10));
         } catch (WaitForConditionTimeoutException e) {
-            LOGGER.log(Level.INFO, e.getMessage(), e);
+            LOGGER.log(Level.INFO, "No 'Code With Me' popup found to close.");
             return;
         }
         codeWithMeDialog.findText(ButtonLabels.GOT_IT_LABEL).click();
