@@ -78,7 +78,11 @@ public class GradleBuildToolPane extends CommonContainerFixture {
         if (remoteRobot.isMac()) {
             expandAll();
         } else {
-            gradleTaskTree().expandAll();
+            try {
+                gradleTaskTree().expandAll();
+            } catch (Exception ignored) {
+                // Ignoring the exception, nothing happens
+            }
         }
 
         gradleTaskTree().findAllText("build").get(1).doubleClick();

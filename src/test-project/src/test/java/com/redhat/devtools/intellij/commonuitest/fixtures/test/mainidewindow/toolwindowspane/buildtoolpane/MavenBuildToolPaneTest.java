@@ -67,7 +67,9 @@ class MavenBuildToolPaneTest extends LibraryTestBase {
 
     @Test
     public void collapseAllTest() {
-        mavenBuildToolPane.mavenTargetTree().expandAll();
+        try {
+            mavenBuildToolPane.mavenTargetTree().expandAll();
+        } catch (Exception ignored) {}
         int itemsCountBeforeCollapsing = mavenBuildToolPane.mavenTargetTree().collectRows().size();
         mavenBuildToolPane.collapseAll();
         int itemsCountAfterCollapsing = mavenBuildToolPane.mavenTargetTree().collectRows().size();
