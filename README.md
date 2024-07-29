@@ -65,7 +65,23 @@ runIdeForUiTests {
     systemProperty "robot-server.port", System.getProperty("robot-server.port")
 }
 ```
-### STEP #5: Test project location
+## Additional Features
+
+### Creating a Project
+
+**Creating an Empty Project:**
+Use the following method to create an empty project with a specified name:
+
+```java
+CreateCloseUtils.createEmptyProject(remoteRobot, "empty-test-project");
+```
+**Creating a New Project with a Specific Type:**
+You can also create a new project with a specific type, such as Java, Maven, or Gradle:
+```java
+CreateCloseUtils.createNewProject(remoteRobot, "new-test-project", CreateCloseUtils.NewProjectType.PLAIN_JAVA);
+```
+### Test project location
+Default test project location is `/home/user/IdeaProjects/intellij-ui-test-projects/`.
 Developers can specify the location where the test project will be created by providing a system property called `testProjectLocation`. For example:
 ```
 task integrationTest(type: Test) {

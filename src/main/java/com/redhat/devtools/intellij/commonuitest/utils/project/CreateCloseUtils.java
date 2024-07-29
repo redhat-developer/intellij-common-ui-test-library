@@ -91,6 +91,25 @@ public class CreateCloseUtils {
     }
 
     /**
+     * Create new empty type project with given project name
+     *
+     * @param remoteRobot    reference to the RemoteRobot instance
+     * @param projectName    name of new project
+     */
+    public static void createEmptyProject(RemoteRobot remoteRobot, String projectName) {
+        NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
+        NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
+
+        newProjectFirstPage.selectNewProjectType(NewProjectType.EMPTY_PROJECT.toString());
+
+        newProjectFirstPage.setProjectName(projectName);
+        newProjectFirstPage.setProjectLocation(PROJECT_LOCATION);
+
+        newProjectDialogWizard.finish();
+        waitAfterOpeningProject(remoteRobot);
+    }
+
+    /**
      * Wait after opening project for a complete import, also maximizing window
      *
      * @param remoteRobot reference to the RemoteRobot instance
@@ -166,7 +185,8 @@ public class CreateCloseUtils {
     public enum NewProjectType {
         PLAIN_JAVA("Java"),
         MAVEN("Maven"),
-        GRADLE("Gradle");
+        GRADLE("Gradle"),
+        EMPTY_PROJECT("Empty Project");
 
         private final String projectType;
 

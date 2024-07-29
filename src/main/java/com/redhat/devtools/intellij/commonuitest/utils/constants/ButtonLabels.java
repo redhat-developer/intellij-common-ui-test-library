@@ -36,6 +36,7 @@ public class ButtonLabels {
     public static final String LEARN_INTELLIJ_IDEA_LABEL = "Learn IntelliJ IDEA";
     public static final String LEARN_LABEL = "Learn";
     public static final String REMOVE_FROM_LIST_LABEL = "Remove From List";
+    public static final String NEW_PROJECT = "New Project";
 
     private ButtonLabels() {
         throw new UITestException("Utility class with static methods.");
