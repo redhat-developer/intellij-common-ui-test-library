@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.4.1 (Jul 30, 2024)
+- Add platformType and platformVersion to ProcessBuilder parameters [(#239)](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/239)
+- Fix Project creation failing on GHA [(#260)](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/260)
+- Add create EMPTY PROJECT methods [(#275)](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/275)
+- Update dependencies
+
 ## 0.4.0 (May 7, 2024)
 - Add support for IntelliJ 2024.1
 - Update the `Remote-Robot` to version 0.11.22
