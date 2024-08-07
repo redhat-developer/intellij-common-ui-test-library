@@ -1,0 +1,127 @@
+# This workflow will build a Java project with Gradle
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle - dialogs ULTIMATE
+
+on:
+  workflow_run:
+    workflows: [ "Sonar" ]
+    types:
+      - completed
+
+jobs: 
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: 17
+        distribution: 'temurin'
+        cache: 'gradle'
+    - name: Run integration tests
+      env:
+        GPG_PASSPHRASE: ${{ secrets.IDEA_KEY_PASSPHRASE }}
+      run: |
+        echo -n "$GPG_PASSPHRASE" | gpg --decrypt --passphrase-fd 0 --pinentry-mode loopback --output src/test-project/idea_license_token/idea.key src/test-project/idea_license_token/idea.key.gpg
+        export DISPLAY=:99.0
+        Xvfb -ac :99 -screen 0 1920x1080x24 &
+        cd src/test-project
+        chmod +x gradlew
+        ./gradlew clean integrationUITestUltimate --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.FlatWelcomeFrameTest
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{ runner.os }}-test-reports
+        path: src/test-project/build/reports/tests/test
+      if: always()
+    - name: Archiving screenshots
+      uses: actions/upload-artifact@v4
+      with: 
+        name: ${{ runner.os }}-screenshots
+        path: src/test-project/build/screenshots/*
+      if: always()
+    - name: Archiving StepLogger logs
+      uses: actions/upload-artifact@v4
+      with: 
+        name: ${{ runner.os }}-steplogger-logs
+        path: src/test-project/build/test-results/*
+      if: always()
+
+
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: 17
+        distribution: 'temurin'
+        cache: 'gradle'
+    - name: Run integration tests
+      env:
+        GPG_PASSPHRASE: ${{ secrets.IDEA_KEY_PASSPHRASE }}
+      run: |
+        echo -n "$GPG_PASSPHRASE" | gpg --decrypt --passphrase-fd 0 --pinentry-mode loopback --output src/test-project/idea_license_token/idea.key src/test-project/idea_license_token/idea.key.gpg
+        cd src/test-project
+        chmod +x gradlew
+        ./gradlew clean integrationUITestUltimate --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.FlatWelcomeFrameTest
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{ runner.os }}-test-reports
+        path: src/test-project/build/reports/tests/test
+      if: always()
+    - name: Archiving screenshots
+      uses: actions/upload-artifact@v4
+      with: 
+        name: ${{ runner.os }}-screenshots
+        path: src/test-project/build/screenshots/*
+      if: always()
+    - name: Archiving StepLogger logs
+      uses: actions/upload-artifact@v4
+      with: 
+        name: ${{ runner.os }}-steplogger-logs
+        path: src/test-project/build/test-results/*
+      if: always()
+
+
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: 17
+        distribution: 'temurin'
+        cache: 'gradle'
+    - name: Run integration tests
+      env:
+        GPG_PASSPHRASE: ${{ secrets.IDEA_KEY_PASSPHRASE }}
+      run: |
+        gpg --decrypt --passphrase "$env:GPG_PASSPHRASE" --pinentry-mode loopback --output src\test-project\idea_license_token\idea.key src\test-project\idea_license_token\idea.key.gpg
+        cd src\test-project
+        chmod +x gradlew.bat
+        .\gradlew.bat clean integrationUITestUltimate --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.FlatWelcomeFrameTest
+      shell: powershell
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{ runner.os }}-test-reports
+        path: src\test-project\build\reports\tests\test
+      if: always()
+    - name: Archiving screenshots
+      uses: actions/upload-artifact@v4
+      with: 
+        name: ${{ runner.os }}-screenshots
+        path: src\test-project\build\screenshots\*
+      if: always()
+    - name: Archiving StepLogger logs
+      uses: actions/upload-artifact@v4
+      with: 
+        name: ${{ runner.os }}-steplogger-logs
+        path: src\test-project\build\test-results\*
+      if: always()
