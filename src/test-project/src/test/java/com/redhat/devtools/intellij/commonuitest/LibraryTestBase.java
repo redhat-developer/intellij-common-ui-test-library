@@ -21,6 +21,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.Duration;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -31,15 +32,27 @@ import java.util.logging.Logger;
 @ExtendWith(ScreenshotAfterTestFailExtension.class)
 public class LibraryTestBase {
     protected static final Logger LOGGER = Logger.getLogger(LibraryTestBase.class.getName());
-    private static final IntelliJVersion ideaVersion = IntelliJVersion.COMMUNITY_V_2024_1;
+    private static final IntelliJVersion communityIdeaVersion = IntelliJVersion.COMMUNITY_V_2024_1;
+    private static final IntelliJVersion ultimateIdeaVersion = IntelliJVersion.ULTIMATE_V_2024_1;
     protected static RemoteRobot remoteRobot;
-    protected static int ideaVersionInt = ideaVersion.toInt();
+    protected static int ideaVersionInt;
     private static boolean intelliJHasStarted = false;
+    private static final int port = 8580;
 
     @BeforeAll
     protected static void startIntelliJ() {
         if (!intelliJHasStarted) {
-            remoteRobot = UITestRunner.runIde(ideaVersion, 8580);
+            String taskName = System.getProperty("task.name");
+            if (taskName != null && taskName.equalsIgnoreCase("integrationUITestUltimate")) {
+                // Run UI tests for ultimate version
+                ideaVersionInt = ultimateIdeaVersion.toInt();
+                remoteRobot = UITestRunner.runIde(ultimateIdeaVersion, port);
+            } else {
+                // Run UI tests for community version
+                ideaVersionInt = communityIdeaVersion.toInt();
+                remoteRobot = UITestRunner.runIde(communityIdeaVersion, port);
+            }
+
             intelliJHasStarted = true;
             Runtime.getRuntime().addShutdownHook(new CloseIntelliJBeforeQuit());
 
