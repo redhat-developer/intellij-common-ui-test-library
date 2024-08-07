@@ -30,6 +30,7 @@ import java.time.Duration;
 import java.util.Optional;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
+import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 
 /**
  * Project creation utilities
@@ -99,6 +100,8 @@ public class CreateCloseUtils {
     public static void createEmptyProject(RemoteRobot remoteRobot, String projectName) {
         NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
+
+        waitForDialogsToDisappear(remoteRobot, Duration.ofSeconds(20));
 
         newProjectFirstPage.selectNewProjectType(NewProjectType.EMPTY_PROJECT.toString());
 
@@ -177,6 +180,29 @@ public class CreateCloseUtils {
             default:
                 throw new UITestException("Unsupported project type.");
         }
+    }
+
+    /**
+     * Waits for any dialog to disappear within a given timeout.
+     *
+     * @param remoteRobot the RemoteRobot instance
+     * @param timeout the maximum duration to wait for the dialog to disappear
+     */
+    private static void waitForDialogsToDisappear(RemoteRobot remoteRobot, Duration timeout) {
+        waitFor(
+                timeout,
+                Duration.ofSeconds(2),
+                "Waiting for dialogs to reduce to one",
+                () -> "Multiple dialogs did not disappear within the timeout",
+                () -> {
+                    try {
+                        // Attempt to find all dialogs; if more than one exists, return false
+                        return remoteRobot.findAll(ComponentFixture.class, byXpath(XPathDefinitions.MY_DIALOG)).size() <= 1;
+                    } catch (Exception e) {
+                        return true; // If finding dialogs throws an exception, it's safe to proceed
+                    }
+                }
+        );
     }
 
     /**
