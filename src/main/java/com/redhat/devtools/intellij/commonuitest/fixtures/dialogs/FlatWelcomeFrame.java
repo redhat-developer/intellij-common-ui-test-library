@@ -124,12 +124,12 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             ideErrorsIcon().click();
             find(IdeFatalErrorsDialog.class, Duration.ofSeconds(10)).clearAll();
         } catch (WaitForConditionTimeoutException e) {
-            LOGGER.log(Level.INFO, e.getMessage(), e);
+            LOGGER.log(Level.INFO, "No fatal errors dialog found to clear.");
 
             try {
                 find(IdeFatalErrorsDialog.class, Duration.ofSeconds(10)).clearAll();
             } catch (Exception e2) {
-                LOGGER.log(Level.INFO, e.getMessage(), e2);
+                LOGGER.log(Level.INFO, "Second attempt to clear fatal errors dialog also failed.");
             }
         }
     }
