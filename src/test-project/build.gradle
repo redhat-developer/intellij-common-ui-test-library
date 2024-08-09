@@ -35,6 +35,23 @@ test {
     useJUnitPlatform()
 }
 
+tasks.register('integrationUITestUltimate', Test) {
+    dependsOn copyKey
+    systemProperties['task.name'] = 'integrationUITestUltimate'
+    systemProperties['intellij_debug'] = 'true'
+    useJUnitPlatform()
+}
+
+tasks.register('integrationUITest', Test) {
+    systemProperties['intellij_debug'] = 'true'
+    useJUnitPlatform()
+}
+
+tasks.register('copyKey', Copy) {
+    from "idea_license_token/idea.key"
+    into "build/idea-sandbox/config-uiTest"
+}
+
 runIdeForUiTests {
     systemProperty "ide.mac.message.dialogs.as.sheets", "false"
     systemProperty "jb.privacy.policy.text", "<!--999.999-->"

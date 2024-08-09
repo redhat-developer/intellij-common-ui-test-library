@@ -52,12 +52,20 @@ $ ./gradlew publishToMavenLocal
 
 ## Running Tests
 
-To exeute the JUnit 5 tests run the following command:
+To execute the JUnit 5 tests with **Community** version of IntelliJ run the following commands:
 
 ```
 $ cd ./src/test-project
-$ ./gradlew clean test
+$ ./gradlew clean integrationUITest
 ```
+
+To execute the JUnit 5 tests with **Ultimate** version of IntelliJ:
+1. Decrypt **idea.key.gpg** file inside `./src/test-project/idea_license_key`
+2. Run the following commands:
+    ``` 
+   $ cd ./src/test-project
+   $ ./gradlew clean integrationUITestUltimate
+   ```
 
 
 ## Reporting Issues

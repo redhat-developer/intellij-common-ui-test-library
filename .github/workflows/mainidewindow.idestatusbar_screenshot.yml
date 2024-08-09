@@ -43,7 +43,7 @@ jobs:
         Xvfb -ac :99 -screen 0 1920x1080x24 &
         cd src/test-project
         chmod +x gradlew
-        ./gradlew clean test --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.idestatusbar.*
+        ./gradlew clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.idestatusbar.*
     - uses: actions/upload-artifact@v4
       with:
         name: ${{ runner.os }}-test-reports
@@ -78,7 +78,7 @@ jobs:
       run: |
         cd src/test-project
         chmod +x gradlew
-        ./gradlew clean test --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.mainidewindow.idestatusbar.*
+        ./gradlew clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.mainidewindow.idestatusbar.*
     - uses: actions/upload-artifact@v4
       with:
         name: ${{ runner.os }}-test-reports
@@ -113,7 +113,7 @@ jobs:
       run: |
         cd src\test-project
         chmod +x gradlew.bat
-        .\gradlew.bat clean test --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.mainidewindow.idestatusbar.*
+        .\gradlew.bat clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.mainidewindow.idestatusbar.*
       shell: powershell
     - uses: actions/upload-artifact@v4
       with:
