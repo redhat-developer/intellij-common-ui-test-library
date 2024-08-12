@@ -20,7 +20,7 @@ repositories {
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.0.0'
-    implementation 'org.jetbrains.kotlin:kotlin-reflect:2.0.0'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect:2.0.10'
     api 'commons-io:commons-io:2.16.1'
     api 'org.junit.jupiter:junit-jupiter-api:5.10.3'
     api 'org.junit.jupiter:junit-jupiter-engine:5.10.3'
