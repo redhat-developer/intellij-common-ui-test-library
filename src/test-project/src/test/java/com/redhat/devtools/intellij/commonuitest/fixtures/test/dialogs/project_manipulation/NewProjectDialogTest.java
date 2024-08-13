@@ -82,7 +82,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         } else {
             try {
                 // tests ending with opened New Project Dialog needs to close the dialog
-                newProjectDialogWizard.cancel();
+                remoteRobot.find(NewProjectDialogWizard.class).cancel();
             } catch (WaitForConditionTimeoutException e) {
                 // tests ending with opened Flat Welcome Frame does not need any assistance
             }
@@ -359,11 +359,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         }
         assertTrue(isEmptyProjectPageDisplayed, "The 'Empty Project' page should be displayed but is not.");
 
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            newProjectFirstPage.selectNewProjectType("New Project");
-        } else {
-            newProjectFirstPage.selectNewProjectType("Java");
-        }
+        selectJavaNewProjectType();
 
         boolean isProjectSDKLabelVisible;
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
@@ -372,6 +368,34 @@ public class NewProjectDialogTest extends LibraryTestBase {
             isProjectSDKLabelVisible = !newProjectFirstPage.findAll(JLabelFixture.class, byXpath("//div[@text='Project SDK:']")).isEmpty();
         }
         assertTrue(isProjectSDKLabelVisible, "The 'Project SDK:' label should be visible but is not.");
+    }
+
+    private void selectJavaNewProjectType() {
+        newProjectFirstPage = remoteRobot.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
+        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            newProjectFirstPage.selectNewProjectType("New Project");
+        } else {
+            newProjectFirstPage.selectNewProjectType("Java");
+        }
+    }
+
+    @Test
+    public void createEmptyProjectTest() {
+        cleanUp();
+        String projectName = "empty-test-project";
+        CreateCloseUtils.createEmptyProject(remoteRobot, projectName);
+        mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(60));
+        assertTrue(mainIdeWindow.isShowing(), "The Main IDE Window should be open after creating an empty project.");
+
+        mainIdeWindow.closeProject();
+        mainIdeWindow = null;
+
+        // IntelliJ remembers the last chosen project language, for continuity with other tests select Java project
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame.clearWorkspace();
+        flatWelcomeFrame.createNewProject();
+        selectJavaNewProjectType();
+        remoteRobot.find(NewProjectDialogWizard.class).cancel();
     }
 
     private void navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType newProjectType) {
