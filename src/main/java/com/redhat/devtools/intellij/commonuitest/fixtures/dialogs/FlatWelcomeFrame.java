@@ -22,6 +22,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.Setti
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.pages.NotificationsPage;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
+import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
 import com.redhat.devtools.intellij.commonuitest.utils.steps.SharedSteps;
 import org.apache.commons.io.FileUtils;
@@ -100,12 +101,12 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
     public void clearWorkspace() {
         // Remove projects on disk
         try {
-            String pathToDirToMakeEmpty = System.getProperty("user.home") + File.separator + "IdeaProjects";
+            String pathToDirToMakeEmpty = CreateCloseUtils.PROJECT_LOCATION;
             boolean doesProjectDirExists = Files.exists(Paths.get(pathToDirToMakeEmpty));
             if (doesProjectDirExists) {
                 FileUtils.cleanDirectory(new File(pathToDirToMakeEmpty));
             } else {
-                Files.createDirectory(Paths.get(pathToDirToMakeEmpty));
+                Files.createDirectories(Paths.get(pathToDirToMakeEmpty));
             }
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
