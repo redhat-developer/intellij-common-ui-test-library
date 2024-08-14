@@ -22,6 +22,7 @@ import java.time.Duration;
 import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
+import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 
 /**
  * Top menu fixture
@@ -50,6 +51,10 @@ public class MenuBar {
         JButtonFixture mainMenuFirstItem = mainMenuItem(path[0]);
         if (mainMenuFirstItem != null) {
             mainMenuFirstItem.click();
+            // Wait for the JPopupMenuFixture to appear
+            waitFor(Duration.ofSeconds(5), Duration.ofSeconds(1), "JPopupMenu to appear", () ->
+                    !remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType()).isEmpty()
+            );
         }
 
         if (path.length == 1) {
