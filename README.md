@@ -1,6 +1,6 @@
 Welcome to the IntelliJ IDEA UI test library project! Here you'll find several pieces of information and advices on how to setup, use and contribute to this library.
 
-## Purpose of this project
+## Goal of this project
 This project allows you to create automated UI tests for your IntelliJ IDEA plugin project. Using this library you are able to access UI elements such as buttons, inputs, tree elements etc. and perform actions with them. Navigating through wizards, clicking on buttons or editing file content of newly created project could be automated using this library.
 
 ## Any Suggestions or Questions?
