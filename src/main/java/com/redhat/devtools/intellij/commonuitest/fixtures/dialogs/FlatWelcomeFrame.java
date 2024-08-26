@@ -265,7 +265,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
                 "robot.click(component, new Point(horizontal_offset, 22), MouseButton.LEFT_BUTTON, 1);");
 
         if (ideaVersion >= 20231) {
-            ComponentFixture removeDialog = remoteRobot.find(ComponentFixture.class, byXpath(XPathDefinitions.MY_DIALOG), Duration.ofSeconds(2));
+            ComponentFixture removeDialog = remoteRobot.find(ComponentFixture.class, byXpath(XPathDefinitions.MY_DIALOG), Duration.ofSeconds(10));
             removeDialog.findText(ButtonLabels.REMOVE_FROM_LIST_LABEL)
                     .click();
         } else if (ideaVersion >= 20203) {         // Code for IntelliJ Idea 2020.3 or newer
