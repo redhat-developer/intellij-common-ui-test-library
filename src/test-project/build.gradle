@@ -37,6 +37,7 @@ test {
 
 tasks.register('integrationUITestUltimate', Test) {
     dependsOn copyKey
+    group = 'verification'
     systemProperties['task.name'] = 'integrationUITestUltimate'
     systemProperties['intellij_debug'] = 'true'
     useJUnitPlatform()
@@ -44,6 +45,7 @@ tasks.register('integrationUITestUltimate', Test) {
 
 tasks.register('integrationUITest', Test) {
     systemProperties['intellij_debug'] = 'true'
+    group = 'verification'
     useJUnitPlatform()
 }
 
