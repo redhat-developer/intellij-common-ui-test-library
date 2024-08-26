@@ -27,9 +27,11 @@ import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinition
 
 import java.io.File;
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
+import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 
 /**
  * Project creation utilities
@@ -101,6 +103,7 @@ public class CreateCloseUtils {
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
 
         newProjectFirstPage.selectNewProjectType(NewProjectType.EMPTY_PROJECT.toString());
+        ensureEmptyProjectPageIsOpened(newProjectFirstPage, remoteRobot);
 
         newProjectFirstPage.setProjectName(projectName);
         newProjectFirstPage.setProjectLocation(PROJECT_LOCATION);
@@ -177,6 +180,51 @@ public class CreateCloseUtils {
             default:
                 throw new UITestException("Unsupported project type.");
         }
+    }
+
+    /**
+     * Ensures that the Empty Project page is opened by checking for specific text on the page.
+     * If verification fails, it waits for dialogs to disappear and reselects the Empty Project type.
+     *
+     * @param newProjectFirstPage the first page of the new project dialog
+     * @param remoteRobot         reference to the RemoteRobot instance
+     */
+    private static void ensureEmptyProjectPageIsOpened(NewProjectFirstPage newProjectFirstPage, RemoteRobot remoteRobot) {
+        int ideaVersionInt = UITestRunner.getIdeaVersionInt();
+        boolean isEmptyProjectPageDisplayed;
+
+        if (ideaVersionInt >= 20231) {  // For IntelliJ IDEA version 2023.1 and newer
+            isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("A basic project with free structure.");
+        } else {  // For IntelliJ IDEA version 2022.1 and newer
+            isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("A basic project that allows working with separate files and compiling Java and Kotlin classes.");
+        }
+
+        if (!isEmptyProjectPageDisplayed) {
+            // If the expected text is not found, wait for dialogs to disappear and reselect the Empty Project type
+            waitForDialogsToDisappear(remoteRobot, Duration.ofSeconds(20));
+            newProjectFirstPage.selectNewProjectType(NewProjectType.EMPTY_PROJECT.toString());
+        }
+    }
+
+    /**
+     * Waits until only the "New Project" dialog is open.
+     * If any other dialogs are open, it waits for them to disappear.
+     *
+     * @param remoteRobot the RemoteRobot instance
+     * @param timeout the maximum duration to wait for the other dialogs to disappear
+     */
+    private static void waitForDialogsToDisappear(RemoteRobot remoteRobot, Duration timeout) {
+        waitFor(
+                timeout,
+                Duration.ofSeconds(2),
+                "Waiting for only the New Project dialog to remain open",
+                () -> "Extra dialogs did not disappear within the timeout",
+                () -> {
+                    List<ComponentFixture> allDialogs = remoteRobot.findAll(ComponentFixture.class, byXpath(XPathDefinitions.MY_DIALOG));
+                    // Proceed if only one dialog is open, assumed to be the New Project dialog
+                    return allDialogs.size() == 1;
+                }
+        );
     }
 
     /**
