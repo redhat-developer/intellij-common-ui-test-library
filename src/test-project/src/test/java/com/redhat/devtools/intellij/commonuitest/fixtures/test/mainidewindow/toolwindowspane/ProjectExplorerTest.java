@@ -72,26 +72,26 @@ class ProjectExplorerTest extends LibraryTestBase {
 
     @Test
     public void isItemPresentTest() {
-        boolean isItemPresent = projectExplorer.isItemPresent(PROJECT_NAME, PROJECT_NAME + ".iml");
-        assertTrue(isItemPresent, "The file '" + PROJECT_NAME + ".iml' should be present in the project on location '" + PROJECT_NAME + "/" + PROJECT_NAME + ".iml' but is not.");
+        boolean isMainPresent = projectExplorer.isItemPresent(PROJECT_NAME, "src", "Main");
+        assertTrue(isMainPresent, "The file 'Main' should be present in the project on location 'src/Main' but is not.");
     }
 
     @Test
     public void openFileTest() {
-        projectExplorer.openFile(PROJECT_NAME, PROJECT_NAME + ".iml");
+        projectExplorer.openFile(PROJECT_NAME, ".gitignore");
         if (ideaVersionInt >= 20231) {       // Code for IJ 2023.1+
-            String projectLabelXpath = "//div[@accessiblename='" + PROJECT_NAME + ".iml' and @class='EditorTabLabel']//div[@class='ActionPanel']";
+            String projectLabelXpath = "//div[@accessiblename='.gitignore' and @class='EditorTabLabel']//div[@class='ActionPanel']";
             try {       // Verify file is opened by finding its tab in the editor
                 remoteRobot.find(ComponentFixture.class, byXpath(projectLabelXpath));
             } catch (Exception e) {
-                fail("The '" + PROJECT_NAME + ".iml' file should be opened but is not.");
+                fail("The '.gitignore' file should be opened but is not.");
             }
         } else {
             List<ContainerFixture> cfs = remoteRobot.findAll(ContainerFixture.class, byXpath(XPathDefinitions.SINGLE_HEIGHT_LABEL));
             ContainerFixture cf = cfs.get(cfs.size() - 1);
             String allText = TextUtils.listOfRemoteTextToString(cf.findAllText());
-            boolean isFileOpened = allText.contains(PROJECT_NAME + ".iml");
-            assertTrue(isFileOpened, "The '" + PROJECT_NAME + ".iml' file should be opened but is not.");
+            boolean isFileOpened = allText.contains(".gitignore");
+            assertTrue(isFileOpened, "The '.gitignore' file should be opened but is not.");
         }
     }
 
@@ -117,12 +117,16 @@ class ProjectExplorerTest extends LibraryTestBase {
 
     @Test
     public void selectOpenedFileTest() {
-        projectExplorer.openFile(PROJECT_NAME, PROJECT_NAME + ".iml");
+        projectExplorer.expandAll();
+        projectExplorer.openFile(PROJECT_NAME, "src", "Main");
         projectExplorer.projectViewTree().clickRow(0);
-        SharedSteps.waitForComponentByXpath(remoteRobot,3,1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
+        SharedSteps.waitForComponentByXpath(remoteRobot, 3, 1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
         projectExplorer.selectOpenedFile();
-        SharedSteps.waitForComponentByXpath(remoteRobot,3,1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
-        assertTrue(projectExplorer.projectViewTree().isPathSelected(projectExplorer.projectViewTree().getValueAtRow(0), PROJECT_NAME + ".iml"), "The file '" + PROJECT_NAME + ".xml' should be selected but is not.");
+        SharedSteps.waitForComponentByXpath(remoteRobot, 3, 1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
+        assertTrue(projectExplorer.projectViewTree().isPathSelected(
+                        projectExplorer.projectViewTree().getValueAtRow(0), "src", "Main"),
+                "The file 'Main' should be selected but is not."
+        );
     }
 
     @Test
