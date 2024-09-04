@@ -45,7 +45,9 @@ class CodeWithMeDialogTest extends LibraryTestBase {
 
             if (UITestRunner.getIdeaVersionInt() >= 20221) {
                 newProjectFirstPage.selectNewProjectType("New Project");
+                newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
                 newProjectFirstPage.setProjectName(PROJECT_NAME);
+                newProjectFirstPage.setProjectLocation(CreateCloseUtils.PROJECT_LOCATION);
                 newProjectFirstPage.setLanguage("Java");
                 newProjectFirstPage.setBuildSystem("IntelliJ");
                 newProjectFirstPage.setProjectSdkIfAvailable("11");

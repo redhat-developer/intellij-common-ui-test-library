@@ -50,7 +50,10 @@ class IdeStatusBarTest extends LibraryTestBase {
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
 
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            newProjectFirstPage.selectNewProjectType("New Project");
+            newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
             newProjectFirstPage.setProjectName(PROJECT_NAME);
+            newProjectFirstPage.setProjectLocation(CreateCloseUtils.PROJECT_LOCATION);
             newProjectFirstPage.selectNewProjectType("New Project");
             newProjectFirstPage.setBuildSystem("Maven");
         } else {
