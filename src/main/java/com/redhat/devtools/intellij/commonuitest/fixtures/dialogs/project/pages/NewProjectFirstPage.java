@@ -97,7 +97,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
      */
     public void setBuildSystem(String buildSystem) {
         if (ideaVersion >= 20241) {
-            find(JLabelFixture.class, byXpath(XPathDefinitions.SET_BUILD_SYSTEM_2024_1_AND_NEWER)).findText(buildSystem).click();
+            find(JLabelFixture.class, byXpath(XPathDefinitions.SET_BUILD_SYSTEM_2024_2_AND_NEWER)).findText(buildSystem).click();
         } else {
             find(JLabelFixture.class, byXpath(XPathDefinitions.SET_BUILD_SYSTEM)).findText(buildSystem).click();
         }
