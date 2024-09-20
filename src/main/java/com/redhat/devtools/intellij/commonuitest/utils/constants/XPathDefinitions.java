@@ -55,6 +55,7 @@ public class XPathDefinitions {
     public static final String TREE = "//div[@class='Tree']";
     public static final String TOOLTIP_TEXT_PROJECT = "//div[@tooltiptext='Project']";
     public static final String TOOLTIP_TEXT_HIDE = "//div[contains(@myvisibleactions, 'View),')]//div[@tooltiptext='Hide']";
+    public static final String MAIN_MENU = "//div[@tooltiptext='Main Menu']";
     public static final String MY_ICON_GEAR_PLAIN = "//div[contains(@myvisibleactions, 'View),')]//div[@myicon='gearPlain.svg']";
     public static final String MY_ICON_COLLAPSE_ALL = "//div[contains(@myvisibleactions, 'View),')]//div[@myicon='collapseall.svg']";
     public static final String MY_ICON_COLLAPSE_ALL_FOR = "//div[contains(@myvisibleactions, 'For')]//div[@myicon='collapseall.svg']";
