@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.4.2 (Sep 17, 2024)
+ - fix: IdeaProject folder getting deleted by running local tests fixed #293 by @martinszuc in [(#294)](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/294)
+ - fix(UITest): fix for unstable tests & minor improvements #212 & #296 by @martinszuc in [(#301)](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/301)
+ - fix(UITest): fix for unstable MenuBar tests #278 by @martinszuc in [(#295)](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/295)
+ - Integrate the UI Test Robot properties inside test-project #256 by @richardkocian in [(#282)](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/295)
+ - waitForDialogsToDisappear method for empty project creation process #284 by @martinszuc in [(#285)](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/285)
+ - feat: Add UI integration tests for IntelliJ Ultimate #240 by @richardkocian in  [(#286)](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/286)
+ - chore(deps): bump org.jetbrains.kotlin:kotlin-reflect from 2.0.0 to 2.0.20 in [(#298)](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/298)
+ - chore(deps): bump org.jetbrains.kotlin.jvm from 2.0.0 to 2.0.20 in [(#299)](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/299)
+ - chore(deps): bump org.jetbrains.kotlin:kotlin-stdlib from 2.0.0 to 2.0.20 in [(#297)](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/297)
+
 ## 0.4.1 (Jul 30, 2024)
 - Add platformType and platformVersion to ProcessBuilder parameters [(#239)](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/239)
 - Fix Project creation failing on GHA [(#260)](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/260)
