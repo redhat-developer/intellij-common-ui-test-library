@@ -14,8 +14,11 @@ import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowLeftToolbar;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowRightToolbar;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import org.junit.jupiter.api.AfterAll;
 
@@ -61,15 +64,42 @@ abstract class AbstractToolWinPane extends LibraryTestBase {
 
     protected void clickOnStripeButton(String label, boolean isPaneOpened) {
         waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The '" + label + "' stripe button is not available.", () -> isStripeButtonAvailable(label, isPaneOpened));
-        toolWinPane.stripeButton(label, isPaneOpened).click();
+
+        if (UITestRunner.getIdeaVersionInt() >= 20242) { // For IntelliJ IDEA 2024.2 and newer
+            if (isRightToolbarButton(label)) {
+                ToolWindowRightToolbar toolWindowRightToolbar = remoteRobot.find(ToolWindowRightToolbar.class, Duration.ofSeconds(10));
+                toolWindowRightToolbar.clickStripeButton(label);
+            } else {
+                ToolWindowLeftToolbar toolWindowLeftToolbar = remoteRobot.find(ToolWindowLeftToolbar.class, Duration.ofSeconds(10));
+                toolWindowLeftToolbar.clickStripeButton(label);
+            }
+        } else {            // For older versions
+            toolWinPane.stripeButton(label, isPaneOpened).click();
+        }
     }
 
     protected boolean isStripeButtonAvailable(String label, boolean isPaneOpened) {
         try {
-            toolWinPane.stripeButton(label, isPaneOpened);
+            if (UITestRunner.getIdeaVersionInt() >= 20242) { // For IntelliJ IDEA 2024.2 and newer
+                if (isRightToolbarButton(label)) {
+                    ToolWindowRightToolbar toolWindowRightToolbar = remoteRobot.find(ToolWindowRightToolbar.class, Duration.ofSeconds(2));
+                    toolWindowRightToolbar.findStripeButton(label);
+                } else {
+                    ToolWindowLeftToolbar toolWindowLeftToolbar = remoteRobot.find(ToolWindowLeftToolbar.class, Duration.ofSeconds(2));
+                    toolWindowLeftToolbar.findStripeButton(label);
+                }
+            } else {            // For older versions
+                toolWinPane.stripeButton(label, isPaneOpened);
+            }
+            return true;
         } catch (WaitForConditionTimeoutException e) {
             return false;
         }
-        return true;
+    }
+
+    private boolean isRightToolbarButton(String label) {
+        // Determine if the stripe button is on the right toolbar
+        return label.equals(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL) ||
+                label.equals(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL);
     }
 }
