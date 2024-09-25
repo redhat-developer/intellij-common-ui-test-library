@@ -50,7 +50,7 @@ class CodeWithMeDialogTest extends LibraryTestBase {
                 newProjectFirstPage.setProjectLocation(CreateCloseUtils.PROJECT_LOCATION);
                 newProjectFirstPage.setLanguage("Java");
                 newProjectFirstPage.setBuildSystem("IntelliJ");
-                newProjectFirstPage.setProjectSdkIfAvailable("11");
+                newProjectFirstPage.setProjectSdkIfAvailable("17");
             } else {
                 newProjectFirstPage.selectNewProjectType("Java");
                 newProjectFirstPage.setProjectSdkIfAvailable("11");
