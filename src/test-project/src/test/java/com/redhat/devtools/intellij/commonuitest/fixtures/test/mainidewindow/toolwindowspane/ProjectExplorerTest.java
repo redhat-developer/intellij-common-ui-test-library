@@ -133,6 +133,7 @@ class ProjectExplorerTest extends LibraryTestBase {
     public void expandAllTest() {
         projectExplorer.collapseAll();
         int itemsInTreeBeforeExpanding = projectExplorer.projectViewTree().collectRows().size();
+        projectExplorer.projectViewTree().clickRow(0); // Newer versions expands selected subtree (not all rows)
         projectExplorer.expandAll();
         int itemsInTreeAfterExpanding = projectExplorer.projectViewTree().collectRows().size();
         assertTrue(itemsInTreeAfterExpanding > itemsInTreeBeforeExpanding, "Expanding of the 'Project View' tree was not successful.");
