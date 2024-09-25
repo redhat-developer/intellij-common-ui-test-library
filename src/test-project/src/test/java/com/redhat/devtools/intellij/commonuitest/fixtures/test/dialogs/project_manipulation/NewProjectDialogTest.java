@@ -311,7 +311,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
     public void finishButtonTest() {
         if (UITestRunner.getIdeaVersionInt() < 20221) {
             newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
-            newProjectFirstPage.setProjectSdkIfAvailable("11");
+            newProjectFirstPage.setProjectSdkIfAvailable("17");
             assertThrows(UITestException.class, () ->
                     newProjectDialogWizard.finish(), "The 'UITestException' should be thrown because the 'Finish' button is not available on the first page of the 'New Project' wizard for java project.");
             newProjectDialogWizard.next();
