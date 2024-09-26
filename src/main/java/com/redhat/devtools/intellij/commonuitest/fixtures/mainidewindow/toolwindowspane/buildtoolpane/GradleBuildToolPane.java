@@ -58,14 +58,22 @@ public class GradleBuildToolPane extends CommonContainerFixture {
      * Expand all
      */
     public void expandAll() {
-        actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL_IDE), Duration.ofSeconds(2)).click();
+        if (UITestRunner.getIdeaVersionInt() >= 20242) {    // Code for IntelliJ version 2024.2 and newer
+            actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL_2024_2), Duration.ofSeconds(2)).click();
+        } else { // Code for IntelliJ version 2024.1 and older
+            actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL_IDE), Duration.ofSeconds(2)).click();
+        }
     }
 
     /**
      * Collapse all
      */
     public void collapseAll() {
-        actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_IDE), Duration.ofSeconds(2)).click();
+        if (UITestRunner.getIdeaVersionInt() >= 20242) {    // Code for IntelliJ version 2024.2 and newer
+            actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_2024_2), Duration.ofSeconds(2)).click();
+        } else { // Code for IntelliJ version 2024.1 and older
+            actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_IDE), Duration.ofSeconds(2)).click();
+        }
     }
 
     /**
