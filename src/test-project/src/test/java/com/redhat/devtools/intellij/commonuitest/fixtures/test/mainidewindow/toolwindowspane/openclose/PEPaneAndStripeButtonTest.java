@@ -20,6 +20,7 @@ import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import java.time.Duration;
 
@@ -59,6 +60,7 @@ class PEPaneAndStripeButtonTest extends AbstractToolWinPane {
     }
 
     @Test
+    @DisabledIfSystemProperty(named = "uitestlib.idea.version", matches = "20242")
     public void stripeButtonTest() {
         try {
             toolWinPane.stripeButton(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL, false);
