@@ -53,7 +53,7 @@ class CodeWithMeDialogTest extends LibraryTestBase {
                 newProjectFirstPage.setProjectSdkIfAvailable("11");
             } else {
                 newProjectFirstPage.selectNewProjectType("Java");
-                newProjectFirstPage.setProjectSdkIfAvailable("11");
+                newProjectFirstPage.setProjectSdkIfAvailable("17");
                 newProjectDialogWizard.next();
                 newProjectDialogWizard.next();
                 AbstractNewProjectFinalPage finalPage = getFinalPage(newProjectDialogWizard, CreateCloseUtils.NewProjectType.PLAIN_JAVA);

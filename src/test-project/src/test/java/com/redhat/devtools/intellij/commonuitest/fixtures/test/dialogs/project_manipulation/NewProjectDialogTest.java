@@ -10,11 +10,7 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.project_manipulation;
 
-import com.intellij.remoterobot.fixtures.ComboBoxFixture;
-import com.intellij.remoterobot.fixtures.ComponentFixture;
-import com.intellij.remoterobot.fixtures.ContainerFixture;
-import com.intellij.remoterobot.fixtures.JLabelFixture;
-import com.intellij.remoterobot.fixtures.JListFixture;
+import com.intellij.remoterobot.fixtures.*;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
@@ -28,8 +24,10 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.NewProjectFirstPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
+import com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -311,7 +309,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
     public void finishButtonTest() {
         if (UITestRunner.getIdeaVersionInt() < 20221) {
             newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
-            newProjectFirstPage.setProjectSdkIfAvailable("11");
+            newProjectFirstPage.setProjectSdkIfAvailable("17");
             assertThrows(UITestException.class, () ->
                     newProjectDialogWizard.finish(), "The 'UITestException' should be thrown because the 'Finish' button is not available on the first page of the 'New Project' wizard for java project.");
             newProjectDialogWizard.next();
@@ -333,13 +331,23 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     public void setProjectSdkIfAvailableTest() {
-        newProjectFirstPage.setProjectSdkIfAvailable("11");
-        ComboBoxFixture projectJdkComboBox = newProjectFirstPage.getProjectJdkComboBox();
-        String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
-        assertTrue(currentlySelectedProjectSdk.contains("11"), "Selected project SDK should be Java 11 but is '" + currentlySelectedProjectSdk + "'");
-        newProjectFirstPage.setProjectSdkIfAvailable("17");
-        currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
-        assertTrue(currentlySelectedProjectSdk.contains("17"), "Selected project SDK should be Java 17 but is '" + currentlySelectedProjectSdk + "'");
+        if (ideaVersionInt >= 20242 && remoteRobot.isWin()) {
+            newProjectFirstPage.setProjectSdkIfAvailable("Download JDK");
+            try {
+                ContainerFixture downloadJdkDialog = remoteRobot.find(ContainerFixture.class, byXpath("//div[@title='Download JDK']"), Duration.ofSeconds(10));
+                downloadJdkDialog.find(ActionButtonFixture.class, byXpath(XPathDefinitions.label(ButtonLabels.CANCEL_LABEL)), Duration.ofSeconds(5)).click();
+            } catch (WaitForConditionTimeoutException e) {
+                fail("Download JDK button was not pressed and Download JDK dialog was not found");
+            }
+        } else {
+            newProjectFirstPage.setProjectSdkIfAvailable("11");
+            ComboBoxFixture projectJdkComboBox = newProjectFirstPage.getProjectJdkComboBox();
+            String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
+            assertTrue(currentlySelectedProjectSdk.contains("11"), "Selected project SDK should be Java 11 but is '" + currentlySelectedProjectSdk + "'");
+            newProjectFirstPage.setProjectSdkIfAvailable("17");
+            currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
+            assertTrue(currentlySelectedProjectSdk.contains("17"), "Selected project SDK should be Java 17 but is '" + currentlySelectedProjectSdk + "'");
+        }
     }
 
     @Test

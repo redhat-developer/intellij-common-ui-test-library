@@ -55,11 +55,15 @@ public class XPathDefinitions {
     public static final String TREE = "//div[@class='Tree']";
     public static final String TOOLTIP_TEXT_PROJECT = "//div[@tooltiptext='Project']";
     public static final String TOOLTIP_TEXT_HIDE = "//div[contains(@myvisibleactions, 'View),')]//div[@tooltiptext='Hide']";
+    public static final String MAIN_MENU = "//div[@tooltiptext='Main Menu']";
     public static final String MY_ICON_GEAR_PLAIN = "//div[contains(@myvisibleactions, 'View),')]//div[@myicon='gearPlain.svg']";
+    public static final String MY_ICON_MORE_VERTICAL = "//div[@myicon='moreVertical.svg']";
     public static final String MY_ICON_COLLAPSE_ALL = "//div[contains(@myvisibleactions, 'View),')]//div[@myicon='collapseall.svg']";
+    public static final String MY_ICON_COLLAPSE_ALL_2024_2 = "//div[@myicon='collapseAll.svg']";
     public static final String MY_ICON_COLLAPSE_ALL_FOR = "//div[contains(@myvisibleactions, 'For')]//div[@myicon='collapseall.svg']";
     public static final String MY_ICON_COLLAPSE_ALL_IDE = "//div[contains(@myvisibleactions, 'IDE')]//div[@myicon='collapseall.svg']";
     public static final String MY_ICON_EXPAND_ALL = "//div[contains(@myvisibleactions, 'View),')]//div[@myicon='expandall.svg']";
+    public static final String MY_ICON_EXPAND_ALL_2024_2 = "//div[@myicon='expandAll.svg']";
     public static final String MY_ICON_EXPAND_ALL_IDE = "//div[contains(@myvisibleactions, 'IDE')]//div[@myicon='expandall.svg']";
     public static final String MY_ICON_LOCATE_SVG = "//div[@myicon='locate.svg']";
     public static final String MY_ICON_REFRESH = "//div[@myicon='refresh.svg']";
@@ -80,10 +84,11 @@ public class XPathDefinitions {
     public static final String REMOVE_PROJECT_BUTTON = "//div[contains(@text.key, 'button.remove')]";
     public static final String SET_LANGUAGE = "//div[@class='SegmentedButtonComponent'][.//div[contains(@action.key, 'language.groovy')]]";
     public static final String SET_BUILD_SYSTEM = "//div[@class='SegmentedButtonComponent'][.//div[@action.key='buildsystem.type.intellij']]";
-    public static final String SET_BUILD_SYSTEM_2024_1_AND_NEWER = "//div[@accessiblename='Build system:' and @class='SegmentedButtonComponent']";  // works for IntelliJ Idea 2024.1 and higher
-    public static final String GET_SET_MODULE_NAME = "//div[@accessiblename='Module name:' and @accessiblename.key='label.project.wizard.new.project.module.name' and @class='JBTextField']";
-    public static final String GET_SET_CONTENT_ROOT = "//div[@accessiblename='Content root:' and @accessiblename.key='label.project.wizard.new.project.content.root' and @class='ExtendableTextField']";
-    public static final String GET_SET_MODULE_FILE_LOCATION = "//div[@accessiblename='Module file location:' and @accessiblename.key='label.project.wizard.new.project.module.file.location' and @class='ExtendableTextField']";
+    public static final String SET_BUILD_SYSTEM_2024_2_AND_NEWER = "//div[@accessiblename='Build system:' and @class='SegmentedButtonComponent']";  // works for IntelliJ Idea 2024.1 and higher
+    public static final String GET_SET_MODULE_NAME = "//div[@accessiblename='Module name:' and @class='JBTextField']";
+    public static final String GET_SET_MODULE_NAME_2024_2_AND_NEWER = "//div[@accessiblename='Module name:' and @class='JBTextField']";
+    public static final String GET_SET_CONTENT_ROOT = "//div[@accessiblename='Content root:' and @class='ExtendableTextField']";
+    public static final String GET_SET_MODULE_FILE_LOCATION = "//div[@accessiblename='Module file location:' and @class='ExtendableTextField']";
     public static final String CREATE_NEW_PROJECT = "//div[@defaulticon='createNewProjectTab.svg']"; // works for IntelliJ Idea 2024.1 and higher
 
     private XPathDefinitions() {

@@ -97,7 +97,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
      */
     public void setBuildSystem(String buildSystem) {
         if (ideaVersion >= 20241) {
-            find(JLabelFixture.class, byXpath(XPathDefinitions.SET_BUILD_SYSTEM_2024_1_AND_NEWER)).findText(buildSystem).click();
+            find(JLabelFixture.class, byXpath(XPathDefinitions.SET_BUILD_SYSTEM_2024_2_AND_NEWER)).findText(buildSystem).click();
         } else {
             find(JLabelFixture.class, byXpath(XPathDefinitions.SET_BUILD_SYSTEM)).findText(buildSystem).click();
         }
@@ -121,12 +121,21 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
      * @param targetSdkName name of the SDK to which will be changed the current settings
      */
     public void setProjectSdkIfAvailable(String targetSdkName) {
-        step("Select the '" + targetSdkName + "' as new project SDK", () -> {
-            ComboBoxFixture projectJdkComboBox = getProjectJdkComboBox();
-            String currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
-            if (currentlySelectedProjectSdk.contains(targetSdkName)) {
-                return;
-            }
+            step("Select the '" + targetSdkName + "' as new project SDK", () -> {
+
+                waitFor(
+                        Duration.ofSeconds(20),
+                        Duration.ofSeconds(5),
+                        "Waiting for 'resolving jdk' dialog to disappear.",
+                        () -> "Expected exactly one dialog but found " + remoteRobot.findAll(CommonContainerFixture.class, byXpath(XPathDefinitions.MY_DIALOG)).size(),
+                        () -> remoteRobot.findAll(CommonContainerFixture.class, byXpath(XPathDefinitions.MY_DIALOG)).size() == 1
+                );
+
+                ComboBoxFixture projectJdkComboBox = getProjectJdkComboBox();
+                String currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
+                if (currentlySelectedProjectSdk.contains(targetSdkName)) {
+                    return;
+                }
 
             if (UITestRunner.getIdeaVersionInt() >= 20221) {
                 projectJdkComboBox.click();

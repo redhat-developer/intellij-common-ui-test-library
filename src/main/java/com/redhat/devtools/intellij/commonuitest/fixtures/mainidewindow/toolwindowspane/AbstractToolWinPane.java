@@ -138,24 +138,58 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
     }
 
     private void clickOnStripeButton(String label, boolean isPaneOpened) {
-        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The '" + label + "' stripe button is not available.", () -> isStripeButtonAvailable(label, isPaneOpened));
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10)).stripeButton(label, isPaneOpened).click();
+        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2),
+                "The '" + label + "' stripe button is not available.",
+                () -> isStripeButtonAvailable(label, isPaneOpened));
+
+        if (UITestRunner.getIdeaVersionInt() >= 20242) {
+            // For IntelliJ IDEA 2024.2 and newer
+            if (isRightToolbarButton(label)) {
+                ToolWindowRightToolbar toolWindowRightToolbar = remoteRobot.find(ToolWindowRightToolbar.class, Duration.ofSeconds(10));
+                toolWindowRightToolbar.clickStripeButton(label);
+            } else {
+                ToolWindowLeftToolbar toolWindowLeftToolbar = remoteRobot.find(ToolWindowLeftToolbar.class, Duration.ofSeconds(10));
+                toolWindowLeftToolbar.clickStripeButton(label);
+            }
+        } else if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            // For IntelliJ IDEA 2022.1 to 2024.1
+            ToolWindowPane toolWindowPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
+            toolWindowPane.stripeButton(label, isPaneOpened).click();
         } else {
-            remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10)).stripeButton(label, isPaneOpened).click();
+            // For older versions
+            ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
+            toolWindowsPane.stripeButton(label, isPaneOpened).click();
         }
     }
 
     private boolean isStripeButtonAvailable(String label, boolean isPaneOpened) {
         try {
-            if (UITestRunner.getIdeaVersionInt() >= 20221) {
-                remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(2)).stripeButton(label, isPaneOpened);
+            if (UITestRunner.getIdeaVersionInt() >= 20242) {
+                // For IntelliJ IDEA 2024.2 and newer
+                if (isRightToolbarButton(label)) {
+                    ToolWindowRightToolbar toolWindowRightToolbar = remoteRobot.find(ToolWindowRightToolbar.class, Duration.ofSeconds(2));
+                    toolWindowRightToolbar.findStripeButton(label);
+                } else {
+                    ToolWindowLeftToolbar toolWindowLeftToolbar = remoteRobot.find(ToolWindowLeftToolbar.class, Duration.ofSeconds(2));
+                    toolWindowLeftToolbar.findStripeButton(label);
+                }
+            } else if (UITestRunner.getIdeaVersionInt() >= 20221) {
+                // For IntelliJ IDEA 2022.1 to 2024.1
+                ToolWindowPane toolWindowPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(2));
+                toolWindowPane.stripeButton(label, isPaneOpened);
             } else {
-                remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(2)).stripeButton(label, isPaneOpened);
+                // For older versions
+                ToolWindowsPane toolWindowsPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(2));
+                toolWindowsPane.stripeButton(label, isPaneOpened);
             }
+            return true;
         } catch (WaitForConditionTimeoutException e) {
             return false;
         }
-        return true;
+    }
+
+    private boolean isRightToolbarButton(String label) {
+        return label.equals(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL) ||
+                label.equals(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL);
     }
 }

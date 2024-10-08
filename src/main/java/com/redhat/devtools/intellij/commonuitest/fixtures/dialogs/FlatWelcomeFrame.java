@@ -31,7 +31,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.List;
@@ -150,7 +149,46 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
         } else {
             JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
             jTreeFixture.findText("Customize").click();
-            remoteRobot.find(ContainerFixture.class, byXpath(XPathDefinitions.DIALOG_PANEL)).findText("All settings" + '\u2026').click();
+
+            if (remoteRobot.isMac()) {
+                resizeWelcomeWindow(remoteRobot, 900);
+            }
+
+            remoteRobot.find(ContainerFixture.class, byXpath(XPathDefinitions.DIALOG_PANEL))
+                    .findText("All settings" + '\u2026')
+                    .click();
+        }
+    }
+
+    /**
+     * Resize the Welcome to IntelliJ IDEA window
+     *
+     * @param remoteRobot Valid instance of remote robot
+     * @param newHeight Integer of new height to use
+     */
+    private void resizeWelcomeWindow(RemoteRobot remoteRobot, int newHeight) {
+        try {
+            remoteRobot.callJs(String.format("""
+                        importClass(java.awt.Frame);
+                        importClass(javax.swing.SwingUtilities);
+                        var frames = Frame.getFrames();
+                        var resized = false;
+                        for (var i = 0; i < frames.length; i++) {
+                            var frame = frames[i];
+                            if (frame.isShowing() && frame.getClass().getName().contains("FlatWelcomeFrame")) {
+                                SwingUtilities.invokeLater(function() {
+                                    frame.setSize(frame.getWidth(), %d);
+                                    frame.validate();
+                                });
+                                resized = true;
+                                break;
+                            }
+                        }
+                        resized;
+                    """, newHeight));
+            Thread.sleep(5000);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to resize the Welcome window: " + e.getMessage());
         }
     }
 

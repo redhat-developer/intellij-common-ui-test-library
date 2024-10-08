@@ -11,6 +11,7 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar;
 
 import com.intellij.remoterobot.RemoteRobot;
+import com.intellij.remoterobot.fixtures.ActionButtonFixture;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
@@ -47,10 +48,18 @@ public class MenuBar {
         if (path.length == 0) {
             return;
         }
+        if (UITestRunner.getIdeaVersionInt() >= 20242) {
+            remoteRobot.find(ActionButtonFixture.class, byXpath(XPathDefinitions.MAIN_MENU)).click();
+        }
 
         JButtonFixture mainMenuFirstItem = mainMenuItem(path[0]);
         if (mainMenuFirstItem != null) {
-            mainMenuFirstItem.click();
+            if (UITestRunner.getIdeaVersionInt() >= 20242) {
+                mainMenuFirstItem.moveMouse();
+            } else {
+                mainMenuFirstItem.click();
+            }
+
             // Wait for the JPopupMenuFixture to appear
             waitFor(Duration.ofSeconds(5), Duration.ofSeconds(1), "JPopupMenu to appear", () ->
                     !remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType()).isEmpty()
