@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.4.3 (Nov 4, 2024)
+- chore(deps): bump org.jetbrains.kotlin:kotlin-reflect (#316)
+- chore(deps): bump org.jetbrains.kotlin.jvm from 2.0.20 to 2.0.21 (#315)
+- chore(deps): bump org.junit.jupiter:junit-jupiter-engine (#314)
+- chore(deps): bump org.junit.jupiter:junit-jupiter-api (#313)
+- chore(deps): bump commons-io:commons-io from 2.16.1 to 2.17.0 (#307)
+- Merge pull request #312 from redhat-developer/0.4.3-bump
+- chore: fix publish and bump version
+- feat: added IU-2024.2 to IntelliJVersion (#302)
+
 ## 0.4.2 (Sep 17, 2024)
  - fix: IdeaProject folder getting deleted by running local tests fixed #293 by @martinszuc in [(#294)](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/294)
  - fix(UITest): fix for unstable tests & minor improvements #212 & #296 by @martinszuc in [(#301)](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/301)
