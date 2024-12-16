@@ -6,7 +6,7 @@ junit-jupiter = "5.11.3"
 
 # plugins
 gradleNexusPublishPlugin = "2.0.0"
-sonarqube = "5.1.0.4882"
+sonarqube = "6.0.1.5171"
 
 [libraries]
 kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
