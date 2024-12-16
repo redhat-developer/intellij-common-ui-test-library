@@ -25,7 +25,6 @@ import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinition
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
 import com.redhat.devtools.intellij.commonuitest.utils.steps.SharedSteps;
-import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -103,7 +102,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             String pathToDirToMakeEmpty = CreateCloseUtils.PROJECT_LOCATION;
             boolean doesProjectDirExists = Files.exists(Paths.get(pathToDirToMakeEmpty));
             if (doesProjectDirExists) {
-                FileUtils.cleanDirectory(new File(pathToDirToMakeEmpty));
+                Files.delete(new File(pathToDirToMakeEmpty).toPath());
             } else {
                 Files.createDirectories(Paths.get(pathToDirToMakeEmpty));
             }

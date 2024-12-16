@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-node('rhel7') {
+node('rhel9') {
 	def javaHome = tool 'openjdk-17'
 	env.JAVA_HOME = "${javaHome}"
 
