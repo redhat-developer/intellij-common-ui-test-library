@@ -192,7 +192,9 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
                     """, newHeight));
             Thread.sleep(5000);
         } catch (Exception e) {
-            LOGGER.log(Level.WARNING, "Failed to resize the Welcome window: " + e.getMessage());
+            LOGGER.log(Level.WARNING, "Failed to resize the Welcome window: {0}", e.getMessage());
+            /* Clean up whatever needs to be handled before interrupting  */
+            Thread.currentThread().interrupt();
         }
     }
 

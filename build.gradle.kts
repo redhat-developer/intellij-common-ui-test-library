@@ -45,10 +45,9 @@ tasks {
             property("sonar.projectKey", "redhat-developer_intellij-common-ui-test-library")
             property("sonar.organization", "redhat-developer")
             property("sonar.host.url", "https://sonarcloud.io")
-            property("sonar.sources", "src")
+            property("sonar.junit.reportsPath", layout.buildDirectory.dir("test-results").get().asFile.absolutePath)
         }
     }
-
 }
 
 publishing {
