@@ -24,7 +24,7 @@ import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinition
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.KeyEvent;
-import java.time.Duration;;
+import java.time.Duration;
 
 import com.redhat.devtools.intellij.commonuitest.utils.internalerror.IdeInternalErrorUtils;
 
