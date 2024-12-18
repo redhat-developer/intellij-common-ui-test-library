@@ -79,8 +79,13 @@ public class UITestRunner {
             String fileExtension = OS_NAME.contains("windows") ? ".bat" : "";
             String[] platformTypeVersion = generatePlatformTypeVersion();
 
-            ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port, "-PplatformType=" + platformTypeVersion[0], "-PplatformVersion=" + platformTypeVersion[1]);
+            ProcessBuilder pb = null;
 
+            if (ideaVersion.toInt() < 20242) {
+                pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port);
+            } else {
+                pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-Drobot-server.port=" + port, "-PplatformType=" + platformTypeVersion[0], "-PplatformVersion=" + platformTypeVersion[1]);
+            }
             boolean isDebugOn = Boolean.parseBoolean(System.getProperty("intellij_debug", "false")); // For more info on intellij_debug please check README
             if (isDebugOn) {
                 redirectProcessOutputs(pb);
