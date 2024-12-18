@@ -9,6 +9,12 @@ group = "com.redhat.devtools.intellij"
 version = "1.0-SNAPSHOT"
 val platformVersion = providers.gradleProperty("ideaVersion").get()
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
 repositories {
     mavenCentral()
     intellijPlatform {
