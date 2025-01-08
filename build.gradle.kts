@@ -25,6 +25,9 @@ dependencies {
 
 
 java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
     withSourcesJar()
     withJavadocJar()
 }
@@ -54,8 +57,6 @@ publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
-            artifact(tasks.named("sourcesJar"))
-            artifact(tasks.named("javadocJar"))
             pom {
                 name.set("IntelliJ common UI test library")
                 description.set("Common utilities for IntelliJ UI testing")
