@@ -11,7 +11,7 @@ val platformVersion = providers.gradleProperty("ideaVersion").get()
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
