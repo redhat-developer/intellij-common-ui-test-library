@@ -44,7 +44,11 @@ jobs:
           cache: 'gradle'
       - name: Run integration tests on Linux
         run: |
+          export DISPLAY=:99.0
+          Xvfb -ac :99 -screen 0 1920x1080x24 &
+          sleep 10
           cd src/test-project
+          mkdir -p build/reports
           chmod +x gradlew
           ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.idestatusbar.*
         if: runner.os == 'Linux'
