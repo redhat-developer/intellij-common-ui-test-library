@@ -48,19 +48,19 @@ jobs:
           Xvfb -ac :99 -screen 0 1920x1080x24 &
           cd src/test-project
           chmod +x gradlew
-          ./gradlew clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.idestatusbar.*
+          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.idestatusbar.*
         if: runner.os == 'Linux'
       - name: Run integration tests on Windows
         run: |
           cd src\test-project
           chmod +x gradlew.bat
-          .\gradlew.bat clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.mainidewindow.idestatusbar.*
+          .\gradlew.bat integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.mainidewindow.idestatusbar.*
         if: runner.os == 'Windows'
-      - name: Run integration tests on MacOs
+      - name: Run integration tests on MacOS
         run: |
           cd src/test-project
           chmod +x gradlew
-          ./gradlew clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.mainidewindow.idestatusbar.*
+          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.mainidewindow.idestatusbar.*
         if: runner.os == 'macOS'
       - uses: actions/upload-artifact@v4
         with:
