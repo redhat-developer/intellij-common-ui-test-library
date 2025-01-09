@@ -23,18 +23,20 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.pages
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
-import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
 import com.redhat.devtools.intellij.commonuitest.utils.steps.SharedSteps;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 
@@ -50,14 +52,12 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
     private static final String PROJECTS_BUTTON = "Projects";
     private static final String TIP_OF_THE_DAY = "Tip of the Day";
     private final RemoteRobot remoteRobot;
-    private final IntelliJVersion intelliJVersion;
     private final int ideaVersion;
 
     public FlatWelcomeFrame(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
         this.remoteRobot = remoteRobot;
-        this.intelliJVersion = UITestRunner.getIdeaVersion();
-        this.ideaVersion = intelliJVersion.toInt();
+        this.ideaVersion = UITestRunner.getIdeaVersion().toInt();
     }
 
     /**
@@ -100,11 +100,16 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
         // Remove projects on disk
         try {
             String pathToDirToMakeEmpty = CreateCloseUtils.PROJECT_LOCATION;
-            boolean doesProjectDirExists = Files.exists(Paths.get(pathToDirToMakeEmpty));
+            Path path = Paths.get(pathToDirToMakeEmpty);
+            boolean doesProjectDirExists = Files.exists(path);
             if (doesProjectDirExists) {
-                Files.delete(new File(pathToDirToMakeEmpty).toPath());
+                try (Stream<Path> pathStream = Files.walk(new File(pathToDirToMakeEmpty).toPath())) {
+                    pathStream.sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+                }
             } else {
-                Files.createDirectories(Paths.get(pathToDirToMakeEmpty));
+                Files.createDirectories(path);
             }
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);

@@ -11,6 +11,7 @@
 package com.redhat.devtools.intellij.commonuitest.utils.constants;
 
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
+import org.intellij.lang.annotations.Language;
 
 /**
  * XPath definitions
@@ -39,10 +40,15 @@ public class XPathDefinitions {
     public static final String IDE_FATAL_ERRORS_DIALOG = "//div[@accessiblename='IDE Fatal Errors' and @class='MyDialog']";
     public static final String PROJECT_STRUCTURE_DIALOG = "//div[@accessiblename='Project Structure' and @class='MyDialog']";
     public static final String TIP_DIALOG = "//div[@accessiblename='Tip of the Day' and @class='MyDialog']";
+    @Language("XPath")
     public static final String TIP_DIALOG_2 = "//div[@text='Tip of the Day']";
+    @Language("XPath")
     public static final String RECENT_PROJECTS = "//div[@accessiblename='Recent Projects']";
+    @Language("XPath")
     public static final String RECENT_PROJECT_PANEL_NEW = "//div[@class='NewRecentProjectPanel']";
+    @Language("XPath")
     public static final String RECENT_PROJECT_PANEL_NEW_2 = "//div[@class='JBViewport']/*";
+    @Language("XPath")
     public static final String IDE_ERROR_ICON = "//div[@class='IdeErrorsIcon']";
     public static final String BUILD_VIEW_EDITOR = "//div[@accessiblename='Editor']";
     public static final String JCOMBOBOX = "//div[@class='JComboBox']";
@@ -51,7 +57,9 @@ public class XPathDefinitions {
     public static final String HEAVY_WEIGHT_WINDOW = "//div[@class='HeavyWeightWindow']";
     public static final String JDK_COMBOBOX = "//div[@class='JdkComboBox']";
     public static final String JDK_COMBOBOX_PROJECT_WIZARD = "//div[@class='ProjectWizardJdkComboBox']"; // works for IntelliJ Idea 2024.1 and higher
+    @Language("XPath")
     public static final String MY_DIALOG = "//div[@class='MyDialog']";
+    @Language("XPath")
     public static final String TREE = "//div[@class='Tree']";
     public static final String TOOLTIP_TEXT_PROJECT = "//div[@tooltiptext='Project']";
     public static final String TOOLTIP_TEXT_HIDE = "//div[contains(@myvisibleactions, 'View),')]//div[@tooltiptext='Hide']";
@@ -68,8 +76,11 @@ public class XPathDefinitions {
     public static final String MY_ICON_LOCATE_SVG = "//div[@myicon='locate.svg']";
     public static final String MY_ICON_REFRESH = "//div[@myicon='refresh.svg']";
     public static final String CONTENT_COMBO_LABEL = "//div[@class='ContentComboLabel']";
+    @Language("XPath")
     public static final String JBLIST = "//div[@class='JBList']";
+    @Language("XPath")
     public static final String DIALOG_PANEL = "//div[@class='DialogPanel']";
+    @Language("XPath")
     public static final String MY_LIST = "//div[@class='MyList']";
     public static final String CODE_WITH_ME_JPANEL = "//div[@class='Wrapper'][.//div[@class='JBLabel']]//div[@class='JPanel']";
     public static final String BREAD_CRUMBS = "//div[@class='Breadcrumbs']";
@@ -81,6 +92,7 @@ public class XPathDefinitions {
     public static final String COLLAPSIBLE_TITLED_SEPARATOR_NEW_SIBLINGS = COLLAPSIBLE_TITLED_SEPARATOR_NEW + "/../*";
     public static final String EXTENDABLE_TEXT_FIELD = "//div[@class='ExtendableTextField']";
     public static final String JBTEXT_FIELD = "//div[@class='JBTextField']";
+    @Language("XPath")
     public static final String REMOVE_PROJECT_BUTTON = "//div[contains(@text.key, 'button.remove')]";
     public static final String SET_LANGUAGE = "//div[@class='SegmentedButtonComponent'][.//div[contains(@action.key, 'language.groovy')]]";
     public static final String SET_BUILD_SYSTEM = "//div[@class='SegmentedButtonComponent'][.//div[@action.key='buildsystem.type.intellij']]";
@@ -89,6 +101,7 @@ public class XPathDefinitions {
     public static final String GET_SET_MODULE_NAME_2024_2_AND_NEWER = "//div[@accessiblename='Module name:' and @class='JBTextField']";
     public static final String GET_SET_CONTENT_ROOT = "//div[@accessiblename='Content root:' and @class='ExtendableTextField']";
     public static final String GET_SET_MODULE_FILE_LOCATION = "//div[@accessiblename='Module file location:' and @class='ExtendableTextField']";
+    @Language("XPath")
     public static final String CREATE_NEW_PROJECT = "//div[@defaulticon='createNewProjectTab.svg']"; // works for IntelliJ Idea 2024.1 and higher
 
     private XPathDefinitions() {

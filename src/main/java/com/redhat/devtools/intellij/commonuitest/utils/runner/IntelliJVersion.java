@@ -28,17 +28,10 @@ public enum IntelliJVersion {
     COMMUNITY_V_2023_2("IC-2023.2"),
     COMMUNITY_V_2024_1("IC-2024.1"),
     COMMUNITY_V_2024_2("IC-2024.2"),
-    ULTIMATE_V_2020_2("IU-2020.2"),
-    ULTIMATE_V_2020_3("IU-2020.3"),
-    ULTIMATE_V_2021_1("IU-2021.1"),
-    ULTIMATE_V_2021_2("IU-2021.2"),
-    ULTIMATE_V_2023_2("IU-2023.2"),
-    ULTIMATE_V_2024_1("IU-2024.1"),
-    ULTIMATE_V_2024_2("IU-2024.2");
+    COMMUNITY_V_2024_3("IC-2024.3");
 
     private final String ideaVersionStringRepresentation;
     private final int ideaVersionIntRepresentation;
-    private final boolean isIdeaUltimate;
 
     IntelliJVersion(String ideaVersionStringRepresentation) {
         this.ideaVersionStringRepresentation = ideaVersionStringRepresentation;
@@ -46,7 +39,6 @@ public enum IntelliJVersion {
         String ideaVersionString = this.ideaVersionStringRepresentation.substring(3).replace(".", "");
         this.ideaVersionIntRepresentation = Integer.parseInt(ideaVersionString);
 
-        this.isIdeaUltimate = this.ideaVersionStringRepresentation.charAt(1) == 'U';
     }
 
     @Override
@@ -58,7 +50,4 @@ public enum IntelliJVersion {
         return this.ideaVersionIntRepresentation;
     }
 
-    public boolean isUltimate() {
-        return this.isIdeaUltimate;
-    }
 }
