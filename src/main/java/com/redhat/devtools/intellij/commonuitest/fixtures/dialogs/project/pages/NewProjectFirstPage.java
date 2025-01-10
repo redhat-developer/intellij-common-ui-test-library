@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
@@ -121,21 +122,21 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
      * @param targetSdkName name of the SDK to which will be changed the current settings
      */
     public void setProjectSdkIfAvailable(String targetSdkName) {
-            step("Select the '" + targetSdkName + "' as new project SDK", () -> {
+        step("Select the '" + targetSdkName + "' as new project SDK", () -> {
 
-                waitFor(
-                        Duration.ofSeconds(20),
-                        Duration.ofSeconds(5),
-                        "Waiting for 'resolving jdk' dialog to disappear.",
-                        () -> "Expected exactly one dialog but found " + remoteRobot.findAll(CommonContainerFixture.class, byXpath(XPathDefinitions.MY_DIALOG)).size(),
-                        () -> remoteRobot.findAll(CommonContainerFixture.class, byXpath(XPathDefinitions.MY_DIALOG)).size() == 1
-                );
+            waitFor(
+                Duration.ofSeconds(20),
+                Duration.ofSeconds(5),
+                "Waiting for 'resolving jdk' dialog to disappear.",
+                () -> "Expected exactly one dialog but found " + remoteRobot.findAll(CommonContainerFixture.class, byXpath(XPathDefinitions.MY_DIALOG)).size(),
+                () -> remoteRobot.findAll(CommonContainerFixture.class, byXpath(XPathDefinitions.MY_DIALOG)).size() == 1
+            );
 
-                ComboBoxFixture projectJdkComboBox = getProjectJdkComboBox();
-                String currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
-                if (currentlySelectedProjectSdk.contains(targetSdkName)) {
-                    return;
-                }
+            ComboBoxFixture projectJdkComboBox = getProjectJdkComboBox();
+            String currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
+            if (currentlySelectedProjectSdk.contains(targetSdkName)) {
+                return;
+            }
 
             if (UITestRunner.getIdeaVersionInt() >= 20221) {
                 projectJdkComboBox.click();
@@ -152,17 +153,9 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
 
             CommonContainerFixture parentFixture = waitFor(Duration.ofSeconds(20), Duration.ofSeconds(2), "Wait for the 'Project SDK' list to finish loading all items.", "The project JDK list did not load all items in 20 seconds.", this::didProjectSdkListLoadAllItems);
             JPopupMenuFixture projectSdkList = parentFixture.jPopupMenus(byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW)).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
-            List<RemoteText> sdkItems = projectSdkList.findAllText();
-            for (RemoteText sdkItem : sdkItems) {
-                if (sdkItem.getText().contains(targetSdkName)) {
-                    try {
-                        sdkItem.click();
-                    } catch (Exception e) {
-                        // issue #83 in the Remote-Robot framework - https://github.com/JetBrains/intellij-ui-test-robot/issues/83
-                        break;
-                    }
-                }
-            }
+            List<String> sdkItems = projectSdkList.jList().collectItems();
+            Optional<String> item = sdkItems.stream().filter(s -> s.startsWith(targetSdkName)).findFirst();
+            item.ifPresent(s -> projectSdkList.jList().clickItem(s, true));
         });
     }
 

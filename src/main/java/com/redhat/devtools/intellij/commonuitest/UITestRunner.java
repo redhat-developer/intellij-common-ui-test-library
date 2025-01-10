@@ -72,15 +72,17 @@ public class UITestRunner {
             UITestRunner.ideaVersion = ideaVersion;
 
             acceptAllTermsAndConditions();
-            if (ideaVersion.isUltimate()) {
-                activateEvaluateForFree();
-            }
 
             String fileExtension = OS_NAME.contains("windows") ? ".bat" : "";
             String[] platformTypeVersion = generatePlatformTypeVersion();
 
-            ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port, "-PplatformType=" + platformTypeVersion[0], "-PplatformVersion=" + platformTypeVersion[1]);
+            ProcessBuilder pb;
 
+            if (ideaVersion.toInt() < 20242) {
+                pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port);
+            } else {
+                pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-Drobot-server.port=" + port, "-PplatformType=" + platformTypeVersion[0], "-PplatformVersion=" + platformTypeVersion[1]);
+            }
             boolean isDebugOn = Boolean.parseBoolean(System.getProperty("intellij_debug", "false")); // For more info on intellij_debug please check README
             if (isDebugOn) {
                 redirectProcessOutputs(pb);
@@ -171,18 +173,14 @@ public class UITestRunner {
 
     private static void acceptAllTermsAndConditions() {
         String osxPlistSourceLocation;
-        if (ideaVersion.isUltimate()) {
-            osxPlistSourceLocation = "plist/ultimate_all/com.apple.java.util.prefs.plist";
-        } else if (ideaVersion.toInt() <= 20213) {
+        if (ideaVersion.toInt() <= 20213) {
             osxPlistSourceLocation = "plist/2021_3_and_older/com.apple.java.util.prefs.plist";
         } else {
             osxPlistSourceLocation = "plist/2022_1/com.apple.java.util.prefs.plist";
         }
 
         String linuxPrefsXmlSourceLocation;
-        if (ideaVersion.isUltimate()) {
-            linuxPrefsXmlSourceLocation = "prefs_xml/ultimate_all/prefs.xml";
-        } else if (ideaVersion.toInt() <= 20213) {
+        if (ideaVersion.toInt() <= 20213) {
             linuxPrefsXmlSourceLocation = "prefs_xml/2021_3_and_older/prefs.xml";
         } else {
             linuxPrefsXmlSourceLocation = "prefs_xml/2022_1/prefs.xml";
@@ -254,18 +252,6 @@ public class UITestRunner {
         }
     }
 
-    private static void activateEvaluateForFree() {
-        String targetEvaluationKeysDir = System.getProperty("user.dir") + "/build/idea-sandbox/config-uiTest/eval/";
-        createDirectoryHierarchy(targetEvaluationKeysDir);
-
-        for (String ideaVersionSubstring : new String[]{"202", "203", "211", "212"}) {
-            String keyFilename = "idea" + ideaVersionSubstring + ".evaluation.key";
-            String sourcePathToKey = "evaluate_for_free_keys/" + keyFilename;
-            String targetPathToKey = targetEvaluationKeysDir + keyFilename;
-            copyFileFromJarResourceDir(sourcePathToKey, targetPathToKey);
-        }
-    }
-
     private static void waitUntilIntelliJStarts(int port) {
         waitFor(Duration.ofSeconds(600), Duration.ofSeconds(3), "The IntelliJ Idea did not start in 10 minutes.", () -> isIntelliJUIVisible(port));
     }
@@ -303,14 +289,16 @@ public class UITestRunner {
     }
 
     private static void copyFileFromJarResourceDir(String sourceFileLocation, String destFileLocation) {
-        InputStream resourceStream = UITestRunner.class.getClassLoader().getResourceAsStream(sourceFileLocation);
-        try (OutputStream outStream = new FileOutputStream(new File(destFileLocation))) {
-            byte[] buffer = new byte[resourceStream.available()];
-            int count = resourceStream.read(buffer);
-            if (count == 0) {
-                throw new UITestException("Reading from buffer was unsuccessful.");
+        try (OutputStream outStream = new FileOutputStream(destFileLocation);
+             InputStream resourceStream = UITestRunner.class.getClassLoader().getResourceAsStream(sourceFileLocation)) {
+            if (resourceStream != null) {
+                byte[] buffer = new byte[resourceStream.available()];
+                int count = resourceStream.read(buffer);
+                if (count == 0) {
+                    throw new UITestException("Reading from buffer was unsuccessful.");
+                }
+                outStream.write(buffer);
             }
-            outStream.write(buffer);
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
@@ -319,7 +307,7 @@ public class UITestRunner {
     /**
      * Redirect stdout and stderr of running subprocess to files
      *
-     * @param pb    Process builder of running subprocess
+     * @param pb Process builder of running subprocess
      */
     private static void redirectProcessOutputs(ProcessBuilder pb) {
         String outDir = System.getProperty("user.dir") + File.separator + "intellij_debug";
@@ -341,7 +329,7 @@ public class UITestRunner {
      */
     private static String[] generatePlatformTypeVersion() {
         String[] platformTypeVersion = ideaVersion.toString().split("-", 2);
-        if (2 > platformTypeVersion.length){
+        if (2 > platformTypeVersion.length) {
             throw new UITestException("ideaVersion is not recognized.");
         }
         return platformTypeVersion;

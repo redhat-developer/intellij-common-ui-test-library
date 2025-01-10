@@ -1,7 +1,7 @@
 name: Sonar
 on:
   workflow_run:
-    workflows: ["Java CI with Gradle - mainidewindow.idestatusbar, screenshot"]
+    workflows: [Java CI with Gradle]
     types:
       - completed
 jobs:
@@ -13,42 +13,25 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
           ref: ${{github.event.workflow_run.head_sha}}
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: 17
+          java-version: 21
           distribution: 'temurin'
           cache: 'gradle'
-      - name: Download artifacts
-        uses: actions/github-script@v7.0.1
+      - name: Download 'mainidewindow.idestatusbar, screenshot' report
+        uses: actions/download-artifact@v4
         with:
-          script: |
-            var artifacts = await github.actions.listWorkflowRunArtifacts({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                run_id: ${{github.event.workflow_run.id}},
-            });
-            for (var artifact of artifacts.data.artifacts) {
-              if (artifact.name == 'linux-integration-test-reports' || artifact.name == 'ubuntu-latest-test-reports' || artifact.name == 'prInfo') {
-                var zipfile = await github.actions.downloadArtifact({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  artifact_id: artifact.id,
-                  archive_format: 'zip',
-                });
-                var fs = require('fs');
-                var path = require('path');
-                var pathFile = path.format({
-                  root: '${{github.workspace}}/',
-                  name: artifact.name,
-                  ext: '.zip'
-                });
-                fs.writeFileSync(pathFile, Buffer.from(zipfile.data));
-              }
-            }
-      - name: Unzip artifacts
-        run: |
-          find . -name '*.zip' -exec sh -c 'unzip -d "${{github.workspace}}/build" "$1"' _ {} \;
+          path: reports
+          pattern: mainidewindow.idestatusbar-test-reports
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{github.event.workflow_run.id}}
+      - name: Download PrInfo
+        uses: actions/download-artifact@v4
+        with:
+          pattern: prInfo
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{github.event.workflow_run.id}}
       - name: Run Sonar analysis
         env:        
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
