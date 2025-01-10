@@ -27,7 +27,6 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatu
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
-import com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,6 +37,7 @@ import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils.listOfRemoteTextToString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -167,7 +167,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         String newModuleName = currentModuleName + "1";
         javaFinalPage.setModuleName(newModuleName);
         currentModuleName = javaFinalPage.getModuleName();
-        assertTrue(currentModuleName.equals(newModuleName), "Currently set module name should be '" + newModuleName + BUT_IS + currentModuleName + "'.");
+        assertEquals(currentModuleName, newModuleName, "Currently set module name should be '" + newModuleName + BUT_IS + currentModuleName + "'.");
     }
 
     @Test
@@ -184,7 +184,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         String newContentRoot = currentContentRoot + "1";
         javaFinalPage.setContentRoot(newContentRoot);
         currentContentRoot = javaFinalPage.getContentRoot();
-        assertTrue(currentContentRoot.equals(newContentRoot), "Currently set content root location should be '" + newContentRoot + BUT_IS + currentContentRoot + "'.");
+        assertEquals(currentContentRoot, newContentRoot, "Currently set content root location should be '" + newContentRoot + BUT_IS + currentContentRoot + "'.");
     }
 
     @Test
@@ -201,7 +201,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         String newModuleFileLocation = currentModuleFileLocation + "1";
         javaFinalPage.setModuleFileLocation(newModuleFileLocation);
         currentModuleFileLocation = javaFinalPage.getModuleFileLocation();
-        assertTrue(currentModuleFileLocation.equals(newModuleFileLocation), "Currently set module file location should be '" + newModuleFileLocation + BUT_IS + currentModuleFileLocation + "'.");
+        assertEquals(currentModuleFileLocation, newModuleFileLocation, "Currently set module file location should be '" + newModuleFileLocation + BUT_IS + currentModuleFileLocation + "'.");
     }
 
     @Test
@@ -213,10 +213,10 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
         javaFinalPage.setProjectFormat(AbstractNewProjectFinalPage.ProjectFormatType.IPR_FILE_BASED);
         AbstractNewProjectFinalPage.ProjectFormatType currentlySetProjectFormatType = javaFinalPage.getProjectFormat();
-        assertTrue(currentlySetProjectFormatType.equals(AbstractNewProjectFinalPage.ProjectFormatType.IPR_FILE_BASED), "Currently set value in the 'Project format' combo box should be '" + AbstractNewProjectFinalPage.ProjectFormatType.IPR_FILE_BASED + BUT_IS + currentlySetProjectFormatType + "'.");
+        assertEquals(AbstractNewProjectFinalPage.ProjectFormatType.IPR_FILE_BASED, currentlySetProjectFormatType, "Currently set value in the 'Project format' combo box should be '" + AbstractNewProjectFinalPage.ProjectFormatType.IPR_FILE_BASED + BUT_IS + currentlySetProjectFormatType + "'.");
         javaFinalPage.setProjectFormat(AbstractNewProjectFinalPage.ProjectFormatType.IDEA_DIRECTORY_BASED);
         currentlySetProjectFormatType = javaFinalPage.getProjectFormat();
-        assertTrue(currentlySetProjectFormatType.equals(AbstractNewProjectFinalPage.ProjectFormatType.IDEA_DIRECTORY_BASED), "Currently set value in the 'Project format' combo box should be '" + AbstractNewProjectFinalPage.ProjectFormatType.IDEA_DIRECTORY_BASED + BUT_IS + currentlySetProjectFormatType + "'.");
+        assertEquals(AbstractNewProjectFinalPage.ProjectFormatType.IDEA_DIRECTORY_BASED, currentlySetProjectFormatType, "Currently set value in the 'Project format' combo box should be '" + AbstractNewProjectFinalPage.ProjectFormatType.IDEA_DIRECTORY_BASED + BUT_IS + currentlySetProjectFormatType + "'.");
     }
 
     @Test
@@ -343,10 +343,10 @@ public class NewProjectDialogTest extends LibraryTestBase {
             newProjectFirstPage.setProjectSdkIfAvailable("11");
             ComboBoxFixture projectJdkComboBox = newProjectFirstPage.getProjectJdkComboBox();
             String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
-            assertTrue(currentlySelectedProjectSdk.contains("11"), "Selected project SDK should be Java 11 but is '" + currentlySelectedProjectSdk + "'");
+            assertTrue(currentlySelectedProjectSdk.startsWith("11"), "Selected project SDK should be Java 11 but is '" + currentlySelectedProjectSdk + "'");
             newProjectFirstPage.setProjectSdkIfAvailable("17");
             currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
-            assertTrue(currentlySelectedProjectSdk.contains("17"), "Selected project SDK should be Java 17 but is '" + currentlySelectedProjectSdk + "'");
+            assertTrue(currentlySelectedProjectSdk.startsWith("17"), "Selected project SDK should be Java 17 but is '" + currentlySelectedProjectSdk + "'");
         }
     }
 
@@ -426,13 +426,13 @@ public class NewProjectDialogTest extends LibraryTestBase {
         String newProjectName = currentProjectName + "1";
         finalPage.setProjectName(newProjectName);
         currentProjectName = finalPage.getProjectName();
-        assertTrue(currentProjectName.equals(newProjectName), "Currently set project name should be '" + newProjectName + BUT_IS + currentProjectName + "'.");
+        assertEquals(currentProjectName, newProjectName, "Currently set project name should be '" + newProjectName + BUT_IS + currentProjectName + "'.");
 
         String currentProjectLocation = finalPage.getProjectLocation();
         String newProjectLocation = currentProjectLocation + "2";
         finalPage.setProjectLocation(newProjectLocation);
         currentProjectLocation = finalPage.getProjectLocation();
-        assertTrue(currentProjectLocation.equals(newProjectLocation), "Currently set project location should be '" + newProjectLocation + BUT_IS + currentProjectLocation + "'.");
+        assertEquals(currentProjectLocation, newProjectLocation, "Currently set project location should be '" + newProjectLocation + BUT_IS + currentProjectLocation + "'.");
     }
 
     private void testOpenArtifactCoordinatesMavenGradle(CreateCloseUtils.NewProjectType newProjectType) {
@@ -484,7 +484,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
                 currentValue = mavenGradleFinalPage.getVersion();
                 break;
         }
-        assertTrue(currentValue.equals(newValue), "Currently set '" + attribute + "' should be '" + newValue + BUT_IS + currentValue + "'.");
+        assertEquals(currentValue, newValue, "Currently set '" + attribute + "' should be '" + newValue + BUT_IS + currentValue + "'.");
     }
 
     private boolean isMoreSettingsOpened(JavaNewProjectFinalPage javaFinalPage) {
@@ -511,15 +511,15 @@ public class NewProjectDialogTest extends LibraryTestBase {
         ARTIFACT_ID("artifact ID"),
         VERSION("version");
 
-        private final String textReperentation;
+        private final String textRepresentation;
 
         ArtifactCoordinatesAttributes(String textRepresentation) {
-            this.textReperentation = textRepresentation;
+            this.textRepresentation = textRepresentation;
         }
 
         @Override
         public String toString() {
-            return this.textReperentation;
+            return this.textRepresentation;
         }
     }
 }

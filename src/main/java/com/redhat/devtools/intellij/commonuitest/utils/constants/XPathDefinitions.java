@@ -52,10 +52,15 @@ public class XPathDefinitions {
     public static final String IDE_ERROR_ICON = "//div[@class='IdeErrorsIcon']";
     public static final String BUILD_VIEW_EDITOR = "//div[@accessiblename='Editor']";
     public static final String JCOMBOBOX = "//div[@class='JComboBox']";
+    @Language("XPath")
     public static final String MORE_SETTINGS_TITLED_SEPARATOR = "//div[@class='TitledSeparator']/../../*";
+    @Language("XPath")
     public static final String ARTIFACTS_COORDINATES_DIALOG_PANEL = "//div[@class='DialogPanel']/*";
+    @Language("XPath")
     public static final String HEAVY_WEIGHT_WINDOW = "//div[@class='HeavyWeightWindow']";
+    @Language("XPath")
     public static final String JDK_COMBOBOX = "//div[@class='JdkComboBox']";
+    @Language("XPath")
     public static final String JDK_COMBOBOX_PROJECT_WIZARD = "//div[@class='ProjectWizardJdkComboBox']"; // works for IntelliJ Idea 2024.1 and higher
     @Language("XPath")
     public static final String MY_DIALOG = "//div[@class='MyDialog']";
@@ -84,6 +89,7 @@ public class XPathDefinitions {
     public static final String MY_LIST = "//div[@class='MyList']";
     public static final String CODE_WITH_ME_JPANEL = "//div[@class='Wrapper'][.//div[@class='JBLabel']]//div[@class='JPanel']";
     public static final String BREAD_CRUMBS = "//div[@class='Breadcrumbs']";
+    @Language("XPath")
     public static final String EMPTY_PROJECT = "//div[@visible_text='Empty Project']";
     public static final String SINGLE_HEIGHT_LABEL = "//div[@class='SingleHeightLabel']";
     public static final String COLLAPSIBLE_TITLED_SEPARATOR = "//div[@class='CollapsibleTitledSeparator']";
@@ -91,11 +97,15 @@ public class XPathDefinitions {
     public static final String COLLAPSIBLE_TITLED_SEPARATOR_SIBLINGS = COLLAPSIBLE_TITLED_SEPARATOR + "/../*";
     public static final String COLLAPSIBLE_TITLED_SEPARATOR_NEW_SIBLINGS = COLLAPSIBLE_TITLED_SEPARATOR_NEW + "/../*";
     public static final String EXTENDABLE_TEXT_FIELD = "//div[@class='ExtendableTextField']";
+    @Language("XPath")
     public static final String JBTEXT_FIELD = "//div[@class='JBTextField']";
     @Language("XPath")
     public static final String REMOVE_PROJECT_BUTTON = "//div[contains(@text.key, 'button.remove')]";
+    @Language("XPath")
     public static final String SET_LANGUAGE = "//div[@class='SegmentedButtonComponent'][.//div[contains(@action.key, 'language.groovy')]]";
+    @Language("XPath")
     public static final String SET_BUILD_SYSTEM = "//div[@class='SegmentedButtonComponent'][.//div[@action.key='buildsystem.type.intellij']]";
+    @Language("XPath")
     public static final String SET_BUILD_SYSTEM_2024_2_AND_NEWER = "//div[@accessiblename='Build system:' and @class='SegmentedButtonComponent']";  // works for IntelliJ Idea 2024.1 and higher
     public static final String GET_SET_MODULE_NAME = "//div[@accessiblename='Module name:' and @class='JBTextField']";
     public static final String GET_SET_MODULE_NAME_2024_2_AND_NEWER = "//div[@accessiblename='Module name:' and @class='JBTextField']";

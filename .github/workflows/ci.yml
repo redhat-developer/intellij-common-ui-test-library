@@ -67,19 +67,19 @@ jobs:
       - name: Archiving tests reports
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-mainidewindow.idestatusbar-test-reports
+          name: ${{ matrix.os }}-mainidewindow-idestatusbar-test-reports
           path: src/test-project/build/reports/tests/*
         if: always()
       - name: Archiving screenshots
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-mainidewindow.idestatusbar-screenshots
+          name: ${{ matrix.os }}-mainidewindow-idestatusbar-screenshots
           path: src/test-project/build/screenshots/*
         if: always()
       - name: Archiving StepLogger logs
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-mainidewindow.idestatusbar-steplogger-logs
+          name: ${{ matrix.os }}-mainidewindow-idestatusbar-steplogger-logs
           path: src/test-project/build/test-results/*
         if: always()
 
@@ -119,19 +119,19 @@ jobs:
       - name: Archiving tests reports
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-dialogs_information_settings-test-reports
+          name: ${{ matrix.os }}-dialogs-information-settings-test-reports
           path: src/test-project/build/reports/tests/*
         if: always()
       - name: Archiving screenshots
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-dialogs_information_settings-screenshots
+          name: ${{ matrix.os }}-dialogs-information-settings-screenshots
           path: src/test-project/build/screenshots/*
         if: always()
       - name: Archiving StepLogger logs
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-dialogs_information_settings-steplogger-logs
+          name: ${{ matrix.os }}-dialogs-information-settings-steplogger-logs
           path: src/test-project/build/test-results/*
         if: always()
 
@@ -177,19 +177,19 @@ jobs:
       - name: Archiving tests reports
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-dialogs_project_manipulation-test-reports
+          name: ${{ matrix.os }}-dialogs-project-manipulation-test-reports
           path: src/test-project/build/reports/tests/*
         if: always()
       - name: Archiving screenshots
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-dialogs_project_manipulation-screenshots
+          name: ${{ matrix.os }}-dialogs-project-manipulation-screenshots
           path: src/test-project/build/screenshots/*
         if: always()
       - name: Archiving StepLogger logs
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.os }}-dialogs_project_manipulation-steplogger-logs
+          name: ${{ matrix.os }}-dialogs-project-manipulation-steplogger-logs
           path: src/test-project/build/test-results/*
         if: always()
 
