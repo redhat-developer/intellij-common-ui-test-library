@@ -102,19 +102,19 @@ jobs:
           Xvfb -ac :99 -screen 0 1920x1080x24 &
           cd src/test-project
           chmod +x gradlew
-          ./gradlew clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.information.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.settings.*
+          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.information.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.settings.*
         if: runner.os == 'Linux'
       - name: Run integration tests on Windows
         run: |
           cd src\test-project
           chmod +x gradlew.bat
-          .\gradlew.bat clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.information.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.settings.*
+          .\gradlew.bat integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.information.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.settings.*
         if: runner.os == 'Windows'
       - name: Run integration tests on MacOS
         run: |
           cd src/test-project
           chmod +x gradlew
-          ./gradlew clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.information.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.settings.*
+          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.information.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.settings.*
         if: runner.os == 'macOS'
       - name: Archiving tests reports
         uses: actions/upload-artifact@v4
@@ -160,19 +160,19 @@ jobs:
           Xvfb -ac :99 -screen 0 1920x1080x24 &
           cd src/test-project
           chmod +x gradlew
-          ./gradlew clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.project_manipulation.*
+          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.project_manipulation.*
         if: runner.os == 'Linux'
       - name: Run integration tests on Windows
         run: |
           cd src\test-project
           chmod +x gradlew.bat
-          .\gradlew.bat clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.project_manipulation.*
+          .\gradlew.bat integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.project_manipulation.*
         if: runner.os == 'Windows'
       - name: Run integration tests on MacOS
         run: |
           cd src/test-project
           chmod +x gradlew
-          ./gradlew clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.project_manipulation.*
+          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.project_manipulation.*
         if: runner.os == 'macOS'
       - name: Archiving tests reports
         uses: actions/upload-artifact@v4
@@ -213,19 +213,19 @@ jobs:
           Xvfb -ac :99 -screen 0 1920x1080x24 &
           cd src/test-project
           chmod +x gradlew
-          ./gradlew clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.FlatWelcomeFrameTest
+          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.FlatWelcomeFrameTest
         if: runner.os == 'Linux'
       - name: Run integration tests on Windows
         run: |
           cd src\test-project
           chmod +x gradlew.bat
-          .\gradlew.bat clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.FlatWelcomeFrameTest
+          .\gradlew.bat integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.FlatWelcomeFrameTest
         if: runner.os == 'Windows'
       - name: Run integration tests on MacOS
         run: |
           cd src/test-project
           chmod +x gradlew
-          ./gradlew clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.FlatWelcomeFrameTest
+          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.FlatWelcomeFrameTest
         if: runner.os == 'macOS'
       - name: Archiving tests reports
         uses: actions/upload-artifact@v4
@@ -266,19 +266,19 @@ jobs:
           Xvfb -ac :99 -screen 0 1920x1080x24 &
           cd src/test-project
           chmod +x gradlew
-          ./gradlew clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.menubar.*
+          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.menubar.*
         if: runner.os == 'Linux'
       - name: Run integration tests on Windows
         run: |
           cd src\test-project
           chmod +x gradlew.bat
-          .\gradlew.bat clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.menubar.*
+          .\gradlew.bat integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.menubar.*
         if: runner.os == 'Windows'
       - name: Run integration tests on MacOS
         run: |
           cd src/test-project
           chmod +x gradlew
-          ./gradlew clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.menubar.*
+          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.menubar.*
         if: runner.os == 'macOS'
       - name: Archiving tests reports
         uses: actions/upload-artifact@v4
@@ -320,19 +320,19 @@ jobs:
           Xvfb -ac :99 -screen 0 1920x1080x24 &
           cd src/test-project
           chmod +x gradlew
-          ./gradlew clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.*
+          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.*
         if: runner.os == 'Linux'
       - name: Run integration tests on Windows
         run: |
           cd src\test-project
           chmod +x gradlew.bat
-          .\gradlew.bat clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.*
+          .\gradlew.bat integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.*
         if: runner.os == 'Windows'
       - name: Run integration tests on MacOS
         run: |
           cd src/test-project
           chmod +x gradlew
-          ./gradlew clean integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.*
+          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.*
         if: runner.os == 'macOS'
       - name: Archiving tests reports
         uses: actions/upload-artifact@v4
