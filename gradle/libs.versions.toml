@@ -2,7 +2,7 @@
 # libraries
 remote-robot = "0.11.22"
 kotlin = "2.1.0"
-junit-jupiter = "5.11.3"
+junit-jupiter = "5.11.4"
 
 # plugins
 gradleNexusPublishPlugin = "2.0.0"
