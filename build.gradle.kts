@@ -46,7 +46,6 @@ tasks {
             property("sonar.organization", "redhat-developer")
             property("sonar.host.url", "https://sonarcloud.io")
             property("sonar.sources", "src")
-            //property("sonar.gradle.skipCompile", "true")
         }
     }
 

@@ -13,17 +13,17 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
           ref: ${{github.event.workflow_run.head_sha}}
-      - name: Set up JDK 21
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: 21
+          java-version: 17
           distribution: 'temurin'
           cache: 'gradle'
-      - name: Download 'mainidewindow.idestatusbar, screenshot' report
+      - name: Download reports
         uses: actions/download-artifact@v4
         with:
           path: reports
-          pattern: mainidewindow.idestatusbar-test-reports
+          pattern: -test-reports
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{github.event.workflow_run.id}}
       - name: Download PrInfo
