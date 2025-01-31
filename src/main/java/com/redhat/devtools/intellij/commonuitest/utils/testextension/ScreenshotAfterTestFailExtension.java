@@ -21,12 +21,14 @@ import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import java.time.Duration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 
 /**
  * ScreenshotAfterTestFailExtension takes screenshot immediately after test has failed
- * and perform a clean up to ensure no dialog or windows is opened<br>
+ * and perform a cleanup to ensure no dialog or windows is opened<br>
  *
  * <b>USAGE:</b> Add the following annotation before every class with JUnit tests:
  * {@code @ExtendWith(ScreenshotAfterTestFailExtension.class)}<br>
@@ -35,18 +37,23 @@ import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
  */
 public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallback {
     private final RemoteRobot remoteRobot;
+    protected static final Logger LOGGER = Logger.getLogger(ScreenshotAfterTestFailExtension.class.getName());
 
     public ScreenshotAfterTestFailExtension() {
         this.remoteRobot = UITestRunner.getRemoteRobot();
     }
 
     /**
-     * Take screenshot right after a test has failed and perform a clean up to ensure no dialog or window is opened
+     * Take screenshot right after a test has failed and perform a cleanup to ensure no dialog or window is opened
      *
      * @param extensionContext test run data
      */
     @Override
     public void afterTestExecution(ExtensionContext extensionContext) {
+        if (remoteRobot == null) {
+            LOGGER.log(Level.SEVERE, "Can take a screenshot, remoteRobot is null!");
+            return;
+        }
         boolean testFailed = extensionContext.getExecutionException().isPresent();
         if (testFailed) {
             step("Take a screenshot after a test has failed", () ->
