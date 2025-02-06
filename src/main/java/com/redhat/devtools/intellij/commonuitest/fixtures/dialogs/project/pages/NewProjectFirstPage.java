@@ -168,6 +168,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
                 System.out.println("About to click on "+label);
                 projectSdkList.jList().clickItem(label, true);
             } else {
+                System.out.println("No SDK found starting with"+targetSdkName);
                 ScreenshotUtils.takeScreenshot(remoteRobot);
             }
 

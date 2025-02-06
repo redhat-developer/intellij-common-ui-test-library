@@ -2,7 +2,7 @@ import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 
 plugins {
     id("java")
-    id("org.jetbrains.intellij.platform") version ("2.0.1")
+    id("org.jetbrains.intellij.platform") version ("2.2.1")
 }
 
 group = "com.redhat.devtools.intellij"
@@ -28,9 +28,9 @@ dependencies {
         instrumentationTools()
     }
     testImplementation("com.redhat.devtools.intellij:intellij-common-ui-test-library")
-    testImplementation("org.junit.platform:junit-platform-launcher:1.8.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+    testImplementation("org.junit.platform:junit-platform-launcher:1.10.3")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.3")
 }
 
 tasks {
