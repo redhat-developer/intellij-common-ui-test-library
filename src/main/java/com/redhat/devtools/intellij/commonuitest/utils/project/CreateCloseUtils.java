@@ -14,7 +14,6 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
-import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.CodeWithMeDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.AbstractNewProjectFinalPage;
@@ -50,8 +49,7 @@ public class CreateCloseUtils {
      * @param projectName    name of new project
      * @param newProjectType type of new project
      */
-    public static void createNewProject(RemoteRobot remoteRobot, String projectName, NewProjectType newProjectType) {
-        NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
+    public static void createNewProject(RemoteRobot remoteRobot, String projectName, NewProjectType newProjectType, NewProjectDialogWizard newProjectDialogWizard) {
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
 
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
@@ -61,10 +59,12 @@ public class CreateCloseUtils {
                 case PLAIN_JAVA:
                     newProjectFirstPage.setBuildSystem("IntelliJ");
                     break;
-                case MAVEN:
-                case GRADLE:
+                case MAVEN, GRADLE:
                     newProjectFirstPage.setBuildSystem(newProjectType.toString());
                     break;
+                case EMPTY_PROJECT:
+                default:
+                    throw new IllegalStateException("Unexpected value: " + newProjectType);
             }
         } else {
             newProjectFirstPage.selectNewProjectType(newProjectType.toString());
@@ -98,8 +98,7 @@ public class CreateCloseUtils {
      * @param remoteRobot    reference to the RemoteRobot instance
      * @param projectName    name of new project
      */
-    public static void createEmptyProject(RemoteRobot remoteRobot, String projectName) {
-        NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
+    public static void createEmptyProject(RemoteRobot remoteRobot, String projectName, NewProjectDialogWizard newProjectDialogWizard) {
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
 
         newProjectFirstPage.selectNewProjectType(NewProjectType.EMPTY_PROJECT.toString());
@@ -127,19 +126,6 @@ public class CreateCloseUtils {
     }
 
     /**
-     * Open 'New Project' dialog from 'Welcome to IntelliJ IDEA' dialog
-     *
-     * @param remoteRobot reference to the RemoteRobot instance
-     * @return NewProjectDialogWizard fixture
-     */
-    public static NewProjectDialogWizard openNewProjectDialogFromWelcomeDialog(RemoteRobot remoteRobot) {
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-        flatWelcomeFrame.switchToProjectsPage();
-        flatWelcomeFrame.createNewProject();
-        return remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
-    }
-
-    /**
      * Close currently opened project
      *
      * @param remoteRobot reference to the RemoteRobot instance
@@ -147,20 +133,6 @@ public class CreateCloseUtils {
     public static void closeProject(RemoteRobot remoteRobot) {
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
         mainIdeWindow.closeProject();
-        remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-    }
-
-    /**
-     * Open existing project from the Welcome Dialog
-     *
-     * @param remoteRobot reference to the RemoteRobot instance
-     * @param projectName name of existing project
-     */
-    public static void openProjectFromWelcomeDialog(RemoteRobot remoteRobot, String projectName) {
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-        flatWelcomeFrame.openProject(projectName);
-
-        waitAfterOpeningProject(remoteRobot);
     }
 
     /**

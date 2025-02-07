@@ -46,12 +46,12 @@ public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallb
     @Override
     public void afterTestExecution(ExtensionContext extensionContext) {
         RemoteRobot remoteRobot = UITestRunner.getRemoteRobot();
-        if (remoteRobot == null) {
-            LOGGER.log(Level.SEVERE, "Can't take a screenshot, remoteRobot is null!");
-            return;
-        }
         boolean testFailed = extensionContext.getExecutionException().isPresent();
         if (testFailed) {
+            if (remoteRobot == null) {
+                LOGGER.log(Level.SEVERE, "Can't take a screenshot, remoteRobot is null!");
+                return;
+            }
             step("Take a screenshot after a test has failed",
                 () -> ScreenshotUtils.takeScreenshot(remoteRobot)
             );

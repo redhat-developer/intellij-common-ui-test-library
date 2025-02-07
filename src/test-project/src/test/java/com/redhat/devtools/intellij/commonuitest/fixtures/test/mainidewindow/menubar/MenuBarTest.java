@@ -15,7 +15,9 @@ import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
+import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.TipDialog;
+import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar.MenuBar;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ProjectExplorer;
@@ -44,7 +46,9 @@ class MenuBarTest extends LibraryTestBase {
 
     @BeforeAll
     public static void prepareProject() {
-        CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        NewProjectDialogWizard newProjectDialogWizard = flatWelcomeFrame.openNewProjectDialogFromWelcomeDialog(remoteRobot);
+        CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.PLAIN_JAVA, newProjectDialogWizard);
     }
 
     @AfterAll
@@ -64,7 +68,8 @@ class MenuBarTest extends LibraryTestBase {
     @Test
     public void closeAndReopenProjectTest() {
         CreateCloseUtils.closeProject(remoteRobot);
-        CreateCloseUtils.openProjectFromWelcomeDialog(remoteRobot, PROJECT_NAME);
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame.openProjectFromWelcomeDialog(remoteRobot, PROJECT_NAME);
 
         AbstractToolWinPane toolWinPane;
         if (UITestRunner.getIdeaVersionInt() >= 20221) {

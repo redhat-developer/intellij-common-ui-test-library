@@ -62,7 +62,8 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @BeforeEach
     public void openNewProjectDialog() {
-        newProjectDialogWizard = CreateCloseUtils.openNewProjectDialogFromWelcomeDialog(remoteRobot);
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        newProjectDialogWizard = flatWelcomeFrame.openNewProjectDialogFromWelcomeDialog(remoteRobot);
         newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
     }
 
@@ -391,7 +392,9 @@ public class NewProjectDialogTest extends LibraryTestBase {
     public void createEmptyProjectTest() {
         cleanUp();
         String projectName = "empty-test-project";
-        CreateCloseUtils.createEmptyProject(remoteRobot, projectName);
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        newProjectDialogWizard = flatWelcomeFrame.openNewProjectDialogFromWelcomeDialog(remoteRobot);
+        CreateCloseUtils.createEmptyProject(remoteRobot, projectName, newProjectDialogWizard);
         mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(60));
         assertTrue(mainIdeWindow.isShowing(), "The Main IDE Window should be open after creating an empty project.");
 
@@ -399,7 +402,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         mainIdeWindow = null;
 
         // IntelliJ remembers the last chosen project language, for continuity with other tests select Java project
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.clearWorkspace();
         flatWelcomeFrame.createNewProject();
         selectJavaNewProjectType();

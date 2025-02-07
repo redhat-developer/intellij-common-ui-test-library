@@ -12,6 +12,7 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.informat
 
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
+import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.CodeWithMeDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.AbstractNewProjectFinalPage;
@@ -26,7 +27,6 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 
 import static com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils.getFinalPage;
-import static com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils.openNewProjectDialogFromWelcomeDialog;
 
 /**
  * Code With Me dialog test
@@ -40,7 +40,8 @@ class CodeWithMeDialogTest extends LibraryTestBase {
     @BeforeAll
     public static void prepareProject() {
         if (IDEA_VERSION_WITH_CWM_DIALOG_OPENED) {
-            NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
+            FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+            NewProjectDialogWizard newProjectDialogWizard = flatWelcomeFrame.openNewProjectDialogFromWelcomeDialog(remoteRobot);
             NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
 
             if (UITestRunner.getIdeaVersionInt() >= 20221) {

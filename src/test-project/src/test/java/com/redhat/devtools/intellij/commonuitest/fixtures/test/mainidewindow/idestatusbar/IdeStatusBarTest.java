@@ -13,6 +13,7 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.id
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
+import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.MavenGradleNewProjectFinalPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.NewProjectFirstPage;
@@ -41,12 +42,13 @@ class IdeStatusBarTest extends LibraryTestBase {
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         List<RemoteText> inlineProgressPanelContent = ideStatusBar.inlineProgressPanel().findAllText();
         String inlineProgressPanelText = TextUtils.listOfRemoteTextToString(inlineProgressPanelContent);
-        return new kotlin.Pair<>(!inlineProgressPanelText.equals(""), ideStatusBar);
+        return new kotlin.Pair<>(!inlineProgressPanelText.isEmpty(), ideStatusBar);
     }
 
     @BeforeEach
     public void prepareProject() {
-        NewProjectDialogWizard newProjectDialogWizard = CreateCloseUtils.openNewProjectDialogFromWelcomeDialog(remoteRobot);
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        NewProjectDialogWizard newProjectDialogWizard = flatWelcomeFrame.openNewProjectDialogFromWelcomeDialog(remoteRobot);
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
 
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
