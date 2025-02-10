@@ -48,23 +48,26 @@ public class MainIdeWindow extends CommonContainerFixture {
      */
     public void maximizeIdeWindow() {
         if (remoteRobot.isWin()) {
-            runJs("const width = component.getWidth();\n" +
-                    "const height = component.getHeight();\n" +
-                    "const horizontal_offset = width-72;\n" +
-                    "robot.click(component, new Point(horizontal_offset, 14), MouseButton.LEFT_BUTTON, 1);\n" +
-                    "const width_after = component.getWidth();\n" +
-                    "const height_after = component.getHeight();\n" +
-                    "const horizontal_offset_after = width_after-72;\n" +
-                    "if (width > width_after || height > height_after) { robot.click(component, new Point(horizontal_offset_after, 14), MouseButton.LEFT_BUTTON, 1); }");
+            runJs("""
+                    const width = component.getWidth();
+                    const height = component.getHeight();
+                    const horizontal_offset = width-72;
+                    robot.click(component, new Point(horizontal_offset, 14), MouseButton.LEFT_BUTTON, 1);
+                    const width_after = component.getWidth();
+                    const height_after = component.getHeight();
+                    const horizontal_offset_after = width_after-72;
+                    if (width > width_after || height > height_after) { robot.click(component, new Point(horizontal_offset_after, 14), MouseButton.LEFT_BUTTON, 1); }""");
+
         } else {
-            runJs("const width = component.getWidth();\n" +
-                    "const height = component.getHeight();\n" +
-                    "const horizontal_offset = width/2;\n" +
-                    "robot.click(component, new Point(horizontal_offset, 10), MouseButton.LEFT_BUTTON, 2);\n" +
-                    "const width_after = component.getWidth();\n" +
-                    "const height_after = component.getHeight();\n" +
-                    "const horizontal_offset_after = width_after/2;\n" +
-                    "if (width > width_after || height > height_after) { robot.click(component, new Point(horizontal_offset_after, 10), MouseButton.LEFT_BUTTON, 2); }");
+            runJs("""
+                const width = component.getWidth();
+                const height = component.getHeight();
+                const horizontal_offset = width/2;
+                robot.click(component, new Point(horizontal_offset, 10), MouseButton.LEFT_BUTTON, 2);
+                const width_after = component.getWidth();
+                const height_after = component.getHeight();
+                const horizontal_offset_after = width_after/2;
+                if (width > width_after || height > height_after) { robot.click(component, new Point(horizontal_offset_after, 10), MouseButton.LEFT_BUTTON, 2); }""");
         }
     }
 

@@ -126,16 +126,6 @@ public class CreateCloseUtils {
     }
 
     /**
-     * Close currently opened project
-     *
-     * @param remoteRobot reference to the RemoteRobot instance
-     */
-    public static void closeProject(RemoteRobot remoteRobot) {
-        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
-        mainIdeWindow.closeProject();
-    }
-
-    /**
      * Get appropriate final page instance
      *
      * @param newProjectDialogWizard instance of the 'New Project' dialog fixture
@@ -143,15 +133,12 @@ public class CreateCloseUtils {
      * @return final page instance
      */
     public static AbstractNewProjectFinalPage getFinalPage(NewProjectDialogWizard newProjectDialogWizard, NewProjectType newProjectType) {
-        switch (newProjectType) {
-            case PLAIN_JAVA:
-                return newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
-            case MAVEN:
-            case GRADLE:
-                return newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
-            default:
-                throw new UITestException("Unsupported project type.");
-        }
+        return switch (newProjectType) {
+            case PLAIN_JAVA -> newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
+            case MAVEN, GRADLE ->
+                newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
+            default -> throw new UITestException("Unsupported project type.");
+        };
     }
 
     /**

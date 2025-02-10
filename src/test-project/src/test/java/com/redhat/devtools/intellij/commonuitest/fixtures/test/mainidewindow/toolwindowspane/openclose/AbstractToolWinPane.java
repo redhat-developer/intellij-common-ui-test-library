@@ -14,12 +14,12 @@ import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowLeftToolbar;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowRightToolbar;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
-import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import org.junit.jupiter.api.AfterAll;
 
 import java.time.Duration;
@@ -38,7 +38,7 @@ abstract class AbstractToolWinPane extends LibraryTestBase {
 
     @AfterAll
     public static void closeCurrentProject() {
-        CreateCloseUtils.closeProject(remoteRobot);
+        remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10)).closeProject();
     }
 
     protected static boolean isPaneOpened(Class<? extends CommonContainerFixture> fixtureClass) {

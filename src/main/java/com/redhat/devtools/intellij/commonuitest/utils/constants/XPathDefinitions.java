@@ -78,6 +78,7 @@ public class XPathDefinitions {
     public static final String MY_ICON_EXPAND_ALL = "//div[contains(@myvisibleactions, 'View),')]//div[@myicon='expandall.svg']";
     public static final String MY_ICON_EXPAND_ALL_2024_2 = "//div[@myicon='expandAll.svg']";
     public static final String MY_ICON_EXPAND_ALL_IDE = "//div[contains(@myvisibleactions, 'IDE')]//div[@myicon='expandall.svg']";
+    @Language("XPath")
     public static final String MY_ICON_LOCATE_SVG = "//div[@myicon='locate.svg']";
     public static final String MY_ICON_REFRESH = "//div[@myicon='refresh.svg']";
     public static final String CONTENT_COMBO_LABEL = "//div[@class='ContentComboLabel']";

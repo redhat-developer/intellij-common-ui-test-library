@@ -73,7 +73,7 @@ class CodeWithMeDialogTest extends LibraryTestBase {
     @AfterAll
     public static void closeCurrentProject() {
         if (IDEA_VERSION_WITH_CWM_DIALOG_OPENED) {
-            CreateCloseUtils.closeProject(remoteRobot);
+            remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10)).closeProject();
         }
     }
 

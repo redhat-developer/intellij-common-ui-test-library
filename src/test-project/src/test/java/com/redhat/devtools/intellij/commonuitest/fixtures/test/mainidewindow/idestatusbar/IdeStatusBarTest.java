@@ -70,7 +70,7 @@ class IdeStatusBarTest extends LibraryTestBase {
 
     @AfterEach
     public void closeCurrentProject() {
-        CreateCloseUtils.closeProject(remoteRobot);
+        remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10)).closeProject();
     }
 
     @Test

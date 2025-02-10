@@ -25,7 +25,7 @@ import java.time.Duration;
 import java.util.logging.Level;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -69,7 +69,7 @@ public class TipDialogTest extends LibraryTestBase {
         boolean checkboxStateBefore = tipDialog.dontShowTipsCheckBox().isSelected();
         tipDialog.dontShowTipsCheckBox().setValue(!checkboxStateBefore);
         boolean checkboxStateAfter = tipDialog.dontShowTipsCheckBox().isSelected();
-        assertTrue(checkboxStateAfter != checkboxStateBefore,
+        assertNotEquals(checkboxStateAfter, checkboxStateBefore,
                 "The checkbox value should be '" + !checkboxStateBefore + "' but is '" + checkboxStateAfter + "'.");
         tipDialog.dontShowTipsCheckBox().setValue(checkboxStateBefore);
         tipDialog.close();

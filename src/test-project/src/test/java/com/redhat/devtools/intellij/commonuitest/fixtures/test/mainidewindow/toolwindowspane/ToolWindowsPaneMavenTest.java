@@ -14,6 +14,7 @@ import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
@@ -44,7 +45,7 @@ class ToolWindowsPaneMavenTest extends LibraryTestBase {
 
     @AfterAll
     public static void closeCurrentProject() {
-        CreateCloseUtils.closeProject(remoteRobot);
+        remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10)).closeProject();
     }
 
     @BeforeEach

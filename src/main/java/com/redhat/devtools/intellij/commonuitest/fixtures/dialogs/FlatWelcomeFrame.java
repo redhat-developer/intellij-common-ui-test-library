@@ -12,7 +12,16 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.dialogs;
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
-import com.intellij.remoterobot.fixtures.*;
+import com.intellij.remoterobot.fixtures.CommonContainerFixture;
+import com.intellij.remoterobot.fixtures.ComponentFixture;
+import com.intellij.remoterobot.fixtures.ContainerFixture;
+import com.intellij.remoterobot.fixtures.DefaultXpath;
+import com.intellij.remoterobot.fixtures.FixtureName;
+import com.intellij.remoterobot.fixtures.HeavyWeightWindowFixture;
+import com.intellij.remoterobot.fixtures.JButtonFixture;
+import com.intellij.remoterobot.fixtures.JListFixture;
+import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
+import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.intellij.remoterobot.utils.UtilsKt;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
@@ -130,7 +139,6 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             find(IdeFatalErrorsDialog.class, Duration.ofSeconds(10)).clearAll();
         } catch (WaitForConditionTimeoutException e) {
             LOGGER.log(Level.INFO, "No fatal errors dialog found to clear.");
-
             try {
                 find(IdeFatalErrorsDialog.class, Duration.ofSeconds(10)).clearAll();
             } catch (Exception e2) {
@@ -154,43 +162,38 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
         } else {
             JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
             jTreeFixture.findText("Customize").click();
-
             if (remoteRobot.isMac()) {
-                resizeWelcomeWindow(remoteRobot, 900);
+                resizeWelcomeWindow(900);
             }
-
-            remoteRobot.find(ContainerFixture.class, byXpath(XPathDefinitions.DIALOG_PANEL))
-                    .findText("All settings" + '\u2026')
-                    .click();
+            remoteRobot.find(ContainerFixture.class, byXpath(XPathDefinitions.DIALOG_PANEL)).findText("All settings" + '\u2026').click();
         }
     }
 
     /**
      * Resize the Welcome to IntelliJ IDEA window
      *
-     * @param remoteRobot Valid instance of remote robot
-     * @param newHeight Integer of new height to use
+     * @param newHeight   Integer of new height to use
      */
-    private void resizeWelcomeWindow(RemoteRobot remoteRobot, int newHeight) {
+    private void resizeWelcomeWindow(int newHeight) {
         try {
             remoteRobot.callJs(String.format("""
-                        importClass(java.awt.Frame);
-                        importClass(javax.swing.SwingUtilities);
-                        var frames = Frame.getFrames();
-                        var resized = false;
-                        for (var i = 0; i < frames.length; i++) {
-                            var frame = frames[i];
-                            if (frame.isShowing() && frame.getClass().getName().contains("FlatWelcomeFrame")) {
-                                SwingUtilities.invokeLater(function() {
-                                    frame.setSize(frame.getWidth(), %d);
-                                    frame.validate();
-                                });
-                                resized = true;
-                                break;
-                            }
+                    importClass(java.awt.Frame);
+                    importClass(javax.swing.SwingUtilities);
+                    var frames = Frame.getFrames();
+                    var resized = false;
+                    for (var i = 0; i < frames.length; i++) {
+                        var frame = frames[i];
+                        if (frame.isShowing() && frame.getClass().getName().contains("FlatWelcomeFrame")) {
+                            SwingUtilities.invokeLater(function() {
+                                frame.setSize(frame.getWidth(), %d);
+                                frame.validate();
+                            });
+                            resized = true;
+                            break;
                         }
-                        resized;
-                    """, newHeight));
+                    }
+                    resized;
+                """, newHeight));
             Thread.sleep(5000);
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Failed to resize the Welcome window: {0}", e.getMessage());
@@ -212,7 +215,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             } else {
                 flatWelcomeFrame.findText(ButtonLabels.LEARN_INTELLIJ_IDEA_LABEL).click();
             }
-            SharedSteps.waitForComponentByXpath(remoteRobot, 2, 1, byXpath(XPathDefinitions.TIP_DIALOG_2));
+            SharedSteps.createSharedSteps().waitForComponentByXpath(remoteRobot, 2, 1, byXpath(XPathDefinitions.TIP_DIALOG_2));
             flatWelcomeFrame.findText(TIP_OF_THE_DAY).click();
         } else if (ideaVersion <= 20202) {
             clickOnLink("Get Help");
@@ -307,12 +310,11 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
 
         // Clicks on X on first recent project to remove it from the recent projects list (visible only when hovered over with cursor)
         recentProjects.runJs("const horizontal_offset = component.getWidth()-22;\n" +
-                "robot.click(component, new Point(horizontal_offset, 22), MouseButton.LEFT_BUTTON, 1);");
+            "robot.click(component, new Point(horizontal_offset, 22), MouseButton.LEFT_BUTTON, 1);");
 
         if (ideaVersion >= 20231) {
             ComponentFixture removeDialog = remoteRobot.find(ComponentFixture.class, byXpath(XPathDefinitions.MY_DIALOG), Duration.ofSeconds(10));
-            removeDialog.findText(ButtonLabels.REMOVE_FROM_LIST_LABEL)
-                    .click();
+            removeDialog.findText(ButtonLabels.REMOVE_FROM_LIST_LABEL).click();
         } else if (ideaVersion >= 20203) {         // Code for IntelliJ Idea 2020.3 or newer
             List<JPopupMenuFixture> jPopupMenuFixtures = jPopupMenus(JPopupMenuFixture.Companion.byType());
             if (!jPopupMenuFixtures.isEmpty()) {
@@ -325,19 +327,6 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
                 }
             }
         }
-    }
-
-    /**
-     * Open existing project from the Welcome Dialog
-     *
-     * @param remoteRobot reference to the RemoteRobot instance
-     * @param projectName name of existing project
-     */
-    public void openProjectFromWelcomeDialog(RemoteRobot remoteRobot, String projectName) {
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-        flatWelcomeFrame.openProject(projectName);
-
-        CreateCloseUtils.waitAfterOpeningProject(remoteRobot);
     }
 
     /**

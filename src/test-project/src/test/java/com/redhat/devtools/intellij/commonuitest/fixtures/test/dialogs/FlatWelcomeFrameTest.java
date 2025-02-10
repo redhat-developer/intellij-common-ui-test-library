@@ -28,7 +28,7 @@ import java.io.FileFilter;
 import java.time.Duration;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * FlatWelcomeFrame test
@@ -60,14 +60,14 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
         flatWelcomeFrame.clearExceptions();
         int projectsOnDisk = getNumberOfProjectsOnDisk();
         int projectLinks = getNumberOfProjectLinks();
-        assertTrue(projectsOnDisk == 1, "Number of projects in the IntelliJ's project folder should be 1 but is " + projectsOnDisk + ".");
-        assertTrue(projectLinks == 1, "Number of projects' links in the IntelliJ's 'Welcome Frame Dialog' should be 1 but is " + projectLinks + ".");
+        assertEquals(1, projectsOnDisk, "Number of projects in the IntelliJ's project folder should be 1 but is " + projectsOnDisk + ".");
+        assertEquals(1, projectLinks, "Number of projects' links in the IntelliJ's 'Welcome Frame Dialog' should be 1 but is " + projectLinks + ".");
         IdeInternalErrorUtils.clearWindowsErrorsIfTheyAppear(remoteRobot);
         flatWelcomeFrame.clearWorkspace();
         int projectCount2 = getNumberOfProjectsOnDisk();
         int projectLinks2 = getNumberOfProjectLinks();
-        assertTrue(projectCount2 == 0, "Number of projects in the IntelliJ's project folder should be 0 but is " + projectCount2 + ".");
-        assertTrue(projectLinks2 == 0, "Number of projects' links in the IntelliJ's 'Welcome Frame Dialog' should be 0 but is " + projectLinks2 + ".");
+        assertEquals(0, projectCount2, "Number of projects in the IntelliJ's project folder should be 0 but is " + projectCount2 + ".");
+        assertEquals(0, projectLinks2, "Number of projects' links in the IntelliJ's 'Welcome Frame Dialog' should be 0 but is " + projectLinks2 + ".");
     }
 
     @Test

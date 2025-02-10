@@ -44,7 +44,7 @@ public class ProjectStructureDialogTest extends LibraryTestBase {
 
     @AfterAll
     public static void closeProject() {
-        CreateCloseUtils.closeProject(remoteRobot);
+        remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10)).closeProject();
     }
 
     @Test

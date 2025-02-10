@@ -19,6 +19,7 @@ import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ProjectExplorer;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
@@ -66,7 +67,7 @@ class ProjectExplorerTest extends LibraryTestBase {
 
     @AfterAll
     public static void closeCurrentProject() {
-        CreateCloseUtils.closeProject(remoteRobot);
+        remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10)).closeProject();
     }
 
     @AfterEach
@@ -124,9 +125,9 @@ class ProjectExplorerTest extends LibraryTestBase {
         projectExplorer.expandAll();
         projectExplorer.openFile(PROJECT_NAME, "src", "Main");
         projectExplorer.projectViewTree().clickRow(0);
-        SharedSteps.waitForComponentByXpath(remoteRobot, 3, 1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
+        SharedSteps.createSharedSteps().waitForComponentByXpath(remoteRobot, 3, 1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
         projectExplorer.selectOpenedFile();
-        SharedSteps.waitForComponentByXpath(remoteRobot, 3, 1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
+        SharedSteps.createSharedSteps().waitForComponentByXpath(remoteRobot, 3, 1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
         assertTrue(projectExplorer.projectViewTree().isPathSelected(
                         projectExplorer.projectViewTree().getValueAtRow(0), "src", "Main"),
                 "The file 'Main' should be selected but is not."
