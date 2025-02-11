@@ -157,7 +157,6 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
             CommonContainerFixture parentFixture = waitFor(Duration.ofSeconds(20), Duration.ofSeconds(2), "Wait for the 'Project SDK' list to finish loading all items.", "The project JDK list did not load all items in 20 seconds.", this::didProjectSdkListLoadAllItems);
             JPopupMenuFixture projectSdkList = parentFixture.jPopupMenus(byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW)).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
             List<String> sdkItems = projectSdkList.jList().collectItems();
-            System.out.println("Items: " + sdkItems);
             Map<String, String> foundItems = new HashMap<>();
             sdkItems.forEach(item ->
                 Arrays.stream(item.split(" ")).filter(s ->
@@ -165,12 +164,16 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
             );
             if (!foundItems.isEmpty()) {
                 String label = foundItems.values().stream().findFirst().get();
-                System.out.println("About to click on "+label);
                 projectSdkList.jList().clickItem(label, true);
-                ScreenshotUtils.takeScreenshot(remoteRobot, "After click on "+ label);
+                //ScreenshotUtils.takeScreenshot(remoteRobot);
+                try {
+                    waitFor(Duration.ofSeconds(10), Duration.ofMillis(250), "HeavyWeightWindow still visible.", this::noHeavyWeightWindowVisible);
+                } catch (WaitForConditionTimeoutException e) {
+                    // wait for "Resolving JDK..." dialog to disappear
+                }
+                //ScreenshotUtils.takeScreenshot(remoteRobot);
             } else {
-                System.out.println("No SDK found starting with "+targetSdkName);
-                ScreenshotUtils.takeScreenshot(remoteRobot);
+                //ScreenshotUtils.takeScreenshot(remoteRobot, "No SDK found starting with " + targetSdkName);
             }
 
         });

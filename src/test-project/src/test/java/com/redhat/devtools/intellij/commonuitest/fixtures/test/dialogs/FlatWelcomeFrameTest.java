@@ -16,9 +16,9 @@ import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.ProjectLocation;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.internalerror.IdeInternalErrorUtils;
-import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -78,7 +78,7 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
     }
 
     private int getNumberOfProjectsOnDisk() {
-        String pathToIdeaProjectsFolder = CreateCloseUtils.PROJECT_LOCATION;
+        String pathToIdeaProjectsFolder = ProjectLocation.PROJECT_LOCATION;
         File[] files = new File(pathToIdeaProjectsFolder).listFiles((FileFilter) FileFilterUtils.directoryFileFilter());
         if (files != null) {
             return files.length;

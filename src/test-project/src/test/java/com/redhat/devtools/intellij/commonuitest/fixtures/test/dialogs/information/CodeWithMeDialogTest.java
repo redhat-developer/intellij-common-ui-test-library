@@ -19,6 +19,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.NewProjectFirstPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.ProjectLocation;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -48,7 +49,7 @@ class CodeWithMeDialogTest extends LibraryTestBase {
                 newProjectFirstPage.selectNewProjectType("New Project");
                 newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
                 newProjectFirstPage.setProjectName(PROJECT_NAME);
-                newProjectFirstPage.setProjectLocation(CreateCloseUtils.PROJECT_LOCATION);
+                newProjectFirstPage.setProjectLocation(ProjectLocation.PROJECT_LOCATION);
                 newProjectFirstPage.setLanguage("Java");
                 newProjectFirstPage.setBuildSystem("IntelliJ");
                 newProjectFirstPage.setProjectSdkIfAvailable("17");

@@ -31,8 +31,8 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewPro
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.SettingsDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.pages.NotificationsPage;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.ProjectLocation;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
-import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.steps.SharedSteps;
 import org.jetbrains.annotations.NotNull;
 
@@ -109,7 +109,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
     public void clearWorkspace() {
         // Remove projects on disk
         try {
-            String pathToDirToMakeEmpty = CreateCloseUtils.PROJECT_LOCATION;
+            String pathToDirToMakeEmpty = ProjectLocation.PROJECT_LOCATION;
             Path path = Paths.get(pathToDirToMakeEmpty);
             boolean doesProjectDirExists = Files.exists(path);
             if (doesProjectDirExists) {
