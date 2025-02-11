@@ -165,15 +165,15 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
             if (!foundItems.isEmpty()) {
                 String label = foundItems.values().stream().findFirst().get();
                 projectSdkList.jList().clickItem(label, true);
-                //ScreenshotUtils.takeScreenshot(remoteRobot);
+                ScreenshotUtils.takeScreenshot(remoteRobot);
                 try {
                     waitFor(Duration.ofSeconds(10), Duration.ofMillis(250), "HeavyWeightWindow still visible.", this::noHeavyWeightWindowVisible);
                 } catch (WaitForConditionTimeoutException e) {
                     // wait for "Resolving JDK..." dialog to disappear
                 }
-                //ScreenshotUtils.takeScreenshot(remoteRobot);
+                ScreenshotUtils.takeScreenshot(remoteRobot);
             } else {
-                //ScreenshotUtils.takeScreenshot(remoteRobot, "No SDK found starting with " + targetSdkName);
+                ScreenshotUtils.takeScreenshot(remoteRobot, "No SDK found starting with " + targetSdkName);
             }
 
         });
