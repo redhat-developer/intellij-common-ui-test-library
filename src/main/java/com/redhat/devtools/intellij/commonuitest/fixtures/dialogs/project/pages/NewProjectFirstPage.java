@@ -167,6 +167,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
                 String label = foundItems.values().stream().findFirst().get();
                 System.out.println("About to click on "+label);
                 projectSdkList.jList().clickItem(label, true);
+                ScreenshotUtils.takeScreenshot(remoteRobot, "After click on "+ label);
             } else {
                 System.out.println("No SDK found starting with "+targetSdkName);
                 ScreenshotUtils.takeScreenshot(remoteRobot);

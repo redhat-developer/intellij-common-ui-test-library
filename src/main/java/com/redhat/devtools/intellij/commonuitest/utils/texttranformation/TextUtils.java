@@ -14,6 +14,7 @@ import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Static utilities that assist and simplify data conversion and transformation
@@ -32,11 +33,9 @@ public class TextUtils {
      * @return String containing a concatenation of all the labels in the 'data' List
      */
     public static String listOfRemoteTextToString(List<RemoteText> data) {
-        List<String> listOfStrings = data
+        return data
                 .stream()
                 .map(RemoteText::getText)
-                .toList();
-
-        return String.join("", listOfStrings);
+                .collect(Collectors.joining(" "));
     }
 }

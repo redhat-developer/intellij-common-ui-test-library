@@ -354,7 +354,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
         Optional<String> optional = Arrays.stream(currentlySelectedProjectSdk.split(" ")).filter(s ->
             s.startsWith(version)).findFirst();
-        assertTrue(optional.isPresent(), "Selected project SDK should be Java 11 but is '" + currentlySelectedProjectSdk + "'");
+        assertTrue(optional.isPresent(), "Selected project SDK should be Java " + version + " but is '" + currentlySelectedProjectSdk + "'");
     }
 
     @Test
