@@ -38,6 +38,7 @@ import java.util.Map;
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
+import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitForIgnoringError;
 
 /**
  * New Project dialog first page fixture
@@ -166,11 +167,8 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
                 String label = foundItems.values().stream().findFirst().get();
                 projectSdkList.jList().clickItem(label, true);
                 ScreenshotUtils.takeScreenshot(remoteRobot);
-                try {
-                    waitFor(Duration.ofSeconds(10), Duration.ofMillis(250), "HeavyWeightWindow still visible.", this::noHeavyWeightWindowVisible);
-                } catch (WaitForConditionTimeoutException e) {
-                    // wait for "Resolving JDK..." dialog to disappear
-                }
+                // wait for 'resolving JDK' progressmonitor to end
+                waitForIgnoringError(Duration.ofSeconds(5), () -> remoteRobot.callJs("true"));
                 ScreenshotUtils.takeScreenshot(remoteRobot);
             } else {
                 ScreenshotUtils.takeScreenshot(remoteRobot, "No SDK found starting with " + targetSdkName);

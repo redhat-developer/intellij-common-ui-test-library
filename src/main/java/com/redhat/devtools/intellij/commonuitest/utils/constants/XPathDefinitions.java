@@ -31,7 +31,9 @@ public class XPathDefinitions {
     public static final String WINDOWS_MAIN_MENU_2020_3_TO_2022_1 = "//div[@class='MenuFrameHeader']";
     public static final String WINDOWS_MAIN_MENU_2020_2_AND_OLDER = "//div[@class='CustomHeaderMenuBar']";
     public static final String IDE_STATUS_BAR = "//div[@class='IdeStatusBarImpl']";
+    @Language("XPath")
     public static final String INLINE_PROGRESS_PANEL = "//div[@class='InlineProgressPanel']";
+    @Language("XPath")
     public static final String ENGRAVED_LABEL = "//div[@class='EngravedLabel']";
     public static final String FLAT_WELCOME_FRAME = "//div[@class='FlatWelcomeFrame']";
     public static final String NEW_PROJECT_DIALOG_WIZARD = "//div[@accessiblename='New Project' and @class='MyDialog']";
