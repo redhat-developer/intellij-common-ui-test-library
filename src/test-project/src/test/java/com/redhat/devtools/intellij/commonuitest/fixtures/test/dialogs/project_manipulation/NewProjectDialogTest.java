@@ -337,7 +337,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
         if (ideaVersionInt >= 20242 && remoteRobot.isWin()) {
             newProjectFirstPage.setProjectSdkIfAvailable("Download");
             try {
-                ContainerFixture downloadJdkDialog = remoteRobot.find(ContainerFixture.class, byXpath("//div[@title='Download JDK...']"), Duration.ofSeconds(10));
+                ContainerFixture downloadJdkDialog = remoteRobot.find(ContainerFixture.class, byXpath("//div[@title='Download JDK']"), Duration.ofSeconds(10));
                 downloadJdkDialog.find(ActionButtonFixture.class, byXpath(XPathDefinitions.label(ButtonLabels.CANCEL_LABEL)), Duration.ofSeconds(5)).click();
             } catch (WaitForConditionTimeoutException e) {
                 fail("Download JDK button was not pressed and Download JDK dialog was not found");
