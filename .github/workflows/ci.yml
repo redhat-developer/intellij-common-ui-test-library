@@ -88,6 +88,14 @@ jobs:
           name: linux-steplogger-logs
           path: src/test-project/build/test-results/*
         if: always()
+      - name: Archiving coverage for sonar
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sonar-coverage
+          path: |
+            src/test-project/build/test-results/**/*.xml
+            src/test-project/build/jacoco/
 
   run_on_windows:
     runs-on: windows-latest

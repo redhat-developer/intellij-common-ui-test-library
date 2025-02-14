@@ -26,7 +26,6 @@ repositories {
 dependencies {
     intellijPlatform {
         create(IntelliJPlatformType.IntellijIdeaCommunity, platformVersion)
-        instrumentationTools()
     }
     testImplementation("com.redhat.devtools.intellij:intellij-common-ui-test-library")
     testImplementation("org.junit.platform:junit-platform-launcher:1.10.3")
@@ -43,6 +42,25 @@ tasks {
     register("copyKey", Copy::class.java) {
         from("idea_license_token/idea.key")
         into("build/idea-sandbox/config-uiTest")
+    }
+
+    withType<Test> {
+        configure<JacocoTaskExtension> {
+            isIncludeNoLocationClasses = true
+            excludes = listOf("jdk.internal.*")
+        }
+    }
+
+    jacocoTestReport {
+        executionData.setFrom(fileTree(layout.buildDirectory).include("/jacoco/*.exec"))
+        classDirectories.setFrom(instrumentCode)
+        reports {
+            xml.required = true
+        }
+    }
+
+    jacocoTestCoverageVerification {
+        classDirectories.setFrom(instrumentCode)
     }
 }
 

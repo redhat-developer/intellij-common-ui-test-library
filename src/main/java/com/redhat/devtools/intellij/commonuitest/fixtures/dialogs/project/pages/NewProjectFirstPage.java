@@ -167,7 +167,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
                 String label = foundItems.values().stream().findFirst().get();
                 projectSdkList.jList().clickItem(label, true);
                 // wait for 'resolving JDK' progressmonitor to end
-                waitForIgnoringError(Duration.ofSeconds(5), () -> remoteRobot.callJs("true"));
+                waitForIgnoringError(Duration.ofSeconds(10), () -> remoteRobot.callJs("true"));
             } else {
                 ScreenshotUtils.takeScreenshot(remoteRobot, "No SDK found starting with " + targetSdkName);
             }

@@ -46,6 +46,7 @@ tasks {
             property("sonar.organization", "redhat-developer")
             property("sonar.host.url", "https://sonarcloud.io")
             property("sonar.junit.reportsPath", layout.buildDirectory.dir("test-results").get().asFile.absolutePath)
+            property("sonar.gradle.skipCompile", "true")
         }
     }
 }
