@@ -167,7 +167,12 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
                 String label = foundItems.values().stream().findFirst().get();
                 projectSdkList.jList().clickItem(label, true);
                 // wait for 'resolving JDK' progressmonitor to end
-                waitForIgnoringError(Duration.ofSeconds(10), () -> remoteRobot.callJs("true"));
+                waitFor(
+                    Duration.ofSeconds(20),
+                    Duration.ofSeconds(5),
+                    "Waiting for 'resolving jdk' dialog to disappear.",
+                    //() -> "Expected exactly one dialog but found " + remoteRobot.findAll(CommonContainerFixture.class, byXpath(XPathDefinitions.MY_DIALOG)).size(),
+                    () -> remoteRobot.findAll(CommonContainerFixture.class, byXpath("//div[@class='MyDialog']")).isEmpty());
             } else {
                 ScreenshotUtils.takeScreenshot(remoteRobot, "No SDK found starting with " + targetSdkName);
             }
