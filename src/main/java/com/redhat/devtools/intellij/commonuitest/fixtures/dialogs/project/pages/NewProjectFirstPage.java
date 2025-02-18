@@ -38,7 +38,6 @@ import java.util.Map;
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
-import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitForIgnoringError;
 
 /**
  * New Project dialog first page fixture
