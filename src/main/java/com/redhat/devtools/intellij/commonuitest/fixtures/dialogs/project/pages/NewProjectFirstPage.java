@@ -148,6 +148,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
                 try {
                     waitFor(Duration.ofSeconds(10), Duration.ofMillis(250), "HeavyWeightWindow still visible.", this::noHeavyWeightWindowVisible);
                 } catch (WaitForConditionTimeoutException e) {
+                    ScreenshotUtils.takeScreenshot(remoteRobot, "HeavyWeightWindow still visible." + targetSdkName);
                     popupOpenedPermanently = true;
                 }
                 if (!popupOpenedPermanently) {
