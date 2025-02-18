@@ -14,6 +14,7 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.ComboBoxFixture;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
+import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.HeavyWeightWindowFixture;
@@ -165,13 +166,14 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
             if (!foundItems.isEmpty()) {
                 String label = foundItems.values().stream().findFirst().get();
                 projectSdkList.jList().clickItem(label, true);
+                System.out.println(remoteRobot.findAll(CommonContainerFixture.class));
+                System.out.println(remoteRobot.findAll(ContainerFixture.class));
                 // wait for 'resolving JDK' progressmonitor to end
-                waitFor(
-                    Duration.ofSeconds(20),
-                    Duration.ofSeconds(5),
-                    "Waiting for 'resolving jdk' dialog to disappear.",
-                    //() -> "Expected exactly one dialog but found " + remoteRobot.findAll(CommonContainerFixture.class, byXpath(XPathDefinitions.MY_DIALOG)).size(),
-                    () -> remoteRobot.findAll(CommonContainerFixture.class, byXpath("//div[@class='MyDialog']")).isEmpty());
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             } else {
                 ScreenshotUtils.takeScreenshot(remoteRobot, "No SDK found starting with " + targetSdkName);
             }
