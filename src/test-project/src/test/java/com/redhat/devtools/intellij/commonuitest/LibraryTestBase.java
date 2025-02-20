@@ -38,7 +38,7 @@ public class LibraryTestBase {
     private static final int TEST_RUNNER_PORT = 8580;
 
     @BeforeAll
-    protected static void startIntelliJ() {
+    static void startIntelliJ() {
         if (!intelliJHasStarted) {
             ideaVersionInt = communityIdeaVersion.toInt();
             remoteRobot = UITestRunner.runIde(communityIdeaVersion, TEST_RUNNER_PORT);
@@ -52,7 +52,7 @@ public class LibraryTestBase {
     }
 
     @AfterAll
-    protected static void finishTestRun() {
+    static void finishTestRun() {
         FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.clearExceptions();
         flatWelcomeFrame.clearWorkspace();

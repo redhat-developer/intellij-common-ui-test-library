@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class GradlePaneTest extends AbstractToolWinPane {
     @BeforeAll
-    public static void prepareProject() {
+    static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, GRADLE_PROJECT_NAME, CreateCloseUtils.NewProjectType.GRADLE);
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
             toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
@@ -42,14 +42,14 @@ class GradlePaneTest extends AbstractToolWinPane {
     }
 
     @BeforeEach
-    public void preparePanes() {
+    void preparePanes() {
         if (isPaneOpened(GradleBuildToolPane.class)) {
             closePane(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL, GradleBuildToolPane.class);
         }
     }
 
     @Test
-    public void gradleBuildToolPaneOpenCloseTest() {
+    void gradleBuildToolPaneOpenCloseTest() {
         toolWinPane.openGradleBuildToolPane();
         assertTrue(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be opened but is closed.");
         toolWinPane.closeGradleBuildToolPane();

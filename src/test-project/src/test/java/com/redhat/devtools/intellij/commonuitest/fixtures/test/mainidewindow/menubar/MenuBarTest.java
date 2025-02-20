@@ -38,20 +38,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class MenuBarTest extends LibraryTestBase {
     private static final String PROJECT_NAME = "project_view_tree_java_project";
 
-    private static ProjectExplorer projectExplorer;
-
     @BeforeAll
-    public static void prepareProject() {
+    static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
     }
 
     @AfterAll
-    public static void closeCurrentProject() {
+    static void closeCurrentProject() {
         CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @Test
-    public void openTipDialogUsingMenuBarTest() {
+    void openTipDialogUsingMenuBarTest() {
         if (remoteRobot.isWin() || remoteRobot.isLinux()) {
             new MenuBar(remoteRobot).navigateTo("Help", "Tip of the Day");
             assertTrue(isTipDialogVisible(remoteRobot), "The 'Tip of the Day' dialog should be visible but is not");
@@ -60,7 +58,7 @@ class MenuBarTest extends LibraryTestBase {
     }
 
     @Test
-    public void closeAndReopenProjectTest() {
+    void closeAndReopenProjectTest() {
         CreateCloseUtils.closeProject(remoteRobot);
         CreateCloseUtils.openProjectFromWelcomeDialog(remoteRobot, PROJECT_NAME);
 
@@ -71,7 +69,7 @@ class MenuBarTest extends LibraryTestBase {
             toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
         }
         toolWinPane.openProjectExplorer();
-        projectExplorer = toolWinPane.find(ProjectExplorer.class, Duration.ofSeconds(10));
+        ProjectExplorer projectExplorer = toolWinPane.find(ProjectExplorer.class, Duration.ofSeconds(10));
         assertTrue(projectExplorer.isItemPresent(PROJECT_NAME), "The project should be back open, but it is not");
     }
 

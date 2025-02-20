@@ -2,6 +2,7 @@ plugins {
     id("java-library")
     id("maven-publish")
     alias(libs.plugins.gradleNexusPublishPlugin)
+    id("jacoco") // Code coverage
     alias(libs.plugins.sonarqube) // SonarQube
 }
 
@@ -38,6 +39,14 @@ tasks {
 
     test {
         useJUnitPlatform()
+    }
+
+    jacocoTestReport {
+        executionData.setFrom(fileTree(layout.buildDirectory).include("/jacoco/*.exec"))
+        //classDirectories.setFrom(instrumentCode)
+        reports {
+            xml.required = true
+        }
     }
 
     sonar {

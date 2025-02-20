@@ -31,21 +31,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com, olkornii@redhat.com
  */
-public class ProjectStructureDialogTest extends LibraryTestBase {
+class ProjectStructureDialogTest extends LibraryTestBase {
     private static final String PROJECT_NAME = "tip_dialog_java_project";
 
     @BeforeAll
-    public static void prepareProject() {
+    static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
     }
 
     @AfterAll
-    public static void closeProject() {
+    static void closeProject() {
         CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @Test
-    public void projectStructureDialogTest() {
+    void projectStructureDialogTest() {
         dialogTest(() -> {
             ProjectStructureDialog projectStructureDialog = remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(10));
             projectStructureDialog.cancel();

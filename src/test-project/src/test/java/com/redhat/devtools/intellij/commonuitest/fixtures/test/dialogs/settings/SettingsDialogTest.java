@@ -44,25 +44,25 @@ class SettingsDialogTest extends LibraryTestBase {
     private static final String NOTIFICATIONS = "Notifications";
 
     @BeforeAll
-    public static void openSettingsDialog() {
+    static void openSettingsDialog() {
         flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.openSettingsDialog();
     }
 
     @AfterAll
-    public static void closeSettingsDialog() {
+    static void closeSettingsDialog() {
         remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5)).cancel();
     }
 
     @BeforeEach
-    public void prepareSettingsDialogFixture() {
+    void prepareSettingsDialogFixture() {
         if (settingsDialog == null) {
             settingsDialog = remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5));
         }
     }
 
     @AfterEach
-    public void reopenSettingsDialogIfNeeded() {
+    void reopenSettingsDialogIfNeeded() {
         try {
             remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5));
         } catch (WaitForConditionTimeoutException e) {
@@ -72,7 +72,7 @@ class SettingsDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void navigateToTest() {
+    void navigateToTest() {
         settingsDialog.navigateTo(APPEARANCE_AND_BEHAVIOR, NOTIFICATIONS);
         try {
             waitFor(Duration.ofSeconds(10), Duration.ofMillis(250), "The 'Notifications' settings page is not available.", () -> isSettingsPageLoaded(NOTIFICATIONS));
@@ -91,17 +91,17 @@ class SettingsDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void settingsTreeTest() {
+    void settingsTreeTest() {
         JTreeFixture settingsTree = settingsDialog.settingsTree();
         assertTrue(settingsTree.hasText(APPEARANCE_AND_BEHAVIOR), "The Settings tree does not contain the 'Appearance & Behavior' item.");
     }
 
     @Test
-    public void okTest() {
+    void okTest() {
         settingsDialog.ok();
-
+        Duration timeout = Duration.ofSeconds(5);
         try {
-            remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5));
+            remoteRobot.find(SettingsDialog.class, timeout);
             fail("The 'Settings' dialog should be closed but is not.");
         } catch (WaitForConditionTimeoutException e) {
             LOGGER.log(Level.INFO, e.getMessage(), e);
@@ -109,7 +109,7 @@ class SettingsDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void applyTest() {
+    void applyTest() {
         settingsDialog = remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5));
         settingsDialog.navigateTo(APPEARANCE_AND_BEHAVIOR, NOTIFICATIONS);
         JCheckboxFixture balloonNotificationsCheckbox = settingsDialog.checkBox("Display balloon notifications", true);
@@ -120,11 +120,11 @@ class SettingsDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void cancelTest() {
+    void cancelTest() {
         settingsDialog.cancel();
-
+        Duration timeout = Duration.ofSeconds(5);
         try {
-            remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5));
+            remoteRobot.find(SettingsDialog.class, timeout);
             fail("The 'Settings' dialog should be closed but is not.");
         } catch (WaitForConditionTimeoutException e) {
             LOGGER.log(Level.INFO, e.getMessage(), e);

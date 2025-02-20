@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -36,7 +37,7 @@ class NotificationsPageTest extends LibraryTestBase {
     private boolean systemNotificationsCheckBox;
 
     @BeforeAll
-    public static void openSettingsDialog() {
+    static void openSettingsDialog() {
         FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.openSettingsDialog();
         settingsDialog = remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5));
@@ -45,24 +46,24 @@ class NotificationsPageTest extends LibraryTestBase {
     }
 
     @AfterAll
-    public static void closeSettingsDialog() {
+    static void closeSettingsDialog() {
         settingsDialog.cancel();
     }
 
     @BeforeEach
-    public void backupSettings() {
+    void backupSettings() {
         balloonNotificationsCheckBox = notificationsPage.displayBalloonNotificationsCheckBox().isSelected();
         systemNotificationsCheckBox = notificationsPage.displaySystemNotificationsCheckBox().isSelected();
     }
 
     @AfterEach
-    public void restoreSettings() {
+    void restoreSettings() {
         notificationsPage.displayBalloonNotificationsCheckBox().setValue(balloonNotificationsCheckBox);
         notificationsPage.displaySystemNotificationsCheckBox().setValue(systemNotificationsCheckBox);
     }
 
     @Test
-    public void toggleNotificationsTest() {
+    void toggleNotificationsTest() {
         notificationsPage.displayBalloonNotificationsCheckBox().setValue(true);
         notificationsPage.displaySystemNotificationsCheckBox().setValue(true);
         boolean balloonNotificationsEnabled = notificationsPage.displayBalloonNotificationsCheckBox().isSelected();
@@ -76,40 +77,40 @@ class NotificationsPageTest extends LibraryTestBase {
     }
 
     @Test
-    public void toggleBalloonNotificationsTest() {
+    void toggleBalloonNotificationsTest() {
         notificationsPage.displayBalloonNotificationsCheckBox().setValue(true);
         notificationsPage.toggleBalloonNotifications(false);
         boolean balloonNotificationsEnabled = notificationsPage.displayBalloonNotificationsCheckBox().isSelected();
-        assertTrue(!balloonNotificationsEnabled, "The 'Balloon Notifications' checkbox should be unchecked.");
+        assertFalse(balloonNotificationsEnabled, "The 'Balloon Notifications' checkbox should be unchecked.");
     }
 
     @Test
-    public void toggleSystemNotificationsTest() {
+    void toggleSystemNotificationsTest() {
         notificationsPage.displaySystemNotificationsCheckBox().setValue(true);
         notificationsPage.toggleSystemNotifications(false);
         boolean systemNotificationsEnabled = notificationsPage.displaySystemNotificationsCheckBox().isSelected();
-        assertTrue(!systemNotificationsEnabled, "The 'System Notifications' checkbox should be unchecked.");
+        assertFalse(systemNotificationsEnabled, "The 'System Notifications' checkbox should be unchecked.");
     }
 
     @Test
-    public void displayBalloonNotificationsCheckBoxTest() {
+    void displayBalloonNotificationsCheckBoxTest() {
         notificationsPage.displayBalloonNotificationsCheckBox().setValue(true);
         boolean balloonNotificationsEnabled = notificationsPage.displayBalloonNotificationsCheckBox().isSelected();
         assertTrue(balloonNotificationsEnabled, "The 'Balloon Notifications' checkbox should be checked.");
 
         notificationsPage.displayBalloonNotificationsCheckBox().setValue(false);
         balloonNotificationsEnabled = notificationsPage.displayBalloonNotificationsCheckBox().isSelected();
-        assertTrue(!balloonNotificationsEnabled, "The 'Balloon Notifications' checkbox should be unchecked.");
+        assertFalse(balloonNotificationsEnabled, "The 'Balloon Notifications' checkbox should be unchecked.");
     }
 
     @Test
-    public void displaySystemNotificationsCheckBoxTest() {
+    void displaySystemNotificationsCheckBoxTest() {
         notificationsPage.displaySystemNotificationsCheckBox().setValue(true);
         boolean systemNotificationsEnabled = notificationsPage.displaySystemNotificationsCheckBox().isSelected();
         assertTrue(systemNotificationsEnabled, "The 'System Notifications' checkbox should be checked.");
 
         notificationsPage.displaySystemNotificationsCheckBox().setValue(false);
         systemNotificationsEnabled = notificationsPage.displaySystemNotificationsCheckBox().isSelected();
-        assertTrue(!systemNotificationsEnabled, "The 'System Notifications' checkbox should be unchecked.");
+        assertFalse(systemNotificationsEnabled, "The 'System Notifications' checkbox should be unchecked.");
     }
 }

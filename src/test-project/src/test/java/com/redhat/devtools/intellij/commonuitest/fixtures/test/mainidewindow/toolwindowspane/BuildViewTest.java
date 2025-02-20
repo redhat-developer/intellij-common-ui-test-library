@@ -36,7 +36,7 @@ class BuildViewTest extends LibraryTestBase {
     private static AbstractToolWinPane toolWinPane;
 
     @BeforeAll
-    public static void prepareProject() {
+    static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.MAVEN);
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
             toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
@@ -48,12 +48,12 @@ class BuildViewTest extends LibraryTestBase {
     }
 
     @AfterAll
-    public static void closeCurrentProject() {
+    static void closeCurrentProject() {
         CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @Test
-    public void waitForSuccessfulBuildTest() {
+    void waitForSuccessfulBuildTest() {
         BuildView buildView = toolWinPane.find(BuildView.class, Duration.ofSeconds(10));
         buildView.waitUntilBuildHasFinished();
         assertTrue(buildView.isBuildSuccessful(), "The build should be successful but is not.");

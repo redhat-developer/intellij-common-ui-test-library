@@ -33,11 +33,11 @@ import static org.junit.jupiter.api.Assertions.fail;
  *
  * @author zcervink@redhat.com
  */
-public class TipDialogTest extends LibraryTestBase {
+class TipDialogTest extends LibraryTestBase {
     private TipDialog tipDialog;
 
     @AfterAll
-    public static void cleanUp() {
+    static void cleanUp() {
         if (ideaVersionInt >= 20213) {
             JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
             jTreeFixture.findText("Projects").click();
@@ -48,16 +48,17 @@ public class TipDialogTest extends LibraryTestBase {
     }
 
     @BeforeEach
-    public void prepareTipDialog() {
+    void prepareTipDialog() {
         tipDialog = remoteRobot.find(FlatWelcomeFrame.class).openTipDialog();
     }
 
     @Test
-    public void closeButtonTest() {
-        remoteRobot.find(TipDialog.class, Duration.ofSeconds(5));
+    void closeButtonTest() {
+        Duration timeout = Duration.ofSeconds(5);
+        remoteRobot.find(TipDialog.class, timeout);
         tipDialog.close();
         try {
-            remoteRobot.find(TipDialog.class, Duration.ofSeconds(5));
+            remoteRobot.find(TipDialog.class, timeout);
             fail("The 'Tif of the Day' dialog should be closed but is not.");
         } catch (WaitForConditionTimeoutException e) {
             LOGGER.log(Level.INFO, e.getMessage(), e);
@@ -65,7 +66,7 @@ public class TipDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void dontShowTipsCheckBoxTest() {
+    void dontShowTipsCheckBoxTest() {
         boolean checkboxStateBefore = tipDialog.dontShowTipsCheckBox().isSelected();
         tipDialog.dontShowTipsCheckBox().setValue(!checkboxStateBefore);
         boolean checkboxStateAfter = tipDialog.dontShowTipsCheckBox().isSelected();

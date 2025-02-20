@@ -37,7 +37,7 @@ class GradleBuildToolPaneTest extends LibraryTestBase {
     private static GradleBuildToolPane gradleBuildToolPane;
 
     @BeforeAll
-    public static void prepareProject() {
+    static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.GRADLE);
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
             toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
@@ -49,24 +49,24 @@ class GradleBuildToolPaneTest extends LibraryTestBase {
     }
 
     @AfterAll
-    public static void closeCurrentProject() {
+    static void closeCurrentProject() {
         CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @Test
-    public void buildProjectTest() {
+    void buildProjectTest() {
         gradleBuildToolPane.buildProject();
         boolean isBuildSuccessful = toolWinPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
         assertTrue(isBuildSuccessful, "The build should be successful but is not.");
     }
 
     @Test
-    public void reloadAllGradleProjects() {
+    void reloadAllGradleProjects() {
         gradleBuildToolPane.reloadAllGradleProjects();
     }
 
     @Test
-    public void expandAll() {
+    void expandAll() {
         gradleBuildToolPane.collapseAll();
         int itemsCountBeforeExpanding = gradleBuildToolPane.gradleTaskTree().collectRows().size();
         gradleBuildToolPane.expandAll();
@@ -75,7 +75,7 @@ class GradleBuildToolPaneTest extends LibraryTestBase {
     }
 
     @Test
-    public void collapseAll() {
+    void collapseAll() {
         gradleBuildToolPane.gradleTaskTree().expandAll();
         int itemsCountBeforeCollapsing = gradleBuildToolPane.gradleTaskTree().collectRows().size();
         gradleBuildToolPane.collapseAll();

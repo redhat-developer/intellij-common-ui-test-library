@@ -91,9 +91,11 @@ public class XPathDefinitions {
     @Language("XPath")
     public static final String MY_LIST = "//div[@class='MyList']";
     public static final String CODE_WITH_ME_JPANEL = "//div[@class='Wrapper'][.//div[@class='JBLabel']]//div[@class='JPanel']";
+    @Language("XPath")
     public static final String BREAD_CRUMBS = "//div[@class='Breadcrumbs']";
     @Language("XPath")
     public static final String EMPTY_PROJECT = "//div[@visible_text='Empty Project']";
+    @Language("XPath")
     public static final String SINGLE_HEIGHT_LABEL = "//div[@class='SingleHeightLabel']";
     public static final String COLLAPSIBLE_TITLED_SEPARATOR = "//div[@class='CollapsibleTitledSeparator']";
     public static final String COLLAPSIBLE_TITLED_SEPARATOR_NEW = "//div[@class='CollapsibleTitledSeparatorImpl']";

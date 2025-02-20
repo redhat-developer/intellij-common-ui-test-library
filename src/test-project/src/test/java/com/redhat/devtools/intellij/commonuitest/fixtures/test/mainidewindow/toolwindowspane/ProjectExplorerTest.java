@@ -25,6 +25,7 @@ import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinition
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.steps.SharedSteps;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
+import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -48,7 +49,7 @@ class ProjectExplorerTest extends LibraryTestBase {
     private final Keyboard keyboard = new Keyboard(remoteRobot);
 
     @BeforeAll
-    public static void prepareProject() {
+    static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         AbstractToolWinPane toolWinPane;
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
@@ -61,26 +62,26 @@ class ProjectExplorerTest extends LibraryTestBase {
     }
 
     @AfterAll
-    public static void closeCurrentProject() {
+    static void closeCurrentProject() {
         CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @AfterEach
-    public void hideAllPopups() {
+    void hideAllPopups() {
         keyboard.escape();
     }
 
     @Test
-    public void isItemPresentTest() {
+    void isItemPresentTest() {
         boolean isItemPresent = projectExplorer.isItemPresent(PROJECT_NAME, "src", "Main");
         assertTrue(isItemPresent, "The file 'Main' should be present in the project on location 'src/Main' but is not.");
     }
 
     @Test
-    public void openFileTest() {
+    void openFileTest() {
         projectExplorer.openFile(PROJECT_NAME, ".gitignore");
         if (ideaVersionInt >= 20231) {       // Code for IJ 2023.1+
-            String projectLabelXpath = "//div[@accessiblename='.gitignore' and @class='EditorTabLabel']//div[@class='ActionPanel']";
+            @Language("XPath") String projectLabelXpath = "//div[@accessiblename='.gitignore' and @class='EditorTabLabel']//div[@class='ActionPanel']";
             try {       // Verify file is opened by finding its tab in the editor
                 remoteRobot.find(ComponentFixture.class, byXpath(projectLabelXpath));
             } catch (Exception e) {
@@ -96,7 +97,7 @@ class ProjectExplorerTest extends LibraryTestBase {
     }
 
     @Test
-    public void openContextMenuOnTest() {
+    void openContextMenuOnTest() {
         try {
             JPopupMenuFixture contextMenu = projectExplorer.openContextMenuOn("Scratches and Consoles");
             assertTrue(contextMenu.hasText("New"), "The context menu on 'Scratches and Consoles' item should be opened but is not.");
@@ -106,7 +107,7 @@ class ProjectExplorerTest extends LibraryTestBase {
     }
 
     @Test
-    public void openViewsPopupTest() {
+    void openViewsPopupTest() {
         try {
             JPopupMenuFixture contextMenu = projectExplorer.openViewsPopup();
             assertTrue(contextMenu.hasText("Packages"), "The View popup menu should be opened but is not.");
@@ -116,7 +117,7 @@ class ProjectExplorerTest extends LibraryTestBase {
     }
 
     @Test
-    public void selectOpenedFileTest() {
+    void selectOpenedFileTest() {
         projectExplorer.expandAll();
         projectExplorer.openFile(PROJECT_NAME, "src", "Main");
         projectExplorer.projectViewTree().clickRow(0);
@@ -130,7 +131,7 @@ class ProjectExplorerTest extends LibraryTestBase {
     }
 
     @Test
-    public void expandAllTest() {
+    void expandAllTest() {
         projectExplorer.collapseAll();
         int itemsInTreeBeforeExpanding = projectExplorer.projectViewTree().collectRows().size();
         projectExplorer.projectViewTree().clickRow(0); // Newer versions expands selected subtree (not all rows)
@@ -140,7 +141,7 @@ class ProjectExplorerTest extends LibraryTestBase {
     }
 
     @Test
-    public void collapseAllTest() {
+    void collapseAllTest() {
         projectExplorer.projectViewTree().expand(PROJECT_NAME);
         int itemsInTreeBeforeCollapsing = projectExplorer.projectViewTree().collectRows().size();
         projectExplorer.collapseAll();
@@ -149,7 +150,7 @@ class ProjectExplorerTest extends LibraryTestBase {
     }
 
     @Test
-    public void openSettingsPopupTest() {
+    void openSettingsPopupTest() {
         try {
             JPopupMenuFixture contextMenu = projectExplorer.openSettingsPopup();
             assertTrue(contextMenu.hasText("Help"), "The Settings popup menu should be opened but is not.");
