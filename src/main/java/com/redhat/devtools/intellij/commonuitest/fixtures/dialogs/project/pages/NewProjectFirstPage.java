@@ -14,6 +14,7 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.ComboBoxFixture;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
+import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.HeavyWeightWindowFixture;
@@ -25,12 +26,15 @@ import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
+import com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
@@ -134,7 +138,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
 
             ComboBoxFixture projectJdkComboBox = getProjectJdkComboBox();
             String currentlySelectedProjectSdk = TextUtils.listOfRemoteTextToString(projectJdkComboBox.findAllText());
-            if (currentlySelectedProjectSdk.contains(targetSdkName)) {
+            if (currentlySelectedProjectSdk.startsWith(targetSdkName)) {
                 return;
             }
 
@@ -154,8 +158,24 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
             CommonContainerFixture parentFixture = waitFor(Duration.ofSeconds(20), Duration.ofSeconds(2), "Wait for the 'Project SDK' list to finish loading all items.", "The project JDK list did not load all items in 20 seconds.", this::didProjectSdkListLoadAllItems);
             JPopupMenuFixture projectSdkList = parentFixture.jPopupMenus(byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW)).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
             List<String> sdkItems = projectSdkList.jList().collectItems();
-            Optional<String> item = sdkItems.stream().filter(s -> s.startsWith(targetSdkName)).findFirst();
-            item.ifPresent(s -> projectSdkList.jList().clickItem(s, true));
+            Map<String, String> foundItems = new HashMap<>();
+            sdkItems.forEach(item ->
+                Arrays.stream(item.split(" ")).filter(s ->
+                    s.startsWith(targetSdkName)).findFirst().ifPresent(s -> foundItems.put(s, item))
+            );
+            if (!foundItems.isEmpty()) {
+                String label = foundItems.values().stream().findFirst().get();
+                projectSdkList.jList().clickItem(label, true);
+                // wait for 'resolving JDK' progressmonitor to end
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                ScreenshotUtils.takeScreenshot(remoteRobot, "No SDK found starting with " + targetSdkName);
+            }
+
         });
     }
 

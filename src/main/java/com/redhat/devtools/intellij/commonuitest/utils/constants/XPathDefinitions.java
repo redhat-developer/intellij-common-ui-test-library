@@ -31,7 +31,9 @@ public class XPathDefinitions {
     public static final String WINDOWS_MAIN_MENU_2020_3_TO_2022_1 = "//div[@class='MenuFrameHeader']";
     public static final String WINDOWS_MAIN_MENU_2020_2_AND_OLDER = "//div[@class='CustomHeaderMenuBar']";
     public static final String IDE_STATUS_BAR = "//div[@class='IdeStatusBarImpl']";
+    @Language("XPath")
     public static final String INLINE_PROGRESS_PANEL = "//div[@class='InlineProgressPanel']";
+    @Language("XPath")
     public static final String ENGRAVED_LABEL = "//div[@class='EngravedLabel']";
     public static final String FLAT_WELCOME_FRAME = "//div[@class='FlatWelcomeFrame']";
     public static final String NEW_PROJECT_DIALOG_WIZARD = "//div[@accessiblename='New Project' and @class='MyDialog']";
@@ -78,6 +80,7 @@ public class XPathDefinitions {
     public static final String MY_ICON_EXPAND_ALL = "//div[contains(@myvisibleactions, 'View),')]//div[@myicon='expandall.svg']";
     public static final String MY_ICON_EXPAND_ALL_2024_2 = "//div[@myicon='expandAll.svg']";
     public static final String MY_ICON_EXPAND_ALL_IDE = "//div[contains(@myvisibleactions, 'IDE')]//div[@myicon='expandall.svg']";
+    @Language("XPath")
     public static final String MY_ICON_LOCATE_SVG = "//div[@myicon='locate.svg']";
     public static final String MY_ICON_REFRESH = "//div[@myicon='refresh.svg']";
     public static final String CONTENT_COMBO_LABEL = "//div[@class='ContentComboLabel']";

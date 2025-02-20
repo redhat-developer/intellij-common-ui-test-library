@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -48,30 +49,30 @@ public class ProjectStructureDialogTest extends LibraryTestBase {
         dialogTest(() -> {
             ProjectStructureDialog projectStructureDialog = remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(10));
             projectStructureDialog.cancel();
-        }, ProjectStructureDialog.class, "Project Structure");
+        });
     }
 
-    private void dialogTest(Runnable selectedImpl, Class<? extends CommonContainerFixture> dialogClass, String dialogTitle) {
-        makeSureDialogIsVisible(dialogClass, dialogTitle);
-        assertTrue(isDialogVisible(dialogClass), "The '" + dialogTitle + "' dialog should be visible but is not.");
-        selectedImpl.run();
-        assertTrue(!isDialogVisible(dialogClass), "The '" + dialogTitle + "' dialog should be visible but is not.");
+    private void dialogTest(Runnable runnable) {
+        makeSureDialogIsVisible();
+        assertTrue(isDialogVisible(), "The 'Project Structure' dialog should be visible but is not.");
+        runnable.run();
+        assertFalse(isDialogVisible(), "The 'Project Structure' dialog should be visible but is not.");
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilAllBgTasksFinish();
     }
 
-    private void makeSureDialogIsVisible(Class<? extends CommonContainerFixture> dialogClass, String dialogTitle) {
+    private void makeSureDialogIsVisible() {
         try {
-            remoteRobot.find(dialogClass, Duration.ofSeconds(10));
+            remoteRobot.find((Class<? extends CommonContainerFixture>) ProjectStructureDialog.class, Duration.ofSeconds(10));
         } catch (WaitForConditionTimeoutException e) {
             MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
-            mainIdeWindow.invokeCmdUsingSearchEverywherePopup(dialogTitle);
+            mainIdeWindow.invokeCmdUsingSearchEverywherePopup("Project Structure");
         }
     }
 
-    private boolean isDialogVisible(Class<? extends CommonContainerFixture> dialogClass) {
+    private boolean isDialogVisible() {
         try {
-            remoteRobot.find(dialogClass, Duration.ofSeconds(10));
+            remoteRobot.find((Class<? extends CommonContainerFixture>) ProjectStructureDialog.class, Duration.ofSeconds(10));
         } catch (WaitForConditionTimeoutException e) {
             return false;
         }

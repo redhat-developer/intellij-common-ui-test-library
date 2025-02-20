@@ -18,6 +18,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -48,12 +49,13 @@ public class ScreenshotUtils {
     public static File takeScreenshot(RemoteRobot remoteRobot, String comment) {
         try {
             BufferedImage screenshotBufferedImage = remoteRobot.getScreenshot();
-            boolean doesScreenshotDirExists = Files.exists(Paths.get(SCREENSHOT_LOCATION));
+            Path path = Paths.get(SCREENSHOT_LOCATION);
+            boolean doesScreenshotDirExists = Files.exists(path);
             if (!doesScreenshotDirExists) {
-                Files.createDirectory(Paths.get(SCREENSHOT_LOCATION));
+                Files.createDirectory(path);
             }
-            String screenshotFilename = getTimeNow("yyyy_MM_dd_HH_mm_ss");
-            String screenshotComment = comment == null || comment.equals("") ? "" :  "_" + comment;
+            String screenshotFilename = getTimeNow();
+            String screenshotComment = comment == null || comment.isEmpty() ? "" :  "_" + comment.replace(" ", "_");
             String screenshotPathname = SCREENSHOT_LOCATION + screenshotFilename + screenshotComment + "." + FILETYPE;
             File screenshotFile = new File(screenshotPathname);
             ImageIO.write(screenshotBufferedImage, FILETYPE, screenshotFile);
@@ -74,8 +76,8 @@ public class ScreenshotUtils {
         return takeScreenshot(remoteRobot, "");
     }
 
-    private static String getTimeNow(String timeFormat) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(timeFormat);
+    private static String getTimeNow() {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
         LocalDateTime localTimeNow = LocalDateTime.now();
         return dateTimeFormatter.format(localTimeNow);
     }

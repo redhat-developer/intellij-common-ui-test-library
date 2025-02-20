@@ -21,6 +21,8 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  * These methods facilitate common automation steps that can be reused in various test scenarios.
  */
 public class SharedSteps {
+    private SharedSteps() {}
+
     /**
      * Waits for a component to be visible within the IDE's UI hierarchy based on the provided XPath locator.
      *

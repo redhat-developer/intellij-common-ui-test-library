@@ -33,7 +33,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils.listOfRemoteTextToString;
@@ -332,7 +334,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
     @Test
     public void setProjectSdkIfAvailableTest() {
         if (ideaVersionInt >= 20242 && remoteRobot.isWin()) {
-            newProjectFirstPage.setProjectSdkIfAvailable("Download JDK");
+            newProjectFirstPage.setProjectSdkIfAvailable("Download");
             try {
                 ContainerFixture downloadJdkDialog = remoteRobot.find(ContainerFixture.class, byXpath("//div[@title='Download JDK']"), Duration.ofSeconds(10));
                 downloadJdkDialog.find(ActionButtonFixture.class, byXpath(XPathDefinitions.label(ButtonLabels.CANCEL_LABEL)), Duration.ofSeconds(5)).click();
@@ -340,14 +342,18 @@ public class NewProjectDialogTest extends LibraryTestBase {
                 fail("Download JDK button was not pressed and Download JDK dialog was not found");
             }
         } else {
-            newProjectFirstPage.setProjectSdkIfAvailable("11");
-            ComboBoxFixture projectJdkComboBox = newProjectFirstPage.getProjectJdkComboBox();
-            String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
-            assertTrue(currentlySelectedProjectSdk.startsWith("11"), "Selected project SDK should be Java 11 but is '" + currentlySelectedProjectSdk + "'");
-            newProjectFirstPage.setProjectSdkIfAvailable("17");
-            currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
-            assertTrue(currentlySelectedProjectSdk.startsWith("17"), "Selected project SDK should be Java 17 but is '" + currentlySelectedProjectSdk + "'");
+            setProjectSDKVersion("11");
+            setProjectSDKVersion("17");
         }
+    }
+
+    private void setProjectSDKVersion(String version) {
+        newProjectFirstPage.setProjectSdkIfAvailable(version);
+        ComboBoxFixture projectJdkComboBox = newProjectFirstPage.getProjectJdkComboBox();
+        String currentlySelectedProjectSdk = listOfRemoteTextToString(projectJdkComboBox.findAllText());
+        Optional<String> optional = Arrays.stream(currentlySelectedProjectSdk.split(" ")).filter(s ->
+            s.startsWith(version)).findFirst();
+        assertTrue(optional.isPresent(), "Selected project SDK should be Java " + version + " but is '" + currentlySelectedProjectSdk + "'");
     }
 
     @Test

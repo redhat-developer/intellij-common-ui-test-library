@@ -23,12 +23,11 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.NewProjectFirstPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.ProjectLocation;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 
-import java.io.File;
 import java.time.Duration;
 import java.util.List;
-import java.util.Optional;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
@@ -39,9 +38,6 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  * @author zcervink@redhat.com
  */
 public class CreateCloseUtils {
-    public static final String PROJECT_LOCATION = Optional.ofNullable(System.getProperty("testProjectLocation"))        // For more info on testProjectLocation please check README
-            .filter(s -> !s.isEmpty())
-            .orElseGet(() -> System.getProperty("user.home") + File.separator + "IdeaProjects" + File.separator + "intellij-ui-test-projects");
 
     /**
      * Create new project with given project name according to given project type
@@ -61,10 +57,12 @@ public class CreateCloseUtils {
                 case PLAIN_JAVA:
                     newProjectFirstPage.setBuildSystem("IntelliJ");
                     break;
-                case MAVEN:
-                case GRADLE:
+                case MAVEN, GRADLE:
                     newProjectFirstPage.setBuildSystem(newProjectType.toString());
                     break;
+                case EMPTY_PROJECT:
+                default:
+                    throw new IllegalStateException("Unexpected value: " + newProjectType);
             }
         } else {
             newProjectFirstPage.selectNewProjectType(newProjectType.toString());
@@ -76,7 +74,7 @@ public class CreateCloseUtils {
             newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
 
             newProjectFirstPage.setProjectName(projectName);
-            newProjectFirstPage.setProjectLocation(PROJECT_LOCATION);
+            newProjectFirstPage.setProjectLocation(ProjectLocation.PROJECT_LOCATION);
         } else {
             newProjectDialogWizard.next();
             // Plain java project has more pages in the 'New project' dialog
@@ -106,7 +104,7 @@ public class CreateCloseUtils {
         ensureEmptyProjectPageIsOpened(newProjectFirstPage, remoteRobot);
 
         newProjectFirstPage.setProjectName(projectName);
-        newProjectFirstPage.setProjectLocation(PROJECT_LOCATION);
+        newProjectFirstPage.setProjectLocation(ProjectLocation.PROJECT_LOCATION);
 
         newProjectDialogWizard.finish();
         waitAfterOpeningProject(remoteRobot);
@@ -171,15 +169,12 @@ public class CreateCloseUtils {
      * @return final page instance
      */
     public static AbstractNewProjectFinalPage getFinalPage(NewProjectDialogWizard newProjectDialogWizard, NewProjectType newProjectType) {
-        switch (newProjectType) {
-            case PLAIN_JAVA:
-                return newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
-            case MAVEN:
-            case GRADLE:
-                return newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
-            default:
-                throw new UITestException("Unsupported project type.");
-        }
+        return switch (newProjectType) {
+            case PLAIN_JAVA -> newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
+            case MAVEN, GRADLE ->
+                newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
+            default -> throw new UITestException("Unsupported project type.");
+        };
     }
 
     /**

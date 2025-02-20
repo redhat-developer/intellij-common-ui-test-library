@@ -36,12 +36,7 @@ import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
  * @author zcervink@redhat.com
  */
 public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallback {
-    private final RemoteRobot remoteRobot;
     protected static final Logger LOGGER = Logger.getLogger(ScreenshotAfterTestFailExtension.class.getName());
-
-    public ScreenshotAfterTestFailExtension() {
-        this.remoteRobot = UITestRunner.getRemoteRobot();
-    }
 
     /**
      * Take screenshot right after a test has failed and perform a cleanup to ensure no dialog or window is opened
@@ -50,22 +45,23 @@ public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallb
      */
     @Override
     public void afterTestExecution(ExtensionContext extensionContext) {
-        if (remoteRobot == null) {
-            LOGGER.log(Level.SEVERE, "Can take a screenshot, remoteRobot is null!");
-            return;
-        }
+        RemoteRobot remoteRobot = UITestRunner.getRemoteRobot();
         boolean testFailed = extensionContext.getExecutionException().isPresent();
         if (testFailed) {
-            step("Take a screenshot after a test has failed", () ->
-                    ScreenshotUtils.takeScreenshot(remoteRobot)
+            if (remoteRobot == null) {
+                LOGGER.log(Level.SEVERE, "Can't take a screenshot, remoteRobot is null!");
+                return;
+            }
+            step("Take a screenshot after a test has failed",
+                () -> ScreenshotUtils.takeScreenshot(remoteRobot)
             );
             step("Return to the 'Welcome Frame' dialog",
-                    this::cleanAfterTestFail
+                () -> cleanAfterTestFail(remoteRobot)
             );
         }
     }
 
-    private void cleanAfterTestFail() {
+    private void cleanAfterTestFail(RemoteRobot remoteRobot) {
         // New Project Dialog is visible -> close it
         try {
             NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));

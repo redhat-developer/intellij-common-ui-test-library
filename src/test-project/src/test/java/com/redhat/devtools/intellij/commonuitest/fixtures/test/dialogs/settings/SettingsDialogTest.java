@@ -47,7 +47,6 @@ class SettingsDialogTest extends LibraryTestBase {
     public static void openSettingsDialog() {
         flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.openSettingsDialog();
-
     }
 
     @AfterAll

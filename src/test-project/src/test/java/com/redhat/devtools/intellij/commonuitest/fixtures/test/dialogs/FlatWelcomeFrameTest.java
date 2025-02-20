@@ -16,9 +16,9 @@ import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.ProjectLocation;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.internalerror.IdeInternalErrorUtils;
-import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ import java.io.FileFilter;
 import java.time.Duration;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * FlatWelcomeFrame test
@@ -60,14 +60,14 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
         flatWelcomeFrame.clearExceptions();
         int projectsOnDisk = getNumberOfProjectsOnDisk();
         int projectLinks = getNumberOfProjectLinks();
-        assertTrue(projectsOnDisk == 1, "Number of projects in the IntelliJ's project folder should be 1 but is " + projectsOnDisk + ".");
-        assertTrue(projectLinks == 1, "Number of projects' links in the IntelliJ's 'Welcome Frame Dialog' should be 1 but is " + projectLinks + ".");
+        assertEquals(1, projectsOnDisk, "Number of projects in the IntelliJ's project folder should be 1 but is " + projectsOnDisk + ".");
+        assertEquals(1, projectLinks, "Number of projects' links in the IntelliJ's 'Welcome Frame Dialog' should be 1 but is " + projectLinks + ".");
         IdeInternalErrorUtils.clearWindowsErrorsIfTheyAppear(remoteRobot);
         flatWelcomeFrame.clearWorkspace();
         int projectCount2 = getNumberOfProjectsOnDisk();
         int projectLinks2 = getNumberOfProjectLinks();
-        assertTrue(projectCount2 == 0, "Number of projects in the IntelliJ's project folder should be 0 but is " + projectCount2 + ".");
-        assertTrue(projectLinks2 == 0, "Number of projects' links in the IntelliJ's 'Welcome Frame Dialog' should be 0 but is " + projectLinks2 + ".");
+        assertEquals(0, projectCount2, "Number of projects in the IntelliJ's project folder should be 0 but is " + projectCount2 + ".");
+        assertEquals(0, projectLinks2, "Number of projects' links in the IntelliJ's 'Welcome Frame Dialog' should be 0 but is " + projectLinks2 + ".");
     }
 
     @Test
@@ -78,7 +78,7 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
     }
 
     private int getNumberOfProjectsOnDisk() {
-        String pathToIdeaProjectsFolder = CreateCloseUtils.PROJECT_LOCATION;
+        String pathToIdeaProjectsFolder = ProjectLocation.PROJECT_LOCATION;
         File[] files = new File(pathToIdeaProjectsFolder).listFiles((FileFilter) FileFilterUtils.directoryFileFilter());
         if (files != null) {
             return files.length;

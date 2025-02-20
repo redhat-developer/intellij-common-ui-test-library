@@ -33,11 +33,9 @@ public class TextUtils {
      * @return String containing a concatenation of all the labels in the 'data' List
      */
     public static String listOfRemoteTextToString(List<RemoteText> data) {
-        List<String> listOfStrings = data
+        return data
                 .stream()
                 .map(RemoteText::getText)
-                .collect(Collectors.toList());
-
-        return String.join("", listOfStrings);
+                .collect(Collectors.joining(" "));
     }
 }

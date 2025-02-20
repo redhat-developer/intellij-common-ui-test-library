@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.time.Duration;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -38,7 +38,7 @@ class ScreenshotUtilsTest extends LibraryTestBase {
         int numberOfScreenshotBefore = getNumberOfSavedScreenshot();
         File screenshotFile = ScreenshotUtils.takeScreenshot(remoteRobot);
         int numberOfScreenshotAfter = getNumberOfSavedScreenshot();
-        assertTrue(numberOfScreenshotAfter == numberOfScreenshotBefore + 1, "Screenshot should be already saved but is not.");
+        assertEquals(numberOfScreenshotAfter, numberOfScreenshotBefore + 1, "Screenshot should be already saved but is not.");
         try {
             Files.delete(screenshotFile.toPath());
         } catch (IOException e) {

@@ -11,7 +11,6 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.menubar;
 
 import com.intellij.remoterobot.RemoteRobot;
-import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
@@ -29,7 +28,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
-import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
