@@ -14,10 +14,7 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
-import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.TipDialog;
-import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar.MenuBar;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ProjectExplorer;
@@ -45,14 +42,12 @@ class MenuBarTest extends LibraryTestBase {
 
     @BeforeAll
     public static void prepareProject() {
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-        NewProjectDialogWizard newProjectDialogWizard = flatWelcomeFrame.openNewProjectDialogFromWelcomeDialog(remoteRobot);
-        CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.PLAIN_JAVA, newProjectDialogWizard);
+        CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
     }
 
     @AfterAll
     public static void closeCurrentProject() {
-        remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10)).closeProject();
+        CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @Test
@@ -66,9 +61,8 @@ class MenuBarTest extends LibraryTestBase {
 
     @Test
     public void closeAndReopenProjectTest() {
-        remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10)).closeProject();
-        remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).openProject(PROJECT_NAME);
-        CreateCloseUtils.waitAfterOpeningProject(remoteRobot);
+        CreateCloseUtils.closeProject(remoteRobot);
+        CreateCloseUtils.openProjectFromWelcomeDialog(remoteRobot, PROJECT_NAME);
 
         AbstractToolWinPane toolWinPane;
         if (UITestRunner.getIdeaVersionInt() >= 20221) {

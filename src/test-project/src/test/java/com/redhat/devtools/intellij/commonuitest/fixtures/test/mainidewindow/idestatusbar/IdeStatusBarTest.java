@@ -13,7 +13,6 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.id
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
-import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.MavenGradleNewProjectFinalPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.NewProjectFirstPage;
@@ -48,8 +47,7 @@ class IdeStatusBarTest extends LibraryTestBase {
 
     @BeforeEach
     public void prepareProject() {
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-        NewProjectDialogWizard newProjectDialogWizard = flatWelcomeFrame.openNewProjectDialogFromWelcomeDialog(remoteRobot);
+        NewProjectDialogWizard newProjectDialogWizard = CreateCloseUtils.openNewProjectDialogFromWelcomeDialog(remoteRobot);
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
 
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
@@ -71,7 +69,7 @@ class IdeStatusBarTest extends LibraryTestBase {
 
     @AfterEach
     public void closeCurrentProject() {
-        remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10)).closeProject();
+        CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @Test

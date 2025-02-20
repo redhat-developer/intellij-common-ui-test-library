@@ -17,9 +17,6 @@ import com.intellij.remoterobot.utils.Keyboard;
 import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
-import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
-import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ProjectExplorer;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
@@ -52,9 +49,7 @@ class ProjectExplorerTest extends LibraryTestBase {
 
     @BeforeAll
     public static void prepareProject() {
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-        NewProjectDialogWizard newProjectDialogWizard = flatWelcomeFrame.openNewProjectDialogFromWelcomeDialog(remoteRobot);
-        CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.PLAIN_JAVA, newProjectDialogWizard);
+        CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         AbstractToolWinPane toolWinPane;
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
             toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
@@ -67,7 +62,7 @@ class ProjectExplorerTest extends LibraryTestBase {
 
     @AfterAll
     public static void closeCurrentProject() {
-        remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10)).closeProject();
+        CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @AfterEach
@@ -125,9 +120,9 @@ class ProjectExplorerTest extends LibraryTestBase {
         projectExplorer.expandAll();
         projectExplorer.openFile(PROJECT_NAME, "src", "Main");
         projectExplorer.projectViewTree().clickRow(0);
-        SharedSteps.createSharedSteps().waitForComponentByXpath(remoteRobot, 3, 1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
+        SharedSteps.waitForComponentByXpath(remoteRobot, 3, 1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
         projectExplorer.selectOpenedFile();
-        SharedSteps.createSharedSteps().waitForComponentByXpath(remoteRobot, 3, 1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
+        SharedSteps.waitForComponentByXpath(remoteRobot, 3, 1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
         assertTrue(projectExplorer.projectViewTree().isPathSelected(
                         projectExplorer.projectViewTree().getValueAtRow(0), "src", "Main"),
                 "The file 'Main' should be selected but is not."

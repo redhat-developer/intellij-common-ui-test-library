@@ -27,7 +27,6 @@ import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.errors.IdeFatalErrorsDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.TipDialog;
-import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.SettingsDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.pages.NotificationsPage;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
@@ -215,7 +214,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             } else {
                 flatWelcomeFrame.findText(ButtonLabels.LEARN_INTELLIJ_IDEA_LABEL).click();
             }
-            SharedSteps.createSharedSteps().waitForComponentByXpath(remoteRobot, 2, 1, byXpath(XPathDefinitions.TIP_DIALOG_2));
+            SharedSteps.waitForComponentByXpath(remoteRobot, 2, 1, byXpath(XPathDefinitions.TIP_DIALOG_2));
             flatWelcomeFrame.findText(TIP_OF_THE_DAY).click();
         } else if (ideaVersion <= 20202) {
             clickOnLink("Get Help");
@@ -327,18 +326,5 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
                 }
             }
         }
-    }
-
-    /**
-     * Open 'New Project' dialog from 'Welcome to IntelliJ IDEA' dialog
-     *
-     * @param remoteRobot reference to the RemoteRobot instance
-     * @return NewProjectDialogWizard fixture
-     */
-    public NewProjectDialogWizard openNewProjectDialogFromWelcomeDialog(RemoteRobot remoteRobot) {
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-        flatWelcomeFrame.switchToProjectsPage();
-        flatWelcomeFrame.createNewProject();
-        return remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
     }
 }

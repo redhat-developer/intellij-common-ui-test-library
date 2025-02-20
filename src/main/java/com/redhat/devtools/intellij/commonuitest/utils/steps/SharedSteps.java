@@ -31,13 +31,9 @@ public class SharedSteps {
      * @param interval The interval at which to check the component's visibility, in seconds.
      * @param xpath    The XPath locator used to find the component within the UI hierarchy.
      */
-    public void waitForComponentByXpath(RemoteRobot robot, int duration, int interval , Locator xpath) {
+    public static void waitForComponentByXpath(RemoteRobot robot, int duration, int interval , Locator xpath) {
         waitFor(Duration.ofSeconds(duration), Duration.ofSeconds(interval), () -> robot.findAll(ComponentFixture.class, xpath)
                 .stream()
                 .anyMatch(ComponentFixture::isShowing));
-    }
-
-    public static SharedSteps createSharedSteps() {
-        return new SharedSteps();
     }
 }
