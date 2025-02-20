@@ -148,7 +148,6 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
                 try {
                     waitFor(Duration.ofSeconds(10), Duration.ofMillis(250), "HeavyWeightWindow still visible.", this::noHeavyWeightWindowVisible);
                 } catch (WaitForConditionTimeoutException e) {
-                    ScreenshotUtils.takeScreenshot(remoteRobot, "HeavyWeightWindow still visible." + targetSdkName);
                     popupOpenedPermanently = true;
                 }
                 if (!popupOpenedPermanently) {
@@ -167,8 +166,6 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
             if (!foundItems.isEmpty()) {
                 String label = foundItems.values().stream().findFirst().get();
                 projectSdkList.jList().clickItem(label, true);
-                System.out.println(remoteRobot.findAll(CommonContainerFixture.class));
-                System.out.println(remoteRobot.findAll(ContainerFixture.class));
                 // wait for 'resolving JDK' progressmonitor to end
                 try {
                     Thread.sleep(5000);
