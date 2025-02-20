@@ -40,13 +40,13 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
     private FlatWelcomeFrame flatWelcomeFrame;
 
     @AfterEach
-    public void cleanUp() {
+    void cleanUp() {
         flatWelcomeFrame.clearWorkspace();
         flatWelcomeFrame.clearExceptions();
     }
 
     @Test
-    public void createNewProjectLinkTest() {
+    void createNewProjectLinkTest() {
         flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.createNewProject();
         NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
@@ -54,7 +54,7 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
     }
 
     @Test
-    public void clearWorkspaceTest() {
+    void clearWorkspaceTest() {
         prepareWorkspace(PROJECT_NAME);
         flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.clearExceptions();
@@ -71,7 +71,7 @@ class FlatWelcomeFrameTest extends LibraryTestBase {
     }
 
     @Test
-    public void clearExceptionsTest() {
+    void clearExceptionsTest() {
         prepareWorkspace(PROJECT_NAME);
         flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.clearExceptions();

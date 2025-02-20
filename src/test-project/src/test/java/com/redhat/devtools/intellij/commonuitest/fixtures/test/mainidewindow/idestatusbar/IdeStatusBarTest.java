@@ -46,7 +46,7 @@ class IdeStatusBarTest extends LibraryTestBase {
     }
 
     @BeforeEach
-    public void prepareProject() {
+    void prepareProject() {
         NewProjectDialogWizard newProjectDialogWizard = CreateCloseUtils.openNewProjectDialogFromWelcomeDialog(remoteRobot);
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
 
@@ -68,12 +68,12 @@ class IdeStatusBarTest extends LibraryTestBase {
     }
 
     @AfterEach
-    public void closeCurrentProject() {
+    void closeCurrentProject() {
         CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @Test
-    public void progressBarTest() {
+    void progressBarTest() {
         IdeStatusBar ideStatusBar = waitFor(Duration.ofSeconds(60), Duration.ofSeconds(1), "Wait for the appearance of progress bar in the IDE status bar.", "The progress bar in status bar did not appear in 60 seconds.", IdeStatusBarTest::isProgressbarWithLabelVisible);
         ideStatusBar.waitUntilProjectImportIsComplete();
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));

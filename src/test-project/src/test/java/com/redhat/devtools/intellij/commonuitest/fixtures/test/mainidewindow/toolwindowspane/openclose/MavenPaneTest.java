@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class MavenPaneTest extends AbstractToolWinPane {
     @BeforeAll
-    public static void prepareProject() {
+    static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, MAVEN_PROJECT_NAME, CreateCloseUtils.NewProjectType.MAVEN);
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
             toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
@@ -42,14 +42,14 @@ class MavenPaneTest extends AbstractToolWinPane {
     }
 
     @BeforeEach
-    public void preparePanes() {
+    void preparePanes() {
         if (isPaneOpened(MavenBuildToolPane.class)) {
             closePane(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL, MavenBuildToolPane.class);
         }
     }
 
     @Test
-    public void mavenBuildToolPaneOpenCloseTest() {
+    void mavenBuildToolPaneOpenCloseTest() {
         toolWinPane.openMavenBuildToolPane();
         assertTrue(isPaneOpened(MavenBuildToolPane.class), "The 'Maven Build Tool Pane' should be opened but is closed.");
         toolWinPane.closeMavenBuildToolPane();

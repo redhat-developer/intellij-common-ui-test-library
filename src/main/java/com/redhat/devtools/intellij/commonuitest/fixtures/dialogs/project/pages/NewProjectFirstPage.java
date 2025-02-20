@@ -14,7 +14,6 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.ComboBoxFixture;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
-import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.HeavyWeightWindowFixture;
@@ -167,10 +166,13 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
                 String label = foundItems.values().stream().findFirst().get();
                 projectSdkList.jList().clickItem(label, true);
                 // wait for 'resolving JDK' progressmonitor to end
+                // TODO for now don't know what kind of dialog is the 'resolving' so just pausing thread
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    ScreenshotUtils.takeScreenshot(remoteRobot, "interrupted while waiting for " + targetSdkName);
+                    /* Clean up whatever needs to be handled before interrupting  */
+                    Thread.currentThread().interrupt();
                 }
             } else {
                 ScreenshotUtils.takeScreenshot(remoteRobot, "No SDK found starting with " + targetSdkName);
