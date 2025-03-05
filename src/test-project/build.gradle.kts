@@ -39,11 +39,6 @@ tasks {
         useJUnitPlatform()
     }
 
-    register("copyKey", Copy::class.java) {
-        from("idea_license_token/idea.key")
-        into("build/idea-sandbox/config-uiTest")
-    }
-
     withType<Test> {
         configure<JacocoTaskExtension> {
             isIncludeNoLocationClasses = true
@@ -64,18 +59,10 @@ tasks {
     }
 }
 
-val integrationUITestUltimate by intellijPlatformTesting.testIde.registering {
-    task {
-        systemProperty("intellij_debug", "true")
-        group = "verification"
-        useJUnitPlatform()
-        dependsOn(tasks["copyKey"])
-    }
-}
-
 val integrationUITest by intellijPlatformTesting.testIde.registering {
     task {
         systemProperty("intellij_debug", "true")
+        systemProperty("communityIdeaVersion", platformVersion)
         group = "verification"
         useJUnitPlatform()
     }

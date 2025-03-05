@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 @ExtendWith(ScreenshotAfterTestFailExtension.class)
 public class LibraryTestBase {
     protected static final Logger LOGGER = Logger.getLogger(LibraryTestBase.class.getName());
-    private static final IntelliJVersion communityIdeaVersion = IntelliJVersion.COMMUNITY_V_2024_2;
+    private static final IntelliJVersion communityIdeaVersion = IntelliJVersion.getFromStringVersion(System.getProperty("communityIdeaVersion"));
     protected static RemoteRobot remoteRobot;
     protected static int ideaVersionInt;
     private static boolean intelliJHasStarted = false;

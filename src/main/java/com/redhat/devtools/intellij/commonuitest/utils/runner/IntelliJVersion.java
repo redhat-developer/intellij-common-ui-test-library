@@ -26,6 +26,7 @@ public enum IntelliJVersion {
     COMMUNITY_V_2022_3("IC-2022.3"),
     COMMUNITY_V_2023_1("IC-2023.1"),
     COMMUNITY_V_2023_2("IC-2023.2"),
+    COMMUNITY_V_2023_3("IC-2023.2"),
     COMMUNITY_V_2024_1("IC-2024.1"),
     COMMUNITY_V_2024_2("IC-2024.2"),
     COMMUNITY_V_2024_3("IC-2024.3");
@@ -38,7 +39,13 @@ public enum IntelliJVersion {
 
         String ideaVersionString = this.ideaVersionStringRepresentation.substring(3).replace(".", "");
         this.ideaVersionIntRepresentation = Integer.parseInt(ideaVersionString);
+    }
 
+    public static IntelliJVersion getFromStringVersion(String aVersion) {
+        for (IntelliJVersion v : values()) {
+            if (v.ideaVersionStringRepresentation.endsWith(aVersion)) return v;
+        }
+        throw new IllegalArgumentException();
     }
 
     @Override

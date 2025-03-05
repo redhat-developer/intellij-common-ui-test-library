@@ -31,6 +31,13 @@ jobs:
 
   run_on_linux:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        IJ: [ 2020.2, 2020.3,
+              2021.1, 2021.2, 2021.3,
+              2022.1, 2022.2, 2022.3,
+              2023.1, 2023.2, 2023.3,
+              2024.1, 2024.2, 2024.3 ]
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 11 # Java 11 is only used for test NewProjectDialogTest/setProjectSdkIfAvailableTest
@@ -45,30 +52,10 @@ jobs:
           java-version: 17
           distribution: 'temurin'
           cache: 'gradle'
-      - name: Run mainidewindow_idestatusbar_screenshot integration tests
+      - name: Run integration tests
         run: |
           cd src/test-project
-          xvfb-run --server-args="-screen 0 1920x1080x24" ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.idestatusbar.*
-      - name: Run dialogs_information_settings integration tests
-        run: |
-          cd src/test-project
-          xvfb-run --server-args="-screen 0 1920x1080x24" ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.information.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.settings.*
-      - name: Run dialogs_project_manipulation integration tests
-        run: |
-          cd src/test-project
-          xvfb-run --server-args="-screen 0 1920x1080x24" ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.project_manipulation.*
-      - name: Run dialogs integration tests
-        run: |
-          cd src/test-project
-          xvfb-run --server-args="-screen 0 1920x1080x24" ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.FlatWelcomeFrameTest
-      - name: Run mainidewindow-menubar integration tests
-        run: |
-          cd src/test-project
-          xvfb-run --server-args="-screen 0 1920x1080x24" ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.menubar.*
-      - name: Run mainidewindow-toolwindowspane integration tests
-        run: |
-          cd src/test-project
-          xvfb-run --server-args="-screen 0 1920x1080x24" ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.*
+          xvfb-run --server-args="-screen 0 1920x1080x24" ./gradlew integrationUITest --warning-mode none -PplatformVersion=${{ matrix.IJ }}
       - name: Archiving tests reports
         uses: actions/upload-artifact@v4
         with:
@@ -113,30 +100,10 @@ jobs:
           java-version: 17
           distribution: 'temurin'
           cache: 'gradle'
-      - name: Run mainidewindow_idestatusbar_screenshot integration tests
+      - name: Run integration tests
         run: |
           cd src/test-project
-          ./gradlew.bat integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.idestatusbar.*
-      - name: Run dialogs_information_settings integration tests
-        run: |
-          cd src/test-project
-          ./gradlew.bat integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.information.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.settings.*
-      - name: Run dialogs_project_manipulation integration tests
-        run: |
-          cd src/test-project
-          ./gradlew.bat integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.project_manipulation.*
-      - name: Run dialogs integration tests
-        run: |
-          cd src/test-project
-          ./gradlew.bat integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.FlatWelcomeFrameTest
-      - name: Run mainidewindow-menubar integration tests
-        run: |
-          cd src/test-project
-          ./gradlew.bat integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.menubar.*
-      - name: Run mainidewindow-toolwindowspane integration tests
-        run: |
-          cd src/test-project
-          ./gradlew.bat integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.*
+          ./gradlew.bat integrationUITest --warning-mode none
       - name: Archiving tests reports
         uses: actions/upload-artifact@v4
         with:
@@ -173,30 +140,10 @@ jobs:
           java-version: 17
           distribution: 'temurin'
           cache: 'gradle'
-      - name: Run mainidewindow_idestatusbar_screenshot integration tests
+      - name: Run integration tests
         run: |
           cd src/test-project
-          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.utils.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.idestatusbar.*
-      - name: Run dialogs_information_settings integration tests
-        run: |
-          cd src/test-project
-          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.information.* --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.settings.*
-      - name: Run dialogs_project_manipulation integration tests
-        run: |
-          cd src/test-project
-          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.project_manipulation.*
-      - name: Run dialogs integration tests
-        run: |
-          cd src/test-project
-          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.FlatWelcomeFrameTest
-      - name: Run mainidewindow-menubar integration tests
-        run: |
-          cd src/test-project
-          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.menubar.*
-      - name: Run mainidewindow-toolwindowspane integration tests
-        run: |
-          cd src/test-project
-          ./gradlew integrationUITest --warning-mode none --tests com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.*
+          ./gradlew integrationUITest --warning-mode none
       - name: Archiving tests reports
         uses: actions/upload-artifact@v4
         with:
