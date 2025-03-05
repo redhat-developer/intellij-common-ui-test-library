@@ -50,7 +50,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  *
  * @author zcervink@redhat.com
  */
-public class NewProjectDialogTest extends LibraryTestBase {
+class NewProjectDialogTest extends LibraryTestBase {
     private static final String PLAIN_JAVA_PROJECT_NAME = "plain_java_project_name_test";
     private static final String MORE_SETTINGS_SHOULD_BE_VISIBLE = "The 'More Settings' should be visible.";
     private static final String MORE_SETTINGS_SHOULD_BE_HIDDEN = "The 'More Settings' should be hidden.";
@@ -63,13 +63,13 @@ public class NewProjectDialogTest extends LibraryTestBase {
     private MainIdeWindow mainIdeWindow;
 
     @BeforeEach
-    public void openNewProjectDialog() {
+    void openNewProjectDialog() {
         newProjectDialogWizard = CreateCloseUtils.openNewProjectDialogFromWelcomeDialog(remoteRobot);
         newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
     }
 
     @AfterEach
-    public void cleanUp() {
+    void cleanUp() {
         if (mainIdeWindow != null) {
             // tests ending with opened Main Ide Window needs to close the project and clear workspace
             IdeStatusBar ideStatusBar = mainIdeWindow.find(IdeStatusBar.class, Duration.ofSeconds(10));
@@ -91,25 +91,25 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void setProjectNamePlainJavaProjectTest() {
+    void setProjectNamePlainJavaProjectTest() {
         testProjectNameAndLocationInputField(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
     }
 
     @Test
     @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
-    public void setProjectNameMavenProjectTest() {
+    void setProjectNameMavenProjectTest() {
         testProjectNameAndLocationInputField(CreateCloseUtils.NewProjectType.MAVEN);
     }
 
     @Test
     @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
-    public void setProjectNameGradleProjectTest() {
+    void setProjectNameGradleProjectTest() {
         testProjectNameAndLocationInputField(CreateCloseUtils.NewProjectType.GRADLE);
     }
 
     @Test
     @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
-    public void openMoreSettingsTest() {
+    void openMoreSettingsTest() {
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         javaFinalPage.closeMoreSettings();
@@ -122,7 +122,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
-    public void closeMoreSettingsTest() {
+    void closeMoreSettingsTest() {
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         javaFinalPage.openMoreSettings();
@@ -135,7 +135,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
-    public void openAdvancedSettingsTest() {
+    void openAdvancedSettingsTest() {
         newProjectFirstPage.closeAdvanceSettings();
         assertFalse(isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_CLOSED_MSG);
         newProjectFirstPage.openAdvanceSettings();
@@ -146,7 +146,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
-    public void closeAdvancedSettingsTest() {
+    void closeAdvancedSettingsTest() {
         newProjectFirstPage.openAdvanceSettings();
         assertTrue(isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_OPENED_MSG);
         newProjectFirstPage.closeAdvanceSettings();
@@ -156,7 +156,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void getSetModuleNameTest() {
+    void getSetModuleNameTest() {
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
@@ -173,7 +173,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void getSetContentRootTest() {
+    void getSetContentRootTest() {
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
@@ -190,7 +190,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void getSetModuleFileLocationTest() {
+    void getSetModuleFileLocationTest() {
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
@@ -208,7 +208,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
-    public void getSetProjectFormat() {
+    void getSetProjectFormat() {
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
         javaFinalPage.openMoreSettings();
@@ -222,48 +222,48 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void openArtifactCoordinatesMavenTest() {
+    void openArtifactCoordinatesMavenTest() {
         testOpenArtifactCoordinatesMavenGradle(CreateCloseUtils.NewProjectType.MAVEN);
     }
 
     @Test
-    public void openArtifactCoordinatesGradleTest() {
+    void openArtifactCoordinatesGradleTest() {
         testOpenArtifactCoordinatesMavenGradle(CreateCloseUtils.NewProjectType.GRADLE);
     }
 
     @Test
-    public void getSetGroupIdMavenTest() {
+    void getSetGroupIdMavenTest() {
         testArtifactCoordinatesAttributes(CreateCloseUtils.NewProjectType.MAVEN, ArtifactCoordinatesAttributes.GROUP_ID);
     }
 
     @Test
-    public void getSetGroupIdGradleTest() {
+    void getSetGroupIdGradleTest() {
         testArtifactCoordinatesAttributes(CreateCloseUtils.NewProjectType.GRADLE, ArtifactCoordinatesAttributes.GROUP_ID);
     }
 
     @Test
-    public void getSetArtifactIdMavenTest() {
+    void getSetArtifactIdMavenTest() {
         testArtifactCoordinatesAttributes(CreateCloseUtils.NewProjectType.MAVEN, ArtifactCoordinatesAttributes.ARTIFACT_ID);
     }
 
     @Test
-    public void getSetArtifactIdGradleTest() {
+    void getSetArtifactIdGradleTest() {
         testArtifactCoordinatesAttributes(CreateCloseUtils.NewProjectType.GRADLE, ArtifactCoordinatesAttributes.ARTIFACT_ID);
     }
 
     @Test
-    public void getSetVersionMavenTest() {
+    void getSetVersionMavenTest() {
         testArtifactCoordinatesAttributes(CreateCloseUtils.NewProjectType.MAVEN, ArtifactCoordinatesAttributes.VERSION);
     }
 
     @Test
-    public void getSetVersionGradleTest() {
+    void getSetVersionGradleTest() {
         testArtifactCoordinatesAttributes(CreateCloseUtils.NewProjectType.GRADLE, ArtifactCoordinatesAttributes.VERSION);
     }
 
     @Test
     @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
-    public void toggleFromTemplateTest() {
+    void toggleFromTemplateTest() {
         newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
         newProjectDialogWizard.next();
         JavaNewProjectSecondPage javaNewProjectSecondPage = newProjectDialogWizard.find(JavaNewProjectSecondPage.class, Duration.ofSeconds(10));
@@ -278,7 +278,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
-    public void previousButtonTest() {
+    void previousButtonTest() {
         newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
         newProjectFirstPage.setProjectSdkIfAvailable("11");
         assertThrows(UITestException.class, () ->
@@ -296,7 +296,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
 
     @Test
     @EnabledIfSystemProperty(named = "uitestlib.idea.version", matches = "2020.|2021.")
-    public void nextButtonTest() {
+    void nextButtonTest() {
         newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
         newProjectFirstPage.setProjectSdkIfAvailable("11");
         newProjectDialogWizard.next();
@@ -308,7 +308,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void finishButtonTest() {
+    void finishButtonTest() {
         if (UITestRunner.getIdeaVersionInt() < 20221) {
             newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
             newProjectFirstPage.setProjectSdkIfAvailable("17");
@@ -326,13 +326,13 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void cancelButtonTest() {
+    void cancelButtonTest() {
         newProjectDialogWizard.cancel();
         remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
     }
 
     @Test
-    public void setProjectSdkIfAvailableTest() {
+    void setProjectSdkIfAvailableTest() {
         if (ideaVersionInt >= 20242 && remoteRobot.isWin()) {
             newProjectFirstPage.setProjectSdkIfAvailable("Download");
             try {
@@ -357,7 +357,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void selectNewProjectTypeTest() {
+    void selectNewProjectTypeTest() {
         newProjectFirstPage.selectNewProjectType("Empty Project");
         boolean isEmptyProjectPageDisplayed;
         if (ideaVersionInt >= 20231) {          // For IntelliJ IDEA version 2023.1 and newer
@@ -394,7 +394,7 @@ public class NewProjectDialogTest extends LibraryTestBase {
     }
 
     @Test
-    public void createEmptyProjectTest() {
+    void createEmptyProjectTest() {
         cleanUp();
         String projectName = "empty-test-project";
         CreateCloseUtils.createEmptyProject(remoteRobot, projectName);

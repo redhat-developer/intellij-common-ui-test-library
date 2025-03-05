@@ -16,15 +16,11 @@ import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
-import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
@@ -37,7 +33,6 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 @DefaultXpath(by = "IdeStatusBarImpl type", xpath = XPathDefinitions.IDE_STATUS_BAR)
 @FixtureName(name = "Ide Status Bar")
 public class IdeStatusBar extends CommonContainerFixture {
-    private static final Logger LOGGER = Logger.getLogger(IdeStatusBar.class.getName());
     private final RemoteRobot remoteRobot;
 
     public IdeStatusBar(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
@@ -85,20 +80,7 @@ public class IdeStatusBar extends CommonContainerFixture {
     }
 
     private boolean didAllBgTasksFinish() {
-        for (int i = 0; i < 5; i++) {
-            IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class);
-            List<RemoteText> inlineProgressPanelContent = ideStatusBar.inlineProgressPanel().findAllText();
-            if (!inlineProgressPanelContent.isEmpty()) {
-                return false;
-            }
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
-                Thread.currentThread().interrupt();
-            }
-        }
-        return true;
+        waitFor(Duration.ofSeconds(5), Duration.ofMillis(500), () -> remoteRobot.find(IdeStatusBar.class).isShowing());
+        return remoteRobot.find(IdeStatusBar.class).inlineProgressPanel().findAllText().isEmpty();
     }
 }

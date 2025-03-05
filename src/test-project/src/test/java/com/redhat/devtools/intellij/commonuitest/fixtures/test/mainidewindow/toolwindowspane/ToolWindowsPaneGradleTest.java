@@ -34,17 +34,17 @@ class ToolWindowsPaneGradleTest extends LibraryTestBase {
     private AbstractToolWinPane toolWinPane;
 
     @BeforeAll
-    public static void prepareProject() {
+    static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.GRADLE);
     }
 
     @AfterAll
-    public static void closeCurrentProject() {
+    static void closeCurrentProject() {
         CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @BeforeEach
-    public void createToolWindowsPaneFixture() {
+    void createToolWindowsPaneFixture() {
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
             toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
         } else {
@@ -53,7 +53,7 @@ class ToolWindowsPaneGradleTest extends LibraryTestBase {
     }
 
     @Test
-    public void gradleBuildTest() {
+    void gradleBuildTest() {
         toolWinPane.openGradleBuildToolPane();
         GradleBuildToolPane gradleBuildToolPane = toolWinPane.find(GradleBuildToolPane.class, Duration.ofSeconds(10));
         gradleBuildToolPane.buildProject();

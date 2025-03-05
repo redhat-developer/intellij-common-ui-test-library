@@ -24,9 +24,9 @@ import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 
 import java.time.Duration;
 
-import static org.assertj.core.api.Fail.fail;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Project Explorer Tool Windows Pane test
@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class PEPaneAndStripeButtonTest extends AbstractToolWinPane {
     @BeforeAll
-    public static void prepareProject() {
+    static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, MAVEN_PROJECT_NAME, CreateCloseUtils.NewProjectType.MAVEN);
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
             toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
@@ -45,14 +45,14 @@ class PEPaneAndStripeButtonTest extends AbstractToolWinPane {
     }
 
     @BeforeEach
-    public void preparePanes() {
+    void preparePanes() {
         if (isPaneOpened(ProjectExplorer.class)) {
             closePane(ButtonLabels.PROJECT_STRIPE_BUTTON_LABEL, ProjectExplorer.class);
         }
     }
 
     @Test
-    public void projectExplorerPaneOpenCloseTest() {
+    void projectExplorerPaneOpenCloseTest() {
         toolWinPane.openProjectExplorer();
         assertTrue(isPaneOpened(ProjectExplorer.class), "The 'Project Explorer' should be opened but is closed.");
         toolWinPane.closeProjectExplorer();
@@ -61,7 +61,7 @@ class PEPaneAndStripeButtonTest extends AbstractToolWinPane {
 
     @Test
     @DisabledIfSystemProperty(named = "uitestlib.idea.version", matches = "20242")
-    public void stripeButtonTest() {
+    void stripeButtonTest() {
         try {
             toolWinPane.stripeButton(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL, false);
         } catch (WaitForConditionTimeoutException e) {

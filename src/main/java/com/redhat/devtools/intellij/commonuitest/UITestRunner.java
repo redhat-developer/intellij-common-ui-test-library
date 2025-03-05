@@ -13,7 +13,6 @@ package com.redhat.devtools.intellij.commonuitest;
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.stepsProcessing.StepLogger;
 import com.intellij.remoterobot.stepsProcessing.StepWorker;
-import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
@@ -154,19 +153,7 @@ public class UITestRunner {
     public static RemoteRobot getRemoteRobotConnection(int port) {
         return step("Create an instance of the RemoteRobot listening on port " + port, () -> {
             RemoteRobot remoteRobot = new RemoteRobot("http://127.0.0.1:" + port);
-            for (int i = 0; i < 60; i++) {
-                try {
-                    remoteRobot.find(FlatWelcomeFrame.class);
-                } catch (WaitForConditionTimeoutException e) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e2) {
-                        LOGGER.log(Level.SEVERE, e2.getMessage(), e2);
-                        Thread.currentThread().interrupt();
-                    }
-                }
-            }
-
+            waitFor(Duration.ofSeconds(30), Duration.ofMillis(500), () -> remoteRobot.find(FlatWelcomeFrame.class).isShowing());
             return remoteRobot;
         });
     }
@@ -253,15 +240,15 @@ public class UITestRunner {
     }
 
     private static void waitUntilIntelliJStarts(int port) {
-        waitFor(Duration.ofSeconds(600), Duration.ofSeconds(3), "The IntelliJ Idea did not start in 10 minutes.", () -> isIntelliJUIVisible(port));
+        waitFor(Duration.ofSeconds(600), Duration.ofSeconds(3), "IntelliJ to start for 10 minutes.", () -> isIntelliJUIVisible(port));
     }
 
     private static boolean isIntelliJUIVisible(int port) {
-        return isHostOnIpAndPortAccessible("127.0.0.1", port);
+        return isHostOnIpAndPortAccessible(port);
     }
 
-    private static boolean isHostOnIpAndPortAccessible(String ip, int port) {
-        SocketAddress sockaddr = new InetSocketAddress(ip, port);
+    private static boolean isHostOnIpAndPortAccessible(int port) {
+        SocketAddress sockaddr = new InetSocketAddress("127.0.0.1", port);
         try (Socket socket = new Socket()) {
             connectToHost(socket, sockaddr);
         } catch (IOException e) {
