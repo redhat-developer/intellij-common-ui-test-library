@@ -162,7 +162,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
             jTreeFixture.findText("Customize").click();
             if (remoteRobot.isMac()) {
-                resizeWelcomeWindow(900);
+                resizeWelcomeWindow();
             }
             remoteRobot.find(ContainerFixture.class, byXpath(XPathDefinitions.DIALOG_PANEL)).findText("All settings" + '\u2026').click();
         }
@@ -170,10 +170,8 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
 
     /**
      * Resize the Welcome to IntelliJ IDEA window
-     *
-     * @param newHeight   Integer of new height to use
      */
-    private void resizeWelcomeWindow(int newHeight) {
+    private void resizeWelcomeWindow() {
         try {
             remoteRobot.callJs(String.format("""
                     importClass(java.awt.Frame);
@@ -192,7 +190,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
                         }
                     }
                     resized;
-                """, newHeight));
+                """, 900));
             Thread.sleep(5000);
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Failed to resize the Welcome window: {0}", e.getMessage());

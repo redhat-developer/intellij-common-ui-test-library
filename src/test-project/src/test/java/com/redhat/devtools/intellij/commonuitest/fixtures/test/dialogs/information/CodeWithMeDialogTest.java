@@ -39,7 +39,7 @@ class CodeWithMeDialogTest extends LibraryTestBase {
     private static final boolean IDEA_VERSION_WITH_CWM_DIALOG_OPENED = ideaVersionInt >= 20212;
 
     @BeforeAll
-    public static void prepareProject() {
+    static void prepareProject() {
         if (IDEA_VERSION_WITH_CWM_DIALOG_OPENED) {
             NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
             NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
@@ -71,14 +71,14 @@ class CodeWithMeDialogTest extends LibraryTestBase {
     }
 
     @AfterAll
-    public static void closeCurrentProject() {
+    static void closeCurrentProject() {
         if (IDEA_VERSION_WITH_CWM_DIALOG_OPENED) {
             CreateCloseUtils.closeProject(remoteRobot);
         }
     }
 
     @Test
-    public void closeCodeWithMe() {
+    void closeCodeWithMe() {
         if (IDEA_VERSION_WITH_CWM_DIALOG_OPENED) {
             CodeWithMeDialog.closeCodeWithMePopupIfItAppears(remoteRobot);
         }

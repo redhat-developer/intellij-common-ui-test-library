@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 class ScreenshotUtilsTest extends LibraryTestBase {
     @Test
-    public void takeScreenshotTest() {
+    void takeScreenshotTest() {
         remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
 
         int numberOfScreenshotBefore = getNumberOfSavedScreenshot();

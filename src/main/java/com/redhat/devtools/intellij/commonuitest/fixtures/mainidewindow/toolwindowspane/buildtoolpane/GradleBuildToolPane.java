@@ -109,6 +109,6 @@ public class GradleBuildToolPane extends CommonContainerFixture {
 
     private boolean isGradleTreeVisible() {
         String treeContent = TextUtils.listOfRemoteTextToString(gradleTaskTree().findAllText());
-        return !treeContent.toLowerCase(Locale.ROOT).contains("nothing") && !treeContent.equals("");
+        return !treeContent.toLowerCase(Locale.ROOT).contains("nothing") && !treeContent.isEmpty();
     }
 }

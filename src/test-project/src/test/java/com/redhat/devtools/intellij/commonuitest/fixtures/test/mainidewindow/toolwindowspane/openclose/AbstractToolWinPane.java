@@ -58,12 +58,12 @@ abstract class AbstractToolWinPane extends LibraryTestBase {
 
     protected void closePane(String label, Class<? extends CommonContainerFixture> fixtureClass) {
         if (isPaneOpened(fixtureClass)) {
-            clickOnStripeButton(label, true);
+            clickOnStripeButton(label);
         }
     }
 
-    protected void clickOnStripeButton(String label, boolean isPaneOpened) {
-        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The '" + label + "' stripe button is not available.", () -> isStripeButtonAvailable(label, isPaneOpened));
+    protected void clickOnStripeButton(String label) {
+        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The '" + label + "' stripe button is not available.", () -> isStripeButtonAvailable(label));
 
         if (UITestRunner.getIdeaVersionInt() >= 20242) { // For IntelliJ IDEA 2024.2 and newer
             if (isRightToolbarButton(label)) {
@@ -74,11 +74,11 @@ abstract class AbstractToolWinPane extends LibraryTestBase {
                 toolWindowLeftToolbar.clickStripeButton(label);
             }
         } else {            // For older versions
-            toolWinPane.stripeButton(label, isPaneOpened).click();
+            toolWinPane.stripeButton(label, true).click();
         }
     }
 
-    protected boolean isStripeButtonAvailable(String label, boolean isPaneOpened) {
+    protected boolean isStripeButtonAvailable(String label) {
         try {
             if (UITestRunner.getIdeaVersionInt() >= 20242) { // For IntelliJ IDEA 2024.2 and newer
                 if (isRightToolbarButton(label)) {
@@ -89,7 +89,7 @@ abstract class AbstractToolWinPane extends LibraryTestBase {
                     toolWindowLeftToolbar.findStripeButton(label);
                 }
             } else {            // For older versions
-                toolWinPane.stripeButton(label, isPaneOpened);
+                toolWinPane.stripeButton(label, true);
             }
             return true;
         } catch (WaitForConditionTimeoutException e) {
