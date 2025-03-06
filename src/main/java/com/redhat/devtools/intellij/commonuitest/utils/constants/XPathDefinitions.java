@@ -25,10 +25,15 @@ public class XPathDefinitions {
     public static final String BUILD_VIEW = "//div[@class='BuildView']";
     public static final String MAVEN_TOOL_WINDOW = "//div[@accessiblename='Maven Tool Window']";
     public static final String GRADLE_TOOL_WINDOW = "//div[@accessiblename='Gradle Tool Window']";
+    @Language("XPath")
     public static final String LINUX_MAIN_MENU = "//div[@class='LinuxIdeMenuBar']";
+    @Language("XPath")
     public static final String WINDOWS_MAIN_MENU_2024_1_AND_NEWER = "//div[@class='IdeJMenuBar']";
+    @Language("XPath")
     public static final String WINDOWS_MAIN_MENU_2022_2_TO_2023_2 = "//div[@class='IdeMenuBar']";
+    @Language("XPath")
     public static final String WINDOWS_MAIN_MENU_2020_3_TO_2022_1 = "//div[@class='MenuFrameHeader']";
+    @Language("XPath")
     public static final String WINDOWS_MAIN_MENU_2020_2_AND_OLDER = "//div[@class='CustomHeaderMenuBar']";
     public static final String IDE_STATUS_BAR = "//div[@class='IdeStatusBarImpl']";
     @Language("XPath")
@@ -38,6 +43,7 @@ public class XPathDefinitions {
     @Language("XPath")
     public static final String FLAT_WELCOME_FRAME = "//div[@class='FlatWelcomeFrame']";
     public static final String NEW_PROJECT_DIALOG_WIZARD = "//div[@accessiblename='New Project' and @class='MyDialog']";
+    @Language("XPath")
     public static final String DIALOG_ROOT_PANE = "//div[@class='DialogRootPane']";
     public static final String SEARCH_EVERYWHERE_POPUP = "//div[@accessiblename='Search everywhere' and @class='SearchEverywhereUI']";
     public static final String IDE_FATAL_ERRORS_DIALOG = "//div[@accessiblename='IDE Fatal Errors' and @class='MyDialog']";
@@ -53,7 +59,9 @@ public class XPathDefinitions {
     public static final String RECENT_PROJECT_PANEL_NEW_2 = "//div[@class='JBViewport']/*";
     @Language("XPath")
     public static final String IDE_ERROR_ICON = "//div[@class='IdeErrorsIcon']";
+    @Language("XPath")
     public static final String BUILD_VIEW_EDITOR = "//div[@accessiblename='Editor']";
+    @Language("XPath")
     public static final String JCOMBOBOX = "//div[@class='JComboBox']";
     @Language("XPath")
     public static final String MORE_SETTINGS_TITLED_SEPARATOR = "//div[@class='TitledSeparator']/../../*";
@@ -69,21 +77,35 @@ public class XPathDefinitions {
     public static final String MY_DIALOG = "//div[@class='MyDialog']";
     @Language("XPath")
     public static final String TREE = "//div[@class='Tree']";
+    @Language("XPath")
     public static final String TOOLTIP_TEXT_PROJECT = "//div[@tooltiptext='Project']";
+    @Language("XPath")
     public static final String TOOLTIP_TEXT_HIDE = "//div[contains(@myvisibleactions, 'View),')]//div[@tooltiptext='Hide']";
+    @Language("XPath")
     public static final String MAIN_MENU = "//div[@tooltiptext='Main Menu']";
+    @Language("XPath")
     public static final String MY_ICON_GEAR_PLAIN = "//div[contains(@myvisibleactions, 'View),')]//div[@myicon='gearPlain.svg']";
+    @Language("XPath")
     public static final String MY_ICON_MORE_VERTICAL = "//div[@myicon='moreVertical.svg']";
+    @Language("XPath")
     public static final String MY_ICON_COLLAPSE_ALL = "//div[contains(@myvisibleactions, 'View),')]//div[@myicon='collapseall.svg']";
+    @Language("XPath")
     public static final String MY_ICON_COLLAPSE_ALL_2024_2 = "//div[@myicon='collapseAll.svg']";
+    @Language("XPath")
     public static final String MY_ICON_COLLAPSE_ALL_FOR = "//div[contains(@myvisibleactions, 'For')]//div[@myicon='collapseall.svg']";
+    @Language("XPath")
     public static final String MY_ICON_COLLAPSE_ALL_IDE = "//div[contains(@myvisibleactions, 'IDE')]//div[@myicon='collapseall.svg']";
+    @Language("XPath")
     public static final String MY_ICON_EXPAND_ALL = "//div[contains(@myvisibleactions, 'View),')]//div[@myicon='expandall.svg']";
+    @Language("XPath")
     public static final String MY_ICON_EXPAND_ALL_2024_2 = "//div[@myicon='expandAll.svg']";
+    @Language("XPath")
     public static final String MY_ICON_EXPAND_ALL_IDE = "//div[contains(@myvisibleactions, 'IDE')]//div[@myicon='expandall.svg']";
     @Language("XPath")
     public static final String MY_ICON_LOCATE_SVG = "//div[@myicon='locate.svg']";
+    @Language("XPath")
     public static final String MY_ICON_REFRESH = "//div[@myicon='refresh.svg']";
+    @Language("XPath")
     public static final String CONTENT_COMBO_LABEL = "//div[@class='ContentComboLabel']";
     @Language("XPath")
     public static final String JBLIST = "//div[@class='JBList']";
@@ -98,10 +120,15 @@ public class XPathDefinitions {
     public static final String EMPTY_PROJECT = "//div[@visible_text='Empty Project']";
     @Language("XPath")
     public static final String SINGLE_HEIGHT_LABEL = "//div[@class='SingleHeightLabel']";
+    @Language("XPath")
     public static final String COLLAPSIBLE_TITLED_SEPARATOR = "//div[@class='CollapsibleTitledSeparator']";
+    @Language("XPath")
     public static final String COLLAPSIBLE_TITLED_SEPARATOR_NEW = "//div[@class='CollapsibleTitledSeparatorImpl']";
+    @Language("XPath")
     public static final String COLLAPSIBLE_TITLED_SEPARATOR_SIBLINGS = COLLAPSIBLE_TITLED_SEPARATOR + "/../*";
+    @Language("XPath")
     public static final String COLLAPSIBLE_TITLED_SEPARATOR_NEW_SIBLINGS = COLLAPSIBLE_TITLED_SEPARATOR_NEW + "/../*";
+    @Language("XPath")
     public static final String EXTENDABLE_TEXT_FIELD = "//div[@class='ExtendableTextField']";
     @Language("XPath")
     public static final String JBTEXT_FIELD = "//div[@class='JBTextField']";
@@ -113,9 +140,13 @@ public class XPathDefinitions {
     public static final String SET_BUILD_SYSTEM = "//div[@class='SegmentedButtonComponent'][.//div[@action.key='buildsystem.type.intellij']]";
     @Language("XPath")
     public static final String SET_BUILD_SYSTEM_2024_2_AND_NEWER = "//div[@accessiblename='Build system:' and @class='SegmentedButtonComponent']";  // works for IntelliJ Idea 2024.1 and higher
+    @Language("XPath")
     public static final String GET_SET_MODULE_NAME = "//div[@accessiblename='Module name:' and @class='JBTextField']";
+    @Language("XPath")
     public static final String GET_SET_MODULE_NAME_2024_2_AND_NEWER = "//div[@accessiblename='Module name:' and @class='JBTextField']";
+    @Language("XPath")
     public static final String GET_SET_CONTENT_ROOT = "//div[@accessiblename='Content root:' and @class='ExtendableTextField']";
+    @Language("XPath")
     public static final String GET_SET_MODULE_FILE_LOCATION = "//div[@accessiblename='Module file location:' and @class='ExtendableTextField']";
     @Language("XPath")
     public static final String CREATE_NEW_PROJECT = "//div[@defaulticon='createNewProjectTab.svg']"; // works for IntelliJ Idea 2024.1 and higher
