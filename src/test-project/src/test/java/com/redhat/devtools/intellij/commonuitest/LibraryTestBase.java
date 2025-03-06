@@ -47,6 +47,7 @@ public class LibraryTestBase {
             Runtime.getRuntime().addShutdownHook(new CloseIntelliJBeforeQuit());
 
             FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+            flatWelcomeFrame.clearWorkspace();
             flatWelcomeFrame.disableNotifications();
         }
     }

@@ -35,6 +35,7 @@ public class XPathDefinitions {
     public static final String INLINE_PROGRESS_PANEL = "//div[@class='InlineProgressPanel']";
     @Language("XPath")
     public static final String ENGRAVED_LABEL = "//div[@class='EngravedLabel']";
+    @Language("XPath")
     public static final String FLAT_WELCOME_FRAME = "//div[@class='FlatWelcomeFrame']";
     public static final String NEW_PROJECT_DIALOG_WIZARD = "//div[@accessiblename='New Project' and @class='MyDialog']";
     public static final String DIALOG_ROOT_PANE = "//div[@class='DialogRootPane']";

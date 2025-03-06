@@ -62,7 +62,9 @@ tasks {
 val integrationUITest by intellijPlatformTesting.testIde.registering {
     task {
         systemProperty("intellij_debug", "true")
-        systemProperty("communityIdeaVersion", platformVersion)
+        val underTestVersion = findProperty("communityIdeaVersion") ?: platformVersion
+        println("IDEA Version under test: $underTestVersion")
+        systemProperty("communityIdeaVersion", underTestVersion)
         group = "verification"
         useJUnitPlatform()
     }

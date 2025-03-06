@@ -11,10 +11,11 @@
 package com.redhat.devtools.intellij.commonuitest;
 
 import com.intellij.remoterobot.RemoteRobot;
+import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.stepsProcessing.StepLogger;
 import com.intellij.remoterobot.stepsProcessing.StepWorker;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
-import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
 
 import java.io.File;
@@ -34,6 +35,7 @@ import java.util.logging.Logger;
 
 import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
+import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 
 /**
  * Basic methods for starting and quiting the IntelliJ Idea IDE for UI tests
@@ -95,7 +97,6 @@ public class UITestRunner {
                 LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
 
-            remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).clearWorkspace();
             return remoteRobot;
         });
     }
@@ -153,7 +154,7 @@ public class UITestRunner {
     public static RemoteRobot getRemoteRobotConnection(int port) {
         return step("Create an instance of the RemoteRobot listening on port " + port, () -> {
             RemoteRobot remoteRobot = new RemoteRobot("http://127.0.0.1:" + port);
-            waitFor(Duration.ofSeconds(30), Duration.ofMillis(500), () -> remoteRobot.find(FlatWelcomeFrame.class).isShowing());
+            waitFor(Duration.ofSeconds(30), Duration.ofMillis(500), () -> remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.FLAT_WELCOME_FRAME)).isShowing());
             return remoteRobot;
         });
     }
