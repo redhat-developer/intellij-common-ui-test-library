@@ -15,7 +15,7 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 
 @DefaultXpath(by = "ToolWindowRightToolbar type", xpath = "//div[@class='ToolWindowRightToolbar']")
 @FixtureName(name = "Tool Window Right Toolbar")
-public class ToolWindowRightToolbar extends CommonContainerFixture {
+public class  ToolWindowRightToolbar extends CommonContainerFixture {
 
     public ToolWindowRightToolbar(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
