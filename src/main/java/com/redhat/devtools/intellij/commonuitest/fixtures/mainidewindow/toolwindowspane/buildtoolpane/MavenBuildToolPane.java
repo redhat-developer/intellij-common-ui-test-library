@@ -93,6 +93,6 @@ public class MavenBuildToolPane extends CommonContainerFixture {
 
     private boolean isMavenTreeVisible() {
         String treeContent = TextUtils.listOfRemoteTextToString(mavenTargetTree().findAllText());
-        return !treeContent.toLowerCase(Locale.ROOT).contains("nothing") && !treeContent.equals("");
+        return !treeContent.toLowerCase(Locale.ROOT).contains("nothing") && !treeContent.isEmpty();
     }
 }

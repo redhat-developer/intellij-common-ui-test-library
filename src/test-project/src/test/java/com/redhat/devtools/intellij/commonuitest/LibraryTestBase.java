@@ -31,14 +31,14 @@ import java.util.logging.Logger;
 @ExtendWith(ScreenshotAfterTestFailExtension.class)
 public class LibraryTestBase {
     protected static final Logger LOGGER = Logger.getLogger(LibraryTestBase.class.getName());
-    private static final IntelliJVersion communityIdeaVersion = IntelliJVersion.COMMUNITY_V_2024_2;
+    private static final IntelliJVersion communityIdeaVersion = IntelliJVersion.getFromStringVersion(System.getProperty("communityIdeaVersion"));
     protected static RemoteRobot remoteRobot;
     protected static int ideaVersionInt;
     private static boolean intelliJHasStarted = false;
     private static final int TEST_RUNNER_PORT = 8580;
 
     @BeforeAll
-    protected static void startIntelliJ() {
+    static void startIntelliJ() {
         if (!intelliJHasStarted) {
             ideaVersionInt = communityIdeaVersion.toInt();
             remoteRobot = UITestRunner.runIde(communityIdeaVersion, TEST_RUNNER_PORT);
@@ -47,12 +47,13 @@ public class LibraryTestBase {
             Runtime.getRuntime().addShutdownHook(new CloseIntelliJBeforeQuit());
 
             FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+            flatWelcomeFrame.clearWorkspace();
             flatWelcomeFrame.disableNotifications();
         }
     }
 
     @AfterAll
-    protected static void finishTestRun() {
+    static void finishTestRun() {
         FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.clearExceptions();
         flatWelcomeFrame.clearWorkspace();

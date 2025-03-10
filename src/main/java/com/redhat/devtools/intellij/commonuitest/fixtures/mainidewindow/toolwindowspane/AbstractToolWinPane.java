@@ -43,11 +43,9 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
 
     /**
      * Open project explorer
-     *
-     * @return the Project Explorer fixture
      */
-    public ProjectExplorer openProjectExplorer() {
-        return togglePane(ButtonLabels.PROJECT_STRIPE_BUTTON_LABEL, ProjectExplorer.class, true);
+    public void openProjectExplorer() {
+        togglePane(ButtonLabels.PROJECT_STRIPE_BUTTON_LABEL, ProjectExplorer.class, true);
     }
 
     /**
@@ -59,11 +57,9 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
 
     /**
      * Open maven build tool pane
-     *
-     * @return the Maven Build Tool Pane fixture
      */
-    public MavenBuildToolPane openMavenBuildToolPane() {
-        return togglePane(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL, MavenBuildToolPane.class, true);
+    public void openMavenBuildToolPane() {
+        togglePane(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL, MavenBuildToolPane.class, true);
     }
 
     /**
@@ -75,11 +71,9 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
 
     /**
      * Open gradle build tool pane
-     *
-     * @return the Gradle Build Tool Pane fixture
      */
-    public GradleBuildToolPane openGradleBuildToolPane() {
-        return togglePane(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL, GradleBuildToolPane.class, true);
+    public void openGradleBuildToolPane() {
+        togglePane(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL, GradleBuildToolPane.class, true);
     }
 
     /**
@@ -111,14 +105,12 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
         return button(byXpath(XPathDefinitions.label(label)), Duration.ofSeconds(2));
     }
 
-    protected <T extends Fixture> T togglePane(String label, Class<T> fixtureClass, boolean openPane) {
+    protected void togglePane(String label, Class<? extends Fixture> fixtureClass, boolean openPane) {
         if ((!isPaneOpened(fixtureClass) && openPane)) {
             clickOnStripeButton(label, false);
-            return find(fixtureClass, Duration.ofSeconds(10));
         } else if (isPaneOpened(fixtureClass) && !openPane) {
             clickOnStripeButton(label, true);
         }
-        return null;
     }
 
     private boolean isPaneOpened(Class<? extends Fixture> fixtureClass) {

@@ -34,17 +34,17 @@ class ToolWindowsPaneMavenTest extends LibraryTestBase {
     private AbstractToolWinPane toolWinPane;
 
     @BeforeAll
-    public static void prepareProject() {
+    static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.MAVEN);
     }
 
     @AfterAll
-    public static void closeCurrentProject() {
+    static void closeCurrentProject() {
         CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @BeforeEach
-    public void createToolWindowsPaneFixture() {
+    void createToolWindowsPaneFixture() {
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
             toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
         } else {
@@ -53,7 +53,7 @@ class ToolWindowsPaneMavenTest extends LibraryTestBase {
     }
 
     @Test
-    public void mavenBuildTest() {
+    void mavenBuildTest() {
         toolWinPane.openMavenBuildToolPane();
         MavenBuildToolPane mavenBuildToolPane = toolWinPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10));
         mavenBuildToolPane.buildProject("install");

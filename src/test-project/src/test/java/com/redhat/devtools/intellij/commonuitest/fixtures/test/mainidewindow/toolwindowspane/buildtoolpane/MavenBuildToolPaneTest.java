@@ -37,7 +37,7 @@ class MavenBuildToolPaneTest extends LibraryTestBase {
     private static MavenBuildToolPane mavenBuildToolPane;
 
     @BeforeAll
-    public static void prepareProject() {
+    static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.MAVEN);
         if (UITestRunner.getIdeaVersionInt() >= 20221) {
             toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
@@ -49,24 +49,24 @@ class MavenBuildToolPaneTest extends LibraryTestBase {
     }
 
     @AfterAll
-    public static void closeCurrentProject() {
+    static void closeCurrentProject() {
         CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @Test
-    public void buildProjectTest() {
+    void buildProjectTest() {
         mavenBuildToolPane.buildProject("install");
         boolean isBuildSuccessful = toolWinPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
         assertTrue(isBuildSuccessful, "The build should be successful but is not.");
     }
 
     @Test
-    public void reloadAllMavenProjectsTest() {
+    void reloadAllMavenProjectsTest() {
         mavenBuildToolPane.reloadAllMavenProjects();
     }
 
     @Test
-    public void collapseAllTest() {
+    void collapseAllTest() {
         mavenBuildToolPane.mavenTargetTree().expandAll();
         int itemsCountBeforeCollapsing = mavenBuildToolPane.mavenTargetTree().collectRows().size();
         mavenBuildToolPane.collapseAll();
