@@ -44,7 +44,7 @@ class BuildViewTest extends LibraryTestBase {
             toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
         }
         toolWinPane.openMavenBuildToolPane();
-        toolWinPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10)).buildProject("install");
+        toolWinPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10)).buildProject("verify");
     }
 
     @AfterAll

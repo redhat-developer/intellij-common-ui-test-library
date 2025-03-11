@@ -52,8 +52,10 @@ public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallb
                 LOGGER.log(Level.SEVERE, "Can't take a screenshot, remoteRobot is null!");
                 return;
             }
+            String testClass = extensionContext.getRequiredTestClass().getName();
+            String testMethod = extensionContext.getRequiredTestMethod().getName();
             step("Take a screenshot after a test has failed",
-                () -> ScreenshotUtils.takeScreenshot(remoteRobot)
+                () -> ScreenshotUtils.takeScreenshot(remoteRobot, testClass+"_"+testMethod)
             );
             step("Return to the 'Welcome Frame' dialog",
                 () -> cleanAfterTestFail(remoteRobot)

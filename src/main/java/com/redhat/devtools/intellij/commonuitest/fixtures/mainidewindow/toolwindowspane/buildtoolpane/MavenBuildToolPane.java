@@ -59,7 +59,6 @@ public class MavenBuildToolPane extends CommonContainerFixture {
     public void collapseAll() {
         if (UITestRunner.getIdeaVersionInt() >= 20242) {
             actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_2024_2), Duration.ofSeconds(2)).click();
-
         } else {
             actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_FOR), Duration.ofSeconds(2)).click();
         }

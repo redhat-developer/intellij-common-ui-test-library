@@ -46,7 +46,7 @@ public class IdeStatusBar extends CommonContainerFixture {
      * @return fixture for the InlineProgressPanel
      */
     public ComponentFixture inlineProgressPanel() {
-        return find(ComponentFixture.class, byXpath(XPathDefinitions.INLINE_PROGRESS_PANEL));
+        return find(ComponentFixture.class, byXpath(XPathDefinitions.INLINE_PROGRESS_PANEL), Duration.ofSeconds(5));
     }
 
     /**
