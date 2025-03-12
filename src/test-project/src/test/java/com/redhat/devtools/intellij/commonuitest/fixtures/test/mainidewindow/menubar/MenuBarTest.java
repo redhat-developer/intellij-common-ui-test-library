@@ -12,7 +12,7 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.me
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
-import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.TipDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar.MenuBar;
@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com
  */
-class MenuBarTest extends LibraryTestBase {
+class MenuBarTest extends AbstractLibraryBaseTest {
     private static final String PROJECT_NAME = "project_view_tree_java_project";
 
     @BeforeAll

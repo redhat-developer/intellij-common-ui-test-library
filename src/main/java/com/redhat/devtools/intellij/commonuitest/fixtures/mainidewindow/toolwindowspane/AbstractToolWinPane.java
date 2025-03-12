@@ -114,16 +114,8 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
     }
 
     private boolean isPaneOpened(Class<? extends Fixture> fixtureClass) {
-        AbstractToolWinPane toolWinPane;
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
-        } else {
-            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        }
-
         try {
-            toolWinPane.find(fixtureClass, Duration.ofSeconds(10));
-            return true;
+            return find(fixtureClass, Duration.ofSeconds(10)).isShowing();
         } catch (WaitForConditionTimeoutException e) {
             return false;
         }

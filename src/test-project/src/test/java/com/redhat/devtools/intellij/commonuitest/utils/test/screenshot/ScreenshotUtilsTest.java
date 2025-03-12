@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.utils.test.screenshot;
 
-import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  *
  * @author zcervink@redhat.com
  */
-class ScreenshotUtilsTest extends LibraryTestBase {
+class ScreenshotUtilsTest extends AbstractLibraryBaseTest {
     @Test
     void takeScreenshotTest() {
         remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
@@ -51,4 +51,5 @@ class ScreenshotUtilsTest extends LibraryTestBase {
         File[] files = new File(pathToIdeaProjectsFolder).listFiles((FileFilter) FileFilterUtils.fileFileFilter());
         return files != null ? files.length : 0;
     }
+
 }

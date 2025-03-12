@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.settings.pages;
 
-import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.SettingsDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.pages.NotificationsPage;
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com
  */
-class NotificationsPageTest extends LibraryTestBase {
+class NotificationsPageTest extends AbstractLibraryBaseTest {
     private static SettingsDialog settingsDialog;
     private static NotificationsPage notificationsPage;
     private boolean balloonNotificationsCheckBox;

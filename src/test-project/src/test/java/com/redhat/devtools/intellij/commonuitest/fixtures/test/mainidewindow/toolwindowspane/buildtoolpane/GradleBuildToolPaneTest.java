@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.buildtoolpane;
 
-import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com
  */
-class GradleBuildToolPaneTest extends LibraryTestBase {
+class GradleBuildToolPaneTest extends AbstractLibraryBaseTest {
     private static final String PROJECT_NAME = "gradle_build_tool_pane_java_project";
     private static AbstractToolWinPane toolWinPane;
     private static GradleBuildToolPane gradleBuildToolPane;

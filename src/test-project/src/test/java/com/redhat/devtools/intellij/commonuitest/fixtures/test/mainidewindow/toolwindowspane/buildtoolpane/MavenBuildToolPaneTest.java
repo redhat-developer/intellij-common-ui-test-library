@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.buildtoolpane;
 
-import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com
  */
-class MavenBuildToolPaneTest extends LibraryTestBase {
+class MavenBuildToolPaneTest extends AbstractLibraryBaseTest {
     private static final String PROJECT_NAME = "maven_build_tool_pane_java_project";
     private static AbstractToolWinPane toolWinPane;
     private static MavenBuildToolPane mavenBuildToolPane;
@@ -55,7 +55,7 @@ class MavenBuildToolPaneTest extends LibraryTestBase {
 
     @Test
     void buildProjectTest() {
-        mavenBuildToolPane.buildProject("install");
+        mavenBuildToolPane.buildProject("verify");
         boolean isBuildSuccessful = toolWinPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
         assertTrue(isBuildSuccessful, "The build should be successful but is not.");
     }

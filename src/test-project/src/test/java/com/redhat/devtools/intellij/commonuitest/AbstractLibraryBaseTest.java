@@ -29,8 +29,8 @@ import java.util.logging.Logger;
  * @author zcervink@redhat.com
  */
 @ExtendWith(ScreenshotAfterTestFailExtension.class)
-public class LibraryTestBase {
-    protected static final Logger LOGGER = Logger.getLogger(LibraryTestBase.class.getName());
+public abstract class AbstractLibraryBaseTest {
+    protected static final Logger LOGGER = Logger.getLogger(AbstractLibraryBaseTest.class.getName());
     private static final IntelliJVersion communityIdeaVersion = IntelliJVersion.getFromStringVersion(System.getProperty("communityIdeaVersion"));
     protected static RemoteRobot remoteRobot;
     protected static int ideaVersionInt;
@@ -39,7 +39,7 @@ public class LibraryTestBase {
 
     @BeforeAll
     static void startIntelliJ() {
-        if (!intelliJHasStarted) {
+       if (!intelliJHasStarted) {
             ideaVersionInt = communityIdeaVersion.toInt();
             remoteRobot = UITestRunner.runIde(communityIdeaVersion, TEST_RUNNER_PORT);
 

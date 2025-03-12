@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane;
 
-import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com
  */
-class BuildViewTest extends LibraryTestBase {
+class BuildViewTest extends AbstractLibraryBaseTest {
     private static final String PROJECT_NAME = "build_view_java_project";
     private static AbstractToolWinPane toolWinPane;
 
@@ -44,7 +44,7 @@ class BuildViewTest extends LibraryTestBase {
             toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
         }
         toolWinPane.openMavenBuildToolPane();
-        toolWinPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10)).buildProject("install");
+        toolWinPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10)).buildProject("verify");
     }
 
     @AfterAll

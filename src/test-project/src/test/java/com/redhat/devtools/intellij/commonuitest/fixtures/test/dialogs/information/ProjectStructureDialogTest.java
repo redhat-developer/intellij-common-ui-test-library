@@ -12,7 +12,7 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.informat
 
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
-import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.ProjectStructureDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com, olkornii@redhat.com
  */
-class ProjectStructureDialogTest extends LibraryTestBase {
+class ProjectStructureDialogTest extends AbstractLibraryBaseTest {
     private static final String PROJECT_NAME = "tip_dialog_java_project";
 
     @BeforeAll

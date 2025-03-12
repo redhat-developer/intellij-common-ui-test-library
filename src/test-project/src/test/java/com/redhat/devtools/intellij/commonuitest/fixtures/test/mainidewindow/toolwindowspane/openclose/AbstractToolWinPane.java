@@ -12,7 +12,7 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.to
 
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
-import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowLeftToolbar;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
@@ -31,7 +31,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  *
  * @author zcervink@redhat.com
  */
-abstract class AbstractToolWinPane extends LibraryTestBase {
+abstract class AbstractToolWinPane extends AbstractLibraryBaseTest {
     protected static final String MAVEN_PROJECT_NAME = "tool_windows_pane_java_maven_project";
     protected static final String GRADLE_PROJECT_NAME = "tool_windows_pane_java_gradle_project";
     protected static com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane toolWinPane;

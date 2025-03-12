@@ -14,7 +14,7 @@ import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.utils.Keyboard;
-import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
@@ -43,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  *
  * @author zcervink@redhat.com
  */
-class ProjectExplorerTest extends LibraryTestBase {
+class ProjectExplorerTest extends AbstractLibraryBaseTest {
     private static final String PROJECT_NAME = "pe_java_project";
     private static ProjectExplorer projectExplorer;
     private final Keyboard keyboard = new Keyboard(remoteRobot);

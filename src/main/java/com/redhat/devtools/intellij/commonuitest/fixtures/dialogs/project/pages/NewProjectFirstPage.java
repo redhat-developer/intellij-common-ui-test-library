@@ -21,7 +21,6 @@ import com.intellij.remoterobot.fixtures.JLabelFixture;
 import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.fixtures.JTextFieldFixture;
-import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
@@ -47,8 +46,8 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 @DefaultXpath(by = "MyDialog type", xpath = XPathDefinitions.DIALOG_ROOT_PANE)
 @FixtureName(name = "New Project Dialog")
 public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
-    private final RemoteRobot remoteRobot;
-    private int projectSdkItemsCount = -1;
+    protected final RemoteRobot remoteRobot;
+    private boolean isProjectSdkItemsLoaded = false;
     private final int ideaVersion;
 
     public NewProjectFirstPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
@@ -184,12 +183,8 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
     private kotlin.Pair<Boolean, CommonContainerFixture> didProjectSdkListLoadAllItems() {
         return step("Test whether the 'Project SDK' list has loaded all items", () -> {
             CommonContainerFixture parentFixture = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.MY_DIALOG));
-            JPopupMenuFixture projectSdkList = parentFixture.jPopupMenus(byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW)).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
-            List<RemoteText> sdkItems = projectSdkList.findAllText();
-            int currentSdkItemsCount = sdkItems.size();
-
-            if ((projectSdkItemsCount == -1) || (projectSdkItemsCount != currentSdkItemsCount)) {
-                projectSdkItemsCount = currentSdkItemsCount;
+            if (!isProjectSdkItemsLoaded) {
+                isProjectSdkItemsLoaded = true;
                 return new kotlin.Pair<>(false, parentFixture);
             }
             return new kotlin.Pair<>(true, parentFixture);

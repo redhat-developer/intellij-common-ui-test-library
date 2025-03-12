@@ -13,7 +13,7 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.informat
 import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
-import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.TipDialog;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  *
  * @author zcervink@redhat.com
  */
-class TipDialogTest extends LibraryTestBase {
+class TipDialogTest extends AbstractLibraryBaseTest {
     private TipDialog tipDialog;
 
     @AfterAll
