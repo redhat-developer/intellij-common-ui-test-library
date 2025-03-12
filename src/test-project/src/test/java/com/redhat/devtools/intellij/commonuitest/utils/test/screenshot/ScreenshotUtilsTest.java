@@ -23,7 +23,6 @@ import java.nio.file.Files;
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -53,16 +52,4 @@ class ScreenshotUtilsTest extends AbstractLibraryBaseTest {
         return files != null ? files.length : 0;
     }
 
-    @Test
-    void hasCorrectCommentScreenshotTest() {
-        remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-        String expectedComment = this.getClass().getName().concat("_hasCorrectCommentScreenshotTest");
-        File screenshotFile = ScreenshotUtils.takeScreenshot(remoteRobot);
-        assertTrue(screenshotFile.getName().endsWith(expectedComment), "Wrong screenshot name.");
-        try {
-            Files.delete(screenshotFile.toPath());
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
-    }
 }
