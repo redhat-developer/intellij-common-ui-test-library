@@ -11,7 +11,7 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.idestatusbar;
 
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
-import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.MavenGradleNewProjectFinalPage;
@@ -35,7 +35,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  *
  * @author zcervink@redhat.com
  */
-class IdeStatusBarTest extends LibraryTestBase {
+class IdeStatusBarTest extends AbstractLibraryBaseTest {
     private static final String PROJECT_NAME = "ide_status_bar_java_project";
 
     private static kotlin.Pair<Boolean, IdeStatusBar> isProgressbarWithLabelVisible() {

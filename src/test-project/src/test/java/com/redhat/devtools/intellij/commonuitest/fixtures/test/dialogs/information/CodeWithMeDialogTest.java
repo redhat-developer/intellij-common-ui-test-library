@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.information;
 
-import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.CodeWithMeDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
@@ -34,7 +34,7 @@ import static com.redhat.devtools.intellij.commonuitest.utils.project.CreateClos
  *
  * @author zcervink@redhat.com
  */
-class CodeWithMeDialogTest extends LibraryTestBase {
+class CodeWithMeDialogTest extends AbstractLibraryBaseTest {
     private static final String PROJECT_NAME = "code_with_me_java_project";
     private static final boolean IDEA_VERSION_WITH_CWM_DIALOG_OPENED = ideaVersionInt >= 20212;
 

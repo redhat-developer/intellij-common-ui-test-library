@@ -12,7 +12,7 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.project_
 
 import com.intellij.remoterobot.fixtures.*;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
-import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
@@ -50,7 +50,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  *
  * @author zcervink@redhat.com
  */
-class NewProjectDialogTest extends LibraryTestBase {
+class NewProjectDialogTest extends AbstractLibraryBaseTest {
     private static final String PLAIN_JAVA_PROJECT_NAME = "plain_java_project_name_test";
     private static final String MORE_SETTINGS_SHOULD_BE_VISIBLE = "The 'More Settings' should be visible.";
     private static final String MORE_SETTINGS_SHOULD_BE_HIDDEN = "The 'More Settings' should be hidden.";

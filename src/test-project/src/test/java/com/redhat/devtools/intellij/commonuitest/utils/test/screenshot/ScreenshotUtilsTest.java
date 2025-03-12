@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.utils.test.screenshot;
 
-import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -30,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  *
  * @author zcervink@redhat.com
  */
-class ScreenshotUtilsTest extends LibraryTestBase {
+class ScreenshotUtilsTest extends AbstractLibraryBaseTest {
     @Test
     void takeScreenshotTest() {
         remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
@@ -50,5 +51,18 @@ class ScreenshotUtilsTest extends LibraryTestBase {
         String pathToIdeaProjectsFolder = System.getProperty("user.dir") + File.separator + "build" + File.separator + "screenshots";
         File[] files = new File(pathToIdeaProjectsFolder).listFiles((FileFilter) FileFilterUtils.fileFileFilter());
         return files != null ? files.length : 0;
+    }
+
+    @Test
+    void hasCorrectCommentScreenshotTest() {
+        remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        String expectedComment = this.getClass().getName().concat("_hasCorrectCommentScreenshotTest");
+        File screenshotFile = ScreenshotUtils.takeScreenshot(remoteRobot);
+        assertTrue(screenshotFile.getName().endsWith(expectedComment), "Wrong screenshot name.");
+        try {
+            Files.delete(screenshotFile.toPath());
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
     }
 }

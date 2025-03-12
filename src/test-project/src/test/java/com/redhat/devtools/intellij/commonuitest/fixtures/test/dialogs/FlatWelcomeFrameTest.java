@@ -13,7 +13,7 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs;
 import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
-import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ProjectLocation;
@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author zcervink@redhat.com
  */
-class FlatWelcomeFrameTest extends LibraryTestBase {
+class FlatWelcomeFrameTest extends AbstractLibraryBaseTest {
     private static final String PROJECT_NAME = "welcome_frame_java_project";
     private FlatWelcomeFrame flatWelcomeFrame;
 

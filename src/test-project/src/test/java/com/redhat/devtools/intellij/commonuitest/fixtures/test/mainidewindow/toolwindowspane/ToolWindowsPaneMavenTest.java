@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane;
 
-import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
@@ -29,7 +29,7 @@ import java.time.Duration;
  *
  * @author zcervink@redhat.com
  */
-class ToolWindowsPaneMavenTest extends LibraryTestBase {
+class ToolWindowsPaneMavenTest extends AbstractLibraryBaseTest {
     private static final String PROJECT_NAME = "tool_windows_pane_java_maven_project";
     private AbstractToolWinPane toolWinPane;
 

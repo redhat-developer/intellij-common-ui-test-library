@@ -14,7 +14,7 @@ import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.JCheckboxFixture;
 import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
-import com.redhat.devtools.intellij.commonuitest.LibraryTestBase;
+import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.SettingsDialog;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  *
  * @author zcervink@redhat.com
  */
-class SettingsDialogTest extends LibraryTestBase {
+class SettingsDialogTest extends AbstractLibraryBaseTest {
     private static FlatWelcomeFrame flatWelcomeFrame;
     private SettingsDialog settingsDialog = null;
     private static final String APPEARANCE_AND_BEHAVIOR = "Appearance & Behavior";
