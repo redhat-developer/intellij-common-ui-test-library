@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.buildtoolpane;
 
+import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
@@ -24,6 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -67,10 +69,18 @@ class MavenBuildToolPaneTest extends AbstractLibraryBaseTest {
 
     @Test
     void collapseAllTest() {
-        mavenBuildToolPane.mavenTargetTree().expandAll();
-        int itemsCountBeforeCollapsing = mavenBuildToolPane.mavenTargetTree().collectRows().size();
+        JTreeFixture tree = mavenBuildToolPane.mavenTargetTree();
+        tree.doubleClickRow(0); // expand root
+        for (String row : tree.collectRows()) {
+            if (!row.equals(PROJECT_NAME)) {
+                tree.doubleClickRowWithText(row, true); // expand first children
+            }
+        }
+        int itemsCountBeforeCollapsing = tree.collectRows().size();
+        assertTrue(itemsCountBeforeCollapsing > 1, "The Maven tree did not expand correctly");
         mavenBuildToolPane.collapseAll();
-        int itemsCountAfterCollapsing = mavenBuildToolPane.mavenTargetTree().collectRows().size();
+        int itemsCountAfterCollapsing = tree.collectRows().size();
+        assertEquals(1, itemsCountAfterCollapsing);
         assertTrue(itemsCountAfterCollapsing < itemsCountBeforeCollapsing, "The 'Collapse All' operation was unsuccessful.");
     }
 }

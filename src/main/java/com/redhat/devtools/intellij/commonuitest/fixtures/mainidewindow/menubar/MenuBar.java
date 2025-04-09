@@ -17,7 +17,6 @@ import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
-import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
 
 import java.time.Duration;
 import java.util.List;
@@ -32,11 +31,10 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  */
 public class MenuBar {
     private final RemoteRobot remoteRobot;
-    private final IntelliJVersion ideaVersion;
+    private final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
 
     public MenuBar(RemoteRobot remoteRobot) {
         this.remoteRobot = remoteRobot;
-        this.ideaVersion = UITestRunner.getIdeaVersion();
     }
 
     /**
@@ -48,13 +46,13 @@ public class MenuBar {
         if (path.length == 0) {
             return;
         }
-        if (UITestRunner.getIdeaVersionInt() >= 20242) {
+        if (ideaVersionInt >= 20242) {
             remoteRobot.find(ActionButtonFixture.class, byXpath(XPathDefinitions.MAIN_MENU)).click();
         }
 
         JButtonFixture mainMenuFirstItem = mainMenuItem(path[0]);
         if (mainMenuFirstItem != null) {
-            if (UITestRunner.getIdeaVersionInt() >= 20242) {
+            if (ideaVersionInt >= 20242) {
                 mainMenuFirstItem.moveMouse();
             } else {
                 mainMenuFirstItem.click();
@@ -87,13 +85,13 @@ public class MenuBar {
         }
 
         CommonContainerFixture cf;
-        if (remoteRobot.isLinux()) {
+        if (remoteRobot.isLinux() && ideaVersionInt <= 20242) {
             cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.LINUX_MAIN_MENU), Duration.ofSeconds(10));
-        } else if (remoteRobot.isWin() && ideaVersion.toInt() >= 20241) {
+        } else if ((remoteRobot.isWin() && ideaVersionInt >= 20241) || (remoteRobot.isLinux() && ideaVersionInt > 20242)) {
             cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2024_1_AND_NEWER), Duration.ofSeconds(10));
-        } else if (remoteRobot.isWin() && ideaVersion.toInt() >= 20222) {
+        } else if (remoteRobot.isWin() && ideaVersionInt >= 20222) {
             cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2022_2_TO_2023_2), Duration.ofSeconds(10));
-        } else if (remoteRobot.isWin() && ideaVersion.toInt() >= 20203) {
+        } else if (remoteRobot.isWin() && ideaVersionInt >= 20203) {
             cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2020_3_TO_2022_1), Duration.ofSeconds(10));
         } else {
             cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2020_2_AND_OLDER), Duration.ofSeconds(10));

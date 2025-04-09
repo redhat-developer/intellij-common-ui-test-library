@@ -57,6 +57,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
     private static final String ADVANCED_SETTINGS_SHOULD_BE_OPENED_MSG = "The 'Advanced Settings' section should be opened but is not";
     private static final String ADVANCED_SETTINGS_SHOULD_BE_CLOSED_MSG = "The 'Advanced Settings' section should be closed but is not";
     private static final String BUT_IS = "but is";
+    private final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
 
     private NewProjectDialogWizard newProjectDialogWizard;
     private NewProjectFirstPage newProjectFirstPage;
@@ -159,7 +160,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
     void getSetModuleNameTest() {
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+        if (ideaVersionInt >= 20221) {
             javaFinalPage.openAdvanceSettings();
         } else {
             javaFinalPage.openMoreSettings();
@@ -176,7 +177,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
     void getSetContentRootTest() {
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+        if (ideaVersionInt >= 20221) {
             javaFinalPage.openAdvanceSettings();
         } else {
             javaFinalPage.openMoreSettings();
@@ -193,7 +194,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
     void getSetModuleFileLocationTest() {
         navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType.PLAIN_JAVA);
         JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+        if (ideaVersionInt >= 20221) {
             javaFinalPage.openAdvanceSettings();
         } else {
             javaFinalPage.openMoreSettings();
@@ -309,7 +310,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
 
     @Test
     void finishButtonTest() {
-        if (UITestRunner.getIdeaVersionInt() < 20221) {
+        if (ideaVersionInt < 20221) {
             newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
             newProjectFirstPage.setProjectSdkIfAvailable("17");
             assertThrows(UITestException.class, () ->
@@ -376,7 +377,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
         selectJavaNewProjectType();
 
         boolean isProjectSDKLabelVisible;
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+        if (ideaVersionInt >= 20221) {
             isProjectSDKLabelVisible = !newProjectFirstPage.findAll(JLabelFixture.class, byXpath("//div[@text.key='label.project.wizard.new.project.jdk']")).isEmpty();
         } else {
             isProjectSDKLabelVisible = !newProjectFirstPage.findAll(JLabelFixture.class, byXpath("//div[@text='Project SDK:']")).isEmpty();
@@ -386,7 +387,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
 
     private void selectJavaNewProjectType() {
         newProjectFirstPage = remoteRobot.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+        if (ideaVersionInt >= 20221) {
             newProjectFirstPage.selectNewProjectType("New Project");
         } else {
             newProjectFirstPage.selectNewProjectType("Java");
@@ -413,7 +414,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
     }
 
     private void navigateToSetProjectNamePage(CreateCloseUtils.NewProjectType newProjectType) {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+        if (ideaVersionInt >= 20221) {
             newProjectFirstPage.setBuildSystem(newProjectType.toString().equals("Java") ? "IntelliJ" : newProjectType.toString());
             return;
         }
@@ -442,7 +443,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
     }
 
     private void testOpenArtifactCoordinatesMavenGradle(CreateCloseUtils.NewProjectType newProjectType) {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+        if (ideaVersionInt >= 20221) {
             return;
         }
         navigateToSetProjectNamePage(newProjectType);
@@ -455,14 +456,14 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
     }
 
     private void testArtifactCoordinatesAttributes(CreateCloseUtils.NewProjectType newProjectType, ArtifactCoordinatesAttributes attribute) {
-        if (UITestRunner.getIdeaVersionInt() >= 20221 && attribute == ArtifactCoordinatesAttributes.VERSION) {
+        if (ideaVersionInt >= 20221 && attribute == ArtifactCoordinatesAttributes.VERSION) {
             return;
         }
 
         navigateToSetProjectNamePage(newProjectType);
         MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
 
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+        if (ideaVersionInt >= 20221) {
             mavenGradleFinalPage.openAdvanceSettings();
         } else {
             mavenGradleFinalPage.openArtifactCoordinates();

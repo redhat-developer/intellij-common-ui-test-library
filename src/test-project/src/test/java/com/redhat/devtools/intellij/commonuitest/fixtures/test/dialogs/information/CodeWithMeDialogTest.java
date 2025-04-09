@@ -11,7 +11,6 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.information;
 
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
-import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.CodeWithMeDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.AbstractNewProjectFinalPage;
@@ -44,7 +43,7 @@ class CodeWithMeDialogTest extends AbstractLibraryBaseTest {
             NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
             NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
 
-            if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            if (ideaVersionInt >= 20221) {
                 newProjectFirstPage.selectNewProjectType("New Project");
                 newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
                 newProjectFirstPage.setProjectName(PROJECT_NAME);

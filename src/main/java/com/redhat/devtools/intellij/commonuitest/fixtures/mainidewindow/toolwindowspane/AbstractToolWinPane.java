@@ -35,6 +35,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  */
 public abstract class AbstractToolWinPane extends CommonContainerFixture {
     private final RemoteRobot remoteRobot;
+    private final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
 
     protected AbstractToolWinPane(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
@@ -93,7 +94,7 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
     public JButtonFixture stripeButton(String label, boolean isPaneOpened) {
         if (isPaneOpened) {
             if (label.equals(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL) || label.equals(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL)) {
-                if (UITestRunner.getIdeaVersionInt() >= 20223) {    // Code for IntelliJ version 2022.3 and newer
+                if (ideaVersionInt >= 20223) {    // Code for IntelliJ version 2022.3 and newer
                     return button(byXpath(XPathDefinitions.toolWindowButton(label)), Duration.ofSeconds(2));
                 } else {                                            // Code for IntelliJ versions 2022.2 and older
                     return button(byXpath(XPathDefinitions.toolWindowSvg(label)), Duration.ofSeconds(2));
@@ -126,7 +127,7 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
                 "The '" + label + "' stripe button is not available.",
                 () -> isStripeButtonAvailable(label, isPaneOpened));
 
-        if (UITestRunner.getIdeaVersionInt() >= 20242) {
+        if (ideaVersionInt >= 20242) {
             // For IntelliJ IDEA 2024.2 and newer
             if (isRightToolbarButton(label)) {
                 ToolWindowRightToolbar toolWindowRightToolbar = remoteRobot.find(ToolWindowRightToolbar.class, Duration.ofSeconds(10));
@@ -135,7 +136,7 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
                 ToolWindowLeftToolbar toolWindowLeftToolbar = remoteRobot.find(ToolWindowLeftToolbar.class, Duration.ofSeconds(10));
                 toolWindowLeftToolbar.clickStripeButton(label);
             }
-        } else if (UITestRunner.getIdeaVersionInt() >= 20221) {
+        } else if (ideaVersionInt >= 20221) {
             // For IntelliJ IDEA 2022.1 to 2024.1
             ToolWindowPane toolWindowPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
             toolWindowPane.stripeButton(label, isPaneOpened).click();
@@ -148,7 +149,7 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
 
     private boolean isStripeButtonAvailable(String label, boolean isPaneOpened) {
         try {
-            if (UITestRunner.getIdeaVersionInt() >= 20242) {
+            if (ideaVersionInt >= 20242) {
                 // For IntelliJ IDEA 2024.2 and newer
                 if (isRightToolbarButton(label)) {
                     ToolWindowRightToolbar toolWindowRightToolbar = remoteRobot.find(ToolWindowRightToolbar.class, Duration.ofSeconds(2));
@@ -157,7 +158,7 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
                     ToolWindowLeftToolbar toolWindowLeftToolbar = remoteRobot.find(ToolWindowLeftToolbar.class, Duration.ofSeconds(2));
                     toolWindowLeftToolbar.findStripeButton(label);
                 }
-            } else if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            } else if (ideaVersionInt >= 20221) {
                 // For IntelliJ IDEA 2022.1 to 2024.1
                 ToolWindowPane toolWindowPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(2));
                 toolWindowPane.stripeButton(label, isPaneOpened);
