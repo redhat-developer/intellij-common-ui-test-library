@@ -1,7 +1,6 @@
 plugins {
     id("java-library")
     id("maven-publish")
-    alias(libs.plugins.gradleNexusPublishPlugin)
     id("jacoco") // Code coverage
     alias(libs.plugins.sonarqube) // SonarQube
 }
@@ -89,16 +88,12 @@ publishing {
             }
         }
     }
-}
-
-nexusPublishing {
-    packageGroup.set("JBoss Releases Staging Profile")
     repositories {
-        create("jbossNexus") {
-            nexusUrl.set(uri("https://repository.jboss.org/nexus/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://repository.jboss.org/nexus/content/repositories/snapshots/"))
-            username.set(project.properties["nexusUser"].toString()) // defaults to project.properties["myNexusUsername"]
-            password.set(project.properties["nexusPassword"].toString()) // defaults to project.properties["myNexusPassword"]
+        maven {
+            val baseUrl = layout.buildDirectory.dir("repository/").get()
+            val releasesRepoUrl = baseUrl.dir("releases")
+            val snapshotsRepoUrl = baseUrl.dir("snapshots")
+            url = uri(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
         }
     }
 }

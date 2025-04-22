@@ -5,7 +5,6 @@ kotlin = "2.1.0"
 junit-jupiter = "5.11.3"
 
 # plugins
-gradleNexusPublishPlugin = "2.0.0"
 sonarqube = "5.1.0.4882"
 
 [libraries]
@@ -15,5 +14,4 @@ remote-robot = { group = "com.intellij.remoterobot", name = "remote-robot", vers
 remote-fixtures = { group = "com.intellij.remoterobot", name = "remote-fixtures", version.ref = "remote-robot" }
 
 [plugins]
-gradleNexusPublishPlugin = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "gradleNexusPublishPlugin" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
