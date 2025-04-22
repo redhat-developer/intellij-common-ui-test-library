@@ -104,4 +104,4 @@ jobs:
       - name: Upload Release Asset
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload ${{ inputs.release_version }} ./build/distributions/*
+        run: gh release upload ${{ inputs.release_version }} ./build/libs/*.jar
