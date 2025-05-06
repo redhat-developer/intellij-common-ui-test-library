@@ -4,18 +4,25 @@
       <verify-metadata>true</verify-metadata>
       <verify-signatures>true</verify-signatures>
       <trusted-keys>
+         <trusted-key id="6F538074CCEBF35F28AF9B066A0975F8B1127B83" group="org.jetbrains.kotlin"/>
+         <trusted-key id="2e3a1affe42b5f53af19f780bcf4173966770193" group="org.jetbrains"/>
+         <trusted-key id="A413F67D71BEEC23ADD0CE0ACB43338E060CF9FA" group="org.jacoco"/>
+         <trusted-key id="60200AC4AE761F1614D6C46766D68DAA073BE985" group="org.slf4j"/>
          <trusted-key id="6A30D7A614899833CE2F5FA3CEE8B79520334B30" group="org.assertj" version="2.2.1"/>
          <trusted-key id="A778FDE933A96DDA827840D8E2B3D84202B812D9" group="org.assertj" version="2.2.7"/>
-         <trusted-key id="6F538074CCEBF35F28AF9B066A0975F8B1127B83" group="org.jetbrains.kotlin"/>
+         <trusted-key id="A5BD02B93E7A40482EB1D66A5F69AD087600B22C" group="org.ow2.asm" name="asm-bom" version="9.5"/>
+         <trusted-key id="2B1042677FD8190C7B9FC0DC2161D72E7DCD4258" group="org.sonarsource.*" regex="true"/>
          <trusted-key id="77993D3295698C46912E83984B2277C6358670EE">
             <trusting group="org.assertj" version="3.17.1"/>
             <trusting group="org.assertj" version="3.17.2"/>
          </trusted-key>
-         <trusted-key id="A413F67D71BEEC23ADD0CE0ACB43338E060CF9FA" group="org.jacoco"/>
-         <trusted-key id="A5BD02B93E7A40482EB1D66A5F69AD087600B22C" group="org.ow2.asm" name="asm-bom" version="9.5"/>
-         <trusted-key id="FF6E2C001948C5F2F38B0CC385911F425EC61B51" group="org.junit"/>
-         <trusted-key id="60200AC4AE761F1614D6C46766D68DAA073BE985" group="org.slf4j"/>
-         <trusted-key id="2B1042677FD8190C7B9FC0DC2161D72E7DCD4258" group="org.sonarsource.*" regex="true"/>
+         <trusted-key id="FF6E2C001948C5F2F38B0CC385911F425EC61B51">
+            <trusting group="org.junit"/>
+            <trusting group="org.junit.jupiter"/>
+            <trusting group="org.apiguardian"/>
+            <trusting group="org.junit.platform"/>
+            <trusting group="org.opentest4j"/>
+         </trusted-key>
       </trusted-keys>
    </configuration>
    <components>
