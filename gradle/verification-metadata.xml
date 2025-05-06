@@ -9,7 +9,7 @@
       </key-servers>
       <trusted-keys>
          <trusted-key id="6F538074CCEBF35F28AF9B066A0975F8B1127B83" group="org.jetbrains.kotlin"/>
-         <trusted-key id="2e3a1affe42b5f53af19f780bcf4173966770193" group="org.jetbrains"/>
+         <trusted-key id="2E3A1AFFE42B5F53AF19F780BCF4173966770193" group="org.jetbrains"/>
          <trusted-key id="A413F67D71BEEC23ADD0CE0ACB43338E060CF9FA" group="org.jacoco"/>
          <trusted-key id="60200AC4AE761F1614D6C46766D68DAA073BE985" group="org.slf4j"/>
          <trusted-key id="6A30D7A614899833CE2F5FA3CEE8B79520334B30" group="org.assertj" version="2.2.1"/>
