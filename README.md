@@ -1,4 +1,4 @@
-Welcome to the IntelliJ IDEA UI test library project! Here you'll find several pieces of information and advices on how to setup, use and contribute to this library.
+Welcome to the IntelliJ IDEA UI test library project! Here you'll find several pieces of information and advices on how to set up, use and contribute to this library.
 
 ## Purpose of this project
 This project allows you to create automated UI tests for your IntelliJ IDEA plugin project. Using this library you are able to access UI elements such as buttons, inputs, tree elements etc. and perform actions with them. Navigating through wizards, clicking on buttons or editing file content of newly created project could be automated using this library.
@@ -10,17 +10,14 @@ Please submit an [issue](https://github.com/redhat-developer/intellij-common-ui-
 Feel free to contribute to this project! See the [contribution guide](https://github.com/redhat-developer/intellij-common-ui-test-library/blob/main/CONTRIBUTING.md) for more details.
 
 ## Quick setup
-The setup of this library is easy - just extend the **build.gradle** file as described in the following steps and you are ready to write your first UI test.
+The setup of this library is easy - just extend the **build.gradle.kts** file as described in the following steps, and you are ready to write your first UI test.
 
 ### STEP #1: Adding repositories
 You need to add the following nexus and JetBrains repositories:
 ```
 repositories {
     maven {
-        url 'https://repository.jboss.org/nexus/content/repositories/snapshots'
-    }
-    maven {
-        url 'https://repository.jboss.org/nexus/content/groups/public'
+        url 'https://raw.githubusercontent.com/redhat-developer/intellij-common-ui-test-library/repository/'
     }
     maven {
         url 'https://packages.jetbrains.team/maven/p/ij/intellij-dependencies'
@@ -32,7 +29,7 @@ repositories {
 Add the following dependency:
 ```
 dependencies {
-    compile 'com.redhat.devtools.intellij:intellij-common-ui-test-library:0.4.3'
+    compile 'com.redhat.devtools.intellij:intellij-common-ui-test-library:0.4.4'
 }
 ```
 
@@ -43,8 +40,8 @@ sourceSets {
     integrationTest {
         java.srcDir file('src/it/java')
         resources.srcDir file('src/it/resources')
-        compileClasspath += sourceSets.main.output + configurations.testRuntime
-        runtimeClasspath += output + compileClasspath
+        compileClasspath += sourceSets.main.get().compileClasspath + sourceSets.test.get().compileClasspath
+        runtimeClasspath += output + compileClasspath + sourceSets.test.get().runtimeClasspath
     }
 }
 ```
@@ -90,7 +87,7 @@ task integrationTest(type: Test) {
     ...
 }
 ```
-Or add the location as a paramater for gradlew command which runs the test. For example:
+Or add the location as a parameter for gradlew command which runs the test. For example:
 ```
 systemProperties['testProjectLocation'] = project.hasProperty('testProjectLocation') ? project.property('testProjectLocation') : null
     
@@ -127,7 +124,7 @@ public static void closeIde() {
 ```
 
 ## What next? Implement your first UI test!
-After you manage to setup this library to your project and successfully start and quit IntelliJ IDEA, there is no more setup needed. Just start writing your UI tests! Here are some examples that will help you get started:
+After you manage to set up this library to your project and successfully start and quit IntelliJ IDEA, there is no more setup needed. Just start writing your UI tests! Here are some examples that will help you get started:
 
 ### Create your first fixture
 Create an instance of a FlatWelcomeFrame class which allows you to access the 'Welcome to IntelliJ IDEA' dialog's UI.

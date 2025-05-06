@@ -19,11 +19,11 @@ Package <i>fixtures</i> contains several predefined fixtures that can be instant
 
 ### 2) Package <i>utils</i>
 
-Package <i>utils</i> contains static methods and constants that can be useful for writing IntelliJ IDEA UI tests. There are for example methods for taking sceenshots or creating new project without the need of implementing the whole process using provided fixtures.
+Package <i>utils</i> contains static methods and constants that can be useful for writing IntelliJ IDEA UI tests. There are for example methods for taking screenshots or creating new project without the need of implementing the whole process using provided fixtures.
 
 ### 3) Package <i>exceptions</i>
 
-Package <i>exceptions</i> contains predefined exceptions for handling situation such as the object that I am creating fixture for does not exists or there is unrelevant or unsupported option passed into a method.
+Package <i>exceptions</i> contains predefined exceptions for handling situation such as the object that I am creating fixture for does not exist or there is un-relevant or unsupported option passed into a method.
 
 ### 4) Class <i>UITestRunner</i>
 
@@ -59,18 +59,9 @@ $ cd ./src/test-project
 $ ./gradlew clean integrationUITest
 ```
 
-To execute the JUnit 5 tests with **Ultimate** version of IntelliJ:
-1. Decrypt **idea.key.gpg** file inside `./src/test-project/idea_license_key`
-2. Run the following commands:
-    ``` 
-   $ cd ./src/test-project
-   $ ./gradlew clean integrationUITestUltimate
-   ```
-
-
 ## Reporting Issues
 
-If you encounter a problem and know it is caused by the IntelliJ IDEA UI test library, please open an [issue report](https://github.com/redhat-developer/intellij-common-ui-test-library/issues). We really do appriciate any relevant issue report containg at least description and steps to reproduce the issue.
+If you encounter a problem and know it is caused by the IntelliJ IDEA UI test library, please open an [issue report](https://github.com/redhat-developer/intellij-common-ui-test-library/issues). We really do appreciate any relevant issue report containing at least description and steps to reproduce the issue.
 
 
 ## License

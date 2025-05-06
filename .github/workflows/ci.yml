@@ -29,6 +29,28 @@ jobs:
           name: prInfo
           path: prInfo/
 
+  verify_dependencies:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          cache: 'gradle'
+      - name: Run verification dependency
+        run: |
+          ./gradlew --dependency-verification strict build
+      - name: Archiving reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-reports
+          path: build/reports/dependency-verification/*
+        if: always()
+
   run_on_linux:
     runs-on: ubuntu-latest
 
