@@ -35,6 +35,9 @@ import static com.redhat.devtools.intellij.commonuitest.utils.texttranformation.
 @DefaultXpath(by = "MyDialog type", xpath = XPathDefinitions.DIALOG_ROOT_PANE)
 @FixtureName(name = "New Project Dialog")
 public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture {
+
+    private final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
+
     protected AbstractNewProjectFinalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
     }
@@ -45,7 +48,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      * @return currently set new project name
      */
     public String getProjectName() {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+        if (ideaVersionInt >= 20221) {
             return textFields(byXpath(XPathDefinitions.JBTEXT_FIELD)).get(0).getText();
         } else {
             return textFields(JTextFieldFixture.Companion.byType()).get(0).getText();
@@ -58,7 +61,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      * @param projectName name of the new project
      */
     public void setProjectName(String projectName) {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+        if (ideaVersionInt >= 20221) {
             textFields(byXpath(XPathDefinitions.JBTEXT_FIELD)).get(0).setText(projectName);
         } else {
             textFields(JTextFieldFixture.Companion.byType()).get(0).setText(projectName);
@@ -71,7 +74,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      * @return currently set new project location
      */
     public String getProjectLocation() {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+        if (ideaVersionInt >= 20221) {
             return find(JTextFieldFixture.class, byXpath(XPathDefinitions.EXTENDABLE_TEXT_FIELD)).getText();
         } else {
             return textFields(JTextFieldFixture.Companion.byType()).get(1).getText();
@@ -84,7 +87,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      * @param projectLocation project location of the new project
      */
     public void setProjectLocation(String projectLocation) {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+        if (ideaVersionInt >= 20221) {
             find(JTextFieldFixture.class, byXpath(XPathDefinitions.EXTENDABLE_TEXT_FIELD )).setText(projectLocation);
         } else {
             textFields(JTextFieldFixture.Companion.byType()).get(1).setText(projectLocation);
@@ -96,7 +99,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      */
     public void openAdvanceSettings() {
         if (!isAdvancedSettingsOpened()) {
-            if (UITestRunner.getIdeaVersionInt() >= 20222) {
+            if (ideaVersionInt >= 20222) {
                 find(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR_NEW)).click();
             } else {
                 find(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR)).click();
@@ -109,7 +112,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      */
     public void closeAdvanceSettings() {
         if (isAdvancedSettingsOpened()) {
-            if (UITestRunner.getIdeaVersionInt() >= 20222) {
+            if (ideaVersionInt >= 20222) {
                 find(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR_NEW)).click();
             } else {
                 find(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR)).click();
@@ -120,7 +123,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
     private boolean isAdvancedSettingsOpened() {
         List<ComponentFixture> cf;
 
-        if (UITestRunner.getIdeaVersionInt() >= 20222) {
+        if (ideaVersionInt >= 20222) {
             cf = findAll(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR_NEW_SIBLINGS));
         } else {
             cf = findAll(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR_SIBLINGS));

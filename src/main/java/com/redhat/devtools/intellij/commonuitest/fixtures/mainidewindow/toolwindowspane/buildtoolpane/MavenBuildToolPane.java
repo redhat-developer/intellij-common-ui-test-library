@@ -40,6 +40,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 @FixtureName(name = "Tool Windows Pane")
 public class MavenBuildToolPane extends CommonContainerFixture {
     private final RemoteRobot remoteRobot;
+    private final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
 
     public MavenBuildToolPane(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
@@ -57,7 +58,7 @@ public class MavenBuildToolPane extends CommonContainerFixture {
      * Collapse all
      */
     public void collapseAll() {
-        if (UITestRunner.getIdeaVersionInt() >= 20242) {
+        if (ideaVersionInt >= 20242) {
             actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_2024_2), Duration.ofSeconds(2)).click();
         } else {
             actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_FOR), Duration.ofSeconds(2)).click();
@@ -67,18 +68,21 @@ public class MavenBuildToolPane extends CommonContainerFixture {
     /**
      * Build the project
      *
-     * @param lifecycle name of the lifecycle you want to invoke (clean, validate, compile, test, package, verify, install, site, deploy)
+     * @param goal name of the Lifecycle goal you want to invoke (clean, validate, compile, test, package, verify, install, site, deploy)
      */
-    public void buildProject(String lifecycle) {
+    public void buildProject(String goal) {
         waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The Maven target tree did not appear in 30 seconds.", this::isMavenTreeVisible);
-        mavenTargetTree().expandAll();
-        mavenTargetTree().findAllText(lifecycle).get(0).doubleClick();
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+        JTreeFixture tree = mavenTargetTree();
+        // below workaround due to https://github.com/JetBrains/intellij-ui-test-robot/issues/459
+        tree.doubleClickRow(0); // expand root
+        tree.doubleClickRowWithText("Lifecycle" ,true); // expand Lifecycle
+        tree.doubleClickRowWithText(goal,true);
+        if (ideaVersionInt >= 20221) {
             remoteRobot.find(ToolWindowPane.class).find(BuildView.class).waitUntilBuildHasFinished();
         } else {
             remoteRobot.find(ToolWindowsPane.class).find(BuildView.class).waitUntilBuildHasFinished();
         }
-        remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10)).waitUntilAllBgTasksFinish();
+        remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(30)).waitUntilAllBgTasksFinish();
     }
 
     /**

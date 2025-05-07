@@ -50,7 +50,9 @@ public class CreateCloseUtils {
         NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
 
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+        final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
+
+        if (ideaVersionInt >= 20221) {
             newProjectFirstPage.selectNewProjectType("New Project");
             newProjectFirstPage.setLanguage("Java");
             switch (newProjectType) {
@@ -70,9 +72,8 @@ public class CreateCloseUtils {
 
         newProjectFirstPage.setProjectSdkIfAvailable("17");
 
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+        if (ideaVersionInt >= 20221) {
             newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
-
             newProjectFirstPage.setProjectName(projectName);
             newProjectFirstPage.setProjectLocation(ProjectLocation.PROJECT_LOCATION);
         } else {
@@ -185,7 +186,7 @@ public class CreateCloseUtils {
      * @param remoteRobot         reference to the RemoteRobot instance
      */
     private static void ensureEmptyProjectPageIsOpened(NewProjectFirstPage newProjectFirstPage, RemoteRobot remoteRobot) {
-        int ideaVersionInt = UITestRunner.getIdeaVersionInt();
+        final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
         boolean isEmptyProjectPageDisplayed;
 
         if (ideaVersionInt >= 20231) {  // For IntelliJ IDEA version 2023.1 and newer

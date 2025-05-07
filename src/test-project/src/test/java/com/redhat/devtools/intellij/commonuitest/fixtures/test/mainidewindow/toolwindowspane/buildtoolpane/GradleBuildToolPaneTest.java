@@ -76,7 +76,7 @@ class GradleBuildToolPaneTest extends AbstractLibraryBaseTest {
 
     @Test
     void collapseAll() {
-        gradleBuildToolPane.gradleTaskTree().expandAll();
+        gradleBuildToolPane.expandAll();
         int itemsCountBeforeCollapsing = gradleBuildToolPane.gradleTaskTree().collectRows().size();
         gradleBuildToolPane.collapseAll();
         int itemsCountAfterCollapsing = gradleBuildToolPane.gradleTaskTree().collectRows().size();

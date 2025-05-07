@@ -48,12 +48,11 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
     protected final RemoteRobot remoteRobot;
     private boolean isProjectSdkItemsLoaded = false;
-    private final int ideaVersion;
+    private final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
 
     public NewProjectFirstPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
         this.remoteRobot = remoteRobot;
-        this.ideaVersion = UITestRunner.getIdeaVersion().toInt();
     }
 
     /**
@@ -85,7 +84,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
      * @param language project language
      */
     public void setLanguage(String language) {
-        if (ideaVersion >= 20241) {
+        if (ideaVersionInt >= 20241) {
             JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(XPathDefinitions.JBLIST));
             jListFixture.clickItem(language, false);
         } else {
@@ -99,7 +98,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
      * @param buildSystem build system type
      */
     public void setBuildSystem(String buildSystem) {
-        if (ideaVersion >= 20241) {
+        if (ideaVersionInt >= 20241) {
             find(JLabelFixture.class, byXpath(XPathDefinitions.SET_BUILD_SYSTEM_2024_2_AND_NEWER)).findText(buildSystem).click();
         } else {
             find(JLabelFixture.class, byXpath(XPathDefinitions.SET_BUILD_SYSTEM)).findText(buildSystem).click();
@@ -112,7 +111,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
      * @return JdkComboBox fixture
      */
     public ComboBoxFixture getProjectJdkComboBox() {
-        if (ideaVersion >= 20241) {
+        if (ideaVersionInt >= 20241) {
             return comboBox(byXpath(XPathDefinitions.JDK_COMBOBOX_PROJECT_WIZARD), Duration.ofSeconds(10));
         }
         return comboBox(byXpath(XPathDefinitions.JDK_COMBOBOX), Duration.ofSeconds(10));
@@ -140,7 +139,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
                 return;
             }
 
-            if (UITestRunner.getIdeaVersionInt() >= 20221) {
+            if (ideaVersionInt >= 20221) {
                 projectJdkComboBox.click();
                 boolean popupOpenedPermanently = false;
                 try {

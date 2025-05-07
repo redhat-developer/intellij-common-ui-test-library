@@ -36,6 +36,7 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 @FixtureName(name = "Tool Windows Pane")
 public class ProjectExplorer extends CommonContainerFixture {
     private final RemoteRobot remoteRobot;
+    private final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
 
     public ProjectExplorer(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
@@ -109,7 +110,7 @@ public class ProjectExplorer extends CommonContainerFixture {
      */
     public void expandAll() {
         projectViewTree().moveMouse();
-        if (UITestRunner.getIdeaVersionInt() >= 20242) {
+        if (ideaVersionInt >= 20242) {
             actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL_2024_2), Duration.ofSeconds(5)).click();
         } else {
             actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL), Duration.ofSeconds(5)).click();
@@ -121,7 +122,7 @@ public class ProjectExplorer extends CommonContainerFixture {
      */
     public void collapseAll() {
         projectViewTree().moveMouse();
-        if (UITestRunner.getIdeaVersionInt() >= 20242) {
+        if (ideaVersionInt >= 20242) {
             actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_2024_2), Duration.ofSeconds(5)).click();
         } else {
             actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL), Duration.ofSeconds(5)).click();
@@ -135,7 +136,7 @@ public class ProjectExplorer extends CommonContainerFixture {
      */
     public JPopupMenuFixture openSettingsPopup() {
         projectViewTree().moveMouse();
-        if (UITestRunner.getIdeaVersionInt() >= 20242) {
+        if (ideaVersionInt >= 20242) {
             actionButton(byXpath(XPathDefinitions.MY_ICON_MORE_VERTICAL), Duration.ofSeconds(5)).click();
         } else {
             actionButton(byXpath(XPathDefinitions.MY_ICON_GEAR_PLAIN), Duration.ofSeconds(5)).click();

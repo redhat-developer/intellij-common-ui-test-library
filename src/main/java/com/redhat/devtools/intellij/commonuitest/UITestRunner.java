@@ -11,12 +11,12 @@
 package com.redhat.devtools.intellij.commonuitest;
 
 import com.intellij.remoterobot.RemoteRobot;
-import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.stepsProcessing.StepLogger;
 import com.intellij.remoterobot.stepsProcessing.StepWorker;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
+import com.redhat.devtools.intellij.commonuitest.utils.steps.SharedSteps;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -154,7 +154,7 @@ public class UITestRunner {
     public static RemoteRobot getRemoteRobotConnection(int port) {
         return step("Create an instance of the RemoteRobot listening on port " + port, () -> {
             RemoteRobot remoteRobot = new RemoteRobot("http://127.0.0.1:" + port);
-            waitFor(Duration.ofSeconds(30), Duration.ofMillis(500), () -> remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.FLAT_WELCOME_FRAME)).isShowing());
+            SharedSteps.waitForComponentByXpath(remoteRobot,30, 200, byXpath(XPathDefinitions.FLAT_WELCOME_FRAME));
             return remoteRobot;
         });
     }

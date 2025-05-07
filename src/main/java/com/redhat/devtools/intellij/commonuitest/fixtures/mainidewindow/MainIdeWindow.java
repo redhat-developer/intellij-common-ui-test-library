@@ -12,6 +12,7 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow;
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
+import com.intellij.remoterobot.fixtures.ActionButtonFixture;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
@@ -27,6 +28,8 @@ import java.awt.event.KeyEvent;
 import java.time.Duration;
 
 import com.redhat.devtools.intellij.commonuitest.utils.internalerror.IdeInternalErrorUtils;
+
+import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 
 /**
  * Main IDE window fixture
@@ -97,7 +100,8 @@ public class MainIdeWindow extends CommonContainerFixture {
 
     private SearchEverywherePopup openSearchEverywherePopup() {
         try {
-            SearchEverywherePopup searchEverywherePopup = find(SearchEverywherePopup.class, Duration.ofSeconds(10));
+            find(ActionButtonFixture.class, byXpath("//div[@myicon='search.svg']"), Duration.ofSeconds(5)).click();
+            SearchEverywherePopup searchEverywherePopup = find(SearchEverywherePopup.class, Duration.ofSeconds(5));
             searchEverywherePopup.activateTab("All");
             return searchEverywherePopup;
         } catch (WaitForConditionTimeoutException e) {

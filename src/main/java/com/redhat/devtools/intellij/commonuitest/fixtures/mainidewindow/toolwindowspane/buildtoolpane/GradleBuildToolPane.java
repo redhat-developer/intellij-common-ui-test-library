@@ -40,6 +40,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 @FixtureName(name = "Tool Windows Pane")
 public class GradleBuildToolPane extends CommonContainerFixture {
     private final RemoteRobot remoteRobot;
+    private final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
 
     public GradleBuildToolPane(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
@@ -58,7 +59,7 @@ public class GradleBuildToolPane extends CommonContainerFixture {
      * Expand all
      */
     public void expandAll() {
-        if (UITestRunner.getIdeaVersionInt() >= 20242) {    // Code for IntelliJ version 2024.2 and newer
+        if (ideaVersionInt >= 20242) {    // Code for IntelliJ version 2024.2 and newer
             actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL_2024_2), Duration.ofSeconds(2)).click();
         } else { // Code for IntelliJ version 2024.1 and older
             actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL_IDE), Duration.ofSeconds(2)).click();
@@ -69,7 +70,7 @@ public class GradleBuildToolPane extends CommonContainerFixture {
      * Collapse all
      */
     public void collapseAll() {
-        if (UITestRunner.getIdeaVersionInt() >= 20242) {    // Code for IntelliJ version 2024.2 and newer
+        if (ideaVersionInt >= 20242) {    // Code for IntelliJ version 2024.2 and newer
             actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_2024_2), Duration.ofSeconds(2)).click();
         } else { // Code for IntelliJ version 2024.1 and older
             actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_IDE), Duration.ofSeconds(2)).click();
@@ -81,16 +82,9 @@ public class GradleBuildToolPane extends CommonContainerFixture {
      */
     public void buildProject() {
         waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The Gradle tasks tree did not appear in 30 seconds.", this::isGradleTreeVisible);
-
-        // ISSUE #199 - https://github.com/JetBrains/intellij-ui-test-robot/issues/199
-        if (remoteRobot.isMac()) {
-            expandAll();
-        } else {
-            gradleTaskTree().expandAll();
-        }
-
-        gradleTaskTree().findAllText("build").get(1).doubleClick();
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
+        expandAll();
+        gradleTaskTree().doubleClickPath(new String[]{"Tasks", "build", "build"}, true);
+        if (ideaVersionInt >= 20221) {
             remoteRobot.find(ToolWindowPane.class).find(BuildView.class).waitUntilBuildHasFinished();
         } else {
             remoteRobot.find(ToolWindowsPane.class).find(BuildView.class).waitUntilBuildHasFinished();

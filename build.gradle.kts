@@ -42,7 +42,6 @@ tasks {
 
     jacocoTestReport {
         executionData.setFrom(fileTree(layout.buildDirectory).include("/jacoco/*.exec"))
-        //classDirectories.setFrom(instrumentCode)
         reports {
             xml.required = true
         }

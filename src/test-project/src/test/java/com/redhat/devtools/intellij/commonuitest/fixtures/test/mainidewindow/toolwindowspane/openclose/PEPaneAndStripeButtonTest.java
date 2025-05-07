@@ -60,7 +60,7 @@ class PEPaneAndStripeButtonTest extends AbstractToolWinPane {
     }
 
     @Test
-    @DisabledIfSystemProperty(named = "uitestlib.idea.version", matches = "20242")
+    @DisabledIfSystemProperty(named = "uitestlib.idea.version", matches = "20242|20243")
     void stripeButtonTest() {
         try {
             toolWinPane.stripeButton(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL, false);

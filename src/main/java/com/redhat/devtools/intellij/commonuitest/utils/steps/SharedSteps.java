@@ -28,11 +28,11 @@ public class SharedSteps {
      *
      * @param robot    The RemoteRobot instance for interaction with the IntelliJ IDEA UI.
      * @param duration The maximum time to wait for the component to become visible, in seconds.
-     * @param interval The interval at which to check the component's visibility, in seconds.
+     * @param interval The interval at which to check the component's visibility, in milliseconds.
      * @param xpath    The XPath locator used to find the component within the UI hierarchy.
      */
     public static void waitForComponentByXpath(RemoteRobot robot, int duration, int interval , Locator xpath) {
-        waitFor(Duration.ofSeconds(duration), Duration.ofSeconds(interval), () -> robot.findAll(ComponentFixture.class, xpath)
+        waitFor(Duration.ofSeconds(duration), Duration.ofMillis(interval), () -> robot.findAll(ComponentFixture.class, xpath)
                 .stream()
                 .anyMatch(ComponentFixture::isShowing));
     }

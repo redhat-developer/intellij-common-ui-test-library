@@ -121,9 +121,9 @@ class ProjectExplorerTest extends AbstractLibraryBaseTest {
         projectExplorer.expandAll();
         projectExplorer.openFile(PROJECT_NAME, "src", "Main");
         projectExplorer.projectViewTree().clickRow(0);
-        SharedSteps.waitForComponentByXpath(remoteRobot, 3, 1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
+        SharedSteps.waitForComponentByXpath(remoteRobot, 3, 200, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
         projectExplorer.selectOpenedFile();
-        SharedSteps.waitForComponentByXpath(remoteRobot, 3, 1, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
+        SharedSteps.waitForComponentByXpath(remoteRobot, 3, 200, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
         assertTrue(projectExplorer.projectViewTree().isPathSelected(
                         projectExplorer.projectViewTree().getValueAtRow(0), "src", "Main"),
                 "The file 'Main' should be selected but is not."

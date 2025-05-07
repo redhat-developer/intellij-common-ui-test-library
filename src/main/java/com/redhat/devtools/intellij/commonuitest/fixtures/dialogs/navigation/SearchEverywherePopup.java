@@ -67,7 +67,7 @@ public class SearchEverywherePopup extends CommonContainerFixture {
      * @param cmdToEnter command that will be invoked using the search field
      */
     public void invokeCmd(String cmdToEnter) {
-        JTextFieldFixture searchField = textField(JTextFieldFixture.Companion.byType(), Duration.ofSeconds(10));
+        JTextFieldFixture searchField = textField(JTextFieldFixture.Companion.byType(), Duration.ofSeconds(2));
         searchField.click();
         searchField.setText(cmdToEnter);
         waitFor(Duration.ofSeconds(30), Duration.ofSeconds(1), "The search in the Search Everywhere popup did not finish in 30 seconds.", () -> didSearchFinish(cmdToEnter));
