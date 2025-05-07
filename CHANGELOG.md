@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.4.4 (May 7, 2025)
+- chore(deps): bump org.junit.jupiter:junit-jupiter-api [`#339`](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/339)
+- chore(deps): bump remote-robot from 0.11.22 to 0.11.23 [`#329`](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/329)
+- chore: fix build [`#343`](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/343)
+- build: migrate from jenkins/nexus to github action/github maven repo [`#341`](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/341)
+- fix: fix failed tests screenshot comment  [`#335`](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/335)
+- chore: fix sonar issues [`#333`](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/333)
+- Integration tests fix [`#332`](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/332)
+- Integration tests fix [`#331`](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/331)
+- chore: fix integration tests [`#327`](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/327)
+- chore: fix publishing [`#328`](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/328)
+- chore: bump version [`a94c6cd`](https://github.com/redhat-developer/intellij-common-ui-test-library/commit/a94c6cde6ac97645e6bfee99f1c8fe5a13fea185)
+- chore(skip-release): Update sonar.yml [`191c03b`](https://github.com/redhat-developer/intellij-common-ui-test-library/commit/191c03be187a34ec5f51ba5bce91a30f6f8f4ff3)
+- chore: fixed nightly [`c166204`](https://github.com/redhat-developer/intellij-common-ui-test-library/commit/c16620403c4e4ecc08381e3903baf87661c237d2)
+
 ## 0.4.3 (Nov 4, 2024)
 - chore(deps): bump org.jetbrains.kotlin:kotlin-reflect (#316)
 - chore(deps): bump org.jetbrains.kotlin.jvm from 2.0.20 to 2.0.21 (#315)
