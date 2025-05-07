@@ -1,7 +1,7 @@
 [versions]
 # libraries
 remote-robot = "0.11.23"
-kotlin = "2.1.0"
+kotlin = "2.2.20-canopus-166"
 junit-jupiter = "5.12.2"
 
 # plugins
