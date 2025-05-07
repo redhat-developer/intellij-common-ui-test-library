@@ -56,7 +56,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: repository
-          path: mvn-repo
+          path: build/repository
 
       - name: Deploy to Maven Repository
         env:
@@ -67,6 +67,7 @@ jobs:
           
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action Bot"
-          mv build/repository mvn-repo
-          git commit -am "Publish ${CURRENT_VERSION} (${{github.run_number}})"
+          pushd build/repository
+          git add snapshots/
+          git commit -m "Publish ${CURRENT_VERSION} (${{github.run_number}})"
           git push -f origin repository
