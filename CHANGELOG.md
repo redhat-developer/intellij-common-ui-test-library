@@ -12,7 +12,7 @@
 - chore: fix integration tests [`#327`](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/327)
 - chore: fix publishing [`#328`](https://github.com/redhat-developer/intellij-common-ui-test-library/pull/328)
 - chore: bump version [`a94c6cd`](https://github.com/redhat-developer/intellij-common-ui-test-library/commit/a94c6cde6ac97645e6bfee99f1c8fe5a13fea185)
-- chore(skip-release): Update sonar.yml [`191c03b`](https://github.com/redhat-developer/intellij-common-ui-test-library/commit/191c03be187a34ec5f51ba5bce91a30f6f8f4ff3)
+- chore: Update sonar.yml [`191c03b`](https://github.com/redhat-developer/intellij-common-ui-test-library/commit/191c03be187a34ec5f51ba5bce91a30f6f8f4ff3)
 - chore: fixed nightly [`c166204`](https://github.com/redhat-developer/intellij-common-ui-test-library/commit/c16620403c4e4ecc08381e3903baf87661c237d2)
 
 ## 0.4.3 (Nov 4, 2024)
