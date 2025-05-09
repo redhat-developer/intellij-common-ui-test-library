@@ -53,7 +53,7 @@ class BuildViewTest extends AbstractLibraryBaseTest {
     @Test
     void waitForSuccessfulBuildTest() {
         toolWinPane.openMavenBuildToolPane();
-        toolWinPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10)).buildProject("verify");
+        toolWinPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10)).buildProject("verify", PROJECT_NAME);
         BuildView buildView = toolWinPane.find(BuildView.class, Duration.ofSeconds(10));
         buildView.waitUntilBuildHasFinished();
         assertTrue(buildView.isBuildSuccessful(), "The build should be successful but is not.");

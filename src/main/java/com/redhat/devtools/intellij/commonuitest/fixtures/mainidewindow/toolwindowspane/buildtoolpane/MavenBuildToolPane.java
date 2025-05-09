@@ -70,11 +70,11 @@ public class MavenBuildToolPane extends CommonContainerFixture {
      *
      * @param goal name of the Lifecycle goal you want to invoke (clean, validate, compile, test, package, verify, install, site, deploy)
      */
-    public void buildProject(String goal) {
+    public void buildProject(String goal, String projectName) {
         waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The Maven target tree did not appear in 30 seconds.", this::isMavenTreeVisible);
         JTreeFixture tree = mavenTargetTree();
         // below workaround due to https://github.com/JetBrains/intellij-ui-test-robot/issues/459
-        tree.doubleClickRow(0); // expand root
+        tree.doubleClickRowWithText(projectName, true); // expand root
         tree.doubleClickRowWithText("Lifecycle" ,true); // expand Lifecycle
         tree.doubleClickRowWithText(goal,true);
         if (ideaVersionInt >= 20221) {
