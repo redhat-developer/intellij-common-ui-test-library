@@ -3,38 +3,38 @@
   <groupId>com.redhat.devtools.intellij</groupId>
   <artifactId>intellij-common-ui-test-library</artifactId>
   <versioning>
-    <lastUpdated>20250508072819</lastUpdated>
+    <lastUpdated>20250512131720</lastUpdated>
     <snapshot>
-      <timestamp>20250508.072819</timestamp>
-      <buildNumber>1</buildNumber>
+      <timestamp>20250512.131720</timestamp>
+      <buildNumber>2</buildNumber>
     </snapshot>
     <snapshotVersions>
       <snapshotVersion>
-        <extension>pom</extension>
-        <value>0.4.5-20250508.072819-1</value>
-        <updated>20250508072819</updated>
-      </snapshotVersion>
-      <snapshotVersion>
-        <classifier>javadoc</classifier>
         <extension>jar</extension>
-        <value>0.4.5-20250508.072819-1</value>
-        <updated>20250508072819</updated>
-      </snapshotVersion>
-      <snapshotVersion>
-        <extension>jar</extension>
-        <value>0.4.5-20250508.072819-1</value>
-        <updated>20250508072819</updated>
-      </snapshotVersion>
-      <snapshotVersion>
-        <extension>module</extension>
-        <value>0.4.5-20250508.072819-1</value>
-        <updated>20250508072819</updated>
+        <value>0.4.5-20250512.131720-2</value>
+        <updated>20250512131720</updated>
       </snapshotVersion>
       <snapshotVersion>
         <classifier>sources</classifier>
         <extension>jar</extension>
-        <value>0.4.5-20250508.072819-1</value>
-        <updated>20250508072819</updated>
+        <value>0.4.5-20250512.131720-2</value>
+        <updated>20250512131720</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>0.4.5-20250512.131720-2</value>
+        <updated>20250512131720</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>module</extension>
+        <value>0.4.5-20250512.131720-2</value>
+        <updated>20250512131720</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <classifier>javadoc</classifier>
+        <extension>jar</extension>
+        <value>0.4.5-20250512.131720-2</value>
+        <updated>20250512131720</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
