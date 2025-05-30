@@ -78,10 +78,10 @@ public class MainIdeWindow extends CommonContainerFixture {
      * Close the currently opened project
      */
     public void closeProject() {
-        if (remoteRobot.isWin()) {
-            new MenuBar(remoteRobot).navigateTo("File", "Close Project");
-        } else {
+        if (remoteRobot.isMac()) {
             invokeCmdUsingSearchEverywherePopup("Close Project");
+        } else {
+            new MenuBar(remoteRobot).navigateTo("File", "Close Project");
         }
         IdeInternalErrorUtils.clearWindowsErrorsIfTheyAppear(remoteRobot);
         remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).runJs("const horizontal_offset = component.getWidth()/2;\n" +

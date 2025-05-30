@@ -41,6 +41,8 @@ class MenuBarTest extends AbstractLibraryBaseTest {
     @BeforeAll
     static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
+        //ensure main menu is visible
+        new MenuBar(remoteRobot).setVisible();
     }
 
     @AfterAll
