@@ -80,7 +80,7 @@ public class UITestRunner {
             ProcessBuilder pb;
 
             if (ideaVersion.toInt() < 20242) {
-                pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + ideaVersion, "-Drobot-server.port=" + port);
+                pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + platformTypeVersion[1], "-Drobot-server.port=" + port);
             } else {
                 pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-Drobot-server.port=" + port, "-PplatformType=" + platformTypeVersion[0], "-PplatformVersion=" + platformTypeVersion[1]);
             }

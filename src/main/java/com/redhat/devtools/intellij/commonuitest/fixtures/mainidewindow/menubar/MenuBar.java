@@ -13,10 +13,15 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.fixtures.ActionButtonFixture;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
+import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
+import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
+import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.util.List;
@@ -83,7 +88,11 @@ public class MenuBar {
         if (remoteRobot.isMac()) {
             return null;
         }
+        return getMainMenu().button(byXpath(XPathDefinitions.label(label)), Duration.ofSeconds(10));
+    }
 
+    @NotNull
+    public CommonContainerFixture getMainMenu() {
         CommonContainerFixture cf;
         if (remoteRobot.isLinux() && ideaVersionInt <= 20242) {
             cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.LINUX_MAIN_MENU), Duration.ofSeconds(10));
@@ -96,7 +105,20 @@ public class MenuBar {
         } else {
             cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2020_2_AND_OLDER), Duration.ofSeconds(10));
         }
+        return cf;
+    }
 
-        return cf.button(byXpath(XPathDefinitions.label(label)), Duration.ofSeconds(10));
+    public void setVisible(){
+        // check menu already visible
+        try {
+            getMainMenu();
+        } catch (WaitForConditionTimeoutException e) {
+            // not visible
+            MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
+            mainIdeWindow.invokeCmdUsingSearchEverywherePopup("Appearance");
+            ComponentFixture appearanceDialog = remoteRobot.find(ComponentFixture.class, byXpath("//div[@class='JBViewport'][.//div[@class='MyList']]"));
+            List<RemoteText> items = appearanceDialog.findAllText();
+            items.stream().filter(remoteText -> remoteText.getText().equals("Main Menu")).findFirst().ifPresent(RemoteText::click);
+        }
     }
 }

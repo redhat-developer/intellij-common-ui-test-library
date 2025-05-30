@@ -3,7 +3,7 @@ import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 plugins {
     id("java")
     id("jacoco")
-    id("org.jetbrains.intellij.platform") version ("2.2.1")
+    id("org.jetbrains.intellij.platform") version ("2.6.0")
 }
 
 group = "com.redhat.devtools.intellij"
