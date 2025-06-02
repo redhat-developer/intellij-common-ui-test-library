@@ -70,7 +70,7 @@ public class SearchEverywherePopup extends CommonContainerFixture {
         JTextFieldFixture searchField = textField(JTextFieldFixture.Companion.byType(), Duration.ofSeconds(2));
         searchField.click();
         searchField.setText(cmdToEnter);
-        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(1), "The search in the Search Everywhere popup did not finish in 30 seconds.", () -> didSearchFinish(cmdToEnter));
+        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(1), "the search dialog in the Search Everywhere popup to load in 30 seconds.", () -> didSearchFinish(cmdToEnter));
         new Keyboard(remoteRobot).hotKey(KeyEvent.VK_ENTER);
     }
 

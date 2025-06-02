@@ -26,6 +26,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatu
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar.MenuBar;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ProjectLocation;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
+import com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils;
 
 import java.time.Duration;
 import java.util.List;
@@ -126,6 +127,7 @@ public class CreateCloseUtils {
         CodeWithMeDialog.closeCodeWithMePopupIfItAppears(remoteRobot);
         //ensure main menu is visible
         new MenuBar(remoteRobot).setVisible();
+        ScreenshotUtils.takeScreenshot(remoteRobot);
     }
 
     /**

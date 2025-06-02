@@ -21,6 +21,7 @@ import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
+import com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -116,6 +117,7 @@ public class MenuBar {
             // not visible
             MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
             mainIdeWindow.invokeCmdUsingSearchEverywherePopup("Appearance");
+            ScreenshotUtils.takeScreenshot(remoteRobot);
             ComponentFixture appearanceDialog = remoteRobot.find(ComponentFixture.class, byXpath("//div[@class='JBViewport'][.//div[@class='MyList']]"));
             List<RemoteText> items = appearanceDialog.findAllText();
             items.stream().filter(remoteText -> remoteText.getText().equals("Main Menu")).findFirst().ifPresent(RemoteText::click);
