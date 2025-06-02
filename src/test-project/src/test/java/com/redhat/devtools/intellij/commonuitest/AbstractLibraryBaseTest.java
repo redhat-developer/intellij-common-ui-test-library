@@ -13,6 +13,7 @@ package com.redhat.devtools.intellij.commonuitest;
 import com.intellij.remoterobot.RemoteRobot;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar.MenuBar;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
 import com.redhat.devtools.intellij.commonuitest.utils.testextension.ScreenshotAfterTestFailExtension;
@@ -49,6 +50,8 @@ public abstract class AbstractLibraryBaseTest {
             FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
             flatWelcomeFrame.clearWorkspace();
             flatWelcomeFrame.disableNotifications();
+           //ensure main menu is visible
+           new MenuBar(remoteRobot).setVisible();
         }
     }
 
