@@ -42,6 +42,7 @@ public class MenuBar {
 
     public MenuBar(RemoteRobot remoteRobot) {
         this.remoteRobot = remoteRobot;
+        checkVisibility();
     }
 
     /**
@@ -110,7 +111,7 @@ public class MenuBar {
         return cf;
     }
 
-    public void setVisible() {
+    private void checkVisibility() {
         // check menu already visible
         try {
             getMainMenu();
