@@ -23,10 +23,8 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.NewProjectFirstPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar.MenuBar;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ProjectLocation;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
-import com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils;
 
 import java.time.Duration;
 import java.util.List;
@@ -127,9 +125,6 @@ public class CreateCloseUtils {
         }
         ideStatusBar.waitUntilAllBgTasksFinish(500);
         CodeWithMeDialog.closeCodeWithMePopupIfItAppears(remoteRobot);
-        //ensure main menu is visible
-        new MenuBar(remoteRobot).setVisible();
-        ScreenshotUtils.takeScreenshot(remoteRobot);
     }
 
     /**

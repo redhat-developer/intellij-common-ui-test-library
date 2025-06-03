@@ -222,27 +222,19 @@ jobs:
       - name: Archiving tests reports
         uses: actions/upload-artifact@v4
         with:
-          name: linux-test-reports
+          name: linux-test-reports-${{ matrix.IJ }}
           path: src/test-project/build/reports/tests/*
         if: always()
       - name: Archiving screenshots
         uses: actions/upload-artifact@v4
         with:
-          name: linux-screenshots
+          name: linux-screenshots-${{ matrix.IJ }}
           path: src/test-project/build/screenshots/*
           if-no-files-found: ignore
         if: always()
       - name: Archiving StepLogger logs
         uses: actions/upload-artifact@v4
         with:
-          name: linux-steplogger-logs
+          name: linux-steplogger-logs-${{ matrix.IJ }}
           path: src/test-project/build/test-results/*
         if: always()
-      - name: Archiving coverage for sonar
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: sonar-coverage
-          path: |
-            src/test-project/build/test-results/**/*.xml
-            src/test-project/build/jacoco/
