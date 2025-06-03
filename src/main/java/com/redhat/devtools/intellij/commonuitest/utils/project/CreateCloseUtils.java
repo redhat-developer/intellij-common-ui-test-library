@@ -41,6 +41,8 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  */
 public class CreateCloseUtils {
 
+    static final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
+
     /**
      * Create new project with given project name according to given project type
      *
@@ -51,8 +53,6 @@ public class CreateCloseUtils {
     public static void createNewProject(RemoteRobot remoteRobot, String projectName, NewProjectType newProjectType) {
         NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
-
-        final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
 
         if (ideaVersionInt >= 20221) {
             newProjectFirstPage.selectNewProjectType("New Project");
@@ -121,8 +121,10 @@ public class CreateCloseUtils {
     public static void waitAfterOpeningProject(RemoteRobot remoteRobot) {
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilProjectImportIsComplete();
-        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
-        mainIdeWindow.maximizeIdeWindow();
+        if (ideaVersionInt > 20233) {
+            MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
+            mainIdeWindow.maximizeIdeWindow();
+        }
         ideStatusBar.waitUntilAllBgTasksFinish(500);
         CodeWithMeDialog.closeCodeWithMePopupIfItAppears(remoteRobot);
         //ensure main menu is visible

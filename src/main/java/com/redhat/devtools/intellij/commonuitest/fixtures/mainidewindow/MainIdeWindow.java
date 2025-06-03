@@ -98,6 +98,11 @@ public class MainIdeWindow extends CommonContainerFixture {
         searchEverywherePopup.invokeCmd(cmdToInvoke);
     }
 
+    public void searchEverywhere(String searchString) {
+        SearchEverywherePopup searchEverywherePopup = openSearchEverywherePopup();
+        searchEverywherePopup.searchText(searchString);
+    }
+
     private SearchEverywherePopup openSearchEverywherePopup() {
         try {
             find(ActionButtonFixture.class, byXpath("//div[@myicon='search.svg']"), Duration.ofSeconds(5)).click();

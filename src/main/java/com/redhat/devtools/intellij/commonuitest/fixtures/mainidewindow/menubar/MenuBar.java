@@ -116,11 +116,11 @@ public class MenuBar {
         } catch (WaitForConditionTimeoutException e) {
             // not visible
             MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
-            mainIdeWindow.invokeCmdUsingSearchEverywherePopup("Appearance");
+            mainIdeWindow.searchEverywhere("Appearance");
             ScreenshotUtils.takeScreenshot(remoteRobot);
             ComponentFixture appearanceDialog = remoteRobot.find(ComponentFixture.class, byXpath("//div[@class='JBViewport'][.//div[@class='MyList']]"));
             List<RemoteText> items = appearanceDialog.findAllText();
-            items.stream().filter(remoteText -> remoteText.getText().equals("Main Menu")).findFirst().ifPresent(RemoteText::click);
+            items.stream().filter(remoteText -> remoteText.getText().equals("View | Appearance: Main Menu")).findFirst().ifPresent(RemoteText::click);
         }
     }
 }
