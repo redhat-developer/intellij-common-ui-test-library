@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
@@ -66,7 +67,7 @@ public class MenuBar {
 
             // Wait for the JPopupMenuFixture to appear
             waitFor(Duration.ofSeconds(5), Duration.ofSeconds(1), "JPopupMenu to appear", () ->
-                    !remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType()).isEmpty()
+                !remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType()).isEmpty()
             );
         }
 
@@ -109,7 +110,7 @@ public class MenuBar {
         return cf;
     }
 
-    public void setVisible(){
+    public void setVisible() {
         // check menu already visible
         try {
             getMainMenu();
@@ -117,10 +118,14 @@ public class MenuBar {
             // not visible
             MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
             mainIdeWindow.searchEverywhere("Appearance");
-            ScreenshotUtils.takeScreenshot(remoteRobot);
-            ComponentFixture appearanceDialog = remoteRobot.find(ComponentFixture.class, byXpath("//div[@class='JBViewport'][.//div[@class='MyList']]"));
+            ComponentFixture appearanceDialog = remoteRobot.find(ComponentFixture.class, byXpath("//div[@class='SearchEverywhereUI']"));
             List<RemoteText> items = appearanceDialog.findAllText();
-            items.stream().filter(remoteText -> remoteText.getText().equals("View | Appearance: Main Menu")).findFirst().ifPresent(RemoteText::click);
+            Optional<RemoteText> item = items.stream().filter(remoteText -> remoteText.getText().equals("View | Appearance: Main Menu")).findFirst();
+            if (item.isPresent()) {
+                item.get().click();
+            } else {
+                ScreenshotUtils.takeScreenshot(remoteRobot, "Can't find 'Appearance' Main menu item");
+            }
         }
     }
 }
