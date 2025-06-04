@@ -137,7 +137,7 @@ public class XPathDefinitions {
     @Language("XPath")
     public static final String SET_LANGUAGE = "//div[@class='SegmentedButtonComponent'][.//div[contains(@action.key, 'language.groovy')]]";
     @Language("XPath")
-    public static final String SET_BUILD_SYSTEM = "//div[@class='SegmentedButtonComponent'][.//div[@action.key='buildsystem.type.intellij']]";
+    public static final String SET_BUILD_SYSTEM = "//div[@class='SegmentedButtonComponent'][.//div[@visible_text='IntelliJ']]";
     @Language("XPath")
     public static final String SET_BUILD_SYSTEM_2024_2_AND_NEWER = "//div[@accessiblename='Build system:' and @class='SegmentedButtonComponent']";  // works for IntelliJ Idea 2024.1 and higher
     @Language("XPath")
