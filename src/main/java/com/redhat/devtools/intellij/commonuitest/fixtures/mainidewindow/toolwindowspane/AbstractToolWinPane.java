@@ -124,8 +124,8 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
 
     private void clickOnStripeButton(String label, boolean isPaneOpened) {
         waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2),
-                "The '" + label + "' stripe button is not available.",
-                () -> isStripeButtonAvailable(label, isPaneOpened));
+            "The '" + label + "' stripe button is not available.",
+            () -> isStripeButtonAvailable(label, isPaneOpened));
 
         if (ideaVersionInt >= 20242) {
             // For IntelliJ IDEA 2024.2 and newer
@@ -175,6 +175,6 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
 
     private boolean isRightToolbarButton(String label) {
         return label.equals(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL) ||
-                label.equals(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL);
+            label.equals(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL);
     }
 }

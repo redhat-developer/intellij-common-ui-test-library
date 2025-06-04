@@ -71,7 +71,7 @@ class TipDialogTest extends AbstractLibraryBaseTest {
         tipDialog.dontShowTipsCheckBox().setValue(!checkboxStateBefore);
         boolean checkboxStateAfter = tipDialog.dontShowTipsCheckBox().isSelected();
         assertNotEquals(checkboxStateAfter, checkboxStateBefore,
-                "The checkbox value should be '" + !checkboxStateBefore + "' but is '" + checkboxStateAfter + "'.");
+            "The checkbox value should be '" + !checkboxStateBefore + "' but is '" + checkboxStateAfter + "'.");
         tipDialog.dontShowTipsCheckBox().setValue(checkboxStateBefore);
         tipDialog.close();
     }

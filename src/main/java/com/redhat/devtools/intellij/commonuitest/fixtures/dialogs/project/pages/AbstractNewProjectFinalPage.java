@@ -88,7 +88,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      */
     public void setProjectLocation(String projectLocation) {
         if (ideaVersionInt >= 20221) {
-            find(JTextFieldFixture.class, byXpath(XPathDefinitions.EXTENDABLE_TEXT_FIELD )).setText(projectLocation);
+            find(JTextFieldFixture.class, byXpath(XPathDefinitions.EXTENDABLE_TEXT_FIELD)).setText(projectLocation);
         } else {
             textFields(JTextFieldFixture.Companion.byType()).get(1).setText(projectLocation);
         }

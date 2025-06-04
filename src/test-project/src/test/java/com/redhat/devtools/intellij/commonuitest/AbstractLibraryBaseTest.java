@@ -35,13 +35,12 @@ public abstract class AbstractLibraryBaseTest {
     protected static RemoteRobot remoteRobot;
     protected static int ideaVersionInt;
     private static boolean intelliJHasStarted = false;
-    private static final int TEST_RUNNER_PORT = 8580;
 
     @BeforeAll
     static void startIntelliJ() {
-       if (!intelliJHasStarted) {
+        if (!intelliJHasStarted) {
             ideaVersionInt = communityIdeaVersion.toInt();
-            remoteRobot = UITestRunner.runIde(communityIdeaVersion, TEST_RUNNER_PORT);
+            remoteRobot = UITestRunner.runIde(communityIdeaVersion);
 
             intelliJHasStarted = true;
             Runtime.getRuntime().addShutdownHook(new CloseIntelliJBeforeQuit());

@@ -33,9 +33,9 @@ import java.time.Duration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
-import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 
 /**
  * Basic methods for starting and quiting the IntelliJ Idea IDE for UI tests
@@ -49,41 +49,39 @@ public class UITestRunner {
     private static final Logger LOGGER = Logger.getLogger(UITestRunner.class.getName());
     private static final String OS_NAME = System.getProperty("os.name").toLowerCase();
     private static final String USER_HOME = System.getProperty("user.home");
-    private static RemoteRobot remoteRobot = null;
-    private static Process ideProcess;
-    private static IntelliJVersion ideaVersion;
     private static final String NEW_ITEM_PROPERTY = "New-ItemProperty";
     private static final String NAME_PARAM = "-Name";
     private static final String VALUE_PARAM = "-Value";
+    private static RemoteRobot remoteRobot = null;
+    private static Process ideProcess;
+    private static IntelliJVersion ideaVersion;
 
     private UITestRunner() {}
 
     /**
      * Start the given version of IntelliJ Idea listening on the given port
      *
-     * @param ideaVersion version of the IntelliJ Idea to start
-     * @param port        port number on which will the IntelliJ Idea be listening
+     * @param ideaVersionUnderTest version of the IntelliJ Idea to start
+     * @param port                 port number on which will the IntelliJ Idea be listening
      * @return instance of the RemoteRobot
      */
-    public static RemoteRobot runIde(IntelliJVersion ideaVersion, int port) {
+    public static RemoteRobot runIde(IntelliJVersion ideaVersionUnderTest, int port) {
         StepWorker.registerProcessor(new StepLogger());
+        ideaVersion = ideaVersionUnderTest;
+        if (ideaVersionUnderTest.equals(IntelliJVersion.UNSUPPORTED)) {
+            LOGGER.severe("Cannot run Idea. Version is unsupported");
+            return null;
+        }
 
-        return step("Start IntelliJ Idea ('" + ideaVersion.toString() + "') listening on port " + port, () -> {
+        return step("Start IntelliJ Idea ('" + ideaVersion + "') listening on port " + port, () -> {
             System.setProperty("uitestlib.idea.version", Integer.toString(ideaVersion.toInt()));
-            UITestRunner.ideaVersion = ideaVersion;
 
             acceptAllTermsAndConditions();
 
             String fileExtension = OS_NAME.contains("windows") ? ".bat" : "";
-            String[] platformTypeVersion = generatePlatformTypeVersion();
+            String platformVersion = generatePlatformVersion();
 
-            ProcessBuilder pb;
-
-            if (ideaVersion.toInt() < 20242) {
-                pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + platformTypeVersion[1], "-Drobot-server.port=" + port);
-            } else {
-                pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-Drobot-server.port=" + port, "-PplatformType=" + platformTypeVersion[0], "-PplatformVersion=" + platformTypeVersion[1]);
-            }
+            ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + platformVersion, "-Drobot-server.port=" + port);
             boolean isDebugOn = Boolean.parseBoolean(System.getProperty("intellij_debug", "false")); // For more info on intellij_debug please check README
             if (isDebugOn) {
                 redirectProcessOutputs(pb);
@@ -154,7 +152,7 @@ public class UITestRunner {
     public static RemoteRobot getRemoteRobotConnection(int port) {
         return step("Create an instance of the RemoteRobot listening on port " + port, () -> {
             RemoteRobot remoteRobot = new RemoteRobot("http://127.0.0.1:" + port);
-            SharedSteps.waitForComponentByXpath(remoteRobot,30, 200, byXpath(XPathDefinitions.FLAT_WELCOME_FRAME));
+            SharedSteps.waitForComponentByXpath(remoteRobot, 30, 200, byXpath(XPathDefinitions.FLAT_WELCOME_FRAME));
             return remoteRobot;
         });
     }
@@ -311,15 +309,15 @@ public class UITestRunner {
     }
 
     /**
-     * Generate platformType and platformVersion based on ideaVersion
+     * Generate platformVersion based on complete ideaVersion
      *
-     * @return platformTypeVersion string array
+     * @return platformVersion
      */
-    private static String[] generatePlatformTypeVersion() {
+    private static String generatePlatformVersion() {
         String[] platformTypeVersion = ideaVersion.toString().split("-", 2);
         if (2 > platformTypeVersion.length) {
             throw new UITestException("ideaVersion is not recognized.");
         }
-        return platformTypeVersion;
+        return platformTypeVersion[1];
     }
 }

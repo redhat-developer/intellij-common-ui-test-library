@@ -14,20 +14,25 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.ActionButtonFixture;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
+import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
+import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.Keyboard;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
+import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.navigation.SearchEverywherePopup;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar.MenuBar;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
+import com.redhat.devtools.intellij.commonuitest.utils.internalerror.IdeInternalErrorUtils;
+import com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.KeyEvent;
 import java.time.Duration;
-
-import com.redhat.devtools.intellij.commonuitest.utils.internalerror.IdeInternalErrorUtils;
+import java.util.List;
+import java.util.Optional;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 
@@ -52,14 +57,14 @@ public class MainIdeWindow extends CommonContainerFixture {
     public void maximizeIdeWindow() {
         if (remoteRobot.isWin()) {
             runJs("""
-                    const width = component.getWidth();
-                    const height = component.getHeight();
-                    const horizontal_offset = width-72;
-                    robot.click(component, new Point(horizontal_offset, 14), MouseButton.LEFT_BUTTON, 1);
-                    const width_after = component.getWidth();
-                    const height_after = component.getHeight();
-                    const horizontal_offset_after = width_after-72;
-                    if (width > width_after || height > height_after) { robot.click(component, new Point(horizontal_offset_after, 14), MouseButton.LEFT_BUTTON, 1); }""");
+                const width = component.getWidth();
+                const height = component.getHeight();
+                const horizontal_offset = width-72;
+                robot.click(component, new Point(horizontal_offset, 14), MouseButton.LEFT_BUTTON, 1);
+                const width_after = component.getWidth();
+                const height_after = component.getHeight();
+                const horizontal_offset_after = width_after-72;
+                if (width > width_after || height > height_after) { robot.click(component, new Point(horizontal_offset_after, 14), MouseButton.LEFT_BUTTON, 1); }""");
 
         } else {
             runJs("""
@@ -78,14 +83,16 @@ public class MainIdeWindow extends CommonContainerFixture {
      * Close the currently opened project
      */
     public void closeProject() {
-        if (remoteRobot.isMac()) {
+        if (remoteRobot.isMac() || UITestRunner.getIdeaVersionInt() <= 20242) {
             invokeCmdUsingSearchEverywherePopup("Close Project");
         } else {
-            new MenuBar(remoteRobot).navigateTo("File", "Close Project");
+            MenuBar menu = new MenuBar(remoteRobot);
+            setMainMenuVisible(menu);
+            menu.navigateTo("File", "Close Project");
         }
         IdeInternalErrorUtils.clearWindowsErrorsIfTheyAppear(remoteRobot);
         remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).runJs("const horizontal_offset = component.getWidth()/2;\n" +
-                "robot.click(component, new Point(horizontal_offset, 10), MouseButton.LEFT_BUTTON, 1);");
+            "robot.click(component, new Point(horizontal_offset, 10), MouseButton.LEFT_BUTTON, 1);");
     }
 
     /**
@@ -94,13 +101,11 @@ public class MainIdeWindow extends CommonContainerFixture {
      * @param cmdToInvoke String representation of command which will be executed using the Search Everywhere popup
      */
     public void invokeCmdUsingSearchEverywherePopup(String cmdToInvoke) {
-        SearchEverywherePopup searchEverywherePopup = openSearchEverywherePopup();
-        searchEverywherePopup.invokeCmd(cmdToInvoke);
+        openSearchEverywherePopup().invokeCmd(cmdToInvoke);
     }
 
     public void searchEverywhere(String searchString) {
-        SearchEverywherePopup searchEverywherePopup = openSearchEverywherePopup();
-        searchEverywherePopup.searchText(searchString);
+        openSearchEverywherePopup().searchText(searchString);
     }
 
     private SearchEverywherePopup openSearchEverywherePopup() {
@@ -119,6 +124,22 @@ public class MainIdeWindow extends CommonContainerFixture {
             SearchEverywherePopup searchEverywherePopup = find(SearchEverywherePopup.class, Duration.ofSeconds(10));
             searchEverywherePopup.activateTab("All");
             return searchEverywherePopup;
+        }
+    }
+
+    public void setMainMenuVisible(MenuBar menuBar) {
+        if (menuBar.isVisible()) {
+            return;
+        }
+        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
+        mainIdeWindow.searchEverywhere("Appearance");
+        ComponentFixture appearanceDialog = remoteRobot.find(ComponentFixture.class, byXpath("//div[@class='SearchEverywhereUI']"));
+        List<RemoteText> items = appearanceDialog.findAllText();
+        Optional<RemoteText> item = items.stream().filter(remoteText -> remoteText.getText().equals("View | Appearance: Main Menu")).findFirst();
+        if (item.isPresent()) {
+            item.get().click();
+        } else {
+            ScreenshotUtils.takeScreenshot(remoteRobot, "Can't find 'Appearance' Main menu item");
         }
     }
 }

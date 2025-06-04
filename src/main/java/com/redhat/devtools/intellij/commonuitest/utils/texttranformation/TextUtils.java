@@ -34,8 +34,8 @@ public class TextUtils {
      */
     public static String listOfRemoteTextToString(List<RemoteText> data) {
         return data
-                .stream()
-                .map(RemoteText::getText)
-                .collect(Collectors.joining(" "));
+            .stream()
+            .map(RemoteText::getText)
+            .collect(Collectors.joining(" "));
     }
 }

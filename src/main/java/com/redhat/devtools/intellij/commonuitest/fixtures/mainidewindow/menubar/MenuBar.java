@@ -13,20 +13,16 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.fixtures.ActionButtonFixture;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
-import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
-import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
-import com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Optional;
+import java.util.logging.Logger;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
@@ -37,12 +33,12 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  * @author zcervink@redhat.com
  */
 public class MenuBar {
+    private static final Logger LOGGER = Logger.getLogger(MenuBar.class.getName());
     private final RemoteRobot remoteRobot;
     private final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
 
     public MenuBar(RemoteRobot remoteRobot) {
         this.remoteRobot = remoteRobot;
-        checkVisibility();
     }
 
     /**
@@ -51,6 +47,10 @@ public class MenuBar {
      * @param path path to navigate in the main menu
      */
     public void navigateTo(String... path) {
+        if (!isVisible()) {
+            LOGGER.severe("Main Menu is not visible.");
+            return;
+        }
         if (path.length == 0) {
             return;
         }
@@ -111,22 +111,13 @@ public class MenuBar {
         return cf;
     }
 
-    private void checkVisibility() {
+    public boolean isVisible() {
         // check menu already visible
         try {
             getMainMenu();
+            return true;
         } catch (WaitForConditionTimeoutException e) {
-            // not visible
-            MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
-            mainIdeWindow.searchEverywhere("Appearance");
-            ComponentFixture appearanceDialog = remoteRobot.find(ComponentFixture.class, byXpath("//div[@class='SearchEverywhereUI']"));
-            List<RemoteText> items = appearanceDialog.findAllText();
-            Optional<RemoteText> item = items.stream().filter(remoteText -> remoteText.getText().equals("View | Appearance: Main Menu")).findFirst();
-            if (item.isPresent()) {
-                item.get().click();
-            } else {
-                ScreenshotUtils.takeScreenshot(remoteRobot, "Can't find 'Appearance' Main menu item");
-            }
+            return false;
         }
     }
 }

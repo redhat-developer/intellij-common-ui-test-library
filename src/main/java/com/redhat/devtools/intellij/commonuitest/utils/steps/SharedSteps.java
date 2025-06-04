@@ -13,7 +13,9 @@ package com.redhat.devtools.intellij.commonuitest.utils.steps;
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.search.locators.Locator;
+
 import java.time.Duration;
+
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 
 /**
@@ -31,9 +33,9 @@ public class SharedSteps {
      * @param interval The interval at which to check the component's visibility, in milliseconds.
      * @param xpath    The XPath locator used to find the component within the UI hierarchy.
      */
-    public static void waitForComponentByXpath(RemoteRobot robot, int duration, int interval , Locator xpath) {
+    public static void waitForComponentByXpath(RemoteRobot robot, int duration, int interval, Locator xpath) {
         waitFor(Duration.ofSeconds(duration), Duration.ofMillis(interval), () -> robot.findAll(ComponentFixture.class, xpath)
-                .stream()
-                .anyMatch(ComponentFixture::isShowing));
+            .stream()
+            .anyMatch(ComponentFixture::isShowing));
     }
 }
