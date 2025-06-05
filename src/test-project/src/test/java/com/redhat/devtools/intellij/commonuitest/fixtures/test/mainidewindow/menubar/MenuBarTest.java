@@ -25,7 +25,6 @@ import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;

@@ -47,15 +47,16 @@ public class MenuBar {
      * @param path path to navigate in the main menu
      */
     public void navigateTo(String... path) {
-        if (!isVisible()) {
-            LOGGER.severe("Main Menu is not visible.");
-            return;
-        }
         if (path.length == 0) {
             return;
         }
         if (ideaVersionInt >= 20242) {
             remoteRobot.find(ActionButtonFixture.class, byXpath(XPathDefinitions.MAIN_MENU)).click();
+        }
+
+        if (!isVisible()) {
+            LOGGER.severe("Main Menu is not visible.");
+            return;
         }
 
         JButtonFixture mainMenuFirstItem = mainMenuItem(path[0]);
