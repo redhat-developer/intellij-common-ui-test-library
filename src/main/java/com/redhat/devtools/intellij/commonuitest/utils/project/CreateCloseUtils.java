@@ -117,8 +117,7 @@ public class CreateCloseUtils {
     public static void waitAfterOpeningProject(RemoteRobot remoteRobot) {
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilProjectImportIsComplete();
-        int ideaVersionInt = UITestRunner.getIdeaVersionInt();
-        if (ideaVersionInt > 20233) {
+        if (UITestRunner.getIdeaVersionInt() > 20233) {
             MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
             mainIdeWindow.maximizeIdeWindow();
         }
