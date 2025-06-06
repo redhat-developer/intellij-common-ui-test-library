@@ -75,8 +75,7 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
     public String getModuleName() {
         if (ideaVersionInt >= 20242) {
             return find(JTextFieldFixture.class, byXpath(XPathDefinitions.GET_SET_MODULE_NAME_2024_2_AND_NEWER)).getText();
-        }
-        else if (ideaVersionInt >= 20221) {
+        } else if (ideaVersionInt >= 20221) {
             return find(JTextFieldFixture.class, byXpath(XPathDefinitions.GET_SET_MODULE_NAME)).getText();
         } else {
             return textField("Module name:", true).getText();
@@ -91,8 +90,7 @@ public class JavaNewProjectFinalPage extends AbstractNewProjectFinalPage {
     public void setModuleName(String moduleName) {
         if (ideaVersionInt >= 20242) {
             find(JTextFieldFixture.class, byXpath(XPathDefinitions.GET_SET_MODULE_NAME_2024_2_AND_NEWER)).setText(moduleName);
-        }
-        else if (ideaVersionInt >= 20221) {
+        } else if (ideaVersionInt >= 20221) {
             find(JTextFieldFixture.class, byXpath(XPathDefinitions.GET_SET_MODULE_NAME)).setText(moduleName);
         } else {
             textField("Module name:", true).setText(moduleName);

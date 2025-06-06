@@ -10,7 +10,12 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.project_manipulation;
 
-import com.intellij.remoterobot.fixtures.*;
+import com.intellij.remoterobot.fixtures.ActionButtonFixture;
+import com.intellij.remoterobot.fixtures.ComboBoxFixture;
+import com.intellij.remoterobot.fixtures.ComponentFixture;
+import com.intellij.remoterobot.fixtures.ContainerFixture;
+import com.intellij.remoterobot.fixtures.JLabelFixture;
+import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
@@ -283,7 +288,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
         newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
         newProjectFirstPage.setProjectSdkIfAvailable("11");
         assertThrows(UITestException.class, () ->
-                newProjectDialogWizard.previous(), "The 'UITestException' should be thrown because the 'Previous' button is not enabled on the first page of the 'New Project'.");
+            newProjectDialogWizard.previous(), "The 'UITestException' should be thrown because the 'Previous' button is not enabled on the first page of the 'New Project'.");
         newProjectDialogWizard.next();
         boolean isCommandLineAppTextPresent = listOfRemoteTextToString(newProjectFirstPage.findAllText()).contains("Command Line App");
         assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present on the second page of the 'New Project' wizard for java project.");
@@ -305,7 +310,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
         assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present on the second page of the 'New Project' wizard for java project.");
         newProjectDialogWizard.next();
         assertThrows(UITestException.class, () ->
-                newProjectDialogWizard.next(), "The 'UITestException' should be thrown because the 'Next' button is not available on the last page of the 'New Project' wizard.");
+            newProjectDialogWizard.next(), "The 'UITestException' should be thrown because the 'Next' button is not available on the last page of the 'New Project' wizard.");
     }
 
     @Test
@@ -314,13 +319,13 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
             newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.PLAIN_JAVA.toString());
             newProjectFirstPage.setProjectSdkIfAvailable("17");
             assertThrows(UITestException.class, () ->
-                    newProjectDialogWizard.finish(), "The 'UITestException' should be thrown because the 'Finish' button is not available on the first page of the 'New Project' wizard for java project.");
+                newProjectDialogWizard.finish(), "The 'UITestException' should be thrown because the 'Finish' button is not available on the first page of the 'New Project' wizard for java project.");
             newProjectDialogWizard.next();
             newProjectDialogWizard.next();
         }
 
         assertThrows(UITestException.class, () ->
-                newProjectDialogWizard.next(), "The 'UITestException' should be thrown because the 'Next' button is not available on the last page of the 'New Project' wizard.");
+            newProjectDialogWizard.next(), "The 'UITestException' should be thrown because the 'Next' button is not available on the last page of the 'New Project' wizard.");
         newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10)).setProjectName(PLAIN_JAVA_PROJECT_NAME);
         newProjectDialogWizard.finish();
         mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
@@ -369,7 +374,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
             isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("Simple project with one module");
         } else {                                // For IntelliJ IDEA version 2021.2 and older
             isEmptyProjectPageDisplayed = !newProjectFirstPage.findAll(
-                    JListFixture.class, byXpath(XPathDefinitions.EMPTY_PROJECT)
+                JListFixture.class, byXpath(XPathDefinitions.EMPTY_PROJECT)
             ).isEmpty();
         }
         assertTrue(isEmptyProjectPageDisplayed, "The 'Empty Project' page should be displayed but is not.");

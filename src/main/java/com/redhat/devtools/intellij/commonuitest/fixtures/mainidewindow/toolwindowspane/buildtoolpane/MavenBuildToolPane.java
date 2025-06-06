@@ -75,8 +75,8 @@ public class MavenBuildToolPane extends CommonContainerFixture {
         JTreeFixture tree = mavenTargetTree();
         // below workaround due to https://github.com/JetBrains/intellij-ui-test-robot/issues/459
         tree.doubleClickRowWithText(projectName, true); // expand root
-        tree.doubleClickRowWithText("Lifecycle" ,true); // expand Lifecycle
-        tree.doubleClickRowWithText(goal,true);
+        tree.doubleClickRowWithText("Lifecycle", true); // expand Lifecycle
+        tree.doubleClickRowWithText(goal, true);
         if (ideaVersionInt >= 20221) {
             remoteRobot.find(ToolWindowPane.class).find(BuildView.class).waitUntilBuildHasFinished();
         } else {

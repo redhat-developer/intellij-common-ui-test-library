@@ -43,7 +43,7 @@ public class ScreenshotUtils {
      * Take screenshot of the entire screen and save it on disk
      *
      * @param remoteRobot reference to the RemoteRobot instance
-     * @param comment         message to add at the end of the screenshot's filename
+     * @param comment     message to add at the end of the screenshot's filename
      * @return the screenshot as a File object
      */
     public static File takeScreenshot(RemoteRobot remoteRobot, String comment) {
@@ -55,7 +55,7 @@ public class ScreenshotUtils {
                 Files.createDirectory(path);
             }
             String screenshotFilename = getTimeNow();
-            String screenshotComment = comment == null || comment.isEmpty() ? "" :  "_" + comment.replace(" ", "_");
+            String screenshotComment = comment == null || comment.isEmpty() ? "" : "_" + comment.replace(" ", "_");
             String screenshotPathname = SCREENSHOT_LOCATION + screenshotFilename + screenshotComment + "." + FILETYPE;
             File screenshotFile = new File(screenshotPathname);
             ImageIO.write(screenshotBufferedImage, FILETYPE, screenshotFile);

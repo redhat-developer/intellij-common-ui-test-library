@@ -16,6 +16,7 @@ package com.redhat.devtools.intellij.commonuitest.utils.runner;
  * * @author zcervink@redhat.com
  */
 public enum IntelliJVersion {
+    UNSUPPORTED("unsupported.version"),
     COMMUNITY_V_2020_2("IC-2020.2"),
     COMMUNITY_V_2020_3("IC-2020.3"),
     COMMUNITY_V_2021_1("IC-2021.1"),
@@ -36,9 +37,12 @@ public enum IntelliJVersion {
 
     IntelliJVersion(String ideaVersionStringRepresentation) {
         this.ideaVersionStringRepresentation = ideaVersionStringRepresentation;
-
-        String ideaVersionString = this.ideaVersionStringRepresentation.substring(3).replace(".", "");
-        this.ideaVersionIntRepresentation = Integer.parseInt(ideaVersionString);
+        if (ideaVersionStringRepresentation.equals("unsupported.version")) {
+            this.ideaVersionIntRepresentation = 0;
+        } else {
+            String ideaVersionString = this.ideaVersionStringRepresentation.substring(3).replace(".", "");
+            this.ideaVersionIntRepresentation = Integer.parseInt(ideaVersionString);
+        }
     }
 
     public static IntelliJVersion getFromStringVersion(String aVersion) {

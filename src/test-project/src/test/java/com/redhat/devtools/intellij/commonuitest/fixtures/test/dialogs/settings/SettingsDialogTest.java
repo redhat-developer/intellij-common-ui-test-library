@@ -38,10 +38,10 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @author zcervink@redhat.com
  */
 class SettingsDialogTest extends AbstractLibraryBaseTest {
-    private static FlatWelcomeFrame flatWelcomeFrame;
-    private SettingsDialog settingsDialog = null;
     private static final String APPEARANCE_AND_BEHAVIOR = "Appearance & Behavior";
     private static final String NOTIFICATIONS = "Notifications";
+    private static FlatWelcomeFrame flatWelcomeFrame;
+    private SettingsDialog settingsDialog = null;
 
     @BeforeAll
     static void openSettingsDialog() {

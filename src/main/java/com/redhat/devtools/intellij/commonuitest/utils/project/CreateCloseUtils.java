@@ -39,8 +39,6 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  */
 public class CreateCloseUtils {
 
-    static final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
-
     /**
      * Create new project with given project name according to given project type
      *
@@ -51,7 +49,7 @@ public class CreateCloseUtils {
     public static void createNewProject(RemoteRobot remoteRobot, String projectName, NewProjectType newProjectType) {
         NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
-
+        int ideaVersionInt = UITestRunner.getIdeaVersionInt();
         if (ideaVersionInt >= 20221) {
             newProjectFirstPage.selectNewProjectType("New Project");
             newProjectFirstPage.setLanguage("Java");
@@ -94,8 +92,8 @@ public class CreateCloseUtils {
     /**
      * Create new empty type project with given project name
      *
-     * @param remoteRobot    reference to the RemoteRobot instance
-     * @param projectName    name of new project
+     * @param remoteRobot reference to the RemoteRobot instance
+     * @param projectName name of new project
      */
     public static void createEmptyProject(RemoteRobot remoteRobot, String projectName) {
         NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
@@ -119,7 +117,7 @@ public class CreateCloseUtils {
     public static void waitAfterOpeningProject(RemoteRobot remoteRobot) {
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilProjectImportIsComplete();
-        if (ideaVersionInt > 20233) {
+        if (UITestRunner.getIdeaVersionInt() > 20233) {
             MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
             mainIdeWindow.maximizeIdeWindow();
         }
@@ -182,7 +180,7 @@ public class CreateCloseUtils {
 
     /**
      * Ensures that the Empty Project page is opened by checking for specific text on the page.
-     * If verification fails, it waits for dialogs to disappear and reselects the Empty Project type.
+     * If verification fails, it waits for dialogs to disappear and re-selects the Empty Project type.
      *
      * @param newProjectFirstPage the first page of the new project dialog
      * @param remoteRobot         reference to the RemoteRobot instance
@@ -209,19 +207,19 @@ public class CreateCloseUtils {
      * If any other dialogs are open, it waits for them to disappear.
      *
      * @param remoteRobot the RemoteRobot instance
-     * @param timeout the maximum duration to wait for the other dialogs to disappear
+     * @param timeout     the maximum duration to wait for the other dialogs to disappear
      */
     private static void waitForDialogsToDisappear(RemoteRobot remoteRobot, Duration timeout) {
         waitFor(
-                timeout,
-                Duration.ofSeconds(2),
-                "Waiting for only the New Project dialog to remain open",
-                () -> "Extra dialogs did not disappear within the timeout",
-                () -> {
-                    List<ComponentFixture> allDialogs = remoteRobot.findAll(ComponentFixture.class, byXpath(XPathDefinitions.MY_DIALOG));
-                    // Proceed if only one dialog is open, assumed to be the New Project dialog
-                    return allDialogs.size() == 1;
-                }
+            timeout,
+            Duration.ofSeconds(2),
+            "Waiting for only the New Project dialog to remain open",
+            () -> "Extra dialogs did not disappear within the timeout",
+            () -> {
+                List<ComponentFixture> allDialogs = remoteRobot.findAll(ComponentFixture.class, byXpath(XPathDefinitions.MY_DIALOG));
+                // Proceed if only one dialog is open, assumed to be the New Project dialog
+                return allDialogs.size() == 1;
+            }
         );
     }
 

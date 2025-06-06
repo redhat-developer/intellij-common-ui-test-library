@@ -47,8 +47,8 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 @FixtureName(name = "New Project Dialog")
 public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
     protected final RemoteRobot remoteRobot;
-    private boolean isProjectSdkItemsLoaded = false;
     private final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
+    private boolean isProjectSdkItemsLoaded = false;
 
     public NewProjectFirstPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);

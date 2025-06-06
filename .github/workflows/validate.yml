@@ -1,9 +1,11 @@
-name: Validate
+name: Validate against IJ versions
+
 on:
-  workflow_run:
-    workflows: [Java CI with Gradle]
-    types:
-      - completed
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
   validate_versions:
     runs-on: ubuntu-latest

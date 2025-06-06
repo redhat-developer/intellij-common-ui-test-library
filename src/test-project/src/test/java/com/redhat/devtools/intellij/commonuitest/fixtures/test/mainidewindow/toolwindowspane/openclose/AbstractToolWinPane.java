@@ -100,6 +100,6 @@ abstract class AbstractToolWinPane extends AbstractLibraryBaseTest {
     private boolean isRightToolbarButton(String label) {
         // Determine if the stripe button is on the right toolbar
         return label.equals(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL) ||
-                label.equals(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL);
+            label.equals(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL);
     }
 }
