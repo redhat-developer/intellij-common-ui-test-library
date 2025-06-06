@@ -49,6 +49,9 @@ class MenuBarTest extends AbstractLibraryBaseTest {
 
     @Test
     void openTipDialogUsingMenuBarTest() {
+        if (UITestRunner.getIdeaVersionInt() == 20233 && remoteRobot.isLinux()) {
+            return; // known issue, no menu bar in GHA for 2023.3
+        }
         if (remoteRobot.isWin() || remoteRobot.isLinux()) {
             new MenuBar(remoteRobot).navigateTo("Help", "Tip of the Day");
             assertTrue(isTipDialogVisible(remoteRobot), "The 'Tip of the Day' dialog should be visible but is not");
