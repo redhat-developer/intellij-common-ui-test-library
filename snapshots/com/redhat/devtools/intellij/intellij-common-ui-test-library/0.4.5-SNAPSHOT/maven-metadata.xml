@@ -3,38 +3,38 @@
   <groupId>com.redhat.devtools.intellij</groupId>
   <artifactId>intellij-common-ui-test-library</artifactId>
   <versioning>
-    <lastUpdated>20250604090217</lastUpdated>
+    <lastUpdated>20250607071704</lastUpdated>
     <snapshot>
-      <timestamp>20250604.090217</timestamp>
-      <buildNumber>3</buildNumber>
+      <timestamp>20250607.071704</timestamp>
+      <buildNumber>4</buildNumber>
     </snapshot>
     <snapshotVersions>
       <snapshotVersion>
+        <extension>pom</extension>
+        <value>0.4.5-20250607.071704-4</value>
+        <updated>20250607071704</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>0.4.5-20250607.071704-4</value>
+        <updated>20250607071704</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>module</extension>
+        <value>0.4.5-20250607.071704-4</value>
+        <updated>20250607071704</updated>
+      </snapshotVersion>
+      <snapshotVersion>
         <classifier>sources</classifier>
         <extension>jar</extension>
-        <value>0.4.5-20250604.090217-3</value>
-        <updated>20250604090217</updated>
+        <value>0.4.5-20250607.071704-4</value>
+        <updated>20250607071704</updated>
       </snapshotVersion>
       <snapshotVersion>
         <classifier>javadoc</classifier>
         <extension>jar</extension>
-        <value>0.4.5-20250604.090217-3</value>
-        <updated>20250604090217</updated>
-      </snapshotVersion>
-      <snapshotVersion>
-        <extension>module</extension>
-        <value>0.4.5-20250604.090217-3</value>
-        <updated>20250604090217</updated>
-      </snapshotVersion>
-      <snapshotVersion>
-        <extension>jar</extension>
-        <value>0.4.5-20250604.090217-3</value>
-        <updated>20250604090217</updated>
-      </snapshotVersion>
-      <snapshotVersion>
-        <extension>pom</extension>
-        <value>0.4.5-20250604.090217-3</value>
-        <updated>20250604090217</updated>
+        <value>0.4.5-20250607.071704-4</value>
+        <updated>20250607071704</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
