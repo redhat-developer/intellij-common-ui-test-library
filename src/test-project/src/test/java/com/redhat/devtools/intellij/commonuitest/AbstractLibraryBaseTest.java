@@ -14,6 +14,7 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
+import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
 import com.redhat.devtools.intellij.commonuitest.utils.testextension.ScreenshotAfterTestFailExtension;
 import org.junit.jupiter.api.AfterAll;
@@ -59,7 +60,7 @@ public abstract class AbstractLibraryBaseTest {
     }
 
     protected void prepareWorkspace(String projectName) {
-        CreateCloseUtils.createNewProject(remoteRobot, projectName, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
+        CreateCloseUtils.createNewProject(remoteRobot, projectName, NewProjectType.PLAIN_JAVA);
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
         mainIdeWindow.closeProject();
     }

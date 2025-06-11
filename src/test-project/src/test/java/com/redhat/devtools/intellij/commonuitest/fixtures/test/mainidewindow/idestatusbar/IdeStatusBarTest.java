@@ -12,14 +12,13 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.id
 
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
-import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
-import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.MavenGradleNewProjectFinalPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.NewProjectFirstPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ProjectLocation;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
+import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,19 +49,12 @@ class IdeStatusBarTest extends AbstractLibraryBaseTest {
         NewProjectDialogWizard newProjectDialogWizard = CreateCloseUtils.openNewProjectDialogFromWelcomeDialog(remoteRobot);
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
 
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            newProjectFirstPage.selectNewProjectType("New Project");
-            newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
-            newProjectFirstPage.setProjectName(PROJECT_NAME);
-            newProjectFirstPage.setProjectLocation(ProjectLocation.PROJECT_LOCATION);
-            newProjectFirstPage.selectNewProjectType("New Project");
-            newProjectFirstPage.setBuildSystem("Maven");
-        } else {
-            newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.MAVEN.toString());
-            newProjectDialogWizard.next();
-            MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
-            mavenGradleFinalPage.setProjectName(PROJECT_NAME);
-        }
+        newProjectFirstPage.selectNewProjectType(NewProjectType.NEW_PROJECT);
+        newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
+        newProjectFirstPage.setProjectName(PROJECT_NAME);
+        newProjectFirstPage.setProjectLocation(ProjectLocation.PROJECT_LOCATION);
+        newProjectFirstPage.selectNewProjectType(NewProjectType.EMPTY_PROJECT);
+        newProjectFirstPage.setBuildSystem("Maven");
 
         newProjectDialogWizard.finish();
     }

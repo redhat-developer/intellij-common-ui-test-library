@@ -18,7 +18,6 @@ import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.util.List;
@@ -92,22 +91,19 @@ public class MenuBar {
         if (remoteRobot.isMac()) {
             return null;
         }
-        return getMainMenu().button(byXpath(XPathDefinitions.label(label)), Duration.ofSeconds(10));
+        return getMainMenu().button(byXpath(XPathDefinitions.label(label)), Duration.ofSeconds(5));
     }
 
-    @NotNull
     public CommonContainerFixture getMainMenu() {
-        CommonContainerFixture cf;
+        CommonContainerFixture cf = null;
         if (remoteRobot.isLinux() && ideaVersionInt <= 20242) {
-            cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.LINUX_MAIN_MENU), Duration.ofSeconds(10));
+            cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.LINUX_MAIN_MENU), Duration.ofSeconds(5));
         } else if ((remoteRobot.isWin() && ideaVersionInt >= 20241) || (remoteRobot.isLinux() && ideaVersionInt > 20242)) {
-            cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2024_1_AND_NEWER), Duration.ofSeconds(10));
-        } else if (remoteRobot.isWin() && ideaVersionInt >= 20222) {
-            cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2022_2_TO_2023_2), Duration.ofSeconds(10));
-        } else if (remoteRobot.isWin() && ideaVersionInt >= 20203) {
-            cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2020_3_TO_2022_1), Duration.ofSeconds(10));
+            cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2024_1_AND_NEWER), Duration.ofSeconds(5));
+        } else if (remoteRobot.isWin()) {
+            cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2022_2_TO_2023_2), Duration.ofSeconds(5));
         } else {
-            cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2020_2_AND_OLDER), Duration.ofSeconds(10));
+            LOGGER.severe("Can't get main menu. System OS is %s / IdeaVersion is %d".formatted(remoteRobot.getOs(), ideaVersionInt));
         }
         return cf;
     }
@@ -115,8 +111,7 @@ public class MenuBar {
     public boolean isVisible() {
         // check menu already visible
         try {
-            getMainMenu();
-            return true;
+            return (getMainMenu() != null);
         } catch (WaitForConditionTimeoutException e) {
             return false;
         }

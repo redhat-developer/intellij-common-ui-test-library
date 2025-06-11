@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.information;
 
-import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
@@ -38,13 +37,8 @@ class TipDialogTest extends AbstractLibraryBaseTest {
 
     @AfterAll
     static void cleanUp() {
-        if (ideaVersionInt >= 20213) {
-            JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
-            jTreeFixture.findText("Projects").click();
-        } else if (ideaVersionInt >= 20203) {
-            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(XPathDefinitions.JBLIST));
-            jListFixture.clickItem("Projects", false);
-        }
+        JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
+        jTreeFixture.findText("Projects").click();
     }
 
     @BeforeEach

@@ -15,17 +15,15 @@ import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.utils.Keyboard;
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
-import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ProjectExplorer;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
+import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import com.redhat.devtools.intellij.commonuitest.utils.steps.SharedSteps;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
-import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -50,13 +48,8 @@ class ProjectExplorerTest extends AbstractLibraryBaseTest {
 
     @BeforeAll
     static void prepareProject() {
-        CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
-        AbstractToolWinPane toolWinPane;
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
-        } else {
-            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        }
+        CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, NewProjectType.PLAIN_JAVA);
+        AbstractToolWinPane toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
         toolWinPane.openProjectExplorer();
         projectExplorer = toolWinPane.find(ProjectExplorer.class, Duration.ofSeconds(10));
     }
@@ -81,9 +74,9 @@ class ProjectExplorerTest extends AbstractLibraryBaseTest {
     void openFileTest() {
         projectExplorer.openFile(PROJECT_NAME, ".gitignore");
         if (ideaVersionInt >= 20231) {       // Code for IJ 2023.1+
-            @Language("XPath") String projectLabelXpath = "//div[@accessiblename='.gitignore' and @class='EditorTabLabel']//div[@class='ActionPanel']";
-            try {       // Verify file is opened by finding its tab in the editor
-                remoteRobot.find(ComponentFixture.class, byXpath(projectLabelXpath));
+            try {
+                // Verify file is opened by finding its tab in the editor
+                remoteRobot.find(ComponentFixture.class, byXpath(XPathDefinitions.PROJECT_LABEL));
             } catch (Exception e) {
                 fail("The '.gitignore' file should be opened but is not.");
             }

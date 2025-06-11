@@ -18,6 +18,7 @@ repositories {
 
 dependencies {
     implementation(libs.kotlin.reflect)
+    implementation(libs.openapi)
     api(libs.junit.jupiter.api)
     api(libs.remote.robot)
     api(libs.remote.fixtures)

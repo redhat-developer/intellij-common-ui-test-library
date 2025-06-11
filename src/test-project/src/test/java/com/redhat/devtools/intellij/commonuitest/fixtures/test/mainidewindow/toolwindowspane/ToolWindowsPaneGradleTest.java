@@ -11,12 +11,11 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane;
 
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
-import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.GradleBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
+import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +34,7 @@ class ToolWindowsPaneGradleTest extends AbstractLibraryBaseTest {
 
     @BeforeAll
     static void prepareProject() {
-        CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.GRADLE);
+        CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, NewProjectType.GRADLE);
     }
 
     @AfterAll
@@ -45,11 +44,7 @@ class ToolWindowsPaneGradleTest extends AbstractLibraryBaseTest {
 
     @BeforeEach
     void createToolWindowsPaneFixture() {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
-        } else {
-            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        }
+        toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
     }
 
     @Test

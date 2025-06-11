@@ -11,12 +11,11 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.openclose;
 
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
-import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ProjectExplorer;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
+import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,12 +35,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 class PEPaneAndStripeButtonTest extends AbstractToolWinPane {
     @BeforeAll
     static void prepareProject() {
-        CreateCloseUtils.createNewProject(remoteRobot, MAVEN_PROJECT_NAME, CreateCloseUtils.NewProjectType.MAVEN);
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
-        } else {
-            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        }
+        CreateCloseUtils.createNewProject(remoteRobot, MAVEN_PROJECT_NAME, NewProjectType.MAVEN);
+        toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
     }
 
     @BeforeEach

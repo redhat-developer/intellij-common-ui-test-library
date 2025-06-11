@@ -17,7 +17,6 @@ import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JTextFieldFixture;
-import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
@@ -36,8 +35,6 @@ import static com.redhat.devtools.intellij.commonuitest.utils.texttranformation.
 @FixtureName(name = "New Project Dialog")
 public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture {
 
-    private final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
-
     protected AbstractNewProjectFinalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
     }
@@ -48,11 +45,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      * @return currently set new project name
      */
     public String getProjectName() {
-        if (ideaVersionInt >= 20221) {
-            return textFields(byXpath(XPathDefinitions.JBTEXT_FIELD)).get(0).getText();
-        } else {
-            return textFields(JTextFieldFixture.Companion.byType()).get(0).getText();
-        }
+        return textFields(byXpath(XPathDefinitions.JBTEXT_FIELD)).get(0).getText();
     }
 
     /**
@@ -61,11 +54,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      * @param projectName name of the new project
      */
     public void setProjectName(String projectName) {
-        if (ideaVersionInt >= 20221) {
-            textFields(byXpath(XPathDefinitions.JBTEXT_FIELD)).get(0).setText(projectName);
-        } else {
-            textFields(JTextFieldFixture.Companion.byType()).get(0).setText(projectName);
-        }
+        textFields(byXpath(XPathDefinitions.JBTEXT_FIELD)).get(0).setText(projectName);
     }
 
     /**
@@ -74,11 +63,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      * @return currently set new project location
      */
     public String getProjectLocation() {
-        if (ideaVersionInt >= 20221) {
-            return find(JTextFieldFixture.class, byXpath(XPathDefinitions.EXTENDABLE_TEXT_FIELD)).getText();
-        } else {
-            return textFields(JTextFieldFixture.Companion.byType()).get(1).getText();
-        }
+        return find(JTextFieldFixture.class, byXpath(XPathDefinitions.EXTENDABLE_TEXT_FIELD)).getText();
     }
 
     /**
@@ -87,11 +72,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      * @param projectLocation project location of the new project
      */
     public void setProjectLocation(String projectLocation) {
-        if (ideaVersionInt >= 20221) {
-            find(JTextFieldFixture.class, byXpath(XPathDefinitions.EXTENDABLE_TEXT_FIELD)).setText(projectLocation);
-        } else {
-            textFields(JTextFieldFixture.Companion.byType()).get(1).setText(projectLocation);
-        }
+        find(JTextFieldFixture.class, byXpath(XPathDefinitions.EXTENDABLE_TEXT_FIELD)).setText(projectLocation);
     }
 
     /**
@@ -99,11 +80,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      */
     public void openAdvanceSettings() {
         if (!isAdvancedSettingsOpened()) {
-            if (ideaVersionInt >= 20222) {
-                find(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR_NEW)).click();
-            } else {
-                find(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR)).click();
-            }
+            find(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR_NEW)).click();
         }
     }
 
@@ -112,22 +89,12 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
      */
     public void closeAdvanceSettings() {
         if (isAdvancedSettingsOpened()) {
-            if (ideaVersionInt >= 20222) {
-                find(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR_NEW)).click();
-            } else {
-                find(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR)).click();
-            }
+            find(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR_NEW)).click();
         }
     }
 
     private boolean isAdvancedSettingsOpened() {
-        List<ComponentFixture> cf;
-
-        if (ideaVersionInt >= 20222) {
-            cf = findAll(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR_NEW_SIBLINGS));
-        } else {
-            cf = findAll(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR_SIBLINGS));
-        }
+        List<ComponentFixture> cf = findAll(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR_NEW_SIBLINGS));
 
         for (int i = 0; i < cf.size(); i++) {
             if (listOfRemoteTextToString(cf.get(i).findAllText()).contains("Advanced Settings")) {
@@ -137,22 +104,4 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
         throw new UITestException("Wizard does not contain 'Advanced Settings' section.");
     }
 
-    /**
-     * Enumeration defining values of the 'Project format' combo box
-     */
-    public enum ProjectFormatType {
-        IDEA_DIRECTORY_BASED(".idea"),
-        IPR_FILE_BASED(".ipr");
-
-        private final String textRepresentation;
-
-        ProjectFormatType(String textRepresentation) {
-            this.textRepresentation = textRepresentation;
-        }
-
-        @Override
-        public String toString() {
-            return this.textRepresentation;
-        }
-    }
 }

@@ -24,6 +24,7 @@ import com.intellij.remoterobot.fixtures.JTextFieldFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
+import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
@@ -60,8 +61,13 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
      *
      * @param projectType name of the project type to which will be changed the current settings
      */
-    public void selectNewProjectType(String projectType) {
-        jLists(JListFixture.Companion.byType()).get(0).findText(projectType).click();
+    public void selectNewProjectType(NewProjectType projectType) {
+        if (ideaVersionInt == 20223 && projectType != NewProjectType.NEW_PROJECT &&  projectType != NewProjectType.EMPTY_PROJECT) {
+            jLists(JListFixture.Companion.byType()).get(0).findText(NewProjectType.NEW_PROJECT.toString()).click();
+            setLanguage(projectType.toString());
+        } else {
+            jLists(JListFixture.Companion.byType()).get(0).findText(projectType.toString()).click();
+        }
     }
 
     /**
@@ -139,17 +145,15 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
                 return;
             }
 
-            if (ideaVersionInt >= 20221) {
+            projectJdkComboBox.click();
+            boolean popupOpenedPermanently = false;
+            try {
+                waitFor(Duration.ofSeconds(10), Duration.ofMillis(250), "HeavyWeightWindow still visible.", this::noHeavyWeightWindowVisible);
+            } catch (WaitForConditionTimeoutException e) {
+                popupOpenedPermanently = true;
+            }
+            if (!popupOpenedPermanently) {
                 projectJdkComboBox.click();
-                boolean popupOpenedPermanently = false;
-                try {
-                    waitFor(Duration.ofSeconds(10), Duration.ofMillis(250), "HeavyWeightWindow still visible.", this::noHeavyWeightWindowVisible);
-                } catch (WaitForConditionTimeoutException e) {
-                    popupOpenedPermanently = true;
-                }
-                if (!popupOpenedPermanently) {
-                    projectJdkComboBox.click();
-                }
             }
 
             CommonContainerFixture parentFixture = waitFor(Duration.ofSeconds(20), Duration.ofSeconds(2), "Wait for the 'Project SDK' list to finish loading all items.", "The project JDK list did not load all items in 20 seconds.", this::didProjectSdkListLoadAllItems);
