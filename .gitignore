@@ -32,4 +32,5 @@ build/
 target/
 pom.xml
 
-/src/test-project/.intellijPlatform/self-update.lock
+/src/test-project/.intellijPlatform/
+/.intellijPlatform/

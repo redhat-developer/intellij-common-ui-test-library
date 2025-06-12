@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.information;
 
-import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
@@ -38,13 +37,8 @@ class TipDialogTest extends AbstractLibraryBaseTest {
 
     @AfterAll
     static void cleanUp() {
-        if (ideaVersionInt >= 20213) {
-            JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
-            jTreeFixture.findText("Projects").click();
-        } else if (ideaVersionInt >= 20203) {
-            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(XPathDefinitions.JBLIST));
-            jListFixture.clickItem("Projects", false);
-        }
+        JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
+        jTreeFixture.findText("Projects").click();
     }
 
     @BeforeEach
@@ -54,11 +48,10 @@ class TipDialogTest extends AbstractLibraryBaseTest {
 
     @Test
     void closeButtonTest() {
-        Duration timeout = Duration.ofSeconds(5);
-        remoteRobot.find(TipDialog.class, timeout);
+        remoteRobot.find(TipDialog.class, Duration.ofSeconds(5));
         tipDialog.close();
         try {
-            remoteRobot.find(TipDialog.class, timeout);
+            remoteRobot.find(TipDialog.class);
             fail("The 'Tif of the Day' dialog should be closed but is not.");
         } catch (WaitForConditionTimeoutException e) {
             LOGGER.log(Level.INFO, e.getMessage(), e);

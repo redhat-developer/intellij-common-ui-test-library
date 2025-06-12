@@ -10,9 +10,7 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs;
 
-import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.fixtures.JTreeFixture;
-import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
@@ -29,6 +27,7 @@ import java.time.Duration;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * FlatWelcomeFrame test
@@ -51,6 +50,7 @@ class FlatWelcomeFrameTest extends AbstractLibraryBaseTest {
         flatWelcomeFrame.createNewProject();
         NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
         newProjectDialogWizard.cancel();
+        assertTrue(flatWelcomeFrame.isShowing(), "The Welcome Window should be open.");
     }
 
     @Test
@@ -75,6 +75,7 @@ class FlatWelcomeFrameTest extends AbstractLibraryBaseTest {
         prepareWorkspace(PROJECT_NAME);
         flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.clearExceptions();
+        assertTrue(flatWelcomeFrame.isShowing(), "The Welcome Window should be open.");
     }
 
     private int getNumberOfProjectsOnDisk() {
@@ -88,22 +89,11 @@ class FlatWelcomeFrameTest extends AbstractLibraryBaseTest {
     }
 
     private int getNumberOfProjectLinks() {
-        if (ideaVersionInt >= 20222) {
-            try {
-                JTreeFixture projects = remoteRobot.findAll(JTreeFixture.class, byXpath(XPathDefinitions.RECENT_PROJECT_PANEL_NEW_2)).get(0);
-                return projects.findAllText().size() / 2;
-            } catch (IndexOutOfBoundsException e) {
-                return 0;
-            }
-        } else {
-            try {
-                flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
-                JListFixture recentProjectsList = flatWelcomeFrame.find(JListFixture.class, byXpath(XPathDefinitions.RECENT_PROJECTS), Duration.ofSeconds(10));
-                return recentProjectsList.findAllText().size() / 2;    // 2 items per 1 project link (project path and project name)
-            } catch (WaitForConditionTimeoutException e) {
-                // the list with accessible name 'Recent Projects' is not available -> 0 links in the 'Welcome to IntelliJ IDEA' dialog
-                return 0;
-            }
+        try {
+            JTreeFixture projects = remoteRobot.findAll(JTreeFixture.class, byXpath(XPathDefinitions.RECENT_PROJECT_PANEL_NEW_2)).get(0);
+            return projects.findAllText().size() / 2;
+        } catch (IndexOutOfBoundsException e) {
+            return 0;
         }
     }
 }

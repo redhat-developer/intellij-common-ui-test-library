@@ -37,7 +37,9 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  *
  * @author zcervink@redhat.com
  */
-public class CreateCloseUtils {
+public final class CreateCloseUtils {
+
+    private CreateCloseUtils() {throw new UITestException("Utility class with static methods.");}
 
     /**
      * Create new project with given project name according to given project type
@@ -48,41 +50,25 @@ public class CreateCloseUtils {
      */
     public static void createNewProject(RemoteRobot remoteRobot, String projectName, NewProjectType newProjectType) {
         NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
+
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
-        int ideaVersionInt = UITestRunner.getIdeaVersionInt();
-        if (ideaVersionInt >= 20221) {
-            newProjectFirstPage.selectNewProjectType("New Project");
-            newProjectFirstPage.setLanguage("Java");
-            switch (newProjectType) {
-                case PLAIN_JAVA:
-                    newProjectFirstPage.setBuildSystem("IntelliJ");
-                    break;
-                case MAVEN, GRADLE:
-                    newProjectFirstPage.setBuildSystem(newProjectType.toString());
-                    break;
-                case EMPTY_PROJECT:
-                default:
-                    throw new IllegalStateException("Unexpected value: " + newProjectType);
-            }
-        } else {
-            newProjectFirstPage.selectNewProjectType(newProjectType.toString());
+        newProjectFirstPage.selectNewProjectType(NewProjectType.NEW_PROJECT);
+        newProjectFirstPage.setLanguage("Java");
+        switch (newProjectType) {
+            case PLAIN_JAVA:
+                newProjectFirstPage.setBuildSystem("IntelliJ");
+                break;
+            case MAVEN, GRADLE:
+                newProjectFirstPage.setBuildSystem(newProjectType.toString());
+                break;
+            case EMPTY_PROJECT:
+            default:
+                throw new IllegalStateException("Unexpected value: " + newProjectType);
         }
-
         newProjectFirstPage.setProjectSdkIfAvailable("17");
-
-        if (ideaVersionInt >= 20221) {
-            newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
-            newProjectFirstPage.setProjectName(projectName);
-            newProjectFirstPage.setProjectLocation(ProjectLocation.PROJECT_LOCATION);
-        } else {
-            newProjectDialogWizard.next();
-            // Plain java project has more pages in the 'New project' dialog
-            if (newProjectType.equals(NewProjectType.PLAIN_JAVA)) {
-                newProjectDialogWizard.next();
-            }
-            AbstractNewProjectFinalPage finalPage = getFinalPage(newProjectDialogWizard, newProjectType);
-            finalPage.setProjectName(projectName);
-        }
+        newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
+        newProjectFirstPage.setProjectName(projectName);
+        newProjectFirstPage.setProjectLocation(ProjectLocation.PROJECT_LOCATION);
 
         newProjectDialogWizard.finish();
 
@@ -99,7 +85,7 @@ public class CreateCloseUtils {
         NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
 
-        newProjectFirstPage.selectNewProjectType(NewProjectType.EMPTY_PROJECT.toString());
+        newProjectFirstPage.selectNewProjectType(NewProjectType.EMPTY_PROJECT);
         ensureEmptyProjectPageIsOpened(newProjectFirstPage, remoteRobot);
 
         newProjectFirstPage.setProjectName(projectName);
@@ -117,10 +103,8 @@ public class CreateCloseUtils {
     public static void waitAfterOpeningProject(RemoteRobot remoteRobot) {
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
         ideStatusBar.waitUntilProjectImportIsComplete();
-        if (UITestRunner.getIdeaVersionInt() > 20233) {
-            MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
-            mainIdeWindow.maximizeIdeWindow();
-        }
+        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
+        mainIdeWindow.maximizeIdeWindow();
         ideStatusBar.waitUntilAllBgTasksFinish(500);
         CodeWithMeDialog.closeCodeWithMePopupIfItAppears(remoteRobot);
     }
@@ -146,7 +130,6 @@ public class CreateCloseUtils {
     public static void closeProject(RemoteRobot remoteRobot) {
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
         mainIdeWindow.closeProject();
-        remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
     }
 
     /**
@@ -186,10 +169,9 @@ public class CreateCloseUtils {
      * @param remoteRobot         reference to the RemoteRobot instance
      */
     private static void ensureEmptyProjectPageIsOpened(NewProjectFirstPage newProjectFirstPage, RemoteRobot remoteRobot) {
-        final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
         boolean isEmptyProjectPageDisplayed;
 
-        if (ideaVersionInt >= 20231) {  // For IntelliJ IDEA version 2023.1 and newer
+        if (UITestRunner.getIdeaVersionInt() >= 20231) {  // For IntelliJ IDEA version 2023.1 and newer
             isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("A basic project with free structure.");
         } else {  // For IntelliJ IDEA version 2022.1 and newer
             isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("A basic project that allows working with separate files and compiling Java and Kotlin classes.");
@@ -198,7 +180,7 @@ public class CreateCloseUtils {
         if (!isEmptyProjectPageDisplayed) {
             // If the expected text is not found, wait for dialogs to disappear and reselect the Empty Project type
             waitForDialogsToDisappear(remoteRobot, Duration.ofSeconds(20));
-            newProjectFirstPage.selectNewProjectType(NewProjectType.EMPTY_PROJECT.toString());
+            newProjectFirstPage.selectNewProjectType(NewProjectType.EMPTY_PROJECT);
         }
     }
 
@@ -223,24 +205,4 @@ public class CreateCloseUtils {
         );
     }
 
-    /**
-     * Enumeration for new project type
-     */
-    public enum NewProjectType {
-        PLAIN_JAVA("Java"),
-        MAVEN("Maven"),
-        GRADLE("Gradle"),
-        EMPTY_PROJECT("Empty Project");
-
-        private final String projectType;
-
-        NewProjectType(String projectType) {
-            this.projectType = projectType;
-        }
-
-        @Override
-        public String toString() {
-            return this.projectType;
-        }
-    }
 }

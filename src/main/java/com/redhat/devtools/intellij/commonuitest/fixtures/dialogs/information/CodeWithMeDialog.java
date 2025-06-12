@@ -48,9 +48,8 @@ public class CodeWithMeDialog extends CommonContainerFixture {
      */
     public static void closeCodeWithMePopupIfItAppears(RemoteRobot remoteRobot) {
         CodeWithMeDialog codeWithMeDialog;
-        int ideaVersionInt = UITestRunner.getIdeaVersionInt();
         try {
-            if (ideaVersionInt <= 20231) {
+            if (UITestRunner.getIdeaVersionInt() <= 20231) {
                 codeWithMeDialog = remoteRobot.find(CodeWithMeDialog.class, byXpath("//div[@class='Wrapper']//div[@class='JPanel']"), Duration.ofSeconds(10));
             } else {
                 codeWithMeDialog = remoteRobot.find(CodeWithMeDialog.class, Duration.ofSeconds(10));

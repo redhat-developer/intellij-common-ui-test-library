@@ -12,17 +12,10 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
-import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
-import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-
-import static com.intellij.remoterobot.search.locators.Locators.byXpath;
-import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 
 /**
  * New Project dialog maven project second page fixture
@@ -34,28 +27,6 @@ import static com.intellij.remoterobot.stepsProcessing.StepWorkerKt.step;
 public class MavenGradleNewProjectFinalPage extends AbstractNewProjectFinalPage {
     public MavenGradleNewProjectFinalPage(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-    }
-
-    /**
-     * Open the 'Artifact Coordinates' options
-     */
-    public void openArtifactCoordinates() {
-        step("Open the 'Artifact Coordinates' options", () -> {
-            if (!isArtifactCoordinatesOpened()) {
-                jLabel(ButtonLabels.ARTIFACT_COORDINATES).click();
-            }
-        });
-    }
-
-    /**
-     * Close the 'Artifact Coordinates' options
-     */
-    public void closeArtifactCoordinates() {
-        step("Close the 'Artifact Coordinates' options", () -> {
-            if (isArtifactCoordinatesOpened()) {
-                jLabel(ButtonLabels.ARTIFACT_COORDINATES).click();
-            }
-        });
     }
 
     /**
@@ -112,8 +83,4 @@ public class MavenGradleNewProjectFinalPage extends AbstractNewProjectFinalPage 
         textField("Version:", true).setText(version);
     }
 
-    private boolean isArtifactCoordinatesOpened() {
-        List<ContainerFixture> cf = findAll(ContainerFixture.class, byXpath(XPathDefinitions.ARTIFACTS_COORDINATES_DIALOG_PANEL));
-        return cf.size() > 5;
-    }
 }

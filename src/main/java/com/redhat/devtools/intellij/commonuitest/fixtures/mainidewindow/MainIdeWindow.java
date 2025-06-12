@@ -50,6 +50,9 @@ public class MainIdeWindow extends CommonContainerFixture {
      * Maximize the main IDE window
      */
     public void maximizeIdeWindow() {
+        if (UITestRunner.getIdeaVersionInt() <= 20223) {
+            return;
+        }
         if (remoteRobot.isWin()) {
             runJs("""
                 const width = component.getWidth();
@@ -78,7 +81,7 @@ public class MainIdeWindow extends CommonContainerFixture {
      * Close the currently opened project
      */
     public void closeProject() {
-        if (UITestRunner.getIdeaVersionInt() == 20233 && remoteRobot.isLinux()) {
+        if (UITestRunner.getIdeaVersionInt() == 20233) {
             invokeCmdUsingSearchEverywherePopup("Close Project");
         } else {
             new MenuBar(remoteRobot).navigateTo("File", "Close Project");

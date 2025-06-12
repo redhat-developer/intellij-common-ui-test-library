@@ -13,19 +13,18 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.informat
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.CodeWithMeDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
-import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.AbstractNewProjectFinalPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.NewProjectFirstPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ProjectLocation;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
+import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 
-import static com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils.getFinalPage;
 import static com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils.openNewProjectDialogFromWelcomeDialog;
 
 /**
@@ -35,51 +34,36 @@ import static com.redhat.devtools.intellij.commonuitest.utils.project.CreateClos
  */
 class CodeWithMeDialogTest extends AbstractLibraryBaseTest {
     private static final String PROJECT_NAME = "code_with_me_java_project";
-    private static final boolean IDEA_VERSION_WITH_CWM_DIALOG_OPENED = ideaVersionInt >= 20212;
 
     @BeforeAll
     static void prepareProject() {
-        if (IDEA_VERSION_WITH_CWM_DIALOG_OPENED) {
-            NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
-            NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
+        NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
+        NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
 
-            if (ideaVersionInt >= 20221) {
-                newProjectFirstPage.selectNewProjectType("New Project");
-                newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
-                newProjectFirstPage.setProjectName(PROJECT_NAME);
-                newProjectFirstPage.setProjectLocation(ProjectLocation.PROJECT_LOCATION);
-                newProjectFirstPage.setLanguage("Java");
-                newProjectFirstPage.setBuildSystem("IntelliJ");
-                newProjectFirstPage.setProjectSdkIfAvailable("17");
-            } else {
-                newProjectFirstPage.selectNewProjectType("Java");
-                newProjectFirstPage.setProjectSdkIfAvailable("11");
-                newProjectDialogWizard.next();
-                newProjectDialogWizard.next();
-                AbstractNewProjectFinalPage finalPage = getFinalPage(newProjectDialogWizard, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
-                finalPage.setProjectName(PROJECT_NAME);
-            }
+        newProjectFirstPage.selectNewProjectType(NewProjectType.NEW_PROJECT);
+        newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
+        newProjectFirstPage.setProjectName(PROJECT_NAME);
+        newProjectFirstPage.setProjectLocation(ProjectLocation.PROJECT_LOCATION);
+        newProjectFirstPage.setLanguage("Java");
+        newProjectFirstPage.setBuildSystem("IntelliJ");
+        newProjectFirstPage.setProjectSdkIfAvailable("17");
 
-            newProjectDialogWizard.finish();
-            IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
-            ideStatusBar.waitUntilProjectImportIsComplete();
-            MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
-            mainIdeWindow.maximizeIdeWindow();
-            ideStatusBar.waitUntilAllBgTasksFinish();
-        }
+        newProjectDialogWizard.finish();
+        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
+        ideStatusBar.waitUntilProjectImportIsComplete();
+        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
+        mainIdeWindow.maximizeIdeWindow();
+        ideStatusBar.waitUntilAllBgTasksFinish();
     }
+
 
     @AfterAll
     static void closeCurrentProject() {
-        if (IDEA_VERSION_WITH_CWM_DIALOG_OPENED) {
-            CreateCloseUtils.closeProject(remoteRobot);
-        }
+        CreateCloseUtils.closeProject(remoteRobot);
     }
 
     @Test
     void closeCodeWithMe() {
-        if (IDEA_VERSION_WITH_CWM_DIALOG_OPENED) {
-            CodeWithMeDialog.closeCodeWithMePopupIfItAppears(remoteRobot);
-        }
+        CodeWithMeDialog.closeCodeWithMePopupIfItAppears(remoteRobot);
     }
 }
