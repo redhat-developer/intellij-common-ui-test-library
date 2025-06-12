@@ -27,6 +27,7 @@ import java.time.Duration;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * FlatWelcomeFrame test
@@ -49,6 +50,7 @@ class FlatWelcomeFrameTest extends AbstractLibraryBaseTest {
         flatWelcomeFrame.createNewProject();
         NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
         newProjectDialogWizard.cancel();
+        assertTrue(flatWelcomeFrame.isShowing(), "The Welcome Window should be open.");
     }
 
     @Test
@@ -73,6 +75,7 @@ class FlatWelcomeFrameTest extends AbstractLibraryBaseTest {
         prepareWorkspace(PROJECT_NAME);
         flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
         flatWelcomeFrame.clearExceptions();
+        assertTrue(flatWelcomeFrame.isShowing(), "The Welcome Window should be open.");
     }
 
     private int getNumberOfProjectsOnDisk() {

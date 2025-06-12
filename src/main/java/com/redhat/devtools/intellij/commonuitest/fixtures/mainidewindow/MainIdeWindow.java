@@ -50,6 +50,9 @@ public class MainIdeWindow extends CommonContainerFixture {
      * Maximize the main IDE window
      */
     public void maximizeIdeWindow() {
+        if (UITestRunner.getIdeaVersionInt() <= 20223) {
+            return;
+        }
         if (remoteRobot.isWin()) {
             runJs("""
                 const width = component.getWidth();

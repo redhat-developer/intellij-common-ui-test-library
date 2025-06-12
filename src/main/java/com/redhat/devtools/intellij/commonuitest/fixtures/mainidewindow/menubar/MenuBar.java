@@ -95,7 +95,7 @@ public class MenuBar {
     }
 
     public CommonContainerFixture getMainMenu() {
-        CommonContainerFixture cf = null;
+        CommonContainerFixture cf;
         if (remoteRobot.isLinux() && ideaVersionInt <= 20242) {
             cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.LINUX_MAIN_MENU), Duration.ofSeconds(5));
         } else if ((remoteRobot.isWin() && ideaVersionInt >= 20241) || (remoteRobot.isLinux() && ideaVersionInt > 20242)) {
@@ -103,7 +103,7 @@ public class MenuBar {
         } else if (remoteRobot.isWin()) {
             cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2022_2_TO_2023_2), Duration.ofSeconds(5));
         } else {
-            LOGGER.severe("Can't get main menu. System OS is %s / IdeaVersion is %d".formatted(remoteRobot.getOs(), ideaVersionInt));
+            throw new IllegalStateException("Can't get main menu. System OS is %s / IdeaVersion is %d".formatted(remoteRobot.getOs(), ideaVersionInt));
         }
         return cf;
     }

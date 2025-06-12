@@ -12,6 +12,7 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.to
 
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.GradleBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
@@ -22,6 +23,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * ToolWindowsPane Gradle test
@@ -52,5 +55,8 @@ class ToolWindowsPaneGradleTest extends AbstractLibraryBaseTest {
         toolWinPane.openGradleBuildToolPane();
         GradleBuildToolPane gradleBuildToolPane = toolWinPane.find(GradleBuildToolPane.class, Duration.ofSeconds(10));
         gradleBuildToolPane.buildProject();
+        BuildView buildView = toolWinPane.find(BuildView.class, Duration.ofSeconds(10));
+        buildView.waitUntilBuildHasFinished();
+        assertTrue(buildView.isBuildSuccessful(), "The build should be successful but is not.");
     }
 }

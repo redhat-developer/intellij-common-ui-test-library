@@ -23,8 +23,6 @@ public class ButtonLabels {
     public static final String CANCEL_LABEL = "Cancel";
     public static final String OK_LABEL = "OK";
     public static final String APPLY_LABEL = "Apply";
-    public static final String NEXT_LABEL = "Next";
-    public static final String PREVIOUS_LABEL = "Previous";
     public static final String CREATE_LABEL = "Create";
     public static final String PROJECT_STRIPE_BUTTON_LABEL = "Project";
     public static final String MAVEN_STRIPE_BUTTON_LABEL = "Maven";

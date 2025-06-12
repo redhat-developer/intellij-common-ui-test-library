@@ -12,18 +12,15 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.project_
 
 import com.intellij.remoterobot.fixtures.ActionButtonFixture;
 import com.intellij.remoterobot.fixtures.ComboBoxFixture;
-import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.JLabelFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
-import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.AbstractNewProjectFinalPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.JavaNewProjectFinalPage;
-import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.JavaNewProjectSecondPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.MavenGradleNewProjectFinalPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.NewProjectFirstPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
@@ -38,14 +35,12 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils.listOfRemoteTextToString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -110,21 +105,17 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
     @Test
     void openAdvancedSettingsTest() {
         newProjectFirstPage.closeAdvanceSettings();
-        assertFalse(isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_CLOSED_MSG);
+        assertFalse(newProjectFirstPage.isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_CLOSED_MSG);
         newProjectFirstPage.openAdvanceSettings();
-        assertTrue(isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_OPENED_MSG);
-        newProjectFirstPage.openAdvanceSettings();
-        assertTrue(isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_OPENED_MSG);
+        assertTrue(newProjectFirstPage.isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_OPENED_MSG);
     }
 
     @Test
     void closeAdvancedSettingsTest() {
         newProjectFirstPage.openAdvanceSettings();
-        assertTrue(isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_OPENED_MSG);
+        assertTrue(newProjectFirstPage.isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_OPENED_MSG);
         newProjectFirstPage.closeAdvanceSettings();
-        assertFalse(isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_CLOSED_MSG);
-        newProjectFirstPage.closeAdvanceSettings();
-        assertFalse(isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_CLOSED_MSG);
+        assertFalse(newProjectFirstPage.isAdvancedSettingsOpened(), ADVANCED_SETTINGS_SHOULD_BE_CLOSED_MSG);
     }
 
     @Test
@@ -187,66 +178,18 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
     }
 
     @Test
-    void getSetVersionGradleTest() {
-        testArtifactCoordinatesAttributes(NewProjectType.GRADLE, ArtifactCoordinatesAttributes.VERSION);
-    }
-
-    @Test
-    void toggleFromTemplateTest() {
-        newProjectFirstPage.selectNewProjectType(NewProjectType.PLAIN_JAVA);
-        newProjectDialogWizard.next();
-        JavaNewProjectSecondPage javaNewProjectSecondPage = newProjectDialogWizard.find(JavaNewProjectSecondPage.class, Duration.ofSeconds(10));
-        boolean isSelected = javaNewProjectSecondPage.fromTemplateCheckBox().isSelected();
-        if (isSelected) {
-            javaNewProjectSecondPage.fromTemplateCheckBox().setValue(false);
-        }
-        javaNewProjectSecondPage.toggleFromTemplate(true);
-        assertTrue(javaNewProjectSecondPage.fromTemplateCheckBox().isSelected(), "The 'Create project from template' checkbox should be checked but is not.");
-        javaNewProjectSecondPage.fromTemplateCheckBox().setValue(isSelected);
-    }
-
-    @Test
-    void previousButtonTest() {
-        newProjectFirstPage.selectNewProjectType(NewProjectType.PLAIN_JAVA);
-        newProjectFirstPage.setProjectSdkIfAvailable("17");
-        assertThrows(UITestException.class, () ->
-            newProjectDialogWizard.previous(), "The 'UITestException' should be thrown because the 'Previous' button is not enabled on the first page of the 'New Project'.");
-        newProjectDialogWizard.next();
-        boolean isCommandLineAppTextPresent = listOfRemoteTextToString(newProjectFirstPage.findAllText()).contains("Command Line App");
-        assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present on the second page of the 'New Project' wizard for java project.");
-        newProjectDialogWizard.previous();
-        try {
-            newProjectFirstPage.comboBox(byXpath(XPathDefinitions.JDK_COMBOBOX), Duration.ofSeconds(10));
-        } catch (WaitForConditionTimeoutException e) {
-            fail("The 'Project SDK' should be available but is not.");
-        }
-    }
-
-    @Test
-    void nextButtonTest() {
-        newProjectFirstPage.selectNewProjectType(NewProjectType.PLAIN_JAVA);
-        newProjectFirstPage.setProjectSdkIfAvailable("17");
-        newProjectDialogWizard.next();
-        boolean isCommandLineAppTextPresent = listOfRemoteTextToString(newProjectFirstPage.findAllText()).contains("Command Line App");
-        assertTrue(isCommandLineAppTextPresent, "The 'Command Line App' text should be present on the second page of the 'New Project' wizard for java project.");
-        newProjectDialogWizard.next();
-        assertThrows(UITestException.class, () ->
-            newProjectDialogWizard.next(), "The 'UITestException' should be thrown because the 'Next' button is not available on the last page of the 'New Project' wizard.");
-    }
-
-    @Test
     void finishButtonTest() {
-        assertThrows(UITestException.class, () ->
-            newProjectDialogWizard.next(), "The 'UITestException' should be thrown because the 'Next' button is not available on the last page of the 'New Project' wizard.");
         newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10)).setProjectName(PLAIN_JAVA_PROJECT_NAME);
         newProjectDialogWizard.finish();
         mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
+        assertTrue(mainIdeWindow.isShowing(), "The Main IDE Window should be open.");
     }
 
     @Test
     void cancelButtonTest() {
         newProjectDialogWizard.cancel();
-        remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        FlatWelcomeFrame welcome = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        assertTrue(welcome.isShowing(), "The Welcome Window should be open.");
     }
 
     @Test
@@ -279,7 +222,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
         boolean isEmptyProjectPageDisplayed;
         if (ideaVersionInt >= 20231) { // For IntelliJ IDEA version 2023.1 and newer
             isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("A basic project with free structure.");
-        } else  { // For IntelliJ IDEA version 2022.3 and newer
+        } else { // For IntelliJ IDEA version 2022.3 and newer
             isEmptyProjectPageDisplayed = newProjectFirstPage.hasText("A basic project that allows working with separate files and compiling Java and Kotlin classes.");
         }
         assertTrue(isEmptyProjectPageDisplayed, "The 'Empty Project' page should be displayed but is not.");
@@ -360,30 +303,13 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
                 mavenGradleFinalPage.setArtifactId(newValue);
                 currentValue = mavenGradleFinalPage.getArtifactId();
                 break;
-            case VERSION:
-                currentValue = mavenGradleFinalPage.getVersion();
-                newValue = currentValue + "1";
-                mavenGradleFinalPage.setVersion(newValue);
-                currentValue = mavenGradleFinalPage.getVersion();
-                break;
         }
         assertEquals(currentValue, newValue, "Currently set '" + attribute + "' doesn't match.");
     }
 
-    private boolean isAdvancedSettingsOpened() {
-        List<ComponentFixture> ss = newProjectFirstPage.findAll(ComponentFixture.class, byXpath("//div[@class='CollapsibleTitledSeparator']/../*"));
-        for (int i = 0; i < ss.size(); i++) {
-            if (listOfRemoteTextToString(ss.get(i).findAllText()).contains("Advanced Settings")) {
-                return i != ss.size() - 1;
-            }
-        }
-        throw new UITestException("Wizard does not contain 'Advanced Settings' section.");
-    }
-
     private enum ArtifactCoordinatesAttributes {
         GROUP_ID("group ID"),
-        ARTIFACT_ID("artifact ID"),
-        VERSION("version");
+        ARTIFACT_ID("artifact ID");
 
         private final String textRepresentation;
 

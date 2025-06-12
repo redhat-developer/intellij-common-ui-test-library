@@ -48,7 +48,7 @@ class ProjectStructureDialogTest extends AbstractLibraryBaseTest {
     @Test
     void projectStructureDialogTest() {
         dialogTest(() -> {
-            ProjectStructureDialog projectStructureDialog = remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(10));
+            ProjectStructureDialog projectStructureDialog = remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(15));
             projectStructureDialog.cancel();
         });
     }

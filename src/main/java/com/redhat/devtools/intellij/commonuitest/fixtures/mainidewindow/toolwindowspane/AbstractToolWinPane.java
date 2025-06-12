@@ -103,7 +103,7 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
     }
 
     protected void togglePane(String label, Class<? extends Fixture> fixtureClass, boolean openPane) {
-        if ((!isPaneOpened(fixtureClass) && openPane)) {
+        if (!isPaneOpened(fixtureClass) && openPane) {
             clickOnStripeButton(label, false);
         } else if (isPaneOpened(fixtureClass) && !openPane) {
             clickOnStripeButton(label, true);
@@ -112,11 +112,7 @@ public abstract class AbstractToolWinPane extends CommonContainerFixture {
 
     private boolean isPaneOpened(Class<? extends Fixture> fixtureClass) {
         try {
-            if (ideaVersionInt <= 20223) {
-                return find(fixtureClass, Duration.ofSeconds(10)).isShowing();
-            } else {
-                return find(CommonContainerFixture.class, byXpath("//div[@class='MavenProjectsNavigatorPanel']"), Duration.ofSeconds(10)).isShowing();
-            }
+            return find(fixtureClass, Duration.ofSeconds(10)).isShowing();
         } catch (WaitForConditionTimeoutException e) {
             return false;
         }

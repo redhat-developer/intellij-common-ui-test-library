@@ -35,20 +35,6 @@ public class NewProjectDialogWizard extends CommonContainerFixture {
     }
 
     /**
-     * Move to the previous page of the 'New Project' dialog by clicking on the 'Previous' button
-     */
-    public void previous() {
-        clickOnButton(ButtonLabels.PREVIOUS_LABEL);
-    }
-
-    /**
-     * Move to the next page of the 'New Project' dialog by clicking on the 'Next' button
-     */
-    public void next() {
-        clickOnButton(ButtonLabels.NEXT_LABEL);
-    }
-
-    /**
      * Finish the 'New Project' dialog
      */
     public void finish() {

@@ -62,7 +62,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
      * @param projectType name of the project type to which will be changed the current settings
      */
     public void selectNewProjectType(NewProjectType projectType) {
-        if (ideaVersionInt == 20223 && projectType != NewProjectType.NEW_PROJECT &&  projectType != NewProjectType.EMPTY_PROJECT) {
+        if (ideaVersionInt <= 20223 && projectType != NewProjectType.NEW_PROJECT && projectType != NewProjectType.EMPTY_PROJECT) {
             jLists(JListFixture.Companion.byType()).get(0).findText(NewProjectType.NEW_PROJECT.toString()).click();
             setLanguage(projectType.toString());
         } else {

@@ -33,13 +33,14 @@ class ScreenshotUtilsTest extends AbstractLibraryBaseTest {
 
     @Test
     void takeScreenshotTest() {
+        String comment = "to_be_removed";
         remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
 
         int numberOfScreenshotBefore = getNumberOfSavedScreenshot();
-        ScreenshotUtils.takeScreenshot(remoteRobot);
+        ScreenshotUtils.takeScreenshot(remoteRobot, comment);
         int numberOfScreenshotAfter = getNumberOfSavedScreenshot();
         assertEquals(numberOfScreenshotAfter, numberOfScreenshotBefore + 1, "Screenshot should be already saved but is not.");
-        Arrays.stream(Objects.requireNonNull(new File(pathToIdeaProjectsFolder).listFiles())).forEach(File::delete);
+        Arrays.stream(Objects.requireNonNull(new File(pathToIdeaProjectsFolder).listFiles())).filter(file -> file.getName().contains(comment)).forEach(File::delete);
     }
 
     private int getNumberOfSavedScreenshot() {

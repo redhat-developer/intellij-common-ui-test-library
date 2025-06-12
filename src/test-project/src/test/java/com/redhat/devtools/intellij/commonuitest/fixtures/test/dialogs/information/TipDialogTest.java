@@ -48,11 +48,10 @@ class TipDialogTest extends AbstractLibraryBaseTest {
 
     @Test
     void closeButtonTest() {
-        Duration timeout = Duration.ofSeconds(5);
-        remoteRobot.find(TipDialog.class, timeout);
+        remoteRobot.find(TipDialog.class, Duration.ofSeconds(5));
         tipDialog.close();
         try {
-            remoteRobot.find(TipDialog.class, timeout);
+            remoteRobot.find(TipDialog.class);
             fail("The 'Tif of the Day' dialog should be closed but is not.");
         } catch (WaitForConditionTimeoutException e) {
             LOGGER.log(Level.INFO, e.getMessage(), e);

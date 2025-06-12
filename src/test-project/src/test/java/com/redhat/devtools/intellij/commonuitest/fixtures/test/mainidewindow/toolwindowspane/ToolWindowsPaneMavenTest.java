@@ -12,6 +12,7 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.to
 
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.MavenBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
@@ -22,6 +23,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * ToolWindowsPane Maven test
@@ -52,5 +55,8 @@ class ToolWindowsPaneMavenTest extends AbstractLibraryBaseTest {
         toolWinPane.openMavenBuildToolPane();
         MavenBuildToolPane mavenBuildToolPane = toolWinPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10));
         mavenBuildToolPane.buildProject("verify", PROJECT_NAME);
+        BuildView buildView = toolWinPane.find(BuildView.class, Duration.ofSeconds(10));
+        buildView.waitUntilBuildHasFinished();
+        assertTrue(buildView.isBuildSuccessful(), "The build should be successful but is not.");
     }
 }

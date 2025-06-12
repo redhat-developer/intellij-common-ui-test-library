@@ -28,6 +28,7 @@ import java.time.Duration;
 import java.util.List;
 
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * IdeStatusBar test
@@ -53,7 +54,6 @@ class IdeStatusBarTest extends AbstractLibraryBaseTest {
         newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
         newProjectFirstPage.setProjectName(PROJECT_NAME);
         newProjectFirstPage.setProjectLocation(ProjectLocation.PROJECT_LOCATION);
-        newProjectFirstPage.selectNewProjectType(NewProjectType.EMPTY_PROJECT);
         newProjectFirstPage.setBuildSystem("Maven");
 
         newProjectDialogWizard.finish();
@@ -71,5 +71,6 @@ class IdeStatusBarTest extends AbstractLibraryBaseTest {
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
         mainIdeWindow.maximizeIdeWindow();
         ideStatusBar.waitUntilAllBgTasksFinish();
+        assertTrue(mainIdeWindow.isShowing(), "The Main IDE Window should be open.");
     }
 }

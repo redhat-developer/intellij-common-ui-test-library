@@ -93,7 +93,7 @@ public abstract class AbstractNewProjectFinalPage extends CommonContainerFixture
         }
     }
 
-    private boolean isAdvancedSettingsOpened() {
+    public boolean isAdvancedSettingsOpened() {
         List<ComponentFixture> cf = findAll(ComponentFixture.class, byXpath(XPathDefinitions.COLLAPSIBLE_TITLED_SEPARATOR_NEW_SIBLINGS));
 
         for (int i = 0; i < cf.size(); i++) {
