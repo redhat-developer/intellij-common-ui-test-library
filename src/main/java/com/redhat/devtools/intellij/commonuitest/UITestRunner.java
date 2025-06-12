@@ -10,7 +10,6 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest;
 
-import com.intellij.openapi.util.SystemInfo;
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.stepsProcessing.StepLogger;
 import com.intellij.remoterobot.stepsProcessing.StepWorker;
@@ -48,6 +47,7 @@ public class UITestRunner {
     private static final String ACCEPTED_SOURCE_LOCATION = "accepted";
     private static final String COPY_ACCEPTED_FILE_STEP_DESCRIPTION = "Copy the 'accepted' file to the appropriate location";
     private static final Logger LOGGER = Logger.getLogger(UITestRunner.class.getName());
+    private static final String OS_NAME = System.getProperty("os.name").toLowerCase();
     private static final String USER_HOME = System.getProperty("user.home");
     private static final String NEW_ITEM_PROPERTY = "New-ItemProperty";
     private static final String NAME_PARAM = "-Name";
@@ -69,7 +69,7 @@ public class UITestRunner {
         StepWorker.registerProcessor(new StepLogger());
         ideaVersion = ideaVersionUnderTest;
         if (ideaVersionUnderTest.equals(IntelliJVersion.UNSUPPORTED)) {
-            LOGGER.severe("Cannot run Idea. Version is unsupported");
+            LOGGER.severe("Cannot run Idea, version is unsupported. Please check supported versions in the documentation.");
             return null;
         }
 
@@ -77,7 +77,7 @@ public class UITestRunner {
 
             acceptAllTermsAndConditions();
 
-            String fileExtension = SystemInfo.isWindows ? ".bat" : "";
+            String fileExtension = OS_NAME.contains("windows") ? ".bat" : "";
             String platformVersion = generatePlatformVersion();
 
             ProcessBuilder pb = new ProcessBuilder("." + File.separator + "gradlew" + fileExtension, "runIdeForUiTests", "-PideaVersion=" + platformVersion, "-Drobot-server.port=" + port);
@@ -162,7 +162,7 @@ public class UITestRunner {
             linuxPrefsXmlSourceLocation = "prefs_xml/2022_1/prefs.xml";
         }
 
-        if (SystemInfo.isLinux) {
+        if (OS_NAME.contains("linux")) {
             step("Copy the 'prefs.xml' file to the appropriate location", () -> {
                 String prefsXmlDir = USER_HOME + "/.java/.userPrefs/jetbrains/_!(!!cg\"p!(}!}@\"j!(k!|w\"w!'8!b!\"p!':!e@==";
                 createDirectoryHierarchy(prefsXmlDir);
@@ -174,7 +174,7 @@ public class UITestRunner {
                 createDirectoryHierarchy(acceptedDir);
                 copyFileFromJarResourceDir(ACCEPTED_SOURCE_LOCATION, acceptedDir + "/accepted");
             });
-        } else if (SystemInfo.isMac) {
+        } else if (OS_NAME.contains("os x")) {
             step("Copy the 'com.apple.java.util.prefs.plist' file to the appropriate location", () -> {
                 String plistDir = USER_HOME + "/Library/Preferences";
                 copyFileFromJarResourceDir(osxPlistSourceLocation, plistDir + "/com.apple.java.util.prefs.plist");
@@ -195,7 +195,7 @@ public class UITestRunner {
                     Thread.currentThread().interrupt();
                 }
             });
-        } else if (SystemInfo.isWindows) {
+        } else if (OS_NAME.contains("windows")) {
             step(COPY_ACCEPTED_FILE_STEP_DESCRIPTION, () -> {
                 String acceptedDir = USER_HOME + "\\AppData\\Roaming\\JetBrains\\consentOptions";
                 createDirectoryHierarchy(acceptedDir);
