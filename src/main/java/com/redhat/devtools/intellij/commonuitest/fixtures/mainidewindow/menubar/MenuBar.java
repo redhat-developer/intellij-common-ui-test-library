@@ -79,12 +79,15 @@ public class MenuBar {
         for (int i = 1; i < path.length - 1; i++) {
             List<JPopupMenuFixture> allContextMenus = remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType());
             JPopupMenuFixture lastContextMenu = allContextMenus.get(allContextMenus.size() - 1);
-            lastContextMenu.findText((path[i])).moveMouse();
+            lastContextMenu.findText(path[i]).moveMouse();
+            waitFor(Duration.ofSeconds(5), Duration.ofSeconds(1), "SubMenu to appear", () ->
+                remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType()).size() > allContextMenus.size()
+            );
         }
 
         List<JPopupMenuFixture> allContextMenus = remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType());
         JPopupMenuFixture lastContextMenu = allContextMenus.get(allContextMenus.size() - 1);
-        lastContextMenu.findText((path[path.length - 1])).click();
+        lastContextMenu.findText(path[path.length - 1]).click();
     }
 
     private JButtonFixture mainMenuItem(String label) {

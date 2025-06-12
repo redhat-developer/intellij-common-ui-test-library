@@ -12,20 +12,17 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwin
 
 import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
-import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
-import com.intellij.remoterobot.fixtures.JTreeFixture;
-import com.redhat.devtools.intellij.commonuitest.UITestRunner;
+import com.intellij.remoterobot.utils.Keyboard;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
-import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.event.KeyEvent;
 import java.time.Duration;
-import java.util.Locale;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
@@ -37,20 +34,10 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  */
 @DefaultXpath(by = "ToolWindowsPane type", xpath = XPathDefinitions.MAVEN_TOOL_WINDOW)
 @FixtureName(name = "Tool Windows Pane")
-public class MavenBuildToolPane extends CommonContainerFixture {
-    private final RemoteRobot remoteRobot;
-    private final int ideaVersionInt = UITestRunner.getIdeaVersionInt();
+public class MavenBuildToolPane extends AbstractBuildToolPane {
 
     public MavenBuildToolPane(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        this.remoteRobot = remoteRobot;
-    }
-
-    /**
-     * Reload all Maven projects
-     */
-    public void reloadAllMavenProjects() {
-        actionButton(byXpath(XPathDefinitions.MY_ICON_REFRESH), Duration.ofSeconds(2)).click();
     }
 
     /**
@@ -65,32 +52,34 @@ public class MavenBuildToolPane extends CommonContainerFixture {
     }
 
     /**
+     * Expand all
+     */
+    public void expandAll() {
+        // trick using keyboard shortcut because there is no button for this action, but the 'Expand All' shortcut works...
+        if (!getBuildTree().getHasFocus()) {
+            getBuildTree().click(); // be sure that the pane is selected
+        }
+        Keyboard keyboard = new Keyboard(remoteRobot);
+        int current;
+        do {
+            current = getBuildTree().collectRows().size();
+            keyboard.hotKey(KeyEvent.VK_CONTROL, KeyEvent.VK_ADD);
+        } while (getBuildTree().collectRows().size() > current);
+    }
+
+    /**
      * Build the project
      *
      * @param goal name of the Lifecycle goal you want to invoke (clean, validate, compile, test, package, verify, install, site, deploy)
      */
     public void buildProject(String goal, String projectName) {
-        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "The Maven target tree did not appear in 30 seconds.", this::isMavenTreeVisible);
-        JTreeFixture tree = mavenTargetTree();
+        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "the Maven tree to appear.", this::isTreeVisible);
+
         // below workaround due to https://github.com/JetBrains/intellij-ui-test-robot/issues/459
-        tree.doubleClickRowWithText(projectName, true); // expand root
-        tree.doubleClickRowWithText("Lifecycle", true); // expand Lifecycle
-        tree.doubleClickRowWithText(goal, true);
-        remoteRobot.find(ToolWindowPane.class).find(BuildView.class).waitUntilBuildHasFinished();
+        expandAll();
+        getBuildTree().doubleClickPath(new String[]{projectName, "Lifecycle", goal}, true);
+        remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(2)).find(BuildView.class, Duration.ofSeconds(5)).waitUntilBuildHasFinished();
         remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(30)).waitUntilAllBgTasksFinish();
     }
 
-    /**
-     * Get the Maven Tab tree fixture
-     *
-     * @return Maven Tab tree fixture
-     */
-    public JTreeFixture mavenTargetTree() {
-        return find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
-    }
-
-    private boolean isMavenTreeVisible() {
-        String treeContent = TextUtils.listOfRemoteTextToString(mavenTargetTree().findAllText());
-        return !treeContent.toLowerCase(Locale.ROOT).contains("nothing") && !treeContent.isEmpty();
-    }
 }

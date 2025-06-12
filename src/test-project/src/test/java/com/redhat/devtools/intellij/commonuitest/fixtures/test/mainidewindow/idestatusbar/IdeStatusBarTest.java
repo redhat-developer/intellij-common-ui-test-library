@@ -66,9 +66,9 @@ class IdeStatusBarTest extends AbstractLibraryBaseTest {
 
     @Test
     void progressBarTest() {
-        IdeStatusBar ideStatusBar = waitFor(Duration.ofSeconds(60), Duration.ofSeconds(1), "Wait for the appearance of progress bar in the IDE status bar.", "The progress bar in status bar did not appear in 60 seconds.", IdeStatusBarTest::isProgressbarWithLabelVisible);
+        IdeStatusBar ideStatusBar = waitFor(Duration.ofSeconds(30), Duration.ofMillis(250), "Wait for the appearance of progress bar in the IDE status bar.", "The progress bar in status bar did not appear in 60 seconds.", IdeStatusBarTest::isProgressbarWithLabelVisible);
         ideStatusBar.waitUntilProjectImportIsComplete();
-        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
+        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(2));
         mainIdeWindow.maximizeIdeWindow();
         ideStatusBar.waitUntilAllBgTasksFinish();
         assertTrue(mainIdeWindow.isShowing(), "The Main IDE Window should be open.");

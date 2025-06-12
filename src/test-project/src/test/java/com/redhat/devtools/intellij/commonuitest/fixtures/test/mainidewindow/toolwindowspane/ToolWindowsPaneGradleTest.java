@@ -11,7 +11,6 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane;
 
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.GradleBuildToolPane;
@@ -33,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class ToolWindowsPaneGradleTest extends AbstractLibraryBaseTest {
     private static final String PROJECT_NAME = "tool_windows_pane_java_gradle_project";
-    private AbstractToolWinPane toolWinPane;
+    private ToolWindowPane toolWinPane;
 
     @BeforeAll
     static void prepareProject() {

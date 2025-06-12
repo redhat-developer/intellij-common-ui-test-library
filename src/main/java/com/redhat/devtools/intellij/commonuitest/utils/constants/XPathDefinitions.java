@@ -102,8 +102,6 @@ public class XPathDefinitions {
     @Language("XPath")
     public static final String BREAD_CRUMBS = "//div[@class='Breadcrumbs']";
     @Language("XPath")
-    public static final String SINGLE_HEIGHT_LABEL = "//div[@class='SingleHeightLabel']";
-    @Language("XPath")
     public static final String COLLAPSIBLE_TITLED_SEPARATOR_NEW = "//div[@class='CollapsibleTitledSeparatorImpl']";
     @Language("XPath")
     public static final String COLLAPSIBLE_TITLED_SEPARATOR_NEW_SIBLINGS = COLLAPSIBLE_TITLED_SEPARATOR_NEW + "/../*";
@@ -129,9 +127,13 @@ public class XPathDefinitions {
     public static final String GET_SET_MODULE_FILE_LOCATION = "//div[@accessiblename='Module file location:' and @class='ExtendableTextField']";
     @Language("XPath")
     public static final String CREATE_NEW_PROJECT = "//div[@defaulticon='createNewProjectTab.svg']"; // works for IntelliJ Idea 2024.1 and higher
-
     @Language("XPath")
-    public static final String PROJECT_LABEL = "//div[@accessiblename='.gitignore' and @class='EditorTabLabel']//div[@class='ActionPanel']";
+    public static final String PROJECT_LABEL = "//div[@accessiblename='Main.java' and @class='EditorTabLabel']//div[@class='ActionPanel']";
+    public static final String TOOL_WINDOW_PANE = "//div[@class='ToolWindowPane']";
+    public static final String WINDOW_LEFT_TOOLBAR = "//div[@class='ToolWindowLeftToolbar']";
+    public static final String WINDOW_RIGHT_TOOLBAR = "//div[@class='ToolWindowRightToolbar']";
+    @Language("XPath")
+    public static final String TREE_FOR_20223 = "//div[@accessiblename='Welcome screen categories']";
 
     private XPathDefinitions() {
         throw new UITestException("Utility class with static methods.");

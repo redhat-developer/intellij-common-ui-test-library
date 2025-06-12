@@ -12,7 +12,6 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.to
 
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.GradleBuildToolPane;
-import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import org.junit.jupiter.api.BeforeAll;
@@ -29,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com
  */
-class GradlePaneTest extends AbstractToolWinPane {
+class GradlePaneTest extends AbstractToolWinPaneTest {
     @BeforeAll
     static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, GRADLE_PROJECT_NAME, NewProjectType.GRADLE);
@@ -38,16 +37,16 @@ class GradlePaneTest extends AbstractToolWinPane {
 
     @BeforeEach
     void preparePanes() {
-        if (isPaneOpened(GradleBuildToolPane.class)) {
-            closePane(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL, GradleBuildToolPane.class);
+        if (toolWinPane.isPaneOpened(GradleBuildToolPane.class)) {
+            toolWinPane.closeGradleBuildToolPane();
         }
     }
 
     @Test
     void gradleBuildToolPaneOpenCloseTest() {
         toolWinPane.openGradleBuildToolPane();
-        assertTrue(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be opened but is closed.");
+        assertTrue(toolWinPane.isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be opened but is closed.");
         toolWinPane.closeGradleBuildToolPane();
-        assertFalse(isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be closed but is opened.");
+        assertFalse(toolWinPane.isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be closed but is opened.");
     }
 }

@@ -16,7 +16,6 @@ import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.TipDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar.MenuBar;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ProjectExplorer;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
@@ -65,8 +64,7 @@ class MenuBarTest extends AbstractLibraryBaseTest {
         CreateCloseUtils.closeProject(remoteRobot);
         CreateCloseUtils.openProjectFromWelcomeDialog(remoteRobot, PROJECT_NAME);
 
-        AbstractToolWinPane toolWinPane;
-        toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
+        ToolWindowPane toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
         toolWinPane.openProjectExplorer();
         ProjectExplorer projectExplorer = toolWinPane.find(ProjectExplorer.class, Duration.ofSeconds(10));
         assertTrue(projectExplorer.isItemPresent(PROJECT_NAME), "The project should be back open, but it is not");

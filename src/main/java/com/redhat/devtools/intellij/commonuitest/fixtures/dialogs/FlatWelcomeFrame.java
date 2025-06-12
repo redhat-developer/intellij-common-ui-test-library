@@ -145,7 +145,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
         } catch (WaitForConditionTimeoutException e) {
             // workaround for 2022.3
-            jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath("//div[@accessiblename='Welcome screen categories']"));
+            jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE_FOR_20223));
         }
         jTreeFixture.findText("Customize").click();
         if (remoteRobot.isMac()) {
@@ -220,7 +220,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
         } catch (WaitForConditionTimeoutException e) {
             // workaround for 2022.3
-            jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath("//div[@accessiblename='Welcome screen categories']"));
+            jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE_FOR_20223));
         }
         jTreeFixture.findText(PROJECTS_BUTTON).click();
     }

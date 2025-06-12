@@ -11,7 +11,6 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.buildtoolpane;
 
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.GradleBuildToolPane;
@@ -32,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class GradleBuildToolPaneTest extends AbstractLibraryBaseTest {
     private static final String PROJECT_NAME = "gradle_build_tool_pane_java_project";
-    private static AbstractToolWinPane toolWinPane;
+    private static ToolWindowPane toolWinPane;
     private static GradleBuildToolPane gradleBuildToolPane;
 
     @BeforeAll
@@ -49,7 +48,7 @@ class GradleBuildToolPaneTest extends AbstractLibraryBaseTest {
     }
 
     @Test
-    void buildProjectTest() {
+    void buildProject() {
         gradleBuildToolPane.buildProject();
         boolean isBuildSuccessful = toolWinPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
         assertTrue(isBuildSuccessful, "The build should be successful but is not.");
@@ -57,24 +56,25 @@ class GradleBuildToolPaneTest extends AbstractLibraryBaseTest {
 
     @Test
     void reloadAllGradleProjects() {
-        gradleBuildToolPane.reloadAllGradleProjects();
+        assertTrue(gradleBuildToolPane.isShowing(), "The gradle view pane should be opened but is not.");
+        gradleBuildToolPane.reloadAllProjects();
     }
 
     @Test
     void expandAll() {
         gradleBuildToolPane.collapseAll();
-        int itemsCountBeforeExpanding = gradleBuildToolPane.gradleTaskTree().collectRows().size();
+        int itemsCountBeforeExpanding = gradleBuildToolPane.getBuildTree().collectRows().size();
         gradleBuildToolPane.expandAll();
-        int itemsCountAfterExpanding = gradleBuildToolPane.gradleTaskTree().collectRows().size();
+        int itemsCountAfterExpanding = gradleBuildToolPane.getBuildTree().collectRows().size();
         assertTrue(itemsCountAfterExpanding > itemsCountBeforeExpanding, "The 'Expand All' operation was unsuccessful.");
     }
 
     @Test
     void collapseAll() {
         gradleBuildToolPane.expandAll();
-        int itemsCountBeforeCollapsing = gradleBuildToolPane.gradleTaskTree().collectRows().size();
+        int itemsCountBeforeCollapsing = gradleBuildToolPane.getBuildTree().collectRows().size();
         gradleBuildToolPane.collapseAll();
-        int itemsCountAfterCollapsing = gradleBuildToolPane.gradleTaskTree().collectRows().size();
+        int itemsCountAfterCollapsing = gradleBuildToolPane.getBuildTree().collectRows().size();
         assertTrue(itemsCountAfterCollapsing < itemsCountBeforeCollapsing, "The 'Collapse All' operation was unsuccessful.");
     }
 }

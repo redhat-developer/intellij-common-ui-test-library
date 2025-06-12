@@ -10,12 +10,10 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.dialogs.information;
 
-import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.ProjectStructureDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import org.junit.jupiter.api.AfterAll;
@@ -47,24 +45,16 @@ class ProjectStructureDialogTest extends AbstractLibraryBaseTest {
 
     @Test
     void projectStructureDialogTest() {
-        dialogTest(() -> {
-            ProjectStructureDialog projectStructureDialog = remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(15));
-            projectStructureDialog.cancel();
-        });
-    }
-
-    private void dialogTest(Runnable runnable) {
         makeSureDialogIsVisible();
         assertTrue(isDialogVisible(), "The 'Project Structure' dialog should be visible but is not.");
-        runnable.run();
+        ProjectStructureDialog projectStructureDialog = remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(2));
+        projectStructureDialog.cancel();
         assertFalse(isDialogVisible(), "The 'Project Structure' dialog should be visible but is not.");
-        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
-        ideStatusBar.waitUntilAllBgTasksFinish();
     }
 
     private void makeSureDialogIsVisible() {
         try {
-            remoteRobot.find((Class<? extends CommonContainerFixture>) ProjectStructureDialog.class, Duration.ofSeconds(10));
+            remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(10));
         } catch (WaitForConditionTimeoutException e) {
             MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
             mainIdeWindow.invokeCmdUsingSearchEverywherePopup("Project Structure");
@@ -73,10 +63,9 @@ class ProjectStructureDialogTest extends AbstractLibraryBaseTest {
 
     private boolean isDialogVisible() {
         try {
-            remoteRobot.find((Class<? extends CommonContainerFixture>) ProjectStructureDialog.class, Duration.ofSeconds(10));
+            return remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(10)).isShowing();
         } catch (WaitForConditionTimeoutException e) {
             return false;
         }
-        return true;
     }
 }

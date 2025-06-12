@@ -10,9 +10,7 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.buildtoolpane;
 
-import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.MavenBuildToolPane;
@@ -34,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class MavenBuildToolPaneTest extends AbstractLibraryBaseTest {
     private static final String PROJECT_NAME = "maven_build_tool_pane_java_project";
-    private static AbstractToolWinPane toolWinPane;
+    private static ToolWindowPane toolWinPane;
     private static MavenBuildToolPane mavenBuildToolPane;
 
     @BeforeAll
@@ -51,30 +49,34 @@ class MavenBuildToolPaneTest extends AbstractLibraryBaseTest {
     }
 
     @Test
-    void buildProjectTest() {
+    void buildProject() {
         mavenBuildToolPane.buildProject("verify", PROJECT_NAME);
         boolean isBuildSuccessful = toolWinPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
         assertTrue(isBuildSuccessful, "The build should be successful but is not.");
     }
 
     @Test
-    void reloadAllMavenProjectsTest() {
-        mavenBuildToolPane.reloadAllMavenProjects();
+    void reloadAllMavenProjects() {
+        assertTrue(mavenBuildToolPane.isShowing(), "The maven view pane should be opened but is not.");
+        mavenBuildToolPane.reloadAllProjects();
     }
 
     @Test
-    void collapseAllTest() {
-        JTreeFixture tree = mavenBuildToolPane.mavenTargetTree();
-        tree.doubleClickRow(0); // expand root
-        for (String row : tree.collectRows()) {
-            if (!row.equals(PROJECT_NAME)) {
-                tree.doubleClickRowWithText(row, true); // expand first children
-            }
-        }
-        int itemsCountBeforeCollapsing = tree.collectRows().size();
+    void expandAll() {
+        mavenBuildToolPane.collapseAll();
+        int itemsCountBeforeExpanding = mavenBuildToolPane.getBuildTree().collectRows().size();
+        mavenBuildToolPane.expandAll();
+        int itemsCountAfterExpanding = mavenBuildToolPane.getBuildTree().collectRows().size();
+        assertTrue(itemsCountAfterExpanding > itemsCountBeforeExpanding, "The 'Expand All' operation was unsuccessful.");
+    }
+
+    @Test
+    void collapseAll() {
+        mavenBuildToolPane.expandAll();
+        int itemsCountBeforeCollapsing = mavenBuildToolPane.getBuildTree().collectRows().size();
         assertTrue(itemsCountBeforeCollapsing > 1, "The Maven tree did not expand correctly");
         mavenBuildToolPane.collapseAll();
-        int itemsCountAfterCollapsing = tree.collectRows().size();
+        int itemsCountAfterCollapsing = mavenBuildToolPane.getBuildTree().collectRows().size();
         assertEquals(1, itemsCountAfterCollapsing);
         assertTrue(itemsCountAfterCollapsing < itemsCountBeforeCollapsing, "The 'Collapse All' operation was unsuccessful.");
     }

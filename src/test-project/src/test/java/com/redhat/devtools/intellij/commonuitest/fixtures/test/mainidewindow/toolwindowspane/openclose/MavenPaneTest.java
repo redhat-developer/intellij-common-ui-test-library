@@ -12,7 +12,6 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.to
 
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.MavenBuildToolPane;
-import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import org.junit.jupiter.api.BeforeAll;
@@ -29,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *
  * @author zcervink@redhat.com
  */
-class MavenPaneTest extends AbstractToolWinPane {
+class MavenPaneTest extends AbstractToolWinPaneTest {
     @BeforeAll
     static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, MAVEN_PROJECT_NAME, NewProjectType.MAVEN);
@@ -38,16 +37,16 @@ class MavenPaneTest extends AbstractToolWinPane {
 
     @BeforeEach
     void preparePanes() {
-        if (isPaneOpened(MavenBuildToolPane.class)) {
-            closePane(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL, MavenBuildToolPane.class);
+        if (toolWinPane.isPaneOpened(MavenBuildToolPane.class)) {
+            toolWinPane.closeMavenBuildToolPane();
         }
     }
 
     @Test
     void mavenBuildToolPaneOpenCloseTest() {
         toolWinPane.openMavenBuildToolPane();
-        assertTrue(isPaneOpened(MavenBuildToolPane.class), "The 'Maven Build Tool Pane' should be opened but is closed.");
+        assertTrue(toolWinPane.isPaneOpened(MavenBuildToolPane.class), "The 'Maven Build Tool Pane' should be opened but is closed.");
         toolWinPane.closeMavenBuildToolPane();
-        assertFalse(isPaneOpened(MavenBuildToolPane.class), "The 'Maven Build Tool Pane' should be closed but is opened.");
+        assertFalse(toolWinPane.isPaneOpened(MavenBuildToolPane.class), "The 'Maven Build Tool Pane' should be closed but is opened.");
     }
 }
