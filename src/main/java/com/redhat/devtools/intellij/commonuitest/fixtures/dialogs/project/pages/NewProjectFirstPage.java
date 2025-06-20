@@ -71,6 +71,15 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
     }
 
     /**
+     * Set the project type to specific type
+     *
+     * @param projectType name of the project type to which will be changed the current settings
+     */
+    public void selectNewProjectType(String projectType) {
+        jLists(JListFixture.Companion.byType()).get(0).findText(projectType).click();
+    }
+
+    /**
      * Set the project name
      *
      * @param projectName project name
