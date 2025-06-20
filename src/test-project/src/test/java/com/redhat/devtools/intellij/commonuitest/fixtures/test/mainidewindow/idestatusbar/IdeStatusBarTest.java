@@ -12,14 +12,13 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.id
 
 import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
-import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
-import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.MavenGradleNewProjectFinalPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.NewProjectFirstPage;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ProjectLocation;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
+import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +28,7 @@ import java.time.Duration;
 import java.util.List;
 
 import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * IdeStatusBar test
@@ -50,19 +50,11 @@ class IdeStatusBarTest extends AbstractLibraryBaseTest {
         NewProjectDialogWizard newProjectDialogWizard = CreateCloseUtils.openNewProjectDialogFromWelcomeDialog(remoteRobot);
         NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
 
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            newProjectFirstPage.selectNewProjectType("New Project");
-            newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
-            newProjectFirstPage.setProjectName(PROJECT_NAME);
-            newProjectFirstPage.setProjectLocation(ProjectLocation.PROJECT_LOCATION);
-            newProjectFirstPage.selectNewProjectType("New Project");
-            newProjectFirstPage.setBuildSystem("Maven");
-        } else {
-            newProjectFirstPage.selectNewProjectType(CreateCloseUtils.NewProjectType.MAVEN.toString());
-            newProjectDialogWizard.next();
-            MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
-            mavenGradleFinalPage.setProjectName(PROJECT_NAME);
-        }
+        newProjectFirstPage.selectNewProjectType(NewProjectType.NEW_PROJECT);
+        newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
+        newProjectFirstPage.setProjectName(PROJECT_NAME);
+        newProjectFirstPage.setProjectLocation(ProjectLocation.PROJECT_LOCATION);
+        newProjectFirstPage.setBuildSystem("Maven");
 
         newProjectDialogWizard.finish();
     }
@@ -74,10 +66,11 @@ class IdeStatusBarTest extends AbstractLibraryBaseTest {
 
     @Test
     void progressBarTest() {
-        IdeStatusBar ideStatusBar = waitFor(Duration.ofSeconds(60), Duration.ofSeconds(1), "Wait for the appearance of progress bar in the IDE status bar.", "The progress bar in status bar did not appear in 60 seconds.", IdeStatusBarTest::isProgressbarWithLabelVisible);
+        IdeStatusBar ideStatusBar = waitFor(Duration.ofSeconds(30), Duration.ofMillis(250), "Wait for the appearance of progress bar in the IDE status bar.", "The progress bar in status bar did not appear in 60 seconds.", IdeStatusBarTest::isProgressbarWithLabelVisible);
         ideStatusBar.waitUntilProjectImportIsComplete();
-        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
+        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(2));
         mainIdeWindow.maximizeIdeWindow();
         ideStatusBar.waitUntilAllBgTasksFinish();
+        assertTrue(mainIdeWindow.isShowing(), "The Main IDE Window should be open.");
     }
 }

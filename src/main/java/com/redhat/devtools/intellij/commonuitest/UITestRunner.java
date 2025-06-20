@@ -69,12 +69,11 @@ public class UITestRunner {
         StepWorker.registerProcessor(new StepLogger());
         ideaVersion = ideaVersionUnderTest;
         if (ideaVersionUnderTest.equals(IntelliJVersion.UNSUPPORTED)) {
-            LOGGER.severe("Cannot run Idea. Version is unsupported");
+            LOGGER.severe("Cannot run Idea, version is unsupported. Please check supported versions in the documentation.");
             return null;
         }
 
         return step("Start IntelliJ Idea ('" + ideaVersion + "') listening on port " + port, () -> {
-            System.setProperty("uitestlib.idea.version", Integer.toString(ideaVersion.toInt()));
 
             acceptAllTermsAndConditions();
 
@@ -117,21 +116,12 @@ public class UITestRunner {
     }
 
     /**
-     * Return the IdeaVersion representation of the currently running IntelliJ Idea version
-     *
-     * @return version of the currently running IntelliJ Idea
-     */
-    public static IntelliJVersion getIdeaVersion() {
-        return ideaVersion;
-    }
-
-    /**
      * Return the integer representation of the currently running IntelliJ Idea version
      *
      * @return version of the currently running IntelliJ Idea
      */
     public static int getIdeaVersionInt() {
-        return getIdeaVersion().toInt();
+        return ideaVersion.toInt();
     }
 
     /**

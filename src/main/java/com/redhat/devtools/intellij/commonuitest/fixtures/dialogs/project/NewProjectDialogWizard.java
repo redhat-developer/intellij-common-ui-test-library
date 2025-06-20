@@ -17,7 +17,6 @@ import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
-import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
@@ -36,28 +35,10 @@ public class NewProjectDialogWizard extends CommonContainerFixture {
     }
 
     /**
-     * Move to the previous page of the 'New Project' dialog by clicking on the 'Previous' button
-     */
-    public void previous() {
-        clickOnButton(ButtonLabels.PREVIOUS_LABEL);
-    }
-
-    /**
-     * Move to the next page of the 'New Project' dialog by clicking on the 'Next' button
-     */
-    public void next() {
-        clickOnButton(ButtonLabels.NEXT_LABEL);
-    }
-
-    /**
      * Finish the 'New Project' dialog
      */
     public void finish() {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            clickOnButton(ButtonLabels.CREATE_LABEL);
-        } else {
-            clickOnButton(ButtonLabels.FINISH_LABEL);
-        }
+        clickOnButton(ButtonLabels.CREATE_LABEL);
     }
 
     /**

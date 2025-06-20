@@ -11,18 +11,19 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane;
 
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
-import com.redhat.devtools.intellij.commonuitest.UITestRunner;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.GradleBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
+import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * ToolWindowsPane Gradle test
@@ -31,11 +32,11 @@ import java.time.Duration;
  */
 class ToolWindowsPaneGradleTest extends AbstractLibraryBaseTest {
     private static final String PROJECT_NAME = "tool_windows_pane_java_gradle_project";
-    private AbstractToolWinPane toolWinPane;
+    private ToolWindowPane toolWinPane;
 
     @BeforeAll
     static void prepareProject() {
-        CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.GRADLE);
+        CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, NewProjectType.GRADLE);
     }
 
     @AfterAll
@@ -45,11 +46,7 @@ class ToolWindowsPaneGradleTest extends AbstractLibraryBaseTest {
 
     @BeforeEach
     void createToolWindowsPaneFixture() {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
-        } else {
-            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        }
+        toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
     }
 
     @Test
@@ -57,5 +54,8 @@ class ToolWindowsPaneGradleTest extends AbstractLibraryBaseTest {
         toolWinPane.openGradleBuildToolPane();
         GradleBuildToolPane gradleBuildToolPane = toolWinPane.find(GradleBuildToolPane.class, Duration.ofSeconds(10));
         gradleBuildToolPane.buildProject();
+        BuildView buildView = toolWinPane.find(BuildView.class, Duration.ofSeconds(10));
+        buildView.waitUntilBuildHasFinished();
+        assertTrue(buildView.isBuildSuccessful(), "The build should be successful but is not.");
     }
 }

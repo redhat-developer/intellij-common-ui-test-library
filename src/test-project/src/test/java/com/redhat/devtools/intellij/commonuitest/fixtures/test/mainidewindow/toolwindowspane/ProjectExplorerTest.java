@@ -11,32 +11,25 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane;
 
 import com.intellij.remoterobot.fixtures.ComponentFixture;
-import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.utils.Keyboard;
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
-import com.redhat.devtools.intellij.commonuitest.UITestRunner;
-import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar.MenuBar;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ProjectExplorer;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
+import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import com.redhat.devtools.intellij.commonuitest.utils.steps.SharedSteps;
-import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
-import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
-import java.util.List;
 
 import static com.intellij.remoterobot.search.locators.Locators.byXpath;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Project Explorer test
@@ -50,13 +43,8 @@ class ProjectExplorerTest extends AbstractLibraryBaseTest {
 
     @BeforeAll
     static void prepareProject() {
-        CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.PLAIN_JAVA);
-        AbstractToolWinPane toolWinPane;
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
-        } else {
-            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        }
+        CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, NewProjectType.PLAIN_JAVA);
+        ToolWindowPane toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
         toolWinPane.openProjectExplorer();
         projectExplorer = toolWinPane.find(ProjectExplorer.class, Duration.ofSeconds(10));
     }
@@ -79,55 +67,40 @@ class ProjectExplorerTest extends AbstractLibraryBaseTest {
 
     @Test
     void openFileTest() {
-        projectExplorer.openFile(PROJECT_NAME, ".gitignore");
-        if (ideaVersionInt >= 20231) {       // Code for IJ 2023.1+
-            @Language("XPath") String projectLabelXpath = "//div[@accessiblename='.gitignore' and @class='EditorTabLabel']//div[@class='ActionPanel']";
-            try {       // Verify file is opened by finding its tab in the editor
-                remoteRobot.find(ComponentFixture.class, byXpath(projectLabelXpath));
-            } catch (Exception e) {
-                fail("The '.gitignore' file should be opened but is not.");
-            }
-        } else {
-            List<ContainerFixture> cfs = remoteRobot.findAll(ContainerFixture.class, byXpath(XPathDefinitions.SINGLE_HEIGHT_LABEL));
-            ContainerFixture cf = cfs.get(cfs.size() - 1);
-            String allText = TextUtils.listOfRemoteTextToString(cf.findAllText());
-            boolean isFileOpened = allText.contains(".gitignore");
-            assertTrue(isFileOpened, "The '.gitignore' file should be opened but is not.");
+        if (ideaVersionInt >= 20231) {
+            //ensure no editor is opened
+            new MenuBar(remoteRobot).navigateTo("Window", "Editor Tabs", "Close All Tabs");
+            projectExplorer.openFile(PROJECT_NAME, "src", "Main");
+            assertTrue(remoteRobot.find(ComponentFixture.class, byXpath(XPathDefinitions.PROJECT_LABEL)).isShowing());
         }
     }
 
     @Test
     void openContextMenuOnTest() {
-        try {
-            JPopupMenuFixture contextMenu = projectExplorer.openContextMenuOn("Scratches and Consoles");
-            assertTrue(contextMenu.hasText("New"), "The context menu on 'Scratches and Consoles' item should be opened but is not.");
-        } catch (UITestException e) {
-            fail(e.getMessage());
-        }
+        JPopupMenuFixture contextMenu = projectExplorer.openContextMenuOn("Scratches and Consoles");
+        assertTrue(contextMenu.hasText("New"), "The context menu on 'Scratches and Consoles' item should be opened but is not.");
     }
 
     @Test
     void openViewsPopupTest() {
-        try {
-            JPopupMenuFixture contextMenu = projectExplorer.openViewsPopup();
-            assertTrue(contextMenu.hasText("Packages"), "The View popup menu should be opened but is not.");
-        } catch (UITestException e) {
-            fail(e.getMessage());
-        }
+        JPopupMenuFixture contextMenu = projectExplorer.openViewsPopup();
+        assertTrue(contextMenu.hasText("Packages"), "The View popup menu should be opened but is not.");
     }
 
     @Test
     void selectOpenedFileTest() {
-        projectExplorer.expandAll();
-        projectExplorer.openFile(PROJECT_NAME, "src", "Main");
-        projectExplorer.projectViewTree().clickRow(0);
-        SharedSteps.waitForComponentByXpath(remoteRobot, 3, 200, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
-        projectExplorer.selectOpenedFile();
-        SharedSteps.waitForComponentByXpath(remoteRobot, 3, 200, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
-        assertTrue(projectExplorer.projectViewTree().isPathSelected(
-                projectExplorer.projectViewTree().getValueAtRow(0), "src", "Main"),
-            "The file 'Main' should be selected but is not."
-        );
+        if (ideaVersionInt >= 20231) {
+            projectExplorer.expandAll();
+            projectExplorer.openFile(PROJECT_NAME, "src", "Main");
+            projectExplorer.projectViewTree().clickRow(0);
+            SharedSteps.waitForComponentByXpath(remoteRobot, 3, 200, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
+            projectExplorer.selectOpenedFile();
+            SharedSteps.waitForComponentByXpath(remoteRobot, 3, 200, byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG));
+            assertTrue(projectExplorer.projectViewTree().isPathSelected(
+                    projectExplorer.projectViewTree().getValueAtRow(0), "src", "Main"),
+                "The file 'Main' should be selected but is not."
+            );
+        }
     }
 
     @Test
@@ -151,11 +124,7 @@ class ProjectExplorerTest extends AbstractLibraryBaseTest {
 
     @Test
     void openSettingsPopupTest() {
-        try {
-            JPopupMenuFixture contextMenu = projectExplorer.openSettingsPopup();
-            assertTrue(contextMenu.hasText("Help"), "The Settings popup menu should be opened but is not.");
-        } catch (UITestException e) {
-            fail(e.getMessage());
-        }
+        JPopupMenuFixture contextMenu = projectExplorer.openSettingsPopup();
+        assertTrue(contextMenu.hasText("Help"), "The Settings popup menu should be opened but is not.");
     }
 }

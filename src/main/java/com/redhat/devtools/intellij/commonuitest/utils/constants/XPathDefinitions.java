@@ -20,7 +20,6 @@ import org.intellij.lang.annotations.Language;
  */
 public class XPathDefinitions {
     public static final String MAIN_IDE_WINDOW = "//div[@class='IdeFrameImpl']";
-    public static final String TOOL_WINDOWS_PANE = "//div[@class='ToolWindowsPane']";
     public static final String PROJECT_TOOL_WINDOW = "//div[@accessiblename='Project Tool Window']";
     public static final String BUILD_VIEW = "//div[@class='BuildView']";
     public static final String MAVEN_TOOL_WINDOW = "//div[@accessiblename='Maven Tool Window']";
@@ -31,10 +30,6 @@ public class XPathDefinitions {
     public static final String WINDOWS_MAIN_MENU_2024_1_AND_NEWER = "//div[@class='IdeJMenuBar']";
     @Language("XPath")
     public static final String WINDOWS_MAIN_MENU_2022_2_TO_2023_2 = "//div[@class='IdeMenuBar']";
-    @Language("XPath")
-    public static final String WINDOWS_MAIN_MENU_2020_3_TO_2022_1 = "//div[@class='MenuFrameHeader']";
-    @Language("XPath")
-    public static final String WINDOWS_MAIN_MENU_2020_2_AND_OLDER = "//div[@class='CustomHeaderMenuBar']";
     public static final String IDE_STATUS_BAR = "//div[@class='IdeStatusBarImpl']";
     @Language("XPath")
     public static final String INLINE_PROGRESS_PANEL = "//div[@class='InlineProgressPanel']";
@@ -52,8 +47,6 @@ public class XPathDefinitions {
     @Language("XPath")
     public static final String TIP_DIALOG_2 = "//div[@text='Tip of the Day']";
     @Language("XPath")
-    public static final String RECENT_PROJECTS = "//div[@accessiblename='Recent Projects']";
-    @Language("XPath")
     public static final String RECENT_PROJECT_PANEL_NEW = "//div[@class='NewRecentProjectPanel']";
     @Language("XPath")
     public static final String RECENT_PROJECT_PANEL_NEW_2 = "//div[@class='JBViewport']/*";
@@ -61,12 +54,6 @@ public class XPathDefinitions {
     public static final String IDE_ERROR_ICON = "//div[@class='IdeErrorsIcon']";
     @Language("XPath")
     public static final String BUILD_VIEW_EDITOR = "//div[@accessiblename='Editor']";
-    @Language("XPath")
-    public static final String JCOMBOBOX = "//div[@class='JComboBox']";
-    @Language("XPath")
-    public static final String MORE_SETTINGS_TITLED_SEPARATOR = "//div[@class='TitledSeparator']/../../*";
-    @Language("XPath")
-    public static final String ARTIFACTS_COORDINATES_DIALOG_PANEL = "//div[@class='DialogPanel']/*";
     @Language("XPath")
     public static final String HEAVY_WEIGHT_WINDOW = "//div[@class='HeavyWeightWindow']";
     @Language("XPath")
@@ -111,21 +98,11 @@ public class XPathDefinitions {
     public static final String JBLIST = "//div[@class='JBList']";
     @Language("XPath")
     public static final String DIALOG_PANEL = "//div[@class='DialogPanel']";
-    @Language("XPath")
-    public static final String MY_LIST = "//div[@class='MyList']";
     public static final String CODE_WITH_ME_JPANEL = "//div[@class='Wrapper'][.//div[@class='JBLabel']]//div[@class='JPanel']";
     @Language("XPath")
     public static final String BREAD_CRUMBS = "//div[@class='Breadcrumbs']";
     @Language("XPath")
-    public static final String EMPTY_PROJECT = "//div[@visible_text='Empty Project']";
-    @Language("XPath")
-    public static final String SINGLE_HEIGHT_LABEL = "//div[@class='SingleHeightLabel']";
-    @Language("XPath")
-    public static final String COLLAPSIBLE_TITLED_SEPARATOR = "//div[@class='CollapsibleTitledSeparator']";
-    @Language("XPath")
     public static final String COLLAPSIBLE_TITLED_SEPARATOR_NEW = "//div[@class='CollapsibleTitledSeparatorImpl']";
-    @Language("XPath")
-    public static final String COLLAPSIBLE_TITLED_SEPARATOR_SIBLINGS = COLLAPSIBLE_TITLED_SEPARATOR + "/../*";
     @Language("XPath")
     public static final String COLLAPSIBLE_TITLED_SEPARATOR_NEW_SIBLINGS = COLLAPSIBLE_TITLED_SEPARATOR_NEW + "/../*";
     @Language("XPath")
@@ -150,6 +127,13 @@ public class XPathDefinitions {
     public static final String GET_SET_MODULE_FILE_LOCATION = "//div[@accessiblename='Module file location:' and @class='ExtendableTextField']";
     @Language("XPath")
     public static final String CREATE_NEW_PROJECT = "//div[@defaulticon='createNewProjectTab.svg']"; // works for IntelliJ Idea 2024.1 and higher
+    @Language("XPath")
+    public static final String PROJECT_LABEL = "//div[@accessiblename='Main.java' and @class='EditorTabLabel']//div[@class='ActionPanel']";
+    public static final String TOOL_WINDOW_PANE = "//div[@class='ToolWindowPane']";
+    public static final String WINDOW_LEFT_TOOLBAR = "//div[@class='ToolWindowLeftToolbar']";
+    public static final String WINDOW_RIGHT_TOOLBAR = "//div[@class='ToolWindowRightToolbar']";
+    @Language("XPath")
+    public static final String TREE_FOR_20223 = "//div[@accessiblename='Welcome screen categories']";
 
     private XPathDefinitions() {
         throw new UITestException("Utility class with static methods.");
@@ -165,14 +149,6 @@ public class XPathDefinitions {
 
     public static String nonOpaquePanel(String label) {
         return "//div[@class='NonOpaquePanel'][./div[@text='" + label + "']]";
-    }
-
-    public static String editorTabLabel(String label) {
-        return "//div[@accessiblename='" + label + "' and @class='EditorTabLabel']";
-    }
-
-    public static String toolWindowSvg(String label) {
-        return "//div[@disabledicon='toolWindow" + label + ".svg']";
     }
 
     public static String toolWindowButton(String label) {

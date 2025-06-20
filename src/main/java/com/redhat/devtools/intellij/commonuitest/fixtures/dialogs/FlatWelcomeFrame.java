@@ -17,9 +17,7 @@ import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.ContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
-import com.intellij.remoterobot.fixtures.HeavyWeightWindowFixture;
 import com.intellij.remoterobot.fixtures.JButtonFixture;
-import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.intellij.remoterobot.utils.UtilsKt;
@@ -91,14 +89,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      * @param label label of the link to click on
      */
     public void clickOnLink(String label) {
-        // Code for IntelliJ IDEA 2020.3 or newer
-        if (ideaVersionInt >= 20203) {
-            welcomeFrameLink(label).click();
-        }
-        // Code for IntelliJ IDEA 2020.2 or earlier
-        else {
-            actionLink(label).click();
-        }
+        welcomeFrameLink(label).click();
     }
 
     /**
@@ -134,11 +125,11 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
     public void clearExceptions() {
         try {
             ideErrorsIcon().click();
-            find(IdeFatalErrorsDialog.class, Duration.ofSeconds(10)).clearAll();
+            find(IdeFatalErrorsDialog.class, Duration.ofSeconds(5)).clearAll();
         } catch (WaitForConditionTimeoutException e) {
             LOGGER.log(Level.INFO, "No fatal errors dialog found to clear.");
             try {
-                find(IdeFatalErrorsDialog.class, Duration.ofSeconds(10)).clearAll();
+                find(IdeFatalErrorsDialog.class, Duration.ofSeconds(5)).clearAll();
             } catch (Exception e2) {
                 LOGGER.log(Level.INFO, "Second attempt to clear fatal errors dialog also failed.");
             }
@@ -149,22 +140,18 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      * Open the 'Preferences' dialog
      */
     public void openSettingsDialog() {
-        if (ideaVersionInt <= 20202) {
-            clickOnLink("Configure");
-            HeavyWeightWindowFixture heavyWeightWindowFixture = find(HeavyWeightWindowFixture.class, Duration.ofSeconds(5));
-            heavyWeightWindowFixture.findText("Preferences").click();
-        } else if (ideaVersionInt <= 20212) {
-            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(XPathDefinitions.JBLIST));
-            jListFixture.clickItem("Customize", false);
-            remoteRobot.find(ContainerFixture.class, byXpath(XPathDefinitions.DIALOG_PANEL)).findText("All settings" + '\u2026').click();
-        } else {
-            JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
-            jTreeFixture.findText("Customize").click();
-            if (remoteRobot.isMac()) {
-                resizeWelcomeWindow();
-            }
-            remoteRobot.find(ContainerFixture.class, byXpath(XPathDefinitions.DIALOG_PANEL)).findText("All settings" + '\u2026').click();
+        JTreeFixture jTreeFixture;
+        try {
+            jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
+        } catch (WaitForConditionTimeoutException e) {
+            // workaround for 2022.3
+            jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE_FOR_20223));
         }
+        jTreeFixture.findText("Customize").click();
+        if (remoteRobot.isMac()) {
+            resizeWelcomeWindow();
+        }
+        remoteRobot.find(ContainerFixture.class, byXpath(XPathDefinitions.DIALOG_PANEL)).findText("All settings" + '\u2026').click();
     }
 
     /**
@@ -204,25 +191,10 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      * @return fixture for the 'Tip Of the Day' dialog
      */
     public TipDialog openTipDialog() {
-        if (ideaVersionInt >= 20211) {
-            FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(2));
-            if (ideaVersionInt >= 20223) {         //  COMMUNITY_V_2022_3 and higher version have different labels for Learn button
-                flatWelcomeFrame.findText(ButtonLabels.LEARN_LABEL).click();
-            } else {
-                flatWelcomeFrame.findText(ButtonLabels.LEARN_INTELLIJ_IDEA_LABEL).click();
-            }
-            SharedSteps.waitForComponentByXpath(remoteRobot, 2, 200, byXpath(XPathDefinitions.TIP_DIALOG_2));
-            flatWelcomeFrame.findText(TIP_OF_THE_DAY).click();
-        } else if (ideaVersionInt <= 20202) {
-            clickOnLink("Get Help");
-            HeavyWeightWindowFixture heavyWeightWindowFixture = find(HeavyWeightWindowFixture.class, Duration.ofSeconds(5));
-            heavyWeightWindowFixture.findText(TIP_OF_THE_DAY).click();
-        } else if (ideaVersionInt == 20203) {          // IJ 2020.3
-            actionLink("Help").click();
-            HeavyWeightWindowFixture heavyWeightWindowFixture = find(HeavyWeightWindowFixture.class, Duration.ofSeconds(5));
-            heavyWeightWindowFixture.findText(TIP_OF_THE_DAY).click();
-        }
-
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(2));
+        flatWelcomeFrame.findText(ButtonLabels.LEARN_LABEL).click();
+        SharedSteps.waitForComponentByXpath(remoteRobot, 2, 200, byXpath(XPathDefinitions.TIP_DIALOG_2));
+        flatWelcomeFrame.findText(TIP_OF_THE_DAY).click();
         return remoteRobot.find(TipDialog.class, Duration.ofSeconds(10));
     }
 
@@ -240,44 +212,25 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
     }
 
     /**
-     * Prevent the 'Tip of the Day' dialog from opening after project import
-     */
-    public void preventTipDialogFromOpening() {
-        TipDialog tipDialog = openTipDialog();
-        tipDialog.dontShowTipsCheckBox().setValue(true);
-        tipDialog.close();
-        switchToProjectsPage();
-    }
-
-    /**
      * Switch to the 'Projects' page of flat welcome frame
      */
     public void switchToProjectsPage() {
-        if (ideaVersionInt >= 20213) {
-            JTreeFixture jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
-            jTreeFixture.findText(PROJECTS_BUTTON).click();
-        } else if (ideaVersionInt >= 20203) {
-            JListFixture jListFixture = remoteRobot.find(JListFixture.class, byXpath(XPathDefinitions.JBLIST));
-            jListFixture.clickItem(PROJECTS_BUTTON, false);
+        JTreeFixture jTreeFixture;
+        try {
+            jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE));
+        } catch (WaitForConditionTimeoutException e) {
+            // workaround for 2022.3
+            jTreeFixture = remoteRobot.find(JTreeFixture.class, byXpath(XPathDefinitions.TREE_FOR_20223));
         }
+        jTreeFixture.findText(PROJECTS_BUTTON).click();
     }
 
     private int projectsCount() {
-        if (ideaVersionInt >= 20222) {
-            try {
-                JTreeFixture projects = remoteRobot.findAll(JTreeFixture.class, byXpath(XPathDefinitions.RECENT_PROJECT_PANEL_NEW_2)).get(0);
-                return projects.findAllText().size() / 2;
-            } catch (IndexOutOfBoundsException e) {
-                return 0;
-            }
-        } else {
-            try {
-                ContainerFixture projectWrapper = find(ContainerFixture.class, byXpath(XPathDefinitions.RECENT_PROJECT_PANEL_NEW));
-                JListFixture projectList = projectWrapper.find(JListFixture.class, byXpath(XPathDefinitions.MY_LIST));
-                return projectList.collectItems().size();
-            } catch (WaitForConditionTimeoutException e) {
-                return 0;
-            }
+        try {
+            JTreeFixture projects = remoteRobot.findAll(JTreeFixture.class, byXpath(XPathDefinitions.RECENT_PROJECT_PANEL_NEW_2)).get(0);
+            return projects.findAllText().size() / 2;
+        } catch (IndexOutOfBoundsException e) {
+            return 0;
         }
     }
 
@@ -293,16 +246,11 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
     }
 
     private ComponentFixture ideErrorsIcon() {
-        return find(ComponentFixture.class, byXpath(XPathDefinitions.IDE_ERROR_ICON), Duration.ofSeconds(10));
+        return find(ComponentFixture.class, byXpath(XPathDefinitions.IDE_ERROR_ICON), Duration.ofSeconds(5));
     }
 
     private void removeTopProjectFromRecentProjects() {
-        ComponentFixture recentProjects;
-        if (ideaVersionInt >= 20222) {
-            recentProjects = remoteRobot.findAll(JTreeFixture.class, byXpath(XPathDefinitions.RECENT_PROJECT_PANEL_NEW_2)).get(0);
-        } else {
-            recentProjects = jLists(byXpath(XPathDefinitions.RECENT_PROJECTS)).get(0);
-        }
+        ComponentFixture recentProjects = remoteRobot.findAll(JTreeFixture.class, byXpath(XPathDefinitions.RECENT_PROJECT_PANEL_NEW_2)).get(0);
 
         // Clicks on X on first recent project to remove it from the recent projects list (visible only when hovered over with cursor)
         recentProjects.runJs("const horizontal_offset = component.getWidth()-22;\n" +
@@ -311,16 +259,12 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
         if (ideaVersionInt >= 20231) {
             ComponentFixture removeDialog = remoteRobot.find(ComponentFixture.class, byXpath(XPathDefinitions.MY_DIALOG), Duration.ofSeconds(10));
             removeDialog.findText(ButtonLabels.REMOVE_FROM_LIST_LABEL).click();
-        } else if (ideaVersionInt >= 20203) {         // Code for IntelliJ Idea 2020.3 or newer
+        } else {
             List<JPopupMenuFixture> jPopupMenuFixtures = jPopupMenus(JPopupMenuFixture.Companion.byType());
             if (!jPopupMenuFixtures.isEmpty()) {
                 JPopupMenuFixture contextMenu = jPopupMenuFixtures.get(0);
-                if (ideaVersionInt >= 20222) {
-                    contextMenu.select("Remove from Recent Projects" + '\u2026');
-                    button(byXpath(XPathDefinitions.REMOVE_PROJECT_BUTTON)).click();
-                } else {
-                    contextMenu.select("Remove from Recent Projects");
-                }
+                contextMenu.select("Remove from Recent Projects" + '\u2026');
+                button(byXpath(XPathDefinitions.REMOVE_PROJECT_BUTTON)).click();
             }
         }
     }

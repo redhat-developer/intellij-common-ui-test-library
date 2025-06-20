@@ -11,18 +11,19 @@
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane;
 
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
-import com.redhat.devtools.intellij.commonuitest.UITestRunner;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.AbstractToolWinPane;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowsPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.MavenBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
+import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * ToolWindowsPane Maven test
@@ -31,11 +32,11 @@ import java.time.Duration;
  */
 class ToolWindowsPaneMavenTest extends AbstractLibraryBaseTest {
     private static final String PROJECT_NAME = "tool_windows_pane_java_maven_project";
-    private AbstractToolWinPane toolWinPane;
+    private ToolWindowPane toolWinPane;
 
     @BeforeAll
     static void prepareProject() {
-        CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, CreateCloseUtils.NewProjectType.MAVEN);
+        CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, NewProjectType.MAVEN);
     }
 
     @AfterAll
@@ -45,11 +46,7 @@ class ToolWindowsPaneMavenTest extends AbstractLibraryBaseTest {
 
     @BeforeEach
     void createToolWindowsPaneFixture() {
-        if (UITestRunner.getIdeaVersionInt() >= 20221) {
-            toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
-        } else {
-            toolWinPane = remoteRobot.find(ToolWindowsPane.class, Duration.ofSeconds(10));
-        }
+        toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
     }
 
     @Test
@@ -57,5 +54,7 @@ class ToolWindowsPaneMavenTest extends AbstractLibraryBaseTest {
         toolWinPane.openMavenBuildToolPane();
         MavenBuildToolPane mavenBuildToolPane = toolWinPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10));
         mavenBuildToolPane.buildProject("verify", PROJECT_NAME);
+        BuildView buildView = toolWinPane.find(BuildView.class, Duration.ofSeconds(10));
+        assertTrue(buildView.isBuildSuccessful(), "The build should be successful but is not.");
     }
 }

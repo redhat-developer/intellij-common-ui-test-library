@@ -10,8 +10,8 @@
  ******************************************************************************/
 package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.toolwindowspane.openclose;
 
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ProjectExplorer;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.GradleBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,29 +24,30 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Gradle Tool Windows Pane test
+ * Project Explorer Tool Windows Pane test
  *
  * @author zcervink@redhat.com
  */
-class GradlePaneTest extends AbstractToolWinPaneTest {
+class ProjectExplorerPaneTest extends AbstractToolWinPaneTest {
     @BeforeAll
     static void prepareProject() {
-        CreateCloseUtils.createNewProject(remoteRobot, GRADLE_PROJECT_NAME, NewProjectType.GRADLE);
+        CreateCloseUtils.createNewProject(remoteRobot, PLAIN_PROJECT_NAME, NewProjectType.PLAIN_JAVA);
         toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
     }
 
     @BeforeEach
     void preparePanes() {
-        if (toolWinPane.isPaneOpened(GradleBuildToolPane.class)) {
-            toolWinPane.closeGradleBuildToolPane();
+        if (toolWinPane.isPaneOpened(ProjectExplorer.class)) {
+            toolWinPane.closeProjectExplorer();
         }
     }
 
     @Test
-    void gradleBuildToolPaneOpenCloseTest() {
-        toolWinPane.openGradleBuildToolPane();
-        assertTrue(toolWinPane.isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be opened but is closed.");
-        toolWinPane.closeGradleBuildToolPane();
-        assertFalse(toolWinPane.isPaneOpened(GradleBuildToolPane.class), "The 'Gradle Build Tool Pane' should be closed but is opened.");
+    void projectExplorerPaneOpenCloseTest() {
+        toolWinPane.openProjectExplorer();
+        assertTrue(toolWinPane.isPaneOpened(ProjectExplorer.class), "The 'Project Explorer' should be opened but is closed.");
+        toolWinPane.closeProjectExplorer();
+        assertFalse(toolWinPane.isPaneOpened(ProjectExplorer.class), "The 'Project Explorer' should be closed but is opened.");
     }
+
 }
