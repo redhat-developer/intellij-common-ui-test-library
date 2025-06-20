@@ -212,6 +212,16 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
     }
 
     /**
+     * Prevent the 'Tip of the Day' dialog from opening after project import
+     */
+    public void preventTipDialogFromOpening() {
+        TipDialog tipDialog = openTipDialog();
+        tipDialog.dontShowTipsCheckBox().setValue(true);
+        tipDialog.close();
+        switchToProjectsPage();
+    }
+
+    /**
      * Switch to the 'Projects' page of flat welcome frame
      */
     public void switchToProjectsPage() {
