@@ -3,38 +3,38 @@
   <groupId>com.redhat.devtools.intellij</groupId>
   <artifactId>intellij-common-ui-test-library</artifactId>
   <versioning>
-    <lastUpdated>20250607071704</lastUpdated>
+    <lastUpdated>20250620142921</lastUpdated>
     <snapshot>
-      <timestamp>20250607.071704</timestamp>
-      <buildNumber>4</buildNumber>
+      <timestamp>20250620.142921</timestamp>
+      <buildNumber>5</buildNumber>
     </snapshot>
     <snapshotVersions>
       <snapshotVersion>
         <extension>pom</extension>
-        <value>0.4.5-20250607.071704-4</value>
-        <updated>20250607071704</updated>
+        <value>0.4.5-20250620.142921-5</value>
+        <updated>20250620142921</updated>
       </snapshotVersion>
       <snapshotVersion>
         <extension>jar</extension>
-        <value>0.4.5-20250607.071704-4</value>
-        <updated>20250607071704</updated>
-      </snapshotVersion>
-      <snapshotVersion>
-        <extension>module</extension>
-        <value>0.4.5-20250607.071704-4</value>
-        <updated>20250607071704</updated>
-      </snapshotVersion>
-      <snapshotVersion>
-        <classifier>sources</classifier>
-        <extension>jar</extension>
-        <value>0.4.5-20250607.071704-4</value>
-        <updated>20250607071704</updated>
+        <value>0.4.5-20250620.142921-5</value>
+        <updated>20250620142921</updated>
       </snapshotVersion>
       <snapshotVersion>
         <classifier>javadoc</classifier>
         <extension>jar</extension>
-        <value>0.4.5-20250607.071704-4</value>
-        <updated>20250607071704</updated>
+        <value>0.4.5-20250620.142921-5</value>
+        <updated>20250620142921</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>module</extension>
+        <value>0.4.5-20250620.142921-5</value>
+        <updated>20250620142921</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <classifier>sources</classifier>
+        <extension>jar</extension>
+        <value>0.4.5-20250620.142921-5</value>
+        <updated>20250620142921</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
