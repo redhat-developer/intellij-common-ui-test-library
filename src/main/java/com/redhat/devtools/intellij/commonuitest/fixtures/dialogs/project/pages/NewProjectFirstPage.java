@@ -155,7 +155,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
             }
 
             projectJdkComboBox.click();
-            boolean popupOpenedPermanently = false;
+            /*boolean popupOpenedPermanently = false;
             try {
                 waitFor(Duration.ofSeconds(10), Duration.ofMillis(250), "HeavyWeightWindow still visible.", this::noHeavyWeightWindowVisible);
             } catch (WaitForConditionTimeoutException e) {
@@ -163,7 +163,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
             }
             if (!popupOpenedPermanently) {
                 projectJdkComboBox.click();
-            }
+            }*/
 
             CommonContainerFixture parentFixture = waitFor(Duration.ofSeconds(20), Duration.ofSeconds(2), "Wait for the 'Project SDK' list to finish loading all items.", "The project JDK list did not load all items in 20 seconds.", this::didProjectSdkListLoadAllItems);
             JPopupMenuFixture projectSdkList = parentFixture.jPopupMenus(byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW)).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
@@ -178,13 +178,13 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
                 projectSdkList.jList().clickItem(label, true);
                 // wait for 'resolving JDK' progressmonitor to end
                 // TODO for now don't know what kind of dialog is the 'resolving' so just pausing thread
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    ScreenshotUtils.takeScreenshot(remoteRobot, "interrupted while waiting for " + targetSdkName);
-                    /* Clean up whatever needs to be handled before interrupting  */
-                    Thread.currentThread().interrupt();
-                }
+                //try {
+                //    Thread.sleep(5000);
+                //} catch (InterruptedException e) {
+                //    ScreenshotUtils.takeScreenshot(remoteRobot, "interrupted while waiting for " + targetSdkName);
+                //    /* Clean up whatever needs to be handled before interrupting  */
+                //    Thread.currentThread().interrupt();
+                //}
             } else {
                 ScreenshotUtils.takeScreenshot(remoteRobot, "No SDK found starting with " + targetSdkName);
             }

@@ -31,7 +31,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  * @author zcervink@redhat.com
  */
 @DefaultXpath(by = "ToolWindowsPane type", xpath = XPathDefinitions.GRADLE_TOOL_WINDOW)
-@FixtureName(name = "Tool Windows Pane")
+@FixtureName(name = "Gradle Tool Window Pane")
 public class GradleBuildToolPane extends AbstractBuildToolPane {
 
     public GradleBuildToolPane(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
