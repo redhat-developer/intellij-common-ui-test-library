@@ -33,7 +33,7 @@ import static com.intellij.remoterobot.search.locators.Locators.byXpath;
  * @author zcervink@redhat.com
  */
 @DefaultXpath(by = "ToolWindowsPane type", xpath = XPathDefinitions.PROJECT_TOOL_WINDOW)
-@FixtureName(name = "Tool Windows Pane")
+@FixtureName(name = "Project Explorer Pane")
 public class ProjectExplorer extends CommonContainerFixture {
     private final RemoteRobot remoteRobot;
     private final int ideaVersionInt = UITestRunner.getIdeaVersionInt();

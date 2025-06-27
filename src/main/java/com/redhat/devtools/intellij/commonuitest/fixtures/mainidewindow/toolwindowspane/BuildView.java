@@ -32,7 +32,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  * @author zcervink@redhat.com
  */
 @DefaultXpath(by = "ToolWindowsPane type", xpath = XPathDefinitions.BUILD_VIEW)
-@FixtureName(name = "Tool Windows Pane")
+@FixtureName(name = "Build View Pane")
 public class BuildView extends CommonContainerFixture {
     private String lastBuildStatusTreeText;
 

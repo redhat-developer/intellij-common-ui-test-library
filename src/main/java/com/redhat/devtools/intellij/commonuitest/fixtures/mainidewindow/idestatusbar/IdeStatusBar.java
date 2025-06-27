@@ -57,7 +57,7 @@ public class IdeStatusBar extends CommonContainerFixture {
     }
 
     /**
-     * Wait until all the background tasks finish
+     * Wait for 5 minutes until all the background tasks finish
      */
     public void waitUntilAllBgTasksFinish() {
         waitUntilAllBgTasksFinish(300);
@@ -80,7 +80,9 @@ public class IdeStatusBar extends CommonContainerFixture {
     }
 
     private boolean didAllBgTasksFinish() {
-        waitFor(Duration.ofSeconds(5), Duration.ofMillis(500), () -> remoteRobot.find(IdeStatusBar.class).isShowing());
-        return remoteRobot.find(IdeStatusBar.class).inlineProgressPanel().findAllText().isEmpty();
+        if (remoteRobot.find(IdeStatusBar.class).isShowing()) {
+            return remoteRobot.find(IdeStatusBar.class).inlineProgressPanel().findAllText().isEmpty();
+        }
+        return false;
     }
 }
