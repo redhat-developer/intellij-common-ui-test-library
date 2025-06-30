@@ -33,7 +33,7 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
  * @author zcervink@redhat.com
  */
 @DefaultXpath(by = "ToolWindowsPane type", xpath = XPathDefinitions.MAVEN_TOOL_WINDOW)
-@FixtureName(name = "Tool Windows Pane")
+@FixtureName(name = "Maven Tool Window Pane")
 public class MavenBuildToolPane extends AbstractBuildToolPane {
 
     public MavenBuildToolPane(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
