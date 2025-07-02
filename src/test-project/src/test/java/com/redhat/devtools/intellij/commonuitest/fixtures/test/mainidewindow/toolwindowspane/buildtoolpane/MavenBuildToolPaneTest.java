@@ -51,8 +51,9 @@ class MavenBuildToolPaneTest extends AbstractLibraryBaseTest {
     @Test
     void buildProject() {
         mavenBuildToolPane.buildProject("verify", PROJECT_NAME);
-        boolean isBuildSuccessful = toolWinPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
-        assertTrue(isBuildSuccessful, "The build should be successful but is not.");
+        BuildView buildView = toolWinPane.find(BuildView.class, Duration.ofSeconds(5));
+        buildView.waitUntilBuildHasFinished();
+        assertTrue(buildView.isBuildSuccessful(), "The build should be successful but is not.");
     }
 
     @Test

@@ -16,7 +16,6 @@ import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
-import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,11 +32,9 @@ import static com.intellij.remoterobot.utils.RepeatUtilsKt.waitFor;
 @DefaultXpath(by = "IdeStatusBarImpl type", xpath = XPathDefinitions.IDE_STATUS_BAR)
 @FixtureName(name = "Ide Status Bar")
 public class IdeStatusBar extends CommonContainerFixture {
-    private final RemoteRobot remoteRobot;
 
     public IdeStatusBar(@NotNull RemoteRobot remoteRobot, @NotNull RemoteComponent remoteComponent) {
         super(remoteRobot, remoteComponent);
-        this.remoteRobot = remoteRobot;
     }
 
     /**
@@ -47,13 +44,6 @@ public class IdeStatusBar extends CommonContainerFixture {
      */
     public ComponentFixture inlineProgressPanel() {
         return find(ComponentFixture.class, byXpath(XPathDefinitions.INLINE_PROGRESS_PANEL), Duration.ofSeconds(5));
-    }
-
-    /**
-     * Wait until the project has finished the import
-     */
-    public void waitUntilProjectImportIsComplete() {
-        waitFor(Duration.ofSeconds(300), Duration.ofSeconds(5), "The project import did not finish in 5 minutes.", this::didProjectImportFinish);
     }
 
     /**
@@ -70,18 +60,9 @@ public class IdeStatusBar extends CommonContainerFixture {
         waitFor(Duration.ofSeconds(timeout), Duration.ofSeconds(10), "the background tasks to finish in " + timeout + " seconds.", this::didAllBgTasksFinish);
     }
 
-    private boolean didProjectImportFinish() {
-        try {
-            find(ComponentFixture.class, byXpath(XPathDefinitions.ENGRAVED_LABEL), Duration.ofSeconds(10));
-        } catch (WaitForConditionTimeoutException e) {
-            return true;
-        }
-        return false;
-    }
-
     private boolean didAllBgTasksFinish() {
-        if (remoteRobot.find(IdeStatusBar.class).isShowing()) {
-            return remoteRobot.find(IdeStatusBar.class).inlineProgressPanel().findAllText().isEmpty();
+        if (isShowing()) {
+            return inlineProgressPanel().findAllText().isEmpty();
         }
         return false;
     }

@@ -50,10 +50,9 @@ class CodeWithMeDialogTest extends AbstractLibraryBaseTest {
 
         newProjectDialogWizard.finish();
         IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
-        ideStatusBar.waitUntilProjectImportIsComplete();
+        ideStatusBar.waitUntilAllBgTasksFinish();
         MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
         mainIdeWindow.maximizeIdeWindow();
-        ideStatusBar.waitUntilAllBgTasksFinish();
     }
 
 

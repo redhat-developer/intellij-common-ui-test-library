@@ -70,9 +70,8 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
         if (mainIdeWindow != null) {
             // tests ending with opened Main Ide Window needs to close the project and clear workspace
             IdeStatusBar ideStatusBar = mainIdeWindow.find(IdeStatusBar.class, Duration.ofSeconds(10));
-            ideStatusBar.waitUntilProjectImportIsComplete();
-            mainIdeWindow.maximizeIdeWindow();
             ideStatusBar.waitUntilAllBgTasksFinish();
+            mainIdeWindow.maximizeIdeWindow();
             mainIdeWindow.closeProject();
             remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).clearWorkspace();
             mainIdeWindow = null;

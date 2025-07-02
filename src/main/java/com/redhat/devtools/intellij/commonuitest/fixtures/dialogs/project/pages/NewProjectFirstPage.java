@@ -16,7 +16,6 @@ import com.intellij.remoterobot.fixtures.ComboBoxFixture;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
-import com.intellij.remoterobot.fixtures.HeavyWeightWindowFixture;
 import com.intellij.remoterobot.fixtures.JLabelFixture;
 import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
@@ -184,7 +183,4 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
         });
     }
 
-    private boolean noHeavyWeightWindowVisible() {
-        return remoteRobot.findAll(HeavyWeightWindowFixture.class).isEmpty();
-    }
 }

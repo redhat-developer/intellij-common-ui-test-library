@@ -13,7 +13,7 @@ package com.redhat.devtools.intellij.commonuitest.fixtures.test.mainidewindow.to
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.MavenBuildToolPane;
+import com.redhat.devtools.intellij.commonuitest.utils.build.BuildUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import org.junit.jupiter.api.AfterAll;
@@ -45,11 +45,8 @@ class BuildViewTest extends AbstractLibraryBaseTest {
     }
 
     @Test
-    void waitForSuccessfulBuildTest() {
-        toolWinPane.openMavenBuildToolPane();
-        MavenBuildToolPane mavenPane = toolWinPane.find(MavenBuildToolPane.class, Duration.ofSeconds(5));
-        assertTrue(mavenPane.isShowing(), "The maven pane should be opened but is not.");
-        mavenPane.buildProject("verify", PROJECT_NAME);
+    void waitForSuccessfulMavenBuildTest() {
+        BuildUtils.buildMavenProjectAndWaitForFinish(remoteRobot, PROJECT_NAME, "verify");
         BuildView buildView = toolWinPane.find(BuildView.class, Duration.ofSeconds(10));
         assertTrue(buildView.isBuildSuccessful(), "The build should be successful but is not.");
     }
