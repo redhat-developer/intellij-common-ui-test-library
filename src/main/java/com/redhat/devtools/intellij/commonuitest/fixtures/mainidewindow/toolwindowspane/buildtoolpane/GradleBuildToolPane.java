@@ -55,7 +55,7 @@ public class GradleBuildToolPane extends AbstractBuildToolPane {
         } else {
             actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL_IDE), Duration.ofSeconds(2)).click();
         }
-        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "the Gradle tree to expand.", this::isTreeExpanded);
+        waitFor(Duration.ofSeconds(60), Duration.ofSeconds(2), "the Gradle tree to expand.", this::isTreeExpanded);
     }
 
     private Boolean isTreeExpanded() {
