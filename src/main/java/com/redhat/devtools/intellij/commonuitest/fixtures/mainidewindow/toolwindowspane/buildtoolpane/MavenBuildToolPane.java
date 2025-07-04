@@ -15,9 +15,6 @@ import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.utils.Keyboard;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
@@ -74,12 +71,9 @@ public class MavenBuildToolPane extends AbstractBuildToolPane {
      */
     public void buildProject(String goal, String projectName) {
         waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "the Maven tree to appear.", this::isTreeVisible);
-
         // below workaround due to https://github.com/JetBrains/intellij-ui-test-robot/issues/459
         expandAll();
         getBuildTree().doubleClickPath(new String[]{projectName, "Lifecycle", goal}, true);
-        remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(2)).find(BuildView.class, Duration.ofSeconds(5)).waitUntilBuildHasFinished();
-        remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(30)).waitUntilAllBgTasksFinish();
     }
 
 }

@@ -49,9 +49,10 @@ class GradleBuildToolPaneTest extends AbstractLibraryBaseTest {
 
     @Test
     void buildProject() {
-        gradleBuildToolPane.buildProject();
-        boolean isBuildSuccessful = toolWinPane.find(BuildView.class, Duration.ofSeconds(10)).isBuildSuccessful();
-        assertTrue(isBuildSuccessful, "The build should be successful but is not.");
+        gradleBuildToolPane.buildProject("build");
+        BuildView buildView = toolWinPane.find(BuildView.class, Duration.ofSeconds(10));
+        buildView.waitUntilBuildHasFinished();
+        assertTrue(buildView.isBuildSuccessful(), "The build should be successful but is not.");
     }
 
     @Test

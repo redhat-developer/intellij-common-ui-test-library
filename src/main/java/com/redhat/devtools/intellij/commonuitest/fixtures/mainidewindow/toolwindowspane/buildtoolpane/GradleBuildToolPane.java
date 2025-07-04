@@ -14,9 +14,6 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
@@ -60,14 +57,34 @@ public class GradleBuildToolPane extends AbstractBuildToolPane {
         }
     }
 
-    /**
-     * Build the project
-     */
-    public void buildProject() {
-        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "the Gradle tree to appear in 30 seconds.", this::isTreeVisible);
-        expandAll();
-        getBuildTree().doubleClickPath(new String[]{"Tasks", "build", "build"}, true);
-        remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(2)).find(BuildView.class, Duration.ofSeconds(5)).waitUntilBuildHasFinished();
-        remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(30)).waitUntilAllBgTasksFinish();
+    private Boolean isTreeExpanded() {
+        int rows = getBuildTree().collectRows().size();
+        if (rows == 1) {
+            expandAll();
+            return false;
+        }
+        return rows > 1;
     }
+
+    /**
+     * @param goal name of the build tasks you want to invoke (assemble, build, classes, clean, jar...)
+     */
+    public void buildProject(String goal) {
+        runGradleTask("build", goal);
+    }
+
+    /**
+     * @param goal name of the verification tasks you want to invoke (check, test...)
+     */
+    public void verifyProject(String goal) {
+        runGradleTask("verification", goal);
+    }
+
+    private void runGradleTask(String subTask, String goal) {
+        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(1), "the Gradle tree to appear.", this::isTreeVisible);
+        expandAll();
+        waitFor(Duration.ofSeconds(60), Duration.ofSeconds(1), "the Gradle tree to expand.", this::isTreeExpanded);
+        getBuildTree().doubleClickPath(new String[]{"Tasks", subTask, goal}, true);
+    }
+
 }
