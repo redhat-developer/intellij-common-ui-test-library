@@ -55,30 +55,35 @@ public class GradleBuildToolPane extends AbstractBuildToolPane {
         } else {
             actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL_IDE), Duration.ofSeconds(2)).click();
         }
-        waitFor(Duration.ofSeconds(60), Duration.ofSeconds(2), "the Gradle tree to expand.", this::isTreeExpanded);
     }
 
     private Boolean isTreeExpanded() {
-        return getBuildTree().collectRows().size() > 1;
+        int rows = getBuildTree().collectRows().size();
+        if (rows == 1) {
+            expandAll();
+            return false;
+        }
+        return rows > 1;
     }
 
     /**
-     * @param goal name of the build goal you want to invoke (assemble, build, classes, clean, jar...)
+     * @param goal name of the build tasks you want to invoke (assemble, build, classes, clean, jar...)
      */
     public void buildProject(String goal) {
         runGradleTask("build", goal);
     }
 
     /**
-     * @param goal name of the verification goal you want to invoke (check, test...)
+     * @param goal name of the verification tasks you want to invoke (check, test...)
      */
     public void verifyProject(String goal) {
         runGradleTask("verification", goal);
     }
 
     private void runGradleTask(String subTask, String goal) {
-        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "the Gradle tree to appear in 30 seconds.", this::isTreeVisible);
+        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(1), "the Gradle tree to appear.", this::isTreeVisible);
         expandAll();
+        waitFor(Duration.ofSeconds(60), Duration.ofSeconds(1), "the Gradle tree to expand.", this::isTreeExpanded);
         getBuildTree().doubleClickPath(new String[]{"Tasks", subTask, goal}, true);
     }
 
