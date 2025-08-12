@@ -20,14 +20,14 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
       - name: Download reports
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: reports
           pattern: sonar-coverage
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{github.event.workflow_run.id}}
       - name: Download PrInfo
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           pattern: prInfo
           github-token: ${{ secrets.GITHUB_TOKEN }}
