@@ -20,7 +20,7 @@ jobs:
     steps:
       # Check out current repository
       - name: Fetch Sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # Set up Java environment for the next steps
       - name: Setup Java
@@ -63,7 +63,7 @@ jobs:
 
       # Publish to Maven repo
       - name: Checkout Maven Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: repository
           path: build/repository

@@ -34,7 +34,7 @@ jobs:
     if: github.event_name == 'pull_request'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -97,7 +97,7 @@ jobs:
   run_on_windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -131,7 +131,7 @@ jobs:
   run_on_macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
