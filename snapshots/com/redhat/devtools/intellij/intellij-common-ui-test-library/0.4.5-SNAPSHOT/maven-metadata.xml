@@ -3,38 +3,38 @@
   <groupId>com.redhat.devtools.intellij</groupId>
   <artifactId>intellij-common-ui-test-library</artifactId>
   <versioning>
-    <lastUpdated>20250704101359</lastUpdated>
+    <lastUpdated>20250830071640</lastUpdated>
     <snapshot>
-      <timestamp>20250704.101359</timestamp>
-      <buildNumber>8</buildNumber>
+      <timestamp>20250830.071640</timestamp>
+      <buildNumber>9</buildNumber>
     </snapshot>
     <snapshotVersions>
       <snapshotVersion>
-        <classifier>sources</classifier>
-        <extension>jar</extension>
-        <value>0.4.5-20250704.101359-8</value>
-        <updated>20250704101359</updated>
+        <extension>module</extension>
+        <value>0.4.5-20250830.071640-9</value>
+        <updated>20250830071640</updated>
       </snapshotVersion>
       <snapshotVersion>
         <classifier>javadoc</classifier>
         <extension>jar</extension>
-        <value>0.4.5-20250704.101359-8</value>
-        <updated>20250704101359</updated>
+        <value>0.4.5-20250830.071640-9</value>
+        <updated>20250830071640</updated>
       </snapshotVersion>
       <snapshotVersion>
-        <extension>pom</extension>
-        <value>0.4.5-20250704.101359-8</value>
-        <updated>20250704101359</updated>
+        <classifier>sources</classifier>
+        <extension>jar</extension>
+        <value>0.4.5-20250830.071640-9</value>
+        <updated>20250830071640</updated>
       </snapshotVersion>
       <snapshotVersion>
         <extension>jar</extension>
-        <value>0.4.5-20250704.101359-8</value>
-        <updated>20250704101359</updated>
+        <value>0.4.5-20250830.071640-9</value>
+        <updated>20250830071640</updated>
       </snapshotVersion>
       <snapshotVersion>
-        <extension>module</extension>
-        <value>0.4.5-20250704.101359-8</value>
-        <updated>20250704101359</updated>
+        <extension>pom</extension>
+        <value>0.4.5-20250830.071640-9</value>
+        <updated>20250830071640</updated>
       </snapshotVersion>
     </snapshotVersions>
   </versioning>
