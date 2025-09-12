@@ -1,0 +1,153 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.redhat.devtools.intellij",
+    "module": "intellij-common-ui-test-library",
+    "version": "0.4.5",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.junit.jupiter",
+          "module": "junit-jupiter-api",
+          "version": {
+            "requires": "5.12.2"
+          }
+        },
+        {
+          "group": "com.intellij.remoterobot",
+          "module": "remote-robot",
+          "version": {
+            "requires": "0.11.23"
+          }
+        },
+        {
+          "group": "com.intellij.remoterobot",
+          "module": "remote-fixtures",
+          "version": {
+            "requires": "0.11.23"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "intellij-common-ui-test-library-0.4.5.jar",
+          "url": "intellij-common-ui-test-library-0.4.5.jar",
+          "size": 87974,
+          "sha512": "482ae80b3836f02d101f61960178093862de2172b43ad9339d03b2fa61a07d6d8e32fc6f8a5b20cffbb29124272b4b033346d7bb25407398473a13bb385960a7",
+          "sha256": "e182caa093244e2cda427120a3aa4d4633f56610f2e3c63f2f55ef7faa6aa11b",
+          "sha1": "8b1b7408bc27a61f5d0ad7e43b96f86107a24577",
+          "md5": "1c2be3ba35266b98e098483417de69bb"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-reflect",
+          "version": {
+            "requires": "2.1.0"
+          }
+        },
+        {
+          "group": "org.junit.jupiter",
+          "module": "junit-jupiter-api",
+          "version": {
+            "requires": "5.12.2"
+          }
+        },
+        {
+          "group": "com.intellij.remoterobot",
+          "module": "remote-robot",
+          "version": {
+            "requires": "0.11.23"
+          }
+        },
+        {
+          "group": "com.intellij.remoterobot",
+          "module": "remote-fixtures",
+          "version": {
+            "requires": "0.11.23"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "intellij-common-ui-test-library-0.4.5.jar",
+          "url": "intellij-common-ui-test-library-0.4.5.jar",
+          "size": 87974,
+          "sha512": "482ae80b3836f02d101f61960178093862de2172b43ad9339d03b2fa61a07d6d8e32fc6f8a5b20cffbb29124272b4b033346d7bb25407398473a13bb385960a7",
+          "sha256": "e182caa093244e2cda427120a3aa4d4633f56610f2e3c63f2f55ef7faa6aa11b",
+          "sha1": "8b1b7408bc27a61f5d0ad7e43b96f86107a24577",
+          "md5": "1c2be3ba35266b98e098483417de69bb"
+        }
+      ]
+    },
+    {
+      "name": "sourcesElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "sources",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "intellij-common-ui-test-library-0.4.5-sources.jar",
+          "url": "intellij-common-ui-test-library-0.4.5-sources.jar",
+          "size": 65901,
+          "sha512": "0a54f374f3538735fb1a31db13a7e0d42ddbf47610f26e7cef1878dbdd9f90a4809fa33bd9a5e19662f54aae1e2082095db5919b7cb74ffd8234e970b447e61b",
+          "sha256": "55d269d69ae76b715255b157c697a5d52f10090f2b01028b4eb8b12542e9dc00",
+          "sha1": "61bcb960b06ce615410c9a1637b9fffd202d1e2a",
+          "md5": "7befee555dc962da6bfcbb0b824edf64"
+        }
+      ]
+    },
+    {
+      "name": "javadocElements",
+      "attributes": {
+        "org.gradle.category": "documentation",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.docstype": "javadoc",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "intellij-common-ui-test-library-0.4.5-javadoc.jar",
+          "url": "intellij-common-ui-test-library-0.4.5-javadoc.jar",
+          "size": 307729,
+          "sha512": "f3d1b1f8e826b619e85a0d453c27b1582eed37ba6976b89c0a5363a93e5451e9f76323f26acf951dae2f1659ab01098c514e776a6dd1006c047c6ce8175a60fe",
+          "sha256": "41d39e5453391dc67fd447be3409a836724e501b00c5f93788c7b9ca949169d7",
+          "sha1": "3827cf1c18fc1d83e795d36fd1f889b7454ba897",
+          "md5": "b1b1541641170ca1bec39d91fa50eb6d"
+        }
+      ]
+    }
+  ]
+}
