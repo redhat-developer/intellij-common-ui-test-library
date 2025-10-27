@@ -5,7 +5,7 @@ kotlin = "2.1.0"
 junit-jupiter = "5.12.2"
 
 # plugins
-sonarqube = "5.1.0.4882"
+sonarqube = "7.0.1.6134"
 
 [libraries]
 kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
