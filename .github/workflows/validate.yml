@@ -20,7 +20,8 @@ jobs:
           - 2024.3
           - 2025.1
           - 2025.2
-          # - 2025.3 is the current one
+          - 2025.3
+          # - 2025.4 is the current one
 
     steps:
       - uses: actions/checkout@v4
