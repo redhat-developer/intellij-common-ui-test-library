@@ -129,7 +129,8 @@ jobs:
         if: always()
 
   run_on_macos:
-    runs-on: macos-latest
+    # Using macOS-14 instead of macos-latest due to compatibility issues (#402)
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
