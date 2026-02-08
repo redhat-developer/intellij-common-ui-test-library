@@ -14,6 +14,7 @@ import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.GradleBuildToolPane;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import org.junit.jupiter.api.AfterAll;
@@ -46,15 +47,15 @@ class ToolWindowsPaneGradleTest extends AbstractLibraryBaseTest {
 
     @BeforeEach
     void createToolWindowsPaneFixture() {
-        toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
+        toolWinPane = remoteRobot.find(ToolWindowPane.class, UITestTimeouts.FIXTURE_TIMEOUT);
     }
 
     @Test
     void gradleTest() {
         toolWinPane.openGradleBuildToolPane();
-        GradleBuildToolPane gradleBuildToolPane = toolWinPane.find(GradleBuildToolPane.class, Duration.ofSeconds(10));
+        GradleBuildToolPane gradleBuildToolPane = toolWinPane.find(GradleBuildToolPane.class, UITestTimeouts.FIXTURE_TIMEOUT);
         gradleBuildToolPane.buildProject("build");
-        BuildView buildView = toolWinPane.find(BuildView.class, Duration.ofSeconds(10));
+        BuildView buildView = toolWinPane.find(BuildView.class, UITestTimeouts.FIXTURE_TIMEOUT);
         buildView.waitUntilBuildHasFinished();
         assertTrue(buildView.isBuildSuccessful(), "The build should be successful but is not.");
     }

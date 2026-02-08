@@ -14,6 +14,7 @@ import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.SettingsDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.pages.NotificationsPage;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -38,11 +39,11 @@ class NotificationsPageTest extends AbstractLibraryBaseTest {
 
     @BeforeAll
     static void openSettingsDialog() {
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, UITestTimeouts.FIXTURE_TIMEOUT);
         flatWelcomeFrame.openSettingsDialog();
-        settingsDialog = remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5));
+        settingsDialog = remoteRobot.find(SettingsDialog.class, UITestTimeouts.SHORT_TIMEOUT);
         settingsDialog.navigateTo("Appearance & Behavior", "Notifications");
-        notificationsPage = remoteRobot.find(NotificationsPage.class, Duration.ofSeconds(5));
+        notificationsPage = remoteRobot.find(NotificationsPage.class, UITestTimeouts.SHORT_TIMEOUT);
     }
 
     @AfterAll

@@ -17,6 +17,7 @@ import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.intellij.remoterobot.fixtures.TextEditorFixture;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +45,7 @@ public class BuildView extends CommonContainerFixture {
      * Wait until build has finished
      */
     public void waitUntilBuildHasFinished() {
-        waitFor(Duration.ofSeconds(300), Duration.ofSeconds(3), "The build did not finish in 5 minutes.", this::didBuildStatusTreeTextStopChanging);
+        waitFor(UITestTimeouts.BUILD_TIMEOUT, UITestTimeouts.POLL_INTERVAL, "The build did not finish in 5 minutes.", this::didBuildStatusTreeTextStopChanging);
     }
 
     /**
@@ -72,7 +73,7 @@ public class BuildView extends CommonContainerFixture {
      * @return build console fixture
      */
     public TextEditorFixture buildConsole() {
-        return textEditor(byXpath(XPathDefinitions.BUILD_VIEW_EDITOR), Duration.ofSeconds(2));
+        return textEditor(byXpath(XPathDefinitions.BUILD_VIEW_EDITOR), UITestTimeouts.QUICK_TIMEOUT);
     }
 
     private boolean didBuildStatusTreeTextStopChanging() {

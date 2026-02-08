@@ -15,6 +15,7 @@ import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.TipDialog;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +49,7 @@ class TipDialogTest extends AbstractLibraryBaseTest {
 
     @Test
     void closeButtonTest() {
-        remoteRobot.find(TipDialog.class, Duration.ofSeconds(5));
+        remoteRobot.find(TipDialog.class, UITestTimeouts.SHORT_TIMEOUT);
         tipDialog.close();
         try {
             remoteRobot.find(TipDialog.class);

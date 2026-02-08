@@ -20,6 +20,7 @@ import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
@@ -76,7 +77,7 @@ public class ProjectExplorer extends CommonContainerFixture {
         projectViewTree().expand(path);
         projectViewTree().rightClickPath(path, true);
         try {
-            return remoteRobot.find(JPopupMenuFixture.class, byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW), Duration.ofSeconds(10));
+            return remoteRobot.find(JPopupMenuFixture.class, byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW), UITestTimeouts.FIXTURE_TIMEOUT);
         } catch (WaitForConditionTimeoutException e) {
             throw new UITestException("The context menu for a file in Project Explorer has not been found.");
         }
@@ -89,9 +90,9 @@ public class ProjectExplorer extends CommonContainerFixture {
      */
     public JPopupMenuFixture openViewsPopup() {
         projectViewTree().moveMouse();
-        actionButton(byXpath(XPathDefinitions.CONTENT_COMBO_LABEL), Duration.ofSeconds(5)).click();
+        actionButton(byXpath(XPathDefinitions.CONTENT_COMBO_LABEL), UITestTimeouts.SHORT_TIMEOUT).click();
         try {
-            return remoteRobot.find(JPopupMenuFixture.class, byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW), Duration.ofSeconds(10));
+            return remoteRobot.find(JPopupMenuFixture.class, byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW), UITestTimeouts.FIXTURE_TIMEOUT);
         } catch (WaitForConditionTimeoutException e) {
             throw new UITestException(e.getMessage());
         }
@@ -102,7 +103,7 @@ public class ProjectExplorer extends CommonContainerFixture {
      */
     public void selectOpenedFile() {
         projectViewTree().moveMouse();
-        actionButton(byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG), Duration.ofSeconds(5)).click();
+        actionButton(byXpath(XPathDefinitions.MY_ICON_LOCATE_SVG), UITestTimeouts.SHORT_TIMEOUT).click();
     }
 
     /**
@@ -111,9 +112,9 @@ public class ProjectExplorer extends CommonContainerFixture {
     public void expandAll() {
         projectViewTree().moveMouse();
         if (ideaVersionInt >= 20242) {
-            actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL_2024_2), Duration.ofSeconds(5)).click();
+            actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL_2024_2), UITestTimeouts.SHORT_TIMEOUT).click();
         } else {
-            actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL), Duration.ofSeconds(5)).click();
+            actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL), UITestTimeouts.SHORT_TIMEOUT).click();
         }
     }
 
@@ -123,9 +124,9 @@ public class ProjectExplorer extends CommonContainerFixture {
     public void collapseAll() {
         projectViewTree().moveMouse();
         if (ideaVersionInt >= 20242) {
-            actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_2024_2), Duration.ofSeconds(5)).click();
+            actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_2024_2), UITestTimeouts.SHORT_TIMEOUT).click();
         } else {
-            actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL), Duration.ofSeconds(5)).click();
+            actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL), UITestTimeouts.SHORT_TIMEOUT).click();
         }
     }
 
@@ -137,12 +138,12 @@ public class ProjectExplorer extends CommonContainerFixture {
     public JPopupMenuFixture openSettingsPopup() {
         projectViewTree().moveMouse();
         if (ideaVersionInt >= 20242) {
-            actionButton(byXpath(XPathDefinitions.MY_ICON_MORE_VERTICAL), Duration.ofSeconds(5)).click();
+            actionButton(byXpath(XPathDefinitions.MY_ICON_MORE_VERTICAL), UITestTimeouts.SHORT_TIMEOUT).click();
         } else {
-            actionButton(byXpath(XPathDefinitions.MY_ICON_GEAR_PLAIN), Duration.ofSeconds(5)).click();
+            actionButton(byXpath(XPathDefinitions.MY_ICON_GEAR_PLAIN), UITestTimeouts.SHORT_TIMEOUT).click();
         }
         try {
-            return remoteRobot.find(JPopupMenuFixture.class, byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW), Duration.ofSeconds(10));
+            return remoteRobot.find(JPopupMenuFixture.class, byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW), UITestTimeouts.FIXTURE_TIMEOUT);
         } catch (WaitForConditionTimeoutException e) {
             throw new UITestException(e.getMessage());
         }
@@ -153,7 +154,7 @@ public class ProjectExplorer extends CommonContainerFixture {
      */
     public void hide() {
         projectViewTree().moveMouse();
-        actionButton(byXpath(XPathDefinitions.TOOLTIP_TEXT_HIDE), Duration.ofSeconds(5)).click();
+        actionButton(byXpath(XPathDefinitions.TOOLTIP_TEXT_HIDE), UITestTimeouts.SHORT_TIMEOUT).click();
     }
 
     /**
@@ -162,6 +163,6 @@ public class ProjectExplorer extends CommonContainerFixture {
      * @return Project View tree fixture
      */
     public JTreeFixture projectViewTree() {
-        return find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
+        return find(JTreeFixture.class, JTreeFixture.Companion.byType(), UITestTimeouts.FIXTURE_TIMEOUT);
     }
 }

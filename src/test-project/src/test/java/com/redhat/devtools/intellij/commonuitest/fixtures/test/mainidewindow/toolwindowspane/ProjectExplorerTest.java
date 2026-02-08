@@ -17,6 +17,7 @@ import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ProjectExplorer;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
@@ -44,9 +45,9 @@ class ProjectExplorerTest extends AbstractLibraryBaseTest {
     @BeforeAll
     static void prepareProject() {
         CreateCloseUtils.createNewProject(remoteRobot, PROJECT_NAME, NewProjectType.PLAIN_JAVA);
-        ToolWindowPane toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
+        ToolWindowPane toolWinPane = remoteRobot.find(ToolWindowPane.class, UITestTimeouts.FIXTURE_TIMEOUT);
         toolWinPane.openProjectExplorer();
-        projectExplorer = toolWinPane.find(ProjectExplorer.class, Duration.ofSeconds(10));
+        projectExplorer = toolWinPane.find(ProjectExplorer.class, UITestTimeouts.FIXTURE_TIMEOUT);
     }
 
     @AfterAll
@@ -69,7 +70,7 @@ class ProjectExplorerTest extends AbstractLibraryBaseTest {
     void openFileTest() {
         if (ideaVersionInt >= 20231) {
             //ensure no editor is opened
-            MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
+            MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, UITestTimeouts.FIXTURE_TIMEOUT);
             mainIdeWindow.invokeCmdUsingSearchEverywherePopup("Close All Tabs");
             projectExplorer.openFile(PROJECT_NAME, "src", "Main");
             assertTrue(remoteRobot.find(ComponentFixture.class, byXpath(XPathDefinitions.PROJECT_LABEL)).isShowing());

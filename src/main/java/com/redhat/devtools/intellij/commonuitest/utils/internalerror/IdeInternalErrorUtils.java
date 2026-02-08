@@ -15,6 +15,7 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 
 import java.time.Duration;
@@ -41,7 +42,7 @@ public class IdeInternalErrorUtils {
     public static void clearWindowsErrorsIfTheyAppear(RemoteRobot remoteRobot) {
         if (remoteRobot.isWin()) {
             try {
-                remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.DIALOG_ROOT_PANE), Duration.ofSeconds(10)).button(ButtonLabels.CLEAR_ALL_LABEL).click();
+                remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.DIALOG_ROOT_PANE), UITestTimeouts.FIXTURE_TIMEOUT).button(ButtonLabels.CLEAR_ALL_LABEL).click();
             } catch (WaitForConditionTimeoutException e) {
                 LOGGER.log(Level.INFO, e.getMessage(), e);
             }

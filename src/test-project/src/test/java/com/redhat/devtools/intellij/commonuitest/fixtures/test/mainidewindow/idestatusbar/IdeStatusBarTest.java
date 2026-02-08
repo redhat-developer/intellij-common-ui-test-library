@@ -17,6 +17,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ProjectLocation;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
@@ -39,7 +40,7 @@ class IdeStatusBarTest extends AbstractLibraryBaseTest {
     private static final String PROJECT_NAME = "ide_status_bar_java_project";
 
     private static kotlin.Pair<Boolean, IdeStatusBar> isProgressbarWithLabelVisible() {
-        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
+        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, UITestTimeouts.FIXTURE_TIMEOUT);
         List<RemoteText> inlineProgressPanelContent = ideStatusBar.inlineProgressPanel().findAllText();
         String inlineProgressPanelText = TextUtils.listOfRemoteTextToString(inlineProgressPanelContent);
         return new kotlin.Pair<>(!inlineProgressPanelText.isEmpty(), ideStatusBar);
@@ -48,7 +49,7 @@ class IdeStatusBarTest extends AbstractLibraryBaseTest {
     @BeforeEach
     void prepareProject() {
         NewProjectDialogWizard newProjectDialogWizard = CreateCloseUtils.openNewProjectDialogFromWelcomeDialog(remoteRobot);
-        NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
+        NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, UITestTimeouts.FIXTURE_TIMEOUT);
 
         newProjectFirstPage.selectNewProjectType(NewProjectType.NEW_PROJECT);
         newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
@@ -66,9 +67,9 @@ class IdeStatusBarTest extends AbstractLibraryBaseTest {
 
     @Test
     void progressBarTest() {
-        IdeStatusBar ideStatusBar = waitFor(Duration.ofSeconds(30), Duration.ofMillis(250), "Wait for the appearance of progress bar in the IDE status bar.", "The progress bar in status bar did not appear in 60 seconds.", IdeStatusBarTest::isProgressbarWithLabelVisible);
+        IdeStatusBar ideStatusBar = waitFor(UITestTimeouts.LONG_TIMEOUT, UITestTimeouts.FAST_POLL_INTERVAL, "Wait for the appearance of progress bar in the IDE status bar.", "The progress bar in status bar did not appear in 60 seconds.", IdeStatusBarTest::isProgressbarWithLabelVisible);
         ideStatusBar.waitUntilAllBgTasksFinish();
-        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(2));
+        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, UITestTimeouts.QUICK_TIMEOUT);
         mainIdeWindow.maximizeIdeWindow();
         assertTrue(mainIdeWindow.isShowing(), "The Main IDE Window should be open.");
     }
