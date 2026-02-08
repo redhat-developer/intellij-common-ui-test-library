@@ -32,7 +32,8 @@ public enum IntelliJVersion {
     COMMUNITY_V_2024_2("IC-2024.2"),
     COMMUNITY_V_2024_3("IC-2024.3"),
     COMMUNITY_V_2025_1("IC-2025.1"),
-    COMMUNITY_V_2025_2("IC-2025.2");
+    COMMUNITY_V_2025_2("IC-2025.2"),
+    COMMUNITY_V_2025_3("IC-2025.3");
 
     private final String ideaVersionStringRepresentation;
     private final int ideaVersionIntRepresentation;
