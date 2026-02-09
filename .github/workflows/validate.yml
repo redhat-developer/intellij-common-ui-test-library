@@ -32,20 +32,20 @@ jobs:
           cd src/test-project
           xvfb-run --server-args="-screen 0 1920x1080x24" ./gradlew integrationUITest --warning-mode none -PcommunityIdeaVersion=${{ matrix.IJ }}
       - name: Archiving tests reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: linux-test-reports-${{ matrix.IJ }}
           path: src/test-project/build/reports/tests/*
         if: always()
       - name: Archiving screenshots
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: linux-screenshots-${{ matrix.IJ }}
           path: src/test-project/build/screenshots/*
           if-no-files-found: ignore
         if: always()
       - name: Archiving StepLogger logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: linux-steplogger-logs-${{ matrix.IJ }}
           path: src/test-project/build/test-results/*
