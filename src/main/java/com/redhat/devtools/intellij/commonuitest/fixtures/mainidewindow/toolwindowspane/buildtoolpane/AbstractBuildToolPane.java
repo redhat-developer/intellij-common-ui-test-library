@@ -16,6 +16,7 @@ import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.JTreeFixture;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
@@ -39,8 +40,8 @@ public abstract class AbstractBuildToolPane extends CommonContainerFixture {
      * Reload all projects
      */
     public void reloadAllProjects() {
-        actionButton(byXpath(XPathDefinitions.MY_ICON_REFRESH), Duration.ofSeconds(2)).click();
-        remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10)).waitUntilAllBgTasksFinish();
+        actionButton(byXpath(XPathDefinitions.MY_ICON_REFRESH), UITestTimeouts.QUICK_TIMEOUT).click();
+        remoteRobot.find(IdeStatusBar.class, UITestTimeouts.FIXTURE_TIMEOUT).waitUntilAllBgTasksFinish();
     }
 
     /**
@@ -49,7 +50,7 @@ public abstract class AbstractBuildToolPane extends CommonContainerFixture {
      * @return build tree fixture
      */
     public JTreeFixture getBuildTree() {
-        return find(JTreeFixture.class, JTreeFixture.Companion.byType(), Duration.ofSeconds(10));
+        return find(JTreeFixture.class, JTreeFixture.Companion.byType(), UITestTimeouts.FIXTURE_TIMEOUT);
     }
 
     protected boolean isTreeVisible() {

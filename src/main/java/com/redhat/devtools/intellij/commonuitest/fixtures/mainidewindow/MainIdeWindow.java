@@ -22,6 +22,7 @@ import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.navigation.SearchEverywherePopup;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar.MenuBar;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.internalerror.IdeInternalErrorUtils;
 import org.jetbrains.annotations.NotNull;
@@ -87,7 +88,7 @@ public class MainIdeWindow extends CommonContainerFixture {
             new MenuBar(remoteRobot).navigateTo("File", "Close Project");
         }
         IdeInternalErrorUtils.clearWindowsErrorsIfTheyAppear(remoteRobot);
-        remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).runJs("const horizontal_offset = component.getWidth()/2;\n" +
+        remoteRobot.find(FlatWelcomeFrame.class, UITestTimeouts.FIXTURE_TIMEOUT).runJs("const horizontal_offset = component.getWidth()/2;\n" +
             "robot.click(component, new Point(horizontal_offset, 10), MouseButton.LEFT_BUTTON, 1);");
     }
 
@@ -102,8 +103,8 @@ public class MainIdeWindow extends CommonContainerFixture {
 
     private SearchEverywherePopup openSearchEverywherePopup() {
         try {
-            find(ActionButtonFixture.class, byXpath("//div[@myicon='search.svg']"), Duration.ofSeconds(5)).click();
-            SearchEverywherePopup searchEverywherePopup = find(SearchEverywherePopup.class, Duration.ofSeconds(5));
+            find(ActionButtonFixture.class, byXpath("//div[@myicon='search.svg']"), UITestTimeouts.SHORT_TIMEOUT).click();
+            SearchEverywherePopup searchEverywherePopup = find(SearchEverywherePopup.class, UITestTimeouts.SHORT_TIMEOUT);
             searchEverywherePopup.activateTab("All");
             return searchEverywherePopup;
         } catch (WaitForConditionTimeoutException e) {
@@ -113,7 +114,7 @@ public class MainIdeWindow extends CommonContainerFixture {
             } else {
                 keyboard.hotKey(KeyEvent.VK_CONTROL, KeyEvent.VK_N);
             }
-            SearchEverywherePopup searchEverywherePopup = find(SearchEverywherePopup.class, Duration.ofSeconds(10));
+            SearchEverywherePopup searchEverywherePopup = find(SearchEverywherePopup.class, UITestTimeouts.FIXTURE_TIMEOUT);
             searchEverywherePopup.activateTab("All");
             return searchEverywherePopup;
         }

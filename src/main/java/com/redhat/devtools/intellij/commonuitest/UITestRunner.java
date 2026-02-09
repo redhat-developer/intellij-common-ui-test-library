@@ -14,6 +14,7 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.stepsProcessing.StepLogger;
 import com.intellij.remoterobot.stepsProcessing.StepWorker;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
 import com.redhat.devtools.intellij.commonuitest.utils.steps.SharedSteps;
@@ -229,7 +230,7 @@ public class UITestRunner {
     }
 
     private static void waitUntilIntelliJStarts(int port) {
-        waitFor(Duration.ofSeconds(600), Duration.ofSeconds(3), "IntelliJ to start for 10 minutes.", () -> isIntelliJUIVisible(port));
+        waitFor(UITestTimeouts.STARTUP_TIMEOUT, UITestTimeouts.POLL_INTERVAL, "IntelliJ to start for 10 minutes.", () -> isIntelliJUIVisible(port));
     }
 
     private static boolean isIntelliJUIVisible(int port) {

@@ -16,6 +16,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatu
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.BuildView;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.MavenBuildToolPane;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 
 import java.time.Duration;
 
@@ -34,11 +35,11 @@ public final class BuildUtils {
      * @param goal        the maven goal
      */
     public static void buildMavenProjectAndWaitForFinish(RemoteRobot remoteRobot, String projectName, String goal) {
-        ToolWindowPane toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
+        ToolWindowPane toolWinPane = remoteRobot.find(ToolWindowPane.class, UITestTimeouts.FIXTURE_TIMEOUT);
         toolWinPane.openMavenBuildToolPane();
-        MavenBuildToolPane mavenBuildToolPane = toolWinPane.find(MavenBuildToolPane.class, Duration.ofSeconds(10));
+        MavenBuildToolPane mavenBuildToolPane = toolWinPane.find(MavenBuildToolPane.class, UITestTimeouts.FIXTURE_TIMEOUT);
         mavenBuildToolPane.buildProject(goal, projectName);
-        toolWinPane.find(BuildView.class, Duration.ofSeconds(5)).waitUntilBuildHasFinished();
-        remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(30)).waitUntilAllBgTasksFinish();
+        toolWinPane.find(BuildView.class, UITestTimeouts.SHORT_TIMEOUT).waitUntilBuildHasFinished();
+        remoteRobot.find(IdeStatusBar.class, UITestTimeouts.LONG_TIMEOUT).waitUntilAllBgTasksFinish();
     }
 }

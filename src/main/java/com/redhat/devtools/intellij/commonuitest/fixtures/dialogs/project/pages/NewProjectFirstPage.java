@@ -21,6 +21,7 @@ import com.intellij.remoterobot.fixtures.JListFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.fixtures.JTextFieldFixture;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils;
@@ -88,7 +89,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
     }
 
     public JTextFieldFixture getProjectNameTextField() {
-        return find(JTextFieldFixture.class, byXpath(XPathDefinitions.JBTEXT_FIELD), Duration.ofSeconds(10));
+        return find(JTextFieldFixture.class, byXpath(XPathDefinitions.JBTEXT_FIELD), UITestTimeouts.FIXTURE_TIMEOUT);
     }
 
     /**
@@ -125,9 +126,9 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
      */
     public ComboBoxFixture getProjectJdkComboBox() {
         if (ideaVersionInt >= 20241) {
-            return comboBox(byXpath(XPathDefinitions.JDK_COMBOBOX_PROJECT_WIZARD), Duration.ofSeconds(10));
+            return comboBox(byXpath(XPathDefinitions.JDK_COMBOBOX_PROJECT_WIZARD), UITestTimeouts.FIXTURE_TIMEOUT);
         }
-        return comboBox(byXpath(XPathDefinitions.JDK_COMBOBOX), Duration.ofSeconds(10));
+        return comboBox(byXpath(XPathDefinitions.JDK_COMBOBOX), UITestTimeouts.FIXTURE_TIMEOUT);
     }
 
     /**
@@ -139,8 +140,8 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
         step("Select the '" + targetSdkName + "' as new project SDK", () -> {
 
             waitFor(
-                Duration.ofSeconds(20),
-                Duration.ofSeconds(5),
+                UITestTimeouts.MEDIUM_TIMEOUT,
+                UITestTimeouts.SHORT_TIMEOUT,
                 "Waiting for 'resolving jdk' dialog to disappear.",
                 () -> "Expected exactly one dialog but found " + remoteRobot.findAll(CommonContainerFixture.class, byXpath(XPathDefinitions.MY_DIALOG)).size(),
                 () -> remoteRobot.findAll(CommonContainerFixture.class, byXpath(XPathDefinitions.MY_DIALOG)).size() == 1
@@ -154,7 +155,7 @@ public class NewProjectFirstPage extends AbstractNewProjectFinalPage {
 
             projectJdkComboBox.click();
 
-            CommonContainerFixture parentFixture = waitFor(Duration.ofSeconds(20), Duration.ofSeconds(2), "Wait for the 'Project SDK' list to finish loading all items.", "The project JDK list did not load all items in 20 seconds.", this::didProjectSdkListLoadAllItems);
+            CommonContainerFixture parentFixture = waitFor(UITestTimeouts.MEDIUM_TIMEOUT, UITestTimeouts.QUICK_TIMEOUT, "Wait for the 'Project SDK' list to finish loading all items.", "The project JDK list did not load all items in time.", this::didProjectSdkListLoadAllItems);
             JPopupMenuFixture projectSdkList = parentFixture.jPopupMenus(byXpath(XPathDefinitions.HEAVY_WEIGHT_WINDOW)).get(0); // issue https://github.com/JetBrains/intellij-ui-test-robot/issues/104
             List<String> sdkItems = projectSdkList.jList().collectItems();
             Map<String, String> foundItems = new HashMap<>();

@@ -14,6 +14,7 @@ import com.intellij.remoterobot.RemoteRobot;
 import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,9 +41,9 @@ public class GradleBuildToolPane extends AbstractBuildToolPane {
      */
     public void collapseAll() {
         if (ideaVersionInt >= 20242) {
-            actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_2024_2), Duration.ofSeconds(2)).click();
+            actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_2024_2), UITestTimeouts.QUICK_TIMEOUT).click();
         } else {
-            actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_IDE), Duration.ofSeconds(2)).click();
+            actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_IDE), UITestTimeouts.QUICK_TIMEOUT).click();
         }
     }
 
@@ -51,9 +52,9 @@ public class GradleBuildToolPane extends AbstractBuildToolPane {
      */
     public void expandAll() {
         if (ideaVersionInt >= 20242) {
-            actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL_2024_2), Duration.ofSeconds(2)).click();
+            actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL_2024_2), UITestTimeouts.QUICK_TIMEOUT).click();
         } else {
-            actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL_IDE), Duration.ofSeconds(2)).click();
+            actionButton(byXpath(XPathDefinitions.MY_ICON_EXPAND_ALL_IDE), UITestTimeouts.QUICK_TIMEOUT).click();
         }
     }
 
@@ -81,9 +82,9 @@ public class GradleBuildToolPane extends AbstractBuildToolPane {
     }
 
     private void runGradleTask(String subTask, String goal) {
-        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(1), "the Gradle tree to appear.", this::isTreeVisible);
+        waitFor(UITestTimeouts.LONG_TIMEOUT, UITestTimeouts.VERY_QUICK_TIMEOUT, "the Gradle tree to appear.", this::isTreeVisible);
         expandAll();
-        waitFor(Duration.ofSeconds(60), Duration.ofSeconds(1), "the Gradle tree to expand.", this::isTreeExpanded);
+        waitFor(UITestTimeouts.TREE_EXPANSION_TIMEOUT, UITestTimeouts.VERY_QUICK_TIMEOUT, "the Gradle tree to expand.", this::isTreeExpanded);
         getBuildTree().doubleClickPath(new String[]{"Tasks", subTask, goal}, true);
     }
 

@@ -15,6 +15,7 @@ import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,9 +31,9 @@ public abstract class ToolWindowToolbar extends CommonContainerFixture {
 
     public JButtonFixture stripeButton(String label) {
         if (label.equals(ButtonLabels.MAVEN_STRIPE_BUTTON_LABEL) || label.equals(ButtonLabels.GRADLE_STRIPE_BUTTON_LABEL)) {
-            return button(byXpath(XPathDefinitions.toolWindowButton(label)), Duration.ofSeconds(2));
+            return button(byXpath(XPathDefinitions.toolWindowButton(label)), UITestTimeouts.QUICK_TIMEOUT);
         } else if (label.equals(ButtonLabels.PROJECT_STRIPE_BUTTON_LABEL)) {
-            return button(byXpath(XPathDefinitions.TOOLTIP_TEXT_PROJECT), Duration.ofSeconds(2));
+            return button(byXpath(XPathDefinitions.TOOLTIP_TEXT_PROJECT), UITestTimeouts.QUICK_TIMEOUT);
         }
         return null;
     }

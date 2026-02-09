@@ -29,6 +29,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.Setti
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.pages.NotificationsPage;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ProjectLocation;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.steps.SharedSteps;
 import org.jetbrains.annotations.NotNull;
@@ -79,7 +80,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      * @param projectName name of existing project
      */
     public void openProject(String projectName) {
-        JTreeFixture existingProjectFixture = find(JTreeFixture.class, byXpath("//div[contains(@visible_text, '" + projectName + "')]"), Duration.ofSeconds(2));
+        JTreeFixture existingProjectFixture = find(JTreeFixture.class, byXpath("//div[contains(@visible_text, '" + projectName + "')]"), UITestTimeouts.QUICK_TIMEOUT);
         existingProjectFixture.clickRow(0);
     }
 
@@ -125,11 +126,11 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
     public void clearExceptions() {
         try {
             ideErrorsIcon().click();
-            find(IdeFatalErrorsDialog.class, Duration.ofSeconds(5)).clearAll();
+            find(IdeFatalErrorsDialog.class, UITestTimeouts.SHORT_TIMEOUT).clearAll();
         } catch (WaitForConditionTimeoutException e) {
             LOGGER.log(Level.INFO, "No fatal errors dialog found to clear.");
             try {
-                find(IdeFatalErrorsDialog.class, Duration.ofSeconds(5)).clearAll();
+                find(IdeFatalErrorsDialog.class, UITestTimeouts.SHORT_TIMEOUT).clearAll();
             } catch (Exception e2) {
                 LOGGER.log(Level.INFO, "Second attempt to clear fatal errors dialog also failed.");
             }
@@ -191,11 +192,11 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      * @return fixture for the 'Tip Of the Day' dialog
      */
     public TipDialog openTipDialog() {
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(2));
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, UITestTimeouts.QUICK_TIMEOUT);
         flatWelcomeFrame.findText(ButtonLabels.LEARN_LABEL).click();
         SharedSteps.waitForComponentByXpath(remoteRobot, 2, 200, byXpath(XPathDefinitions.TIP_DIALOG_2));
         flatWelcomeFrame.findText(TIP_OF_THE_DAY).click();
-        return remoteRobot.find(TipDialog.class, Duration.ofSeconds(10));
+        return remoteRobot.find(TipDialog.class, UITestTimeouts.FIXTURE_TIMEOUT);
     }
 
     /**
@@ -203,9 +204,9 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      */
     public void disableNotifications() {
         openSettingsDialog();
-        SettingsDialog settingsDialog = remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5));
+        SettingsDialog settingsDialog = remoteRobot.find(SettingsDialog.class, UITestTimeouts.SHORT_TIMEOUT);
         settingsDialog.navigateTo("Appearance & Behavior", "Notifications");
-        NotificationsPage notificationsPage = remoteRobot.find(NotificationsPage.class, Duration.ofSeconds(5));
+        NotificationsPage notificationsPage = remoteRobot.find(NotificationsPage.class, UITestTimeouts.SHORT_TIMEOUT);
         notificationsPage.toggleNotifications(false);
         settingsDialog.ok();
         switchToProjectsPage();
@@ -247,16 +248,16 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
     // Works for IntelliJ Idea 2020.3+
     private JButtonFixture welcomeFrameLink(String label) {
         if (UtilsKt.hasAnyComponent(this, byXpath(XPathDefinitions.RECENT_PROJECT_PANEL_NEW))) {
-            return button(byXpath(XPathDefinitions.jBOptionButton(label)), Duration.ofSeconds(2));
+            return button(byXpath(XPathDefinitions.jBOptionButton(label)), UITestTimeouts.UI_ELEMENT_TIMEOUT);
         }
         if (ideaVersionInt >= 20241 && label.equals("New Project")) {
-            return button(byXpath(XPathDefinitions.CREATE_NEW_PROJECT), Duration.ofSeconds(2));
+            return button(byXpath(XPathDefinitions.CREATE_NEW_PROJECT), UITestTimeouts.UI_ELEMENT_TIMEOUT);
         }
-        return button(byXpath(XPathDefinitions.nonOpaquePanel(label)), Duration.ofSeconds(2));
+        return button(byXpath(XPathDefinitions.nonOpaquePanel(label)), UITestTimeouts.UI_ELEMENT_TIMEOUT);
     }
 
     private ComponentFixture ideErrorsIcon() {
-        return find(ComponentFixture.class, byXpath(XPathDefinitions.IDE_ERROR_ICON), Duration.ofSeconds(5));
+        return find(ComponentFixture.class, byXpath(XPathDefinitions.IDE_ERROR_ICON), UITestTimeouts.SHORT_TIMEOUT);
     }
 
     private void removeTopProjectFromRecentProjects() {
@@ -267,7 +268,7 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             "robot.click(component, new Point(horizontal_offset, 22), MouseButton.LEFT_BUTTON, 1);");
 
         if (ideaVersionInt >= 20231) {
-            ComponentFixture removeDialog = remoteRobot.find(ComponentFixture.class, byXpath(XPathDefinitions.MY_DIALOG), Duration.ofSeconds(10));
+            ComponentFixture removeDialog = remoteRobot.find(ComponentFixture.class, byXpath(XPathDefinitions.MY_DIALOG), UITestTimeouts.FIXTURE_TIMEOUT);
             removeDialog.findText(ButtonLabels.REMOVE_FROM_LIST_LABEL).click();
         } else {
             List<JPopupMenuFixture> jPopupMenuFixtures = jPopupMenus(JPopupMenuFixture.Companion.byType());

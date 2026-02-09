@@ -21,6 +21,7 @@ import com.intellij.remoterobot.fixtures.dataExtractor.RemoteText;
 import com.intellij.remoterobot.utils.Keyboard;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.exceptions.UITestException;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.texttranformation.TextUtils;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +56,7 @@ public class SearchEverywherePopup extends CommonContainerFixture {
      */
     public void activateTab(String tabName) {
         try {
-            button(byXpath(XPathDefinitions.label(tabName)), Duration.ofSeconds(2)).click();
+            button(byXpath(XPathDefinitions.label(tabName)), UITestTimeouts.QUICK_TIMEOUT).click();
         } catch (WaitForConditionTimeoutException e) {
             throw new UITestException("The '" + tabName + "' tab cannot be found.");
         }
@@ -75,10 +76,10 @@ public class SearchEverywherePopup extends CommonContainerFixture {
     }
 
     private void invokeSearch(String searchText, boolean invoke) {
-        JTextFieldFixture searchField = textField(JTextFieldFixture.Companion.byType(), Duration.ofSeconds(2));
+        JTextFieldFixture searchField = textField(JTextFieldFixture.Companion.byType(), UITestTimeouts.QUICK_TIMEOUT);
         searchField.click();
         searchField.setText(searchText);
-        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(1), "the search dialog in the Search Everywhere popup to load in 30 seconds.", () -> didSearchFinish(searchText));
+        waitFor(UITestTimeouts.LONG_TIMEOUT, UITestTimeouts.VERY_QUICK_TIMEOUT, "the search dialog in the Search Everywhere popup to load in 30 seconds.", () -> didSearchFinish(searchText));
         if (invoke) {
             new Keyboard(remoteRobot).hotKey(KeyEvent.VK_ENTER);
         }
