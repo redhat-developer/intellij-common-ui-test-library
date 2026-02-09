@@ -14,7 +14,7 @@ import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.utils.Keyboard;
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
-import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar.MenuBar;
+import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ProjectExplorer;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
@@ -69,7 +69,8 @@ class ProjectExplorerTest extends AbstractLibraryBaseTest {
     void openFileTest() {
         if (ideaVersionInt >= 20231) {
             //ensure no editor is opened
-            new MenuBar(remoteRobot).navigateTo("Window", "Editor Tabs", "Close All Tabs");
+            MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
+            mainIdeWindow.invokeCmdUsingSearchEverywherePopup("Close All Tabs");
             projectExplorer.openFile(PROJECT_NAME, "src", "Main");
             assertTrue(remoteRobot.find(ComponentFixture.class, byXpath(XPathDefinitions.PROJECT_LABEL)).isShowing());
         }

@@ -52,16 +52,29 @@ public class MavenBuildToolPane extends AbstractBuildToolPane {
      * Expand all
      */
     public void expandAll() {
-        // trick using keyboard shortcut because there is no button for this action, but the 'Expand All' shortcut works...
+        // MavenToolPane has no "Expand All" button (https://github.com/redhat-developer/intellij-common-ui-test-library/issues/405)
         if (!getBuildTree().getHasFocus()) {
-            getBuildTree().click(); // be sure that the pane is selected
+            getBuildTree().click();
         }
         Keyboard keyboard = new Keyboard(remoteRobot);
         int current;
-        do {
-            current = getBuildTree().collectRows().size();
-            keyboard.hotKey(KeyEvent.VK_CONTROL, KeyEvent.VK_ADD);
-        } while (getBuildTree().collectRows().size() > current);
+        int iteration = 0;
+
+        if (remoteRobot.isMac()) {
+            // On macOS, use asterisk key
+            do {
+                current = getBuildTree().collectRows().size();
+                keyboard.key(KeyEvent.VK_MULTIPLY);
+                iteration++;
+            } while (getBuildTree().collectRows().size() > current && iteration < 10);
+        } else {
+            // On Linux/Windows, use Ctrl+ADD
+            do {
+                current = getBuildTree().collectRows().size();
+                keyboard.hotKey(KeyEvent.VK_CONTROL, KeyEvent.VK_ADD);
+                iteration++;
+            } while (getBuildTree().collectRows().size() > current && iteration < 10);
+        }
     }
 
     /**

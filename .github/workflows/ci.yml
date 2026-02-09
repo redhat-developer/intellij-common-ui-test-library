@@ -104,6 +104,14 @@ jobs:
           java-version: 17
           distribution: 'temurin'
           cache: 'gradle'
+      # disable windows snap layouts to prevent UI interference during tests (#404)
+      - name: Disable Windows Snap Layouts
+        shell: powershell
+        run: |
+          Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" -Name "EnableSnapAssistFlyout" -Value 0 -Force
+          Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "WindowArrangementActive" -Value "0" -Force
+          Stop-Process -Name explorer -Force
+          Start-Sleep -Seconds 3
       - name: Run integration tests
         run: |
           cd src/test-project
@@ -129,7 +137,8 @@ jobs:
         if: always()
 
   run_on_macos:
-    runs-on: macos-latest
+    # Using macOS-14 instead of macos-latest due to compatibility issues (#402)
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17

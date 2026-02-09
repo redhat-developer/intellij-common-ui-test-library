@@ -81,7 +81,7 @@ public class MainIdeWindow extends CommonContainerFixture {
      * Close the currently opened project
      */
     public void closeProject() {
-        if (UITestRunner.getIdeaVersionInt() == 20233) {
+        if (UITestRunner.getIdeaVersionInt() == 20233 || remoteRobot.isMac()) {
             invokeCmdUsingSearchEverywherePopup("Close Project");
         } else {
             new MenuBar(remoteRobot).navigateTo("File", "Close Project");
