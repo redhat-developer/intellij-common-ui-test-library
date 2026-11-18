@@ -16,6 +16,7 @@ import com.intellij.remoterobot.fixtures.CommonContainerFixture;
 import com.intellij.remoterobot.fixtures.ComponentFixture;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,7 +44,7 @@ public class IdeStatusBar extends CommonContainerFixture {
      * @return fixture for the InlineProgressPanel
      */
     public ComponentFixture inlineProgressPanel() {
-        return find(ComponentFixture.class, byXpath(XPathDefinitions.INLINE_PROGRESS_PANEL), Duration.ofSeconds(5));
+        return find(ComponentFixture.class, byXpath(XPathDefinitions.INLINE_PROGRESS_PANEL), UITestTimeouts.SHORT_TIMEOUT);
     }
 
     /**
@@ -57,7 +58,7 @@ public class IdeStatusBar extends CommonContainerFixture {
      * Wait until all the background tasks finish
      */
     public void waitUntilAllBgTasksFinish(int timeout) {
-        waitFor(Duration.ofSeconds(timeout), Duration.ofSeconds(10), "the background tasks to finish in " + timeout + " seconds.", this::didAllBgTasksFinish);
+        waitFor(Duration.ofSeconds(timeout), UITestTimeouts.FIXTURE_TIMEOUT, "the background tasks to finish in " + timeout + " seconds.", this::didAllBgTasksFinish);
     }
 
     private boolean didAllBgTasksFinish() {

@@ -18,6 +18,7 @@ import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,9 +51,9 @@ public class CodeWithMeDialog extends CommonContainerFixture {
         CodeWithMeDialog codeWithMeDialog;
         try {
             if (UITestRunner.getIdeaVersionInt() <= 20231) {
-                codeWithMeDialog = remoteRobot.find(CodeWithMeDialog.class, byXpath("//div[@class='Wrapper']//div[@class='JPanel']"), Duration.ofSeconds(10));
+                codeWithMeDialog = remoteRobot.find(CodeWithMeDialog.class, byXpath("//div[@class='Wrapper']//div[@class='JPanel']"), UITestTimeouts.FIXTURE_TIMEOUT);
             } else {
-                codeWithMeDialog = remoteRobot.find(CodeWithMeDialog.class, Duration.ofSeconds(10));
+                codeWithMeDialog = remoteRobot.find(CodeWithMeDialog.class, UITestTimeouts.FIXTURE_TIMEOUT);
             }
         } catch (WaitForConditionTimeoutException e) {
             LOGGER.log(Level.INFO, "Code With Me popup not found, nothing to close.");

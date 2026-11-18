@@ -14,6 +14,7 @@ import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.information.ProjectStructureDialog;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import org.junit.jupiter.api.AfterAll;
@@ -47,23 +48,23 @@ class ProjectStructureDialogTest extends AbstractLibraryBaseTest {
     void projectStructureDialogTest() {
         makeSureDialogIsVisible();
         assertTrue(isDialogVisible(), "The 'Project Structure' dialog should be visible but is not.");
-        ProjectStructureDialog projectStructureDialog = remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(2));
+        ProjectStructureDialog projectStructureDialog = remoteRobot.find(ProjectStructureDialog.class, UITestTimeouts.QUICK_TIMEOUT);
         projectStructureDialog.cancel();
         assertFalse(isDialogVisible(), "The 'Project Structure' dialog should be visible but is not.");
     }
 
     private void makeSureDialogIsVisible() {
         try {
-            remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(10));
+            remoteRobot.find(ProjectStructureDialog.class, UITestTimeouts.FIXTURE_TIMEOUT);
         } catch (WaitForConditionTimeoutException e) {
-            MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
+            MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, UITestTimeouts.FIXTURE_TIMEOUT);
             mainIdeWindow.invokeCmdUsingSearchEverywherePopup("Project Structure");
         }
     }
 
     private boolean isDialogVisible() {
         try {
-            return remoteRobot.find(ProjectStructureDialog.class, Duration.ofSeconds(10)).isShowing();
+            return remoteRobot.find(ProjectStructureDialog.class, UITestTimeouts.FIXTURE_TIMEOUT).isShowing();
         } catch (WaitForConditionTimeoutException e) {
             return false;
         }

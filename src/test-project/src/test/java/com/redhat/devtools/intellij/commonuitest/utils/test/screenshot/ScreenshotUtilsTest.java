@@ -12,6 +12,7 @@ package com.redhat.devtools.intellij.commonuitest.utils.test.screenshot;
 
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils;
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +35,7 @@ class ScreenshotUtilsTest extends AbstractLibraryBaseTest {
     @Test
     void takeScreenshotTest() {
         String comment = "to_be_removed";
-        remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        remoteRobot.find(FlatWelcomeFrame.class, UITestTimeouts.FIXTURE_TIMEOUT);
 
         int numberOfScreenshotBefore = getNumberOfSavedScreenshot();
         ScreenshotUtils.takeScreenshot(remoteRobot, comment);

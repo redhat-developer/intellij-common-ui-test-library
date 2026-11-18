@@ -13,6 +13,7 @@ package com.redhat.devtools.intellij.commonuitest;
 import com.intellij.remoterobot.RemoteRobot;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import com.redhat.devtools.intellij.commonuitest.utils.runner.IntelliJVersion;
@@ -46,7 +47,7 @@ public abstract class AbstractLibraryBaseTest {
             intelliJHasStarted = true;
             Runtime.getRuntime().addShutdownHook(new CloseIntelliJBeforeQuit());
 
-            FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+            FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, UITestTimeouts.FIXTURE_TIMEOUT);
             flatWelcomeFrame.clearWorkspace();
             flatWelcomeFrame.disableNotifications();
         }
@@ -54,14 +55,14 @@ public abstract class AbstractLibraryBaseTest {
 
     @AfterAll
     static void finishTestRun() {
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, UITestTimeouts.FIXTURE_TIMEOUT);
         flatWelcomeFrame.clearExceptions();
         flatWelcomeFrame.clearWorkspace();
     }
 
     protected void prepareWorkspace(String projectName) {
         CreateCloseUtils.createNewProject(remoteRobot, projectName, NewProjectType.PLAIN_JAVA);
-        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
+        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, UITestTimeouts.FIXTURE_TIMEOUT);
         mainIdeWindow.closeProject();
     }
 

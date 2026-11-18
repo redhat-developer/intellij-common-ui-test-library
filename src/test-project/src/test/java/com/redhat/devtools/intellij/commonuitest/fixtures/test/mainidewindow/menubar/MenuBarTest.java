@@ -19,6 +19,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.menubar.
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ProjectExplorer;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.ToolWindowPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import org.junit.jupiter.api.AfterAll;
@@ -55,7 +56,7 @@ class MenuBarTest extends AbstractLibraryBaseTest {
         if (remoteRobot.isWin() || remoteRobot.isLinux()) {
             new MenuBar(remoteRobot).navigateTo("Help", "Tip of the Day");
             assertTrue(isTipDialogVisible(remoteRobot), "The 'Tip of the Day' dialog should be visible but is not");
-            remoteRobot.find(TipDialog.class, Duration.ofSeconds(10)).button(ButtonLabels.CLOSE_LABEL).click();
+            remoteRobot.find(TipDialog.class, UITestTimeouts.FIXTURE_TIMEOUT).button(ButtonLabels.CLOSE_LABEL).click();
         }
     }
 
@@ -64,15 +65,15 @@ class MenuBarTest extends AbstractLibraryBaseTest {
         CreateCloseUtils.closeProject(remoteRobot);
         CreateCloseUtils.openProjectFromWelcomeDialog(remoteRobot, PROJECT_NAME);
 
-        ToolWindowPane toolWinPane = remoteRobot.find(ToolWindowPane.class, Duration.ofSeconds(10));
+        ToolWindowPane toolWinPane = remoteRobot.find(ToolWindowPane.class, UITestTimeouts.FIXTURE_TIMEOUT);
         toolWinPane.openProjectExplorer();
-        ProjectExplorer projectExplorer = toolWinPane.find(ProjectExplorer.class, Duration.ofSeconds(10));
+        ProjectExplorer projectExplorer = toolWinPane.find(ProjectExplorer.class, UITestTimeouts.FIXTURE_TIMEOUT);
         assertTrue(projectExplorer.isItemPresent(PROJECT_NAME), "The project should be back open, but it is not");
     }
 
     private boolean isTipDialogVisible(RemoteRobot remoteRobot) {
         try {
-            remoteRobot.find(TipDialog.class, Duration.ofSeconds(10));
+            remoteRobot.find(TipDialog.class, UITestTimeouts.FIXTURE_TIMEOUT);
         } catch (WaitForConditionTimeoutException e) {
             return false;
         }

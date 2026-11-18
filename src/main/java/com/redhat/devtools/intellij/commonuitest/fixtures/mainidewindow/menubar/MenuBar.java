@@ -17,6 +17,7 @@ import com.intellij.remoterobot.fixtures.JButtonFixture;
 import com.intellij.remoterobot.fixtures.JPopupMenuFixture;
 import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.UITestRunner;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 
 import java.time.Duration;
@@ -67,7 +68,7 @@ public class MenuBar {
             }
 
             // Wait for the JPopupMenuFixture to appear
-            waitFor(Duration.ofSeconds(5), Duration.ofSeconds(1), "JPopupMenu to appear", () ->
+            waitFor(UITestTimeouts.SHORT_TIMEOUT, UITestTimeouts.VERY_QUICK_TIMEOUT, "JPopupMenu to appear", () ->
                 !remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType()).isEmpty()
             );
         }
@@ -80,7 +81,7 @@ public class MenuBar {
             List<JPopupMenuFixture> allContextMenus = remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType());
             JPopupMenuFixture lastContextMenu = allContextMenus.get(allContextMenus.size() - 1);
             lastContextMenu.findText(path[i]).moveMouse();
-            waitFor(Duration.ofSeconds(5), Duration.ofSeconds(1), "SubMenu to appear", () ->
+            waitFor(UITestTimeouts.SHORT_TIMEOUT, UITestTimeouts.VERY_QUICK_TIMEOUT, "SubMenu to appear", () ->
                 remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType()).size() > allContextMenus.size()
             );
         }
@@ -94,17 +95,17 @@ public class MenuBar {
         if (remoteRobot.isMac()) {
             return null;
         }
-        return getMainMenu().button(byXpath(XPathDefinitions.label(label)), Duration.ofSeconds(5));
+        return getMainMenu().button(byXpath(XPathDefinitions.label(label)), UITestTimeouts.SHORT_TIMEOUT);
     }
 
     public CommonContainerFixture getMainMenu() {
         CommonContainerFixture cf;
         if (remoteRobot.isLinux() && ideaVersionInt <= 20242) {
-            cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.LINUX_MAIN_MENU), Duration.ofSeconds(5));
+            cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.LINUX_MAIN_MENU), UITestTimeouts.SHORT_TIMEOUT);
         } else if ((remoteRobot.isWin() && ideaVersionInt >= 20241) || (remoteRobot.isLinux() && ideaVersionInt > 20242)) {
-            cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2024_1_AND_NEWER), Duration.ofSeconds(5));
+            cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2024_1_AND_NEWER), UITestTimeouts.SHORT_TIMEOUT);
         } else if (remoteRobot.isWin()) {
-            cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2022_2_TO_2023_2), Duration.ofSeconds(5));
+            cf = remoteRobot.find(CommonContainerFixture.class, byXpath(XPathDefinitions.WINDOWS_MAIN_MENU_2022_2_TO_2023_2), UITestTimeouts.SHORT_TIMEOUT);
         } else {
             throw new IllegalStateException("Can't get main menu. System OS is %s / IdeaVersion is %d".formatted(remoteRobot.getOs(), ideaVersionInt));
         }

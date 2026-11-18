@@ -26,6 +26,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
@@ -62,18 +63,18 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
     @BeforeEach
     void openNewProjectDialog() {
         newProjectDialogWizard = CreateCloseUtils.openNewProjectDialogFromWelcomeDialog(remoteRobot);
-        newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
+        newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, UITestTimeouts.FIXTURE_TIMEOUT);
     }
 
     @AfterEach
     void cleanUp() {
         if (mainIdeWindow != null) {
             // tests ending with opened Main Ide Window needs to close the project and clear workspace
-            IdeStatusBar ideStatusBar = mainIdeWindow.find(IdeStatusBar.class, Duration.ofSeconds(10));
+            IdeStatusBar ideStatusBar = mainIdeWindow.find(IdeStatusBar.class, UITestTimeouts.FIXTURE_TIMEOUT);
             ideStatusBar.waitUntilAllBgTasksFinish();
             mainIdeWindow.maximizeIdeWindow();
             mainIdeWindow.closeProject();
-            remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10)).clearWorkspace();
+            remoteRobot.find(FlatWelcomeFrame.class, UITestTimeouts.FIXTURE_TIMEOUT).clearWorkspace();
             mainIdeWindow = null;
         } else {
             try {
@@ -120,7 +121,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
     @Test
     void getSetModuleNameTest() {
         navigateToSetProjectNamePage(NewProjectType.PLAIN_JAVA);
-        JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
+        JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, UITestTimeouts.FIXTURE_TIMEOUT);
         javaFinalPage.openAdvanceSettings();
 
         String currentModuleName = javaFinalPage.getModuleName();
@@ -133,7 +134,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
     @Test
     void getSetContentRootTest() {
         navigateToSetProjectNamePage(NewProjectType.PLAIN_JAVA);
-        JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
+        JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, UITestTimeouts.FIXTURE_TIMEOUT);
         javaFinalPage.openAdvanceSettings();
 
         String currentContentRoot = javaFinalPage.getContentRoot();
@@ -146,7 +147,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
     @Test
     void getSetModuleFileLocationTest() {
         navigateToSetProjectNamePage(NewProjectType.PLAIN_JAVA);
-        JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
+        JavaNewProjectFinalPage javaFinalPage = newProjectDialogWizard.find(JavaNewProjectFinalPage.class, UITestTimeouts.FIXTURE_TIMEOUT);
         javaFinalPage.openAdvanceSettings();
 
         String currentModuleFileLocation = javaFinalPage.getModuleFileLocation();
@@ -178,16 +179,16 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
 
     @Test
     void finishButtonTest() {
-        newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10)).setProjectName(PLAIN_JAVA_PROJECT_NAME);
+        newProjectDialogWizard.find(JavaNewProjectFinalPage.class, UITestTimeouts.FIXTURE_TIMEOUT).setProjectName(PLAIN_JAVA_PROJECT_NAME);
         newProjectDialogWizard.finish();
-        mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
+        mainIdeWindow = remoteRobot.find(MainIdeWindow.class, UITestTimeouts.FIXTURE_TIMEOUT);
         assertTrue(mainIdeWindow.isShowing(), "The Main IDE Window should be open.");
     }
 
     @Test
     void cancelButtonTest() {
         newProjectDialogWizard.cancel();
-        FlatWelcomeFrame welcome = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        FlatWelcomeFrame welcome = remoteRobot.find(FlatWelcomeFrame.class, UITestTimeouts.FIXTURE_TIMEOUT);
         assertTrue(welcome.isShowing(), "The Welcome Window should be open.");
     }
 
@@ -196,8 +197,8 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
         if (ideaVersionInt >= 20242 && remoteRobot.isWin()) {
             newProjectFirstPage.setProjectSdkIfAvailable("Download");
             try {
-                ContainerFixture downloadJdkDialog = remoteRobot.find(ContainerFixture.class, byXpath("//div[@title='Download JDK']"), Duration.ofSeconds(10));
-                downloadJdkDialog.find(ActionButtonFixture.class, byXpath(XPathDefinitions.label(ButtonLabels.CANCEL_LABEL)), Duration.ofSeconds(5)).click();
+                ContainerFixture downloadJdkDialog = remoteRobot.find(ContainerFixture.class, byXpath("//div[@title='Download JDK']"), UITestTimeouts.FIXTURE_TIMEOUT);
+                downloadJdkDialog.find(ActionButtonFixture.class, byXpath(XPathDefinitions.label(ButtonLabels.CANCEL_LABEL)), UITestTimeouts.SHORT_TIMEOUT).click();
             } catch (WaitForConditionTimeoutException e) {
                 fail("Download JDK button was not pressed and Download JDK dialog was not found");
             }
@@ -233,7 +234,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
     }
 
     private void selectJavaNewProjectType() {
-        newProjectFirstPage = remoteRobot.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
+        newProjectFirstPage = remoteRobot.find(NewProjectFirstPage.class, UITestTimeouts.FIXTURE_TIMEOUT);
         newProjectFirstPage.selectNewProjectType(NewProjectType.NEW_PROJECT);
     }
 
@@ -242,14 +243,14 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
         cleanUp();
         String projectName = "empty-test-project";
         CreateCloseUtils.createEmptyProject(remoteRobot, projectName);
-        mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(60));
+        mainIdeWindow = remoteRobot.find(MainIdeWindow.class, UITestTimeouts.TREE_EXPANSION_TIMEOUT);
         assertTrue(mainIdeWindow.isShowing(), "The Main IDE Window should be open after creating an empty project.");
 
         mainIdeWindow.closeProject();
         mainIdeWindow = null;
 
         // IntelliJ remembers the last chosen project language, for continuity with other tests select Java project
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, UITestTimeouts.FIXTURE_TIMEOUT);
         flatWelcomeFrame.clearWorkspace();
         flatWelcomeFrame.createNewProject();
         selectJavaNewProjectType();
@@ -283,7 +284,7 @@ class NewProjectDialogTest extends AbstractLibraryBaseTest {
 
     private void testArtifactCoordinatesAttributes(NewProjectType newProjectType, ArtifactCoordinatesAttributes attribute) {
         navigateToSetProjectNamePage(newProjectType);
-        MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
+        MavenGradleNewProjectFinalPage mavenGradleFinalPage = newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, UITestTimeouts.FIXTURE_TIMEOUT);
 
         mavenGradleFinalPage.openAdvanceSettings();
 

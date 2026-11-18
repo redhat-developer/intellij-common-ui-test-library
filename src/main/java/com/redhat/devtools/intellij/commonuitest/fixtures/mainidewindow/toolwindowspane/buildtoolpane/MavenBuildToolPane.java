@@ -15,6 +15,7 @@ import com.intellij.remoterobot.data.RemoteComponent;
 import com.intellij.remoterobot.fixtures.DefaultXpath;
 import com.intellij.remoterobot.fixtures.FixtureName;
 import com.intellij.remoterobot.utils.Keyboard;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,9 +43,9 @@ public class MavenBuildToolPane extends AbstractBuildToolPane {
      */
     public void collapseAll() {
         if (ideaVersionInt >= 20242) {
-            actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_2024_2), Duration.ofSeconds(2)).click();
+            actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_2024_2), UITestTimeouts.QUICK_TIMEOUT).click();
         } else {
-            actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_FOR), Duration.ofSeconds(2)).click();
+            actionButton(byXpath(XPathDefinitions.MY_ICON_COLLAPSE_ALL_FOR), UITestTimeouts.QUICK_TIMEOUT).click();
         }
     }
 
@@ -83,7 +84,7 @@ public class MavenBuildToolPane extends AbstractBuildToolPane {
      * @param goal name of the Lifecycle goal you want to invoke (clean, validate, compile, test, package, verify, install, site, deploy)
      */
     public void buildProject(String goal, String projectName) {
-        waitFor(Duration.ofSeconds(30), Duration.ofSeconds(2), "the Maven tree to appear.", this::isTreeVisible);
+        waitFor(UITestTimeouts.LONG_TIMEOUT, UITestTimeouts.QUICK_TIMEOUT, "the Maven tree to appear.", this::isTreeVisible);
         // below workaround due to https://github.com/JetBrains/intellij-ui-test-robot/issues/459
         expandAll();
         getBuildTree().doubleClickPath(new String[]{projectName, "Lifecycle", goal}, true);

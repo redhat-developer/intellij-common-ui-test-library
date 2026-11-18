@@ -17,6 +17,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ProjectLocation;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.project.CreateCloseUtils;
 import com.redhat.devtools.intellij.commonuitest.utils.project.NewProjectType;
 import org.junit.jupiter.api.AfterAll;
@@ -38,7 +39,7 @@ class CodeWithMeDialogTest extends AbstractLibraryBaseTest {
     @BeforeAll
     static void prepareProject() {
         NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
-        NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
+        NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, UITestTimeouts.FIXTURE_TIMEOUT);
 
         newProjectFirstPage.selectNewProjectType(NewProjectType.NEW_PROJECT);
         newProjectFirstPage.getProjectNameTextField().click(); // Click to gain focus on newProjectFirstPage
@@ -49,9 +50,9 @@ class CodeWithMeDialogTest extends AbstractLibraryBaseTest {
         newProjectFirstPage.setProjectSdkIfAvailable("17");
 
         newProjectDialogWizard.finish();
-        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
+        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, UITestTimeouts.FIXTURE_TIMEOUT);
         ideStatusBar.waitUntilAllBgTasksFinish();
-        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
+        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, UITestTimeouts.SHORT_TIMEOUT);
         mainIdeWindow.maximizeIdeWindow();
     }
 

@@ -15,6 +15,7 @@ import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ProjectLocation;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import com.redhat.devtools.intellij.commonuitest.utils.internalerror.IdeInternalErrorUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -46,9 +47,9 @@ class FlatWelcomeFrameTest extends AbstractLibraryBaseTest {
 
     @Test
     void createNewProjectLinkTest() {
-        flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, UITestTimeouts.FIXTURE_TIMEOUT);
         flatWelcomeFrame.createNewProject();
-        NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
+        NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, UITestTimeouts.FIXTURE_TIMEOUT);
         newProjectDialogWizard.cancel();
         assertTrue(flatWelcomeFrame.isShowing(), "The Welcome Window should be open.");
     }
@@ -56,7 +57,7 @@ class FlatWelcomeFrameTest extends AbstractLibraryBaseTest {
     @Test
     void clearWorkspaceTest() {
         prepareWorkspace(PROJECT_NAME);
-        flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, UITestTimeouts.FIXTURE_TIMEOUT);
         flatWelcomeFrame.clearExceptions();
         int projectsOnDisk = getNumberOfProjectsOnDisk();
         int projectLinks = getNumberOfProjectLinks();
@@ -73,7 +74,7 @@ class FlatWelcomeFrameTest extends AbstractLibraryBaseTest {
     @Test
     void clearExceptionsTest() {
         prepareWorkspace(PROJECT_NAME);
-        flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, UITestTimeouts.FIXTURE_TIMEOUT);
         flatWelcomeFrame.clearExceptions();
         assertTrue(flatWelcomeFrame.isShowing(), "The Welcome Window should be open.");
     }

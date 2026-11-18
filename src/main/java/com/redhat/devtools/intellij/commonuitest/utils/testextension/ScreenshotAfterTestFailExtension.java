@@ -16,6 +16,7 @@ import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.NewProjectDialogWizard;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.screenshot.ScreenshotUtils;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -66,7 +67,7 @@ public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallb
     private void cleanAfterTestFail(RemoteRobot remoteRobot) {
         // New Project Dialog is visible -> close it
         try {
-            NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
+            NewProjectDialogWizard newProjectDialogWizard = remoteRobot.find(NewProjectDialogWizard.class, UITestTimeouts.FIXTURE_TIMEOUT);
             newProjectDialogWizard.cancel();
             return;
         } catch (WaitForConditionTimeoutException e2) {
@@ -75,11 +76,11 @@ public class ScreenshotAfterTestFailExtension implements AfterTestExecutionCallb
 
         // Flat Welcome Frame dialog is visible -> return
         try {
-            remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+            remoteRobot.find(FlatWelcomeFrame.class, UITestTimeouts.FIXTURE_TIMEOUT);
         } catch (WaitForConditionTimeoutException e) {
             // Main IDE Window is visible -> close it
             try {
-                remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10)).closeProject();
+                remoteRobot.find(MainIdeWindow.class, UITestTimeouts.FIXTURE_TIMEOUT).closeProject();
             } catch (WaitForConditionTimeoutException e2) {
                 // Main IDE Window is not visible -> continue
             }

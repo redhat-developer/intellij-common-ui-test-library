@@ -24,6 +24,7 @@ import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.project.pages.
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.MainIdeWindow;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.idestatusbar.IdeStatusBar;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ProjectLocation;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 
 import java.time.Duration;
@@ -51,7 +52,7 @@ public final class CreateCloseUtils {
     public static void createNewProject(RemoteRobot remoteRobot, String projectName, NewProjectType newProjectType) {
         NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
 
-        NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
+        NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, UITestTimeouts.FIXTURE_TIMEOUT);
         newProjectFirstPage.selectNewProjectType(NewProjectType.NEW_PROJECT);
         newProjectFirstPage.setLanguage("Java");
         switch (newProjectType) {
@@ -83,7 +84,7 @@ public final class CreateCloseUtils {
      */
     public static void createEmptyProject(RemoteRobot remoteRobot, String projectName) {
         NewProjectDialogWizard newProjectDialogWizard = openNewProjectDialogFromWelcomeDialog(remoteRobot);
-        NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, Duration.ofSeconds(10));
+        NewProjectFirstPage newProjectFirstPage = newProjectDialogWizard.find(NewProjectFirstPage.class, UITestTimeouts.FIXTURE_TIMEOUT);
 
         newProjectFirstPage.selectNewProjectType(NewProjectType.EMPTY_PROJECT);
         ensureEmptyProjectPageIsOpened(newProjectFirstPage, remoteRobot);
@@ -101,9 +102,9 @@ public final class CreateCloseUtils {
      * @param remoteRobot reference to the RemoteRobot instance
      */
     public static void waitAfterOpeningProject(RemoteRobot remoteRobot) {
-        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, Duration.ofSeconds(10));
+        IdeStatusBar ideStatusBar = remoteRobot.find(IdeStatusBar.class, UITestTimeouts.FIXTURE_TIMEOUT);
         ideStatusBar.waitUntilAllBgTasksFinish(500);
-        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(5));
+        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, UITestTimeouts.SHORT_TIMEOUT);
         mainIdeWindow.maximizeIdeWindow();
         CodeWithMeDialog.closeCodeWithMePopupIfItAppears(remoteRobot);
     }
@@ -115,10 +116,10 @@ public final class CreateCloseUtils {
      * @return NewProjectDialogWizard fixture
      */
     public static NewProjectDialogWizard openNewProjectDialogFromWelcomeDialog(RemoteRobot remoteRobot) {
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, UITestTimeouts.FIXTURE_TIMEOUT);
         flatWelcomeFrame.switchToProjectsPage();
         flatWelcomeFrame.createNewProject();
-        return remoteRobot.find(NewProjectDialogWizard.class, Duration.ofSeconds(10));
+        return remoteRobot.find(NewProjectDialogWizard.class, UITestTimeouts.FIXTURE_TIMEOUT);
     }
 
     /**
@@ -127,7 +128,7 @@ public final class CreateCloseUtils {
      * @param remoteRobot reference to the RemoteRobot instance
      */
     public static void closeProject(RemoteRobot remoteRobot) {
-        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, Duration.ofSeconds(10));
+        MainIdeWindow mainIdeWindow = remoteRobot.find(MainIdeWindow.class, UITestTimeouts.FIXTURE_TIMEOUT);
         mainIdeWindow.closeProject();
     }
 
@@ -138,7 +139,7 @@ public final class CreateCloseUtils {
      * @param projectName name of existing project
      */
     public static void openProjectFromWelcomeDialog(RemoteRobot remoteRobot, String projectName) {
-        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        FlatWelcomeFrame flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, UITestTimeouts.FIXTURE_TIMEOUT);
         flatWelcomeFrame.openProject(projectName);
 
         waitAfterOpeningProject(remoteRobot);
@@ -153,9 +154,9 @@ public final class CreateCloseUtils {
      */
     public static AbstractNewProjectFinalPage getFinalPage(NewProjectDialogWizard newProjectDialogWizard, NewProjectType newProjectType) {
         return switch (newProjectType) {
-            case PLAIN_JAVA -> newProjectDialogWizard.find(JavaNewProjectFinalPage.class, Duration.ofSeconds(10));
+            case PLAIN_JAVA -> newProjectDialogWizard.find(JavaNewProjectFinalPage.class, UITestTimeouts.FIXTURE_TIMEOUT);
             case MAVEN, GRADLE ->
-                newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, Duration.ofSeconds(10));
+                newProjectDialogWizard.find(MavenGradleNewProjectFinalPage.class, UITestTimeouts.FIXTURE_TIMEOUT);
             default -> throw new UITestException("Unsupported project type.");
         };
     }
@@ -178,7 +179,7 @@ public final class CreateCloseUtils {
 
         if (!isEmptyProjectPageDisplayed) {
             // If the expected text is not found, wait for dialogs to disappear and reselect the Empty Project type
-            waitForDialogsToDisappear(remoteRobot, Duration.ofSeconds(20));
+            waitForDialogsToDisappear(remoteRobot, UITestTimeouts.MEDIUM_TIMEOUT);
             newProjectFirstPage.selectNewProjectType(NewProjectType.EMPTY_PROJECT);
         }
     }
@@ -193,7 +194,7 @@ public final class CreateCloseUtils {
     private static void waitForDialogsToDisappear(RemoteRobot remoteRobot, Duration timeout) {
         waitFor(
             timeout,
-            Duration.ofSeconds(2),
+            UITestTimeouts.QUICK_TIMEOUT,
             "Waiting for only the New Project dialog to remain open",
             () -> "Extra dialogs did not disappear within the timeout",
             () -> {

@@ -21,6 +21,7 @@ import com.redhat.devtools.intellij.commonuitest.UITestRunner;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.GradleBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.fixtures.mainidewindow.toolwindowspane.buildtoolpane.MavenBuildToolPane;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.ButtonLabels;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import org.jetbrains.annotations.NotNull;
 
@@ -95,7 +96,7 @@ public class ToolWindowPane extends CommonContainerFixture {
 
     public boolean isPaneOpened(Class<? extends Fixture> fixtureClass) {
         try {
-            return find(fixtureClass, Duration.ofSeconds(10)).isShowing();
+            return find(fixtureClass, UITestTimeouts.FIXTURE_TIMEOUT).isShowing();
         } catch (WaitForConditionTimeoutException e) {
             return false;
         }
@@ -105,16 +106,16 @@ public class ToolWindowPane extends CommonContainerFixture {
         if (ideaVersionInt >= 20242) {
             ToolWindowToolbar toolbar;
             if (isRightToolbarButton(label)) {
-                toolbar = remoteRobot.find(ToolWindowRightToolbar.class, Duration.ofSeconds(10));
+                toolbar = remoteRobot.find(ToolWindowRightToolbar.class, UITestTimeouts.FIXTURE_TIMEOUT);
             } else {
-                toolbar = remoteRobot.find(ToolWindowLeftToolbar.class, Duration.ofSeconds(10));
+                toolbar = remoteRobot.find(ToolWindowLeftToolbar.class, UITestTimeouts.FIXTURE_TIMEOUT);
             }
             toolbar.clickStripeButton(label);
         } else {
             if (openPane) {
-                button(byXpath(XPathDefinitions.label(label)), Duration.ofSeconds(2)).click();
+                button(byXpath(XPathDefinitions.label(label)), UITestTimeouts.UI_ELEMENT_TIMEOUT).click();
             } else {
-                button(byXpath(XPathDefinitions.toolWindowButton(label)), Duration.ofSeconds(2)).click();
+                button(byXpath(XPathDefinitions.toolWindowButton(label)), UITestTimeouts.UI_ELEMENT_TIMEOUT).click();
             }
         }
     }

@@ -17,6 +17,7 @@ import com.intellij.remoterobot.utils.WaitForConditionTimeoutException;
 import com.redhat.devtools.intellij.commonuitest.AbstractLibraryBaseTest;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.FlatWelcomeFrame;
 import com.redhat.devtools.intellij.commonuitest.fixtures.dialogs.settings.SettingsDialog;
+import com.redhat.devtools.intellij.commonuitest.utils.constants.UITestTimeouts;
 import com.redhat.devtools.intellij.commonuitest.utils.constants.XPathDefinitions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -45,29 +46,29 @@ class SettingsDialogTest extends AbstractLibraryBaseTest {
 
     @BeforeAll
     static void openSettingsDialog() {
-        flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, Duration.ofSeconds(10));
+        flatWelcomeFrame = remoteRobot.find(FlatWelcomeFrame.class, UITestTimeouts.FIXTURE_TIMEOUT);
         flatWelcomeFrame.openSettingsDialog();
     }
 
     @AfterAll
     static void closeSettingsDialog() {
-        remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5)).cancel();
+        remoteRobot.find(SettingsDialog.class, UITestTimeouts.SHORT_TIMEOUT).cancel();
     }
 
     @BeforeEach
     void prepareSettingsDialogFixture() {
         if (settingsDialog == null) {
-            settingsDialog = remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5));
+            settingsDialog = remoteRobot.find(SettingsDialog.class, UITestTimeouts.SHORT_TIMEOUT);
         }
     }
 
     @AfterEach
     void reopenSettingsDialogIfNeeded() {
         try {
-            remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5));
+            remoteRobot.find(SettingsDialog.class, UITestTimeouts.SHORT_TIMEOUT);
         } catch (WaitForConditionTimeoutException e) {
             flatWelcomeFrame.openSettingsDialog();
-            settingsDialog = remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5));
+            settingsDialog = remoteRobot.find(SettingsDialog.class, UITestTimeouts.SHORT_TIMEOUT);
         }
     }
 
@@ -75,7 +76,7 @@ class SettingsDialogTest extends AbstractLibraryBaseTest {
     void navigateToTest() {
         settingsDialog.navigateTo(APPEARANCE_AND_BEHAVIOR, NOTIFICATIONS);
         try {
-            waitFor(Duration.ofSeconds(10), Duration.ofMillis(250), "The 'Notifications' settings page is not available.", () -> isSettingsPageLoaded(NOTIFICATIONS));
+            waitFor(UITestTimeouts.FIXTURE_TIMEOUT, UITestTimeouts.FAST_POLL_INTERVAL, "The 'Notifications' settings page is not available.", () -> isSettingsPageLoaded(NOTIFICATIONS));
         } catch (WaitForConditionTimeoutException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
             fail("The 'Settings' dialog should display the 'Notifications' page.");
@@ -83,7 +84,7 @@ class SettingsDialogTest extends AbstractLibraryBaseTest {
 
         settingsDialog.navigateTo("Keymap");
         try {
-            waitFor(Duration.ofSeconds(10), Duration.ofMillis(250), "The 'Keymap' settings page is not available.", () -> isSettingsPageLoaded("Keymap"));
+            waitFor(UITestTimeouts.FIXTURE_TIMEOUT, UITestTimeouts.FAST_POLL_INTERVAL, "The 'Keymap' settings page is not available.", () -> isSettingsPageLoaded("Keymap"));
         } catch (WaitForConditionTimeoutException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
             fail("The 'Settings' dialog should display the 'Keymap' page.");
@@ -99,7 +100,7 @@ class SettingsDialogTest extends AbstractLibraryBaseTest {
     @Test
     void okTest() {
         settingsDialog.ok();
-        Duration timeout = Duration.ofSeconds(5);
+        Duration timeout = UITestTimeouts.SHORT_TIMEOUT;
         try {
             remoteRobot.find(SettingsDialog.class, timeout);
             fail("The 'Settings' dialog should be closed but is not.");
@@ -110,7 +111,7 @@ class SettingsDialogTest extends AbstractLibraryBaseTest {
 
     @Test
     void applyTest() {
-        settingsDialog = remoteRobot.find(SettingsDialog.class, Duration.ofSeconds(5));
+        settingsDialog = remoteRobot.find(SettingsDialog.class, UITestTimeouts.SHORT_TIMEOUT);
         settingsDialog.navigateTo(APPEARANCE_AND_BEHAVIOR, NOTIFICATIONS);
         JCheckboxFixture balloonNotificationsCheckbox = settingsDialog.checkBox("Display balloon notifications", true);
         balloonNotificationsCheckbox.setValue(!balloonNotificationsCheckbox.isSelected());
@@ -122,7 +123,7 @@ class SettingsDialogTest extends AbstractLibraryBaseTest {
     @Test
     void cancelTest() {
         settingsDialog.cancel();
-        Duration timeout = Duration.ofSeconds(5);
+        Duration timeout = UITestTimeouts.SHORT_TIMEOUT;
         try {
             remoteRobot.find(SettingsDialog.class, timeout);
             fail("The 'Settings' dialog should be closed but is not.");
