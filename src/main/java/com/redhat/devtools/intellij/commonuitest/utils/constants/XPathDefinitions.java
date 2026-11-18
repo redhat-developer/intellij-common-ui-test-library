@@ -71,6 +71,8 @@ public class XPathDefinitions {
     @Language("XPath")
     public static final String MAIN_MENU = "//div[@tooltiptext='Main Menu']";
     @Language("XPath")
+    public static final String MAIN_MENU_2025_1_AND_NEWER = "//div[@class='MainMenuWithButton']//div[@tooltiptext='Main Menu']"; // works for IntelliJ Idea 2025.1 and higher
+    @Language("XPath")
     public static final String MY_ICON_GEAR_PLAIN = "//div[contains(@myvisibleactions, 'View),')]//div[@myicon='gearPlain.svg']";
     @Language("XPath")
     public static final String MY_ICON_MORE_VERTICAL = "//div[@myicon='moreVertical.svg']";

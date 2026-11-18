@@ -96,6 +96,10 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
      * Clear the workspace by deleting the content of the IdeaProjects folder and clearing all the projects' links in the 'Welcome to IntelliJ IDEA' dialog
      */
     public void clearWorkspace() {
+        // Ensure we're on the Projects tab to access the projects list (required for IntelliJ 2025.1+)
+        if (ideaVersionInt >= 20251) {
+            switchToProjectsPage();
+        }
         // Remove projects on disk
         try {
             String pathToDirToMakeEmpty = ProjectLocation.PROJECT_LOCATION;
@@ -240,6 +244,9 @@ public class FlatWelcomeFrame extends CommonContainerFixture {
             JTreeFixture projects = remoteRobot.findAll(JTreeFixture.class, byXpath(XPathDefinitions.RECENT_PROJECT_PANEL_NEW_2)).get(0);
             return projects.findAllText().size() / 2;
         } catch (IndexOutOfBoundsException e) {
+            return 0;
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Failed to count projects: {0}", e.getMessage());
             return 0;
         }
     }
