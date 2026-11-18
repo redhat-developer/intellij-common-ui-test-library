@@ -50,8 +50,13 @@ public class MenuBar {
             return;
         }
         if (ideaVersionInt >= 20242) {
-            remoteRobot.find(ActionButtonFixture.class, byXpath(XPathDefinitions.MAIN_MENU)).click();
-        }
+            String mainMenuXPath;
+            if (ideaVersionInt >= 20251) {
+                mainMenuXPath = XPathDefinitions.MAIN_MENU_2025_1_AND_NEWER;
+            } else {
+                mainMenuXPath = XPathDefinitions.MAIN_MENU;
+            }
+            remoteRobot.find(ActionButtonFixture.class, byXpath(mainMenuXPath)).click();        }
 
         if (!isVisible()) {
             LOGGER.severe("Main Menu is not visible.");
@@ -81,7 +86,7 @@ public class MenuBar {
             JPopupMenuFixture lastContextMenu = allContextMenus.get(allContextMenus.size() - 1);
             lastContextMenu.findText(path[i]).moveMouse();
             waitFor(Duration.ofSeconds(5), Duration.ofSeconds(1), "SubMenu to appear", () ->
-                remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType()).size() > allContextMenus.size()
+                    remoteRobot.findAll(JPopupMenuFixture.class, JPopupMenuFixture.Companion.byType()).size() > allContextMenus.size()
             );
         }
 
